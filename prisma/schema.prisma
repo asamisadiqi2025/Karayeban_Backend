@@ -1,537 +1,949 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+
 }
 
-// =========================================
-// PART 1 : CORE TABLES
-// =========================================
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum MarketStatus {
+  ACTIVE
+  INACTIVE
+  CLOSED
+}
+
+enum ShopStatus {
+  EMPTY
+  OCCUPIED
+  RESERVED
+  MAINTENANCE
+}
+
+enum TenantStatus {
+  ACTIVE
+  INACTIVE
+  MOVED_OUT
+  BLACKLISTED
+}
+
+enum DebtStatus {
+  PAID
+  DEBTOR
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ContractStatus {
+  ACTIVE
+  COMPLETED
+  TERMINATED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+enum UtilityType {
+  ELECTRICITY
+  WATER
+  CLEANING
+  SECURITY
+  OTHER
+}
+
+enum UtilityPaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AccountType {
+  CASH
+  BANK
+  MOBILE_MONEY
+  OTHER
+}
+
+enum Currency {
+  AFN
+  USD
+  EUR
+  GBP
+  OTHER
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+enum ChequeStatus {
+  PENDING
+  RECEIVED
+  RETURNED
+}
+
+enum DocumentEntityType {
+  TENANT
+  CONTRACT
+  SHOP
+  GUARANTOR
+  CHEQUE
+  MARKET
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum InvestmentType {
+  CASH
+  EQUIPMENT
+  CONSTRUCTION
+  OTHER
+}
+
+// ============================================================
+// CORE / STRUCTURE
+// ============================================================
+
+model Market {
+  id String @id @default(uuid()) @db.Uuid
+
+  name String
+  code String @unique
+
+  address String?
+  phone   String?
+
+  status MarketStatus @default(ACTIVE)
+
+  // Relations
+  floors                Floor[]
+  shops                 Shop[]
+  shopCategories        ShopCategory[]
+  tenants               Tenant[]
+  contracts             Contract[]
+  rentPayments          RentPayment[]
+  utilityBills          UtilityBill[]
+  expenseCategories     ExpenseCategory[]
+  employees             Employee[]
+  marketExpenses        MarketExpense[]
+  accounts              Account[]
+  miscellaneousIncomes  MiscellaneousIncome[]
+  accountTransactions   AccountTransaction[]
+  exitClearances        ExitClearance[]
+  cheques               Cheque[]
+  documents             Document[]
+  users                 User[]
+  auditLogs             AuditLog[]
+  notifications         Notification[]
+  shareholders          Shareholder[]
+  additionalInvestments AdditionalInvestment[]
+  withdrawals           Withdrawal[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("markets")
+}
 
 model Floor {
-  id            String   @id @default(uuid()) @db.Uuid
-  name          String   @db.VarChar(100)
-  floorPosition String?  @map("floor_position") @db.VarChar(100)
-  description   String?
+  id String @id @default(uuid()) @db.Uuid
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id])
+
+  name         String
+  displayOrder Int
+  description  String?
 
   shops Shop[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
   @@map("floors")
 }
 
-model ShopCategory {
-  id          String  @id @default(uuid()) @db.Uuid
-  name        String  @db.VarChar(100)
-  description String?
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
-
-  shops Shop[]
-
-  @@map("shop_categories")
-}
-
 model Shop {
-  id                     String  @id @default(uuid()) @db.Uuid
-  shopCode               String  @unique @map("shop_code") @db.VarChar(50)
-  floorId                String? @map("floor_id") @db.Uuid
-  categoryId             String? @map("category_id") @db.Uuid
-  shopNumber             String? @map("shop_number") @db.VarChar(50)
-  rentAmount             Decimal @default(0) @map("rent_amount") @db.Decimal(12, 2)
-  areaInSquareMeters     Decimal @default(0) @map("area_in_square_meters") @db.Decimal(10, 2)
-  electricityMeterNumber String? @map("electricity_meter_number") @db.VarChar(100)
-  waterMeterNumber       String? @map("water_meter_number") @db.VarChar(100)
-  description            String?
-  status                 String  @default("empty") @db.VarChar(30)
+  id String @id @default(uuid()) @db.Uuid
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  marketId   String  @db.Uuid
+  floorId    String  @db.Uuid
+  categoryId String? @db.Uuid
 
-  floor          Floor?          @relation(fields: [floorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  category       ShopCategory?   @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  market   Market        @relation(fields: [marketId], references: [id])
+  floor    Floor         @relation(fields: [floorId], references: [id])
+  category ShopCategory? @relation(fields: [categoryId], references: [id])
+
+  shopCode           String
+  shopNumber         String
+  rentAmount         Decimal @db.Decimal(12, 2)
+  areaInSquareMeters Decimal @db.Decimal(10, 2)
+
+  electricityMeterNumber String?
+  waterMeterNumber       String?
+
+  status ShopStatus @default(EMPTY)
+
+  // Relations
   contracts      Contract[]
   rentPayments   RentPayment[]
   utilityBills   UtilityBill[]
   exitClearances ExitClearance[]
 
-  @@index([floorId], map: "idx_shop_floor")
-  @@index([categoryId], map: "idx_shop_category")
-  @@index([status], map: "idx_shop_status")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([marketId, shopCode])
+  @@index([marketId])
   @@map("shops")
 }
 
+model ShopCategory {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+
+  shops Shop[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([marketId])
+  @@map("shop_categories")
+}
+
+// ============================================================
+// TENANTS / GUARANTORS
+// ============================================================
+
 model Tenant {
-  id             String  @id @default(uuid()) @db.Uuid
-  fullName       String  @map("full_name") @db.VarChar(150)
-  tazkiraNumber  String? @unique @map("tazkira_number") @db.VarChar(100)
-  phone          String? @db.VarChar(50)
-  phone2         String? @db.VarChar(50)
-  emergencyPhone String? @map("emergency_phone") @db.VarChar(50)
-  address        String?
-  businessName   String? @map("business_name") @db.VarChar(150)
-  gender         String? @db.VarChar(20)
-  status         String  @default("active") @db.VarChar(30)
-  debtStatus     String  @default("paid") @map("debt_status") @db.VarChar(30)
-  photo          String?
-  description    String?
+  id String @id @default(uuid()) @db.Uuid
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
-  guarantors     Guarantor[]
+  firstName String
+  lastName  String
+
+  nationalId String?
+
+  phone          String
+  secondaryPhone String?
+  emergencyPhone String?
+
+  address String?
+
+  businessName String?
+
+  gender    Gender?
+  birthdate DateTime?
+
+  imageUrl String?
+
+  status     TenantStatus @default(ACTIVE)
+  debtStatus DebtStatus   @default(PAID)
+
+  description String?
+
+  // Relations
   contracts      Contract[]
-  exitClearances ExitClearance[]
+  guarantors     Guarantor[]
   cheques        Cheque[]
+  exitClearances ExitClearance[]
 
-  @@index([phone], map: "idx_tenant_phone")
-  @@index([tazkiraNumber], map: "idx_tenant_tazkira")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([marketId])
   @@map("tenants")
 }
 
 model Guarantor {
-  id            String  @id @default(uuid()) @db.Uuid
-  tenantId      String  @map("tenant_id") @db.Uuid
-  fullName      String  @map("full_name") @db.VarChar(150)
-  phone         String? @db.VarChar(50)
-  address       String?
-  tazkiraCopy   String? @map("tazkira_copy")
-  guarantorForm String? @map("guarantor_form")
-  description   String?
+  id String @id @default(uuid()) @db.Uuid
 
-  createdAt DateTime @default(now()) @map("created_at")
+  tenantId String @db.Uuid
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  fullName    String
+  phone       String
+  address     String?
+  description String?
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
   @@map("guarantors")
 }
 
+// ============================================================
+// CONTRACTS
+// ============================================================
+
 model Contract {
-  id                 String    @id @default(uuid()) @db.Uuid
-  contractNumber     String    @unique @map("contract_number") @db.VarChar(100)
-  shopId             String    @map("shop_id") @db.Uuid
-  tenantId           String    @map("tenant_id") @db.Uuid
-  previousContractId String?   @map("previous_contract_id") @db.Uuid
-  startDate          DateTime  @map("start_date") @db.Date
-  endDate            DateTime? @map("end_date") @db.Date
-  monthlyRent        Decimal   @default(0) @map("monthly_rent") @db.Decimal(12, 2)
-  depositAmount      Decimal   @default(0) @map("deposit_amount") @db.Decimal(12, 2)
-  status             String    @default("active") @db.VarChar(30)
-  renewCount         Int       @default(0) @map("renew_count")
-  nextContractDate   DateTime? @map("next_contract_date") @db.Date
-  signedAt           DateTime? @map("signed_at")
-  approvedBy         String?   @map("approved_by") @db.Uuid
-  terminatedBy       String?   @map("terminated_by") @db.Uuid
-  terminationReason  String?   @map("termination_reason")
-  description        String?
+  id String @id @default(uuid()) @db.Uuid
 
-  createdAt DateTime @default(now()) @map("created_at")
+  marketId String @db.Uuid
+  shopId   String @db.Uuid
+  tenantId String @db.Uuid
 
-  shop             Shop       @relation(fields: [shopId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  tenant           Tenant     @relation(fields: [tenantId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  previousContract Contract?  @relation("ContractRenewal", fields: [previousContractId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  renewedContracts Contract[] @relation("ContractRenewal")
+  market Market @relation(fields: [marketId], references: [id])
+  shop   Shop   @relation(fields: [shopId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 
-  contractTerms  ContractTerm[]
-  rentPayments   RentPayment[]
-  exitClearances ExitClearance[]
-  cheques        Cheque[]
+  contractNumber String
 
-  @@index([shopId], map: "idx_contract_shop")
-  @@index([tenantId], map: "idx_contract_tenant")
-  @@index([status], map: "idx_contract_status")
-  @@index([contractNumber], map: "idx_contract_number")
+  previousContractId String?    @db.Uuid
+  previousContract   Contract?  @relation("ContractHistory", fields: [previousContractId], references: [id])
+  nextContracts      Contract[] @relation("ContractHistory")
+
+  startDate DateTime
+  endDate   DateTime?
+
+  monthlyRent   Decimal @db.Decimal(12, 2)
+  depositAmount Decimal @db.Decimal(12, 2)
+
+  status ContractStatus @default(ACTIVE)
+
+  signedAt DateTime?
+
+  approvedBy        String?
+  terminatedBy      String?
+  terminationReason String?
+
+  // Relations
+  terms         ContractTerm[]
+  rentPayments  RentPayment[]
+  cheques       Cheque[]
+  exitClearance ExitClearance?
+
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([marketId, contractNumber])
+  @@index([shopId])
+  @@index([tenantId])
   @@map("contracts")
 }
 
 model ContractTerm {
-  id                    String  @id @default(uuid()) @db.Uuid
-  contractId            String  @map("contract_id") @db.Uuid
-  workingHours          String? @map("working_hours") @db.VarChar(100)
-  monthlyOffDays        Int     @default(0) @map("monthly_off_days")
-  terminationConditions String? @map("termination_conditions")
-  specialConditions     String? @map("special_conditions")
+  id String @id @default(uuid()) @db.Uuid
 
-  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  contractId String   @db.Uuid
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
+  workingHours         String?
+  monthlyHoliday       Int?
+  terminationCondition String?
+  specialConditions    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contractId])
   @@map("contract_terms")
 }
 
-// =========================================
-// PART 2 : FINANCIAL & OPERATIONS TABLES
-// =========================================
+// ============================================================
+// PAYMENTS / UTILITIES
+// ============================================================
 
 model RentPayment {
-  id            String   @id @default(uuid()) @db.Uuid
-  shopId        String   @map("shop_id") @db.Uuid
-  contractId    String   @map("contract_id") @db.Uuid
-  amount        Decimal  @db.Decimal(12, 2)
-  paymentDate   DateTime @map("payment_date") @db.Date
-  paymentMethod String?  @map("payment_method") @db.VarChar(50)
-  status        String   @default("paid") @db.VarChar(30)
-  year          Int?
-  lateFee       Decimal  @default(0) @map("late_fee") @db.Decimal(12, 2)
-  discount      Decimal  @default(0) @db.Decimal(12, 2)
-  accountId     String?  @map("account_id") @db.Uuid
-  receivedBy    String?  @map("received_by") @db.Uuid
-  description   String?
+  id String @id @default(uuid()) @db.Uuid
 
-  shop     Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
-  contract Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
-  account  Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
-  receiver User?    @relation("RentPaymentReceiver", fields: [receivedBy], references: [id], onDelete: SetNull)
+  marketId   String @db.Uuid
+  shopId     String @db.Uuid
+  contractId String @db.Uuid
 
-  @@index([contractId], map: "idx_payment_contract")
-  @@index([paymentDate], map: "idx_payment_date")
-  @@index([status], map: "idx_payment_status")
+  market   Market   @relation(fields: [marketId], references: [id])
+  shop     Shop     @relation(fields: [shopId], references: [id])
+  contract Contract @relation(fields: [contractId], references: [id])
+
+  amountDue       Decimal @db.Decimal(12, 2)
+  amountPaid      Decimal @default(0) @db.Decimal(12, 2)
+  remainingAmount Decimal @db.Decimal(12, 2)
+
+  paymentDate   DateTime?
+  paymentMethod String?
+
+  status PaymentStatus @default(PENDING)
+
+  year Int
+
+  lateFee  Decimal? @db.Decimal(12, 2)
+  discount Decimal? @db.Decimal(12, 2)
+
+  accountId  String? @db.Uuid
+  receivedBy String?
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
+  @@index([contractId])
   @@map("rent_payments")
 }
 
 model UtilityBill {
-  id            String    @id @default(uuid()) @db.Uuid
-  shopId        String    @map("shop_id") @db.Uuid
-  serviceType   String    @map("service_type") @db.VarChar(50)
-  previousMeter String?   @map("previous_meter") @db.VarChar(100)
-  currentMeter  String?   @map("current_meter") @db.VarChar(100)
-  rate          Decimal   @default(0) @db.Decimal(10, 2)
-  amount        Decimal   @default(0) @db.Decimal(12, 2)
-  billMonth     Int?      @map("bill_month")
-  billYear      Int?      @map("bill_year")
-  dueDate       DateTime? @map("due_date") @db.Date
-  status        String    @default("unpaid") @db.VarChar(30)
-  description   String?
+  id String @id @default(uuid()) @db.Uuid
 
-  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  marketId String @db.Uuid
+  shopId   String @db.Uuid
 
-  @@index([shopId], map: "idx_bill_shop")
+  market Market @relation(fields: [marketId], references: [id])
+  shop   Shop   @relation(fields: [shopId], references: [id])
+
+  type UtilityType
+
+  previousMeter Decimal? @db.Decimal(12, 3)
+  currentMeter  Decimal? @db.Decimal(12, 3)
+  unitsConsumed Decimal? @db.Decimal(12, 3)
+  rate          Decimal? @db.Decimal(12, 2)
+  amount        Decimal  @db.Decimal(12, 2)
+
+  billMonth Int
+  billYear  Int
+
+  dueDate DateTime?
+
+  status UtilityPaymentStatus @default(PENDING)
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
+  @@index([shopId])
   @@map("utility_bills")
 }
 
+// ============================================================
+// EXPENSES / EMPLOYEES
+// ============================================================
+
 model ExpenseCategory {
-  id          String  @id @default(uuid()) @db.Uuid
-  name        String  @db.VarChar(100)
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  name        String
   description String?
 
-  marketExpenses MarketExpense[]
+  expenses MarketExpense[]
 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([marketId])
   @@map("expense_categories")
 }
 
 model Employee {
-  id       String  @id @default(uuid()) @db.Uuid
-  fullName String  @map("full_name") @db.VarChar(150)
-  phone    String? @db.VarChar(50)
-  jobTitle String? @map("job_title") @db.VarChar(100)
-  salary   Decimal @default(0) @db.Decimal(12, 2)
-  status   String  @default("active") @db.VarChar(30)
+  id String @id @default(uuid()) @db.Uuid
 
-  marketExpenses MarketExpense[]
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
+  fullName String
+  phone    String?
+  position String?
+
+  salary Decimal? @db.Decimal(12, 2)
+
+  status EmployeeStatus @default(ACTIVE)
+
+  expenses MarketExpense[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([marketId])
   @@map("employees")
 }
 
 model MarketExpense {
-  id          String   @id @default(uuid()) @db.Uuid
-  expenseDate DateTime @map("expense_date") @db.Date
-  categoryId  String?  @map("category_id") @db.Uuid
-  employeeId  String?  @map("employee_id") @db.Uuid
-  accountId   String?  @map("account_id") @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId   String  @db.Uuid
+  categoryId String  @db.Uuid
+  employeeId String? @db.Uuid
+  accountId  String? @db.Uuid
+
+  market   Market          @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  category ExpenseCategory @relation(fields: [categoryId], references: [id])
+  employee Employee?       @relation(fields: [employeeId], references: [id])
+  account  Account?        @relation(fields: [accountId], references: [id])
+
+  expenseNumber String
+
   amount      Decimal  @db.Decimal(12, 2)
+  expenseDate DateTime
+
   description String?
-  createdBy   String?  @map("created_by") @db.Uuid
+  createdBy   String?
 
-  category ExpenseCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  employee Employee?        @relation(fields: [employeeId], references: [id], onDelete: SetNull)
-  account  Account?         @relation(fields: [accountId], references: [id], onDelete: SetNull)
-  creator  User?            @relation("MarketExpenseCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([expenseDate], map: "idx_expense_date")
+  @@unique([marketId, expenseNumber])
+  @@index([marketId])
   @@map("market_expenses")
 }
 
-model ExitClearance {
-  id                   String   @id @default(uuid()) @db.Uuid
-  contractId           String   @map("contract_id") @db.Uuid
-  tenantId             String   @map("tenant_id") @db.Uuid
-  shopId               String   @map("shop_id") @db.Uuid
-  exitDate             DateTime @map("exit_date") @db.Date
-  shopCondition        String?  @map("shop_condition")
-  damageCost           Decimal  @default(0) @map("damage_cost") @db.Decimal(12, 2)
-  billSettlementStatus String   @default("pending") @map("bill_settlement_status") @db.VarChar(50)
-  remainingAmount      Decimal  @default(0) @map("remaining_amount") @db.Decimal(12, 2)
-  refundAmount         Decimal  @default(0) @map("refund_amount") @db.Decimal(12, 2)
-  reason               String?
-  approvedBy           String?  @map("approved_by") @db.Uuid
-  description          String?
-
-  contract Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
-  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  shop     Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
-
-  @@map("exit_clearances")
-}
-
-model MiscellaneousIncome {
-  id           String   @id @default(uuid()) @db.Uuid
-  source       String   @db.VarChar(150)
-  amount       Decimal  @db.Decimal(12, 2)
-  receivedDate DateTime @map("received_date") @db.Date
-  accountId    String?  @map("account_id") @db.Uuid
-  description  String?
-
-  account Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
-
-  @@map("miscellaneous_income")
-}
-
-// =========================================
-// PART 3 : ACCOUNTING & DOCUMENT TABLES
-// =========================================
+// ============================================================
+// ACCOUNTS / FINANCE
+// ============================================================
 
 model Account {
-  id          String  @id @default(uuid()) @db.Uuid
-  name        String  @db.VarChar(150)
-  type        String  @db.VarChar(50) // cash / bank / other
-  currency    String  @default("AFN") @db.VarChar(20)
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  name String
+  type AccountType
+  currency Currency
+
   description String?
 
-  rentPayments         RentPayment[]
-  marketExpenses       MarketExpense[]
-  miscellaneousIncomes MiscellaneousIncome[]
-  accountTransactions  AccountTransaction[]
-  cheques              Cheque[]
-  withdrawals          Withdrawal[]
+  currentBalance Decimal @default(0) @db.Decimal(14, 2)
 
+  // Relations
+  expenses     MarketExpense[]
+  incomes      MiscellaneousIncome[]
+  transactions AccountTransaction[]
+  withdrawals  Withdrawal[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([marketId])
   @@map("accounts")
 }
 
+model MiscellaneousIncome {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId  String @db.Uuid
+  accountId String @db.Uuid
+
+  market  Market  @relation(fields: [marketId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  source     String
+  amount     Decimal  @db.Decimal(12, 2)
+  incomeDate DateTime
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
+  @@map("miscellaneous_income")
+}
+
 model AccountTransaction {
-  id                      String   @id @default(uuid()) @db.Uuid
-  accountId               String   @map("account_id") @db.Uuid
-  type                    String   @db.VarChar(10) // credit / debit
-  amount                  Decimal  @db.Decimal(12, 2)
-  referenceType           String?  @map("reference_type") @db.VarChar(100)
-  referenceId             String?  @map("reference_id")
-  description             String?
-  createdAt               DateTime @default(now()) @map("created_at")
-  transactionDate         DateTime @default(now()) @map("transaction_date")
-  createdBy               String?  @map("created_by") @db.Uuid
-  balanceAfterTransaction Decimal? @map("balance_after_transaction") @db.Decimal(12, 2)
+  id String @id @default(uuid()) @db.Uuid
 
-  account Account @relation(fields: [accountId], references: [id], onDelete: Restrict)
-  creator User?   @relation("AccountTransactionCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  marketId  String @db.Uuid
+  accountId String @db.Uuid
 
-  @@index([accountId], map: "idx_transaction_account")
-  @@index([referenceType, referenceId], map: "idx_transaction_reference")
-  @@index([transactionDate], map: "idx_transaction_date")
+  market  Market  @relation(fields: [marketId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+
+  type   TransactionType
+  amount Decimal         @db.Decimal(14, 2)
+
+  referenceType String?
+  referenceId   String?
+
+  balanceAfterTransaction Decimal @db.Decimal(14, 2)
+
+  description String?
+  createdBy   String?
+
+  transactionDate DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([marketId])
+  @@index([accountId])
   @@map("account_transactions")
 }
 
+// ============================================================
+// EXIT / CHEQUES / DOCUMENTS
+// ============================================================
+
+model ExitClearance {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId   String @db.Uuid
+  contractId String @unique @db.Uuid
+  tenantId   String @db.Uuid
+  shopId     String @db.Uuid
+
+  market   Market   @relation(fields: [marketId], references: [id])
+  contract Contract @relation(fields: [contractId], references: [id])
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  shop     Shop     @relation(fields: [shopId], references: [id])
+
+  exitDate DateTime
+
+  shopCondition String?
+
+  damageCost      Decimal? @db.Decimal(12, 2)
+  billsCleared    Boolean  @default(false)
+  remainingAmount Decimal? @db.Decimal(12, 2)
+  refundedAmount  Decimal? @db.Decimal(12, 2)
+
+  reason     String?
+  approvedBy String?
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
+  @@map("exit_clearances")
+}
+
 model Cheque {
-  id           String    @id @default(uuid()) @db.Uuid
-  tenantId     String?   @map("tenant_id") @db.Uuid
-  contractId   String?   @map("contract_id") @db.Uuid
-  bankName     String?   @map("bank_name") @db.VarChar(150)
-  chequeNumber String?   @map("cheque_number") @db.VarChar(100)
-  amount       Decimal   @db.Decimal(12, 2)
-  issueDate    DateTime? @map("issue_date") @db.Date
-  dueDate      DateTime? @map("due_date") @db.Date
-  status       String    @default("pending") @db.VarChar(30)
-  image        String?
-  accountId    String?   @map("account_id") @db.Uuid
-  bounceReason String?   @map("bounce_reason")
-  description  String?
+  id String @id @default(uuid()) @db.Uuid
 
-  tenant   Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  contract Contract? @relation(fields: [contractId], references: [id], onDelete: SetNull)
-  account  Account?  @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  marketId   String  @db.Uuid
+  tenantId   String  @db.Uuid
+  contractId String? @db.Uuid
 
+  market   Market    @relation(fields: [marketId], references: [id])
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  contract Contract? @relation(fields: [contractId], references: [id])
+
+  bankName     String
+  chequeNumber String
+
+  amount Decimal @db.Decimal(12, 2)
+
+  issueDate DateTime
+  dueDate   DateTime
+
+  status ChequeStatus @default(PENDING)
+
+  accountId    String? @db.Uuid
+  returnReason String?
+  imageUrl     String?
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
+  @@index([tenantId])
   @@map("cheques")
 }
 
 model Document {
-  id             String   @id @default(uuid()) @db.Uuid
-  referenceTable String   @map("reference_table") @db.VarChar(100)
-  referenceId    String   @map("reference_id")
-  fileType       String?  @map("file_type") @db.VarChar(100)
-  filePath       String   @map("file_path")
-  uploadedBy     String?  @map("uploaded_by") @db.Uuid
-  uploadedAt     DateTime @default(now()) @map("uploaded_at")
+  id String @id @default(uuid()) @db.Uuid
 
-  uploader User? @relation("DocumentUploader", fields: [uploadedBy], references: [id], onDelete: SetNull)
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id])
 
-  @@index([referenceTable, referenceId], map: "idx_document_reference")
+  entityType DocumentEntityType
+  entityId   String             @db.Uuid
+
+  fileType String
+  filePath String
+
+  uploadedBy String?
+
+  createdAt DateTime @default(now())
+
+  @@index([marketId])
+  @@index([entityId])
   @@map("documents")
 }
 
-// =========================================
-// PART 4 : USERS, SECURITY & OWNERSHIP
-// =========================================
+// ============================================================
+// USERS / RBAC
+// ============================================================
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String   @db.VarChar(150)
-  username  String   @unique @db.VarChar(100)
-  email     String?  @unique @db.VarChar(150)
-  password  String
-  status    String   @default("active") @db.VarChar(30)
-  createdAt DateTime @default(now()) @map("created_at")
+  id String @id @default(uuid()) @db.Uuid
 
-  userRoles             UserRole[]
-  rentPaymentsReceived  RentPayment[]        @relation("RentPaymentReceiver")
-  marketExpensesCreated MarketExpense[]      @relation("MarketExpenseCreator")
-  accountTransactions   AccountTransaction[] @relation("AccountTransactionCreator")
-  documentsUploaded     Document[]           @relation("DocumentUploader")
-  auditLogs             AuditLog[]
-  notificationsCreated  Notification[]       @relation("NotificationCreator")
+  marketId String? @db.Uuid
+  market   Market? @relation(fields: [marketId], references: [id])
 
+  name     String
+  username String  @unique
+  email    String? @unique
+  password String
+
+  status UserStatus @default(ACTIVE)
+
+  roles         UserRole[]
+  auditLogs     AuditLog[]
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([marketId])
   @@map("users")
 }
 
 model Role {
-  id          String  @id @default(uuid()) @db.Uuid
-  name        String  @unique @db.VarChar(100)
+  id String @id @default(uuid()) @db.Uuid
+
+  name        String  @unique
   description String?
 
-  rolePermissions RolePermission[]
-  userRoles       UserRole[]
+  users       UserRole[]
+  permissions RolePermission[]
+
+  createdAt DateTime @default(now())
 
   @@map("roles")
 }
 
 model Permission {
-  id          String  @id @default(uuid()) @db.Uuid
-  name        String  @unique @db.VarChar(100)
+  id String @id @default(uuid()) @db.Uuid
+
+  name        String  @unique
   description String?
 
-  rolePermissions RolePermission[]
+  roles RolePermission[]
+
+  createdAt DateTime @default(now())
 
   @@map("permissions")
 }
 
-model RolePermission {
-  roleId       String @map("role_id") @db.Uuid
-  permissionId String @map("permission_id") @db.Uuid
-
-  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-
-  @@id([roleId, permissionId])
-  @@map("role_permissions")
-}
-
 model UserRole {
-  userId String @map("user_id") @db.Uuid
-  roleId String @map("role_id") @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  userId String @db.Uuid
+  roleId String @db.Uuid
 
-  @@id([userId, roleId])
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId])
   @@map("user_roles")
 }
 
+model RolePermission {
+  id String @id @default(uuid()) @db.Uuid
+
+  roleId       String @db.Uuid
+  permissionId String @db.Uuid
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// ============================================================
+// AUDIT / NOTIFICATIONS
+// ============================================================
+
+model AuditLog {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId String? @db.Uuid
+  userId   String? @db.Uuid
+
+  market Market? @relation(fields: [marketId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
+
+  action    String
+  tableName String
+  recordId  String?
+
+  oldValue Json?
+  newValue Json?
+
+  ipAddress  String?
+  deviceInfo String?
+
+  createdAt DateTime @default(now())
+
+  @@index([marketId])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+model Notification {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId String  @db.Uuid
+  userId   String? @db.Uuid
+
+  market Market @relation(fields: [marketId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id])
+
+  type     String
+  message  String
+  priority NotificationPriority @default(NORMAL)
+  isRead   Boolean              @default(false)
+
+  referenceType String?
+  referenceId   String?
+
+  createdBy String?
+
+  readAt     DateTime?
+  resolvedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([marketId])
+  @@map("notifications")
+}
+
+// ============================================================
+// SHAREHOLDERS / INVESTMENTS
+// ============================================================
+
 model Shareholder {
-  id          String  @id @default(uuid()) @db.Uuid
-  firstName   String  @map("first_name") @db.VarChar(100)
-  lastName    String? @map("last_name") @db.VarChar(100)
-  phone       String? @db.VarChar(50)
-  description String?
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  firstName String
+  lastName  String?
+  phone     String?
+
+  initialInvestment Decimal @default(0) @db.Decimal(14, 2)
 
   ownershipHistories    OwnershipHistory[]
   additionalInvestments AdditionalInvestment[]
   withdrawals           Withdrawal[]
 
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([marketId])
   @@map("shareholders")
 }
 
 model OwnershipHistory {
-  id            String    @id @default(uuid()) @db.Uuid
-  shareholderId String    @map("shareholder_id") @db.Uuid
-  percentage    Decimal   @db.Decimal(5, 2)
-  startDate     DateTime  @map("start_date") @db.Date
-  endDate       DateTime? @map("end_date") @db.Date
+  id String @id @default(uuid()) @db.Uuid
 
-  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
+  shareholderId String      @db.Uuid
+  shareholder   Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
 
+  percentage Decimal   @db.Decimal(5, 2)
+  startDate  DateTime
+  endDate    DateTime?
+
+  approvedBy String?
+
+  createdAt DateTime @default(now())
+
+  @@index([shareholderId])
   @@map("ownership_histories")
 }
 
 model AdditionalInvestment {
-  id             String   @id @default(uuid()) @db.Uuid
-  shareholderId  String   @map("shareholder_id") @db.Uuid
-  amount         Decimal  @db.Decimal(12, 2)
-  investmentDate DateTime @map("investment_date") @db.Date
-  type           String?  @db.VarChar(50)
-  description    String?
+  id String @id @default(uuid()) @db.Uuid
 
+  marketId      String @db.Uuid
+  shareholderId String @db.Uuid
+
+  market      Market      @relation(fields: [marketId], references: [id])
   shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
 
+  amount         Decimal        @db.Decimal(14, 2)
+  investmentType InvestmentType
+  investmentDate DateTime
+
+  description String?
+
+  createdAt DateTime @default(now())
+
+  @@index([marketId])
+  @@index([shareholderId])
   @@map("additional_investments")
 }
 
 model Withdrawal {
-  id             String   @id @default(uuid()) @db.Uuid
-  shareholderId  String   @map("shareholder_id") @db.Uuid
-  accountId      String?  @map("account_id") @db.Uuid
-  amount         Decimal  @db.Decimal(12, 2)
-  withdrawalDate DateTime @map("withdrawal_date") @db.Date
-  source         String?
-  description    String?
+  id String @id @default(uuid()) @db.Uuid
 
+  marketId      String  @db.Uuid
+  shareholderId String  @db.Uuid
+  accountId     String? @db.Uuid
+
+  market      Market      @relation(fields: [marketId], references: [id])
   shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
-  account     Account?    @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  account     Account?    @relation(fields: [accountId], references: [id])
 
+  amount         Decimal  @db.Decimal(14, 2)
+  withdrawalDate DateTime
+
+  source      String?
+  description String?
+
+  createdAt DateTime @default(now())
+
+  @@index([marketId])
+  @@index([shareholderId])
   @@map("withdrawals")
-}
-
-model AuditLog {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String?  @map("user_id") @db.Uuid
-  action    String   @db.VarChar(100)
-  tableName String   @map("table_name") @db.VarChar(100)
-  recordId  String?  @map("record_id")
-  oldValue  Json?    @map("old_value")
-  newValue  Json?    @map("new_value")
-  ipAddress String?  @map("ip_address") @db.VarChar(100)
-  device    String?  @db.VarChar(100)
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@index([userId], map: "idx_audit_user")
-  @@map("audit_logs")
-}
-
-model Notification {
-  id            String    @id @default(uuid()) @db.Uuid
-  type          String    @db.VarChar(100)
-  message       String
-  isRead        Boolean   @default(false) @map("is_read")
-  priority      String    @default("normal") @db.VarChar(20)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  readAt        DateTime? @map("read_at")
-  createdBy     String?   @map("created_by") @db.Uuid
-  resolvedAt    DateTime? @map("resolved_at")
-  referenceType String?   @map("reference_type") @db.VarChar(100)
-  referenceId   String?   @map("reference_id")
-
-  creator User? @relation("NotificationCreator", fields: [createdBy], references: [id], onDelete: SetNull)
-
-  @@index([isRead], map: "idx_notification_status")
-  @@map("notifications")
 }
