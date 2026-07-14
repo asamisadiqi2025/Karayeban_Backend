@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Shop
- * 
+ * A rentable shop unit.
  */
 export type ShopModel = runtime.Types.Result.DefaultSelection<Prisma.$ShopPayload>
 
@@ -29,73 +29,72 @@ export type AggregateShop = {
 export type ShopAvgAggregateOutputType = {
   rentAmount: runtime.Decimal | null
   areaInSquareMeters: runtime.Decimal | null
+  version: number | null
 }
 
 export type ShopSumAggregateOutputType = {
   rentAmount: runtime.Decimal | null
   areaInSquareMeters: runtime.Decimal | null
+  version: number | null
 }
 
 export type ShopMinAggregateOutputType = {
   id: string | null
   marketId: string | null
-  shopCode: string | null
   floorId: string | null
   categoryId: string | null
+  shopCode: string | null
   shopNumber: string | null
   rentAmount: runtime.Decimal | null
   areaInSquareMeters: runtime.Decimal | null
   electricityMeterNumber: string | null
   waterMeterNumber: string | null
-  description: string | null
-  status: string | null
+  status: $Enums.ShopStatus | null
+  version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
 export type ShopMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
-  shopCode: string | null
   floorId: string | null
   categoryId: string | null
+  shopCode: string | null
   shopNumber: string | null
   rentAmount: runtime.Decimal | null
   areaInSquareMeters: runtime.Decimal | null
   electricityMeterNumber: string | null
   waterMeterNumber: string | null
-  description: string | null
-  status: string | null
+  status: $Enums.ShopStatus | null
+  version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
 export type ShopCountAggregateOutputType = {
   id: number
   marketId: number
-  shopCode: number
   floorId: number
   categoryId: number
+  shopCode: number
   shopNumber: number
   rentAmount: number
   areaInSquareMeters: number
   electricityMeterNumber: number
   waterMeterNumber: number
-  description: number
   status: number
+  version: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
@@ -104,73 +103,72 @@ export type ShopCountAggregateOutputType = {
 export type ShopAvgAggregateInputType = {
   rentAmount?: true
   areaInSquareMeters?: true
+  version?: true
 }
 
 export type ShopSumAggregateInputType = {
   rentAmount?: true
   areaInSquareMeters?: true
+  version?: true
 }
 
 export type ShopMinAggregateInputType = {
   id?: true
   marketId?: true
-  shopCode?: true
   floorId?: true
   categoryId?: true
+  shopCode?: true
   shopNumber?: true
   rentAmount?: true
   areaInSquareMeters?: true
   electricityMeterNumber?: true
   waterMeterNumber?: true
-  description?: true
   status?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
 export type ShopMaxAggregateInputType = {
   id?: true
   marketId?: true
-  shopCode?: true
   floorId?: true
   categoryId?: true
+  shopCode?: true
   shopNumber?: true
   rentAmount?: true
   areaInSquareMeters?: true
   electricityMeterNumber?: true
   waterMeterNumber?: true
-  description?: true
   status?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
 export type ShopCountAggregateInputType = {
   id?: true
   marketId?: true
-  shopCode?: true
   floorId?: true
   categoryId?: true
+  shopCode?: true
   shopNumber?: true
   rentAmount?: true
   areaInSquareMeters?: true
   electricityMeterNumber?: true
   waterMeterNumber?: true
-  description?: true
   status?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -264,21 +262,20 @@ export type ShopGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type ShopGroupByOutputType = {
   id: string
   marketId: string
-  shopCode: string
-  floorId: string | null
+  floorId: string
   categoryId: string | null
-  shopNumber: string | null
-  rentAmount: runtime.Decimal | null
-  areaInSquareMeters: runtime.Decimal | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal
+  areaInSquareMeters: runtime.Decimal
   electricityMeterNumber: string | null
   waterMeterNumber: string | null
-  description: string | null
-  status: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  status: $Enums.ShopStatus
+  version: number
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: ShopCountAggregateOutputType | null
   _avg: ShopAvgAggregateOutputType | null
@@ -308,24 +305,23 @@ export type ShopWhereInput = {
   NOT?: Prisma.ShopWhereInput | Prisma.ShopWhereInput[]
   id?: Prisma.UuidFilter<"Shop"> | string
   marketId?: Prisma.UuidFilter<"Shop"> | string
-  shopCode?: Prisma.StringFilter<"Shop"> | string
-  floorId?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  floorId?: Prisma.UuidFilter<"Shop"> | string
   categoryId?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  shopNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
-  rentAmount?: Prisma.DecimalNullableFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.DecimalNullableFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFilter<"Shop"> | string
+  shopNumber?: Prisma.StringFilter<"Shop"> | string
+  rentAmount?: Prisma.DecimalFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
   waterMeterNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
-  description?: Prisma.StringNullableFilter<"Shop"> | string | null
-  status?: Prisma.StringNullableFilter<"Shop"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  status?: Prisma.EnumShopStatusFilter<"Shop"> | $Enums.ShopStatus
+  version?: Prisma.IntFilter<"Shop"> | number
+  createdById?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Shop"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Shop"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  floor?: Prisma.XOR<Prisma.FloorNullableScalarRelationFilter, Prisma.FloorWhereInput> | null
+  floor?: Prisma.XOR<Prisma.FloorScalarRelationFilter, Prisma.FloorWhereInput>
   category?: Prisma.XOR<Prisma.ShopCategoryNullableScalarRelationFilter, Prisma.ShopCategoryWhereInput> | null
   contracts?: Prisma.ContractListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
@@ -336,21 +332,20 @@ export type ShopWhereInput = {
 export type ShopOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  shopCode?: Prisma.SortOrder
-  floorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  floorId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
-  shopNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  rentAmount?: Prisma.SortOrderInput | Prisma.SortOrder
-  areaInSquareMeters?: Prisma.SortOrderInput | Prisma.SortOrder
+  shopCode?: Prisma.SortOrder
+  shopNumber?: Prisma.SortOrder
+  rentAmount?: Prisma.SortOrder
+  areaInSquareMeters?: Prisma.SortOrder
   electricityMeterNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   waterMeterNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   floor?: Prisma.FloorOrderByWithRelationInput
@@ -363,54 +358,51 @@ export type ShopOrderByWithRelationInput = {
 
 export type ShopWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.ShopMarketIdIdCompoundUniqueInput
   AND?: Prisma.ShopWhereInput | Prisma.ShopWhereInput[]
   OR?: Prisma.ShopWhereInput[]
   NOT?: Prisma.ShopWhereInput | Prisma.ShopWhereInput[]
   marketId?: Prisma.UuidFilter<"Shop"> | string
-  shopCode?: Prisma.StringFilter<"Shop"> | string
-  floorId?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  floorId?: Prisma.UuidFilter<"Shop"> | string
   categoryId?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  shopNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
-  rentAmount?: Prisma.DecimalNullableFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.DecimalNullableFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFilter<"Shop"> | string
+  shopNumber?: Prisma.StringFilter<"Shop"> | string
+  rentAmount?: Prisma.DecimalFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
   waterMeterNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
-  description?: Prisma.StringNullableFilter<"Shop"> | string | null
-  status?: Prisma.StringNullableFilter<"Shop"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  status?: Prisma.EnumShopStatusFilter<"Shop"> | $Enums.ShopStatus
+  version?: Prisma.IntFilter<"Shop"> | number
+  createdById?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Shop"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Shop"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  floor?: Prisma.XOR<Prisma.FloorNullableScalarRelationFilter, Prisma.FloorWhereInput> | null
+  floor?: Prisma.XOR<Prisma.FloorScalarRelationFilter, Prisma.FloorWhereInput>
   category?: Prisma.XOR<Prisma.ShopCategoryNullableScalarRelationFilter, Prisma.ShopCategoryWhereInput> | null
   contracts?: Prisma.ContractListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
   utilityBills?: Prisma.UtilityBillListRelationFilter
   exitClearances?: Prisma.ExitClearanceListRelationFilter
-}, "id" | "marketId_id">
+}, "id">
 
 export type ShopOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  shopCode?: Prisma.SortOrder
-  floorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  floorId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
-  shopNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  rentAmount?: Prisma.SortOrderInput | Prisma.SortOrder
-  areaInSquareMeters?: Prisma.SortOrderInput | Prisma.SortOrder
+  shopCode?: Prisma.SortOrder
+  shopNumber?: Prisma.SortOrder
+  rentAmount?: Prisma.SortOrder
+  areaInSquareMeters?: Prisma.SortOrder
   electricityMeterNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   waterMeterNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ShopCountOrderByAggregateInput
   _avg?: Prisma.ShopAvgOrderByAggregateInput
@@ -425,42 +417,40 @@ export type ShopScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ShopScalarWhereWithAggregatesInput | Prisma.ShopScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Shop"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"Shop"> | string
-  shopCode?: Prisma.StringWithAggregatesFilter<"Shop"> | string
-  floorId?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
+  floorId?: Prisma.UuidWithAggregatesFilter<"Shop"> | string
   categoryId?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
-  shopNumber?: Prisma.StringNullableWithAggregatesFilter<"Shop"> | string | null
-  rentAmount?: Prisma.DecimalNullableWithAggregatesFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.DecimalNullableWithAggregatesFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringWithAggregatesFilter<"Shop"> | string
+  shopNumber?: Prisma.StringWithAggregatesFilter<"Shop"> | string
+  rentAmount?: Prisma.DecimalWithAggregatesFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalWithAggregatesFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.StringNullableWithAggregatesFilter<"Shop"> | string | null
   waterMeterNumber?: Prisma.StringNullableWithAggregatesFilter<"Shop"> | string | null
-  description?: Prisma.StringNullableWithAggregatesFilter<"Shop"> | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"Shop"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Shop"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Shop"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
+  status?: Prisma.EnumShopStatusWithAggregatesFilter<"Shop"> | $Enums.ShopStatus
+  version?: Prisma.IntWithAggregatesFilter<"Shop"> | number
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Shop"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Shop"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Shop"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Shop"> | Date | string | null
 }
 
 export type ShopCreateInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
@@ -471,21 +461,20 @@ export type ShopCreateInput = {
 export type ShopUncheckedCreateInput = {
   id?: string
   marketId: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
@@ -496,21 +485,20 @@ export type ShopUncheckedCreateInput = {
 export type ShopUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
@@ -521,21 +509,20 @@ export type ShopUpdateInput = {
 export type ShopUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
@@ -546,60 +533,57 @@ export type ShopUncheckedUpdateInput = {
 export type ShopCreateManyInput = {
   id?: string
   marketId: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ShopUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ShopUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -613,82 +597,76 @@ export type ShopOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ShopMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
-}
-
 export type ShopCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  shopCode?: Prisma.SortOrder
   floorId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  shopCode?: Prisma.SortOrder
   shopNumber?: Prisma.SortOrder
   rentAmount?: Prisma.SortOrder
   areaInSquareMeters?: Prisma.SortOrder
   electricityMeterNumber?: Prisma.SortOrder
   waterMeterNumber?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type ShopAvgOrderByAggregateInput = {
   rentAmount?: Prisma.SortOrder
   areaInSquareMeters?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ShopMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  shopCode?: Prisma.SortOrder
   floorId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  shopCode?: Prisma.SortOrder
   shopNumber?: Prisma.SortOrder
   rentAmount?: Prisma.SortOrder
   areaInSquareMeters?: Prisma.SortOrder
   electricityMeterNumber?: Prisma.SortOrder
   waterMeterNumber?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type ShopMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  shopCode?: Prisma.SortOrder
   floorId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  shopCode?: Prisma.SortOrder
   shopNumber?: Prisma.SortOrder
   rentAmount?: Prisma.SortOrder
   areaInSquareMeters?: Prisma.SortOrder
   electricityMeterNumber?: Prisma.SortOrder
   waterMeterNumber?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type ShopSumOrderByAggregateInput = {
   rentAmount?: Prisma.SortOrder
   areaInSquareMeters?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ShopScalarRelationFilter = {
@@ -780,6 +758,18 @@ export type ShopUncheckedUpdateManyWithoutFloorNestedInput = {
   deleteMany?: Prisma.ShopScalarWhereInput | Prisma.ShopScalarWhereInput[]
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type EnumShopStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ShopStatus
+}
+
 export type ShopCreateNestedManyWithoutCategoryInput = {
   create?: Prisma.XOR<Prisma.ShopCreateWithoutCategoryInput, Prisma.ShopUncheckedCreateWithoutCategoryInput> | Prisma.ShopCreateWithoutCategoryInput[] | Prisma.ShopUncheckedCreateWithoutCategoryInput[]
   connectOrCreate?: Prisma.ShopCreateOrConnectWithoutCategoryInput | Prisma.ShopCreateOrConnectWithoutCategoryInput[]
@@ -820,14 +810,6 @@ export type ShopUncheckedUpdateManyWithoutCategoryNestedInput = {
   update?: Prisma.ShopUpdateWithWhereUniqueWithoutCategoryInput | Prisma.ShopUpdateWithWhereUniqueWithoutCategoryInput[]
   updateMany?: Prisma.ShopUpdateManyWithWhereWithoutCategoryInput | Prisma.ShopUpdateManyWithWhereWithoutCategoryInput[]
   deleteMany?: Prisma.ShopScalarWhereInput | Prisma.ShopScalarWhereInput[]
-}
-
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type ShopCreateNestedOneWithoutContractsInput = {
@@ -889,20 +871,19 @@ export type ShopUpdateOneRequiredWithoutExitClearancesNestedInput = {
 export type ShopCreateWithoutMarketInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
@@ -912,21 +893,20 @@ export type ShopCreateWithoutMarketInput = {
 
 export type ShopUncheckedCreateWithoutMarketInput = {
   id?: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
@@ -966,39 +946,37 @@ export type ShopScalarWhereInput = {
   NOT?: Prisma.ShopScalarWhereInput | Prisma.ShopScalarWhereInput[]
   id?: Prisma.UuidFilter<"Shop"> | string
   marketId?: Prisma.UuidFilter<"Shop"> | string
-  shopCode?: Prisma.StringFilter<"Shop"> | string
-  floorId?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  floorId?: Prisma.UuidFilter<"Shop"> | string
   categoryId?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  shopNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
-  rentAmount?: Prisma.DecimalNullableFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.DecimalNullableFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFilter<"Shop"> | string
+  shopNumber?: Prisma.StringFilter<"Shop"> | string
+  rentAmount?: Prisma.DecimalFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFilter<"Shop"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
   waterMeterNumber?: Prisma.StringNullableFilter<"Shop"> | string | null
-  description?: Prisma.StringNullableFilter<"Shop"> | string | null
-  status?: Prisma.StringNullableFilter<"Shop"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  status?: Prisma.EnumShopStatusFilter<"Shop"> | $Enums.ShopStatus
+  version?: Prisma.IntFilter<"Shop"> | number
+  createdById?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Shop"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Shop"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Shop"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Shop"> | Date | string | null
 }
 
 export type ShopCreateWithoutFloorInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
@@ -1010,20 +988,20 @@ export type ShopCreateWithoutFloorInput = {
 
 export type ShopUncheckedCreateWithoutFloorInput = {
   id?: string
-  shopCode: string
+  marketId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
@@ -1060,21 +1038,20 @@ export type ShopUpdateManyWithWhereWithoutFloorInput = {
 export type ShopCreateWithoutCategoryInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
@@ -1083,20 +1060,20 @@ export type ShopCreateWithoutCategoryInput = {
 
 export type ShopUncheckedCreateWithoutCategoryInput = {
   id?: string
+  marketId: string
+  floorId: string
   shopCode: string
-  floorId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
@@ -1133,21 +1110,20 @@ export type ShopUpdateManyWithWhereWithoutCategoryInput = {
 export type ShopCreateWithoutContractsInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
@@ -1157,21 +1133,20 @@ export type ShopCreateWithoutContractsInput = {
 export type ShopUncheckedCreateWithoutContractsInput = {
   id?: string
   marketId: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
@@ -1197,21 +1172,20 @@ export type ShopUpdateToOneWithWhereWithoutContractsInput = {
 export type ShopUpdateWithoutContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
@@ -1221,21 +1195,20 @@ export type ShopUpdateWithoutContractsInput = {
 export type ShopUncheckedUpdateWithoutContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
@@ -1245,21 +1218,20 @@ export type ShopUncheckedUpdateWithoutContractsInput = {
 export type ShopCreateWithoutRentPaymentsInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
@@ -1269,21 +1241,20 @@ export type ShopCreateWithoutRentPaymentsInput = {
 export type ShopUncheckedCreateWithoutRentPaymentsInput = {
   id?: string
   marketId: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
@@ -1309,21 +1280,20 @@ export type ShopUpdateToOneWithWhereWithoutRentPaymentsInput = {
 export type ShopUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
@@ -1333,21 +1303,20 @@ export type ShopUpdateWithoutRentPaymentsInput = {
 export type ShopUncheckedUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
@@ -1357,21 +1326,20 @@ export type ShopUncheckedUpdateWithoutRentPaymentsInput = {
 export type ShopCreateWithoutUtilityBillsInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
@@ -1381,21 +1349,20 @@ export type ShopCreateWithoutUtilityBillsInput = {
 export type ShopUncheckedCreateWithoutUtilityBillsInput = {
   id?: string
   marketId: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
@@ -1421,21 +1388,20 @@ export type ShopUpdateToOneWithWhereWithoutUtilityBillsInput = {
 export type ShopUpdateWithoutUtilityBillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
@@ -1445,21 +1411,20 @@ export type ShopUpdateWithoutUtilityBillsInput = {
 export type ShopUncheckedUpdateWithoutUtilityBillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
@@ -1469,21 +1434,20 @@ export type ShopUncheckedUpdateWithoutUtilityBillsInput = {
 export type ShopCreateWithoutExitClearancesInput = {
   id?: string
   shopCode: string
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopsInput
-  floor?: Prisma.FloorCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
   category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
@@ -1493,21 +1457,20 @@ export type ShopCreateWithoutExitClearancesInput = {
 export type ShopUncheckedCreateWithoutExitClearancesInput = {
   id?: string
   marketId: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
@@ -1533,21 +1496,20 @@ export type ShopUpdateToOneWithWhereWithoutExitClearancesInput = {
 export type ShopUpdateWithoutExitClearancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
@@ -1557,21 +1519,20 @@ export type ShopUpdateWithoutExitClearancesInput = {
 export type ShopUncheckedUpdateWithoutExitClearancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
@@ -1580,41 +1541,39 @@ export type ShopUncheckedUpdateWithoutExitClearancesInput = {
 
 export type ShopCreateManyMarketInput = {
   id?: string
-  shopCode: string
-  floorId?: string | null
+  floorId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ShopUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
@@ -1624,21 +1583,20 @@ export type ShopUpdateWithoutMarketInput = {
 
 export type ShopUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
@@ -1648,58 +1606,56 @@ export type ShopUncheckedUpdateWithoutMarketInput = {
 
 export type ShopUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ShopCreateManyFloorInput = {
   id?: string
-  shopCode: string
+  marketId: string
   categoryId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ShopUpdateWithoutFloorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
   category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
@@ -1711,20 +1667,20 @@ export type ShopUpdateWithoutFloorInput = {
 
 export type ShopUncheckedUpdateWithoutFloorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
@@ -1734,60 +1690,59 @@ export type ShopUncheckedUpdateWithoutFloorInput = {
 
 export type ShopUncheckedUpdateManyWithoutFloorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ShopCreateManyCategoryInput = {
   id?: string
+  marketId: string
+  floorId: string
   shopCode: string
-  floorId?: string | null
-  shopNumber?: string | null
-  rentAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: string | null
   waterMeterNumber?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ShopUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
-  floor?: Prisma.FloorUpdateOneWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
@@ -1796,20 +1751,20 @@ export type ShopUpdateWithoutCategoryInput = {
 
 export type ShopUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
@@ -1819,20 +1774,20 @@ export type ShopUncheckedUpdateWithoutCategoryInput = {
 
 export type ShopUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
   shopCode?: Prisma.StringFieldUpdateOperationsInput | string
-  floorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shopNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rentAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  areaInSquareMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1897,24 +1852,23 @@ export type ShopCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.T
 export type ShopSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  shopCode?: boolean
   floorId?: boolean
   categoryId?: boolean
+  shopCode?: boolean
   shopNumber?: boolean
   rentAmount?: boolean
   areaInSquareMeters?: boolean
   electricityMeterNumber?: boolean
   waterMeterNumber?: boolean
-  description?: boolean
   status?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  floor?: boolean | Prisma.Shop$floorArgs<ExtArgs>
+  floor?: boolean | Prisma.FloorDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Shop$categoryArgs<ExtArgs>
   contracts?: boolean | Prisma.Shop$contractsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Shop$rentPaymentsArgs<ExtArgs>
@@ -1926,76 +1880,73 @@ export type ShopSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type ShopSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  shopCode?: boolean
   floorId?: boolean
   categoryId?: boolean
+  shopCode?: boolean
   shopNumber?: boolean
   rentAmount?: boolean
   areaInSquareMeters?: boolean
   electricityMeterNumber?: boolean
   waterMeterNumber?: boolean
-  description?: boolean
   status?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  floor?: boolean | Prisma.Shop$floorArgs<ExtArgs>
+  floor?: boolean | Prisma.FloorDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Shop$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["shop"]>
 
 export type ShopSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  shopCode?: boolean
   floorId?: boolean
   categoryId?: boolean
+  shopCode?: boolean
   shopNumber?: boolean
   rentAmount?: boolean
   areaInSquareMeters?: boolean
   electricityMeterNumber?: boolean
   waterMeterNumber?: boolean
-  description?: boolean
   status?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  floor?: boolean | Prisma.Shop$floorArgs<ExtArgs>
+  floor?: boolean | Prisma.FloorDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Shop$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["shop"]>
 
 export type ShopSelectScalar = {
   id?: boolean
   marketId?: boolean
-  shopCode?: boolean
   floorId?: boolean
   categoryId?: boolean
+  shopCode?: boolean
   shopNumber?: boolean
   rentAmount?: boolean
   areaInSquareMeters?: boolean
   electricityMeterNumber?: boolean
   waterMeterNumber?: boolean
-  description?: boolean
   status?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type ShopOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopCode" | "floorId" | "categoryId" | "shopNumber" | "rentAmount" | "areaInSquareMeters" | "electricityMeterNumber" | "waterMeterNumber" | "description" | "status" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["shop"]>
+export type ShopOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "floorId" | "categoryId" | "shopCode" | "shopNumber" | "rentAmount" | "areaInSquareMeters" | "electricityMeterNumber" | "waterMeterNumber" | "status" | "version" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shop"]>
 export type ShopInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  floor?: boolean | Prisma.Shop$floorArgs<ExtArgs>
+  floor?: boolean | Prisma.FloorDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Shop$categoryArgs<ExtArgs>
   contracts?: boolean | Prisma.Shop$contractsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Shop$rentPaymentsArgs<ExtArgs>
@@ -2005,12 +1956,12 @@ export type ShopInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }
 export type ShopIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  floor?: boolean | Prisma.Shop$floorArgs<ExtArgs>
+  floor?: boolean | Prisma.FloorDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Shop$categoryArgs<ExtArgs>
 }
 export type ShopIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  floor?: boolean | Prisma.Shop$floorArgs<ExtArgs>
+  floor?: boolean | Prisma.FloorDefaultArgs<ExtArgs>
   category?: boolean | Prisma.Shop$categoryArgs<ExtArgs>
 }
 
@@ -2018,7 +1969,7 @@ export type $ShopPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Shop"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    floor: Prisma.$FloorPayload<ExtArgs> | null
+    floor: Prisma.$FloorPayload<ExtArgs>
     category: Prisma.$ShopCategoryPayload<ExtArgs> | null
     contracts: Prisma.$ContractPayload<ExtArgs>[]
     rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
@@ -2028,21 +1979,23 @@ export type $ShopPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
-    shopCode: string
-    floorId: string | null
+    floorId: string
     categoryId: string | null
-    shopNumber: string | null
-    rentAmount: runtime.Decimal | null
-    areaInSquareMeters: runtime.Decimal | null
+    shopCode: string
+    shopNumber: string
+    rentAmount: runtime.Decimal
+    areaInSquareMeters: runtime.Decimal
     electricityMeterNumber: string | null
     waterMeterNumber: string | null
-    description: string | null
-    status: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    status: $Enums.ShopStatus
+    /**
+     * Optimistic-locking token.
+     */
+    version: number
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["shop"]>
   composites: {}
@@ -2439,7 +2392,7 @@ readonly fields: ShopFieldRefs;
 export interface Prisma__ShopClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  floor<T extends Prisma.Shop$floorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$floorArgs<ExtArgs>>): Prisma.Prisma__FloorClient<runtime.Types.Result.GetResult<Prisma.$FloorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  floor<T extends Prisma.FloorDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FloorDefaultArgs<ExtArgs>>): Prisma.Prisma__FloorClient<runtime.Types.Result.GetResult<Prisma.$FloorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.Shop$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$categoryArgs<ExtArgs>>): Prisma.Prisma__ShopCategoryClient<runtime.Types.Result.GetResult<Prisma.$ShopCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   contracts<T extends Prisma.Shop$contractsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rentPayments<T extends Prisma.Shop$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2476,21 +2429,20 @@ export interface Prisma__ShopClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface ShopFieldRefs {
   readonly id: Prisma.FieldRef<"Shop", 'String'>
   readonly marketId: Prisma.FieldRef<"Shop", 'String'>
-  readonly shopCode: Prisma.FieldRef<"Shop", 'String'>
   readonly floorId: Prisma.FieldRef<"Shop", 'String'>
   readonly categoryId: Prisma.FieldRef<"Shop", 'String'>
+  readonly shopCode: Prisma.FieldRef<"Shop", 'String'>
   readonly shopNumber: Prisma.FieldRef<"Shop", 'String'>
   readonly rentAmount: Prisma.FieldRef<"Shop", 'Decimal'>
   readonly areaInSquareMeters: Prisma.FieldRef<"Shop", 'Decimal'>
   readonly electricityMeterNumber: Prisma.FieldRef<"Shop", 'String'>
   readonly waterMeterNumber: Prisma.FieldRef<"Shop", 'String'>
-  readonly description: Prisma.FieldRef<"Shop", 'String'>
-  readonly status: Prisma.FieldRef<"Shop", 'String'>
+  readonly status: Prisma.FieldRef<"Shop", 'ShopStatus'>
+  readonly version: Prisma.FieldRef<"Shop", 'Int'>
+  readonly createdById: Prisma.FieldRef<"Shop", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Shop", 'String'>
   readonly createdAt: Prisma.FieldRef<"Shop", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Shop", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Shop", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Shop", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Shop", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Shop", 'DateTime'>
 }
     
@@ -2890,25 +2842,6 @@ export type ShopDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Shops to delete.
    */
   limit?: number
-}
-
-/**
- * Shop.floor
- */
-export type Shop$floorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Floor
-   */
-  select?: Prisma.FloorSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Floor
-   */
-  omit?: Prisma.FloorOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.FloorInclude<ExtArgs> | null
-  where?: Prisma.FloorWhereInput
 }
 
 /**

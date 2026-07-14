@@ -9,7 +9,237 @@
 * 🟢 You can import this file directly.
 */
 
+export const MarketStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  CLOSED: 'CLOSED'
+} as const
+
+export type MarketStatus = (typeof MarketStatus)[keyof typeof MarketStatus]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ShopStatus = {
+  EMPTY: 'EMPTY',
+  OCCUPIED: 'OCCUPIED',
+  RESERVED: 'RESERVED',
+  MAINTENANCE: 'MAINTENANCE'
+} as const
+
+export type ShopStatus = (typeof ShopStatus)[keyof typeof ShopStatus]
+
+
+export const TenantStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  MOVED_OUT: 'MOVED_OUT',
+  BLACKLISTED: 'BLACKLISTED'
+} as const
+
+export type TenantStatus = (typeof TenantStatus)[keyof typeof TenantStatus]
+
+
+export const DebtStatus = {
+  PAID: 'PAID',
+  DEBTOR: 'DEBTOR'
+} as const
+
+export type DebtStatus = (typeof DebtStatus)[keyof typeof DebtStatus]
+
+
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const ContractStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  TERMINATED: 'TERMINATED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ContractStatus = (typeof ContractStatus)[keyof typeof ContractStatus]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const UtilityType = {
+  ELECTRICITY: 'ELECTRICITY',
+  WATER: 'WATER',
+  CLEANING: 'CLEANING',
+  SECURITY: 'SECURITY',
+  OTHER: 'OTHER'
+} as const
+
+export type UtilityType = (typeof UtilityType)[keyof typeof UtilityType]
+
+
+export const UtilityPaymentStatus = {
+  PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
+  PAID: 'PAID'
+} as const
+
+export type UtilityPaymentStatus = (typeof UtilityPaymentStatus)[keyof typeof UtilityPaymentStatus]
+
+
+export const EmployeeStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus]
+
+
+export const AccountType = {
+  CASH: 'CASH',
+  BANK: 'BANK',
+  MOBILE_MONEY: 'MOBILE_MONEY',
+  OTHER: 'OTHER'
+} as const
+
+export type AccountType = (typeof AccountType)[keyof typeof AccountType]
+
+
+export const Currency = {
+  AFN: 'AFN',
+  USD: 'USD',
+  EUR: 'EUR',
+  GBP: 'GBP',
+  OTHER: 'OTHER'
+} as const
+
+export type Currency = (typeof Currency)[keyof typeof Currency]
+
+
+export const TransactionType = {
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const TransactionReferenceType = {
+  RENT_PAYMENT: 'RENT_PAYMENT',
+  UTILITY_BILL: 'UTILITY_BILL',
+  MARKET_EXPENSE: 'MARKET_EXPENSE',
+  MISC_INCOME: 'MISC_INCOME',
+  WITHDRAWAL: 'WITHDRAWAL',
+  ADDITIONAL_INVESTMENT: 'ADDITIONAL_INVESTMENT',
+  CHEQUE: 'CHEQUE',
+  OTHER: 'OTHER'
+} as const
+
+export type TransactionReferenceType = (typeof TransactionReferenceType)[keyof typeof TransactionReferenceType]
+
+
+export const ChequeStatus = {
+  PENDING: 'PENDING',
+  RECEIVED: 'RECEIVED',
+  RETURNED: 'RETURNED',
+  CLEARED: 'CLEARED'
+} as const
+
+export type ChequeStatus = (typeof ChequeStatus)[keyof typeof ChequeStatus]
+
+
+export const DocumentEntityType = {
+  TENANT: 'TENANT',
+  CONTRACT: 'CONTRACT',
+  SHOP: 'SHOP',
+  GUARANTOR: 'GUARANTOR',
+  CHEQUE: 'CHEQUE',
+  MARKET: 'MARKET'
+} as const
+
+export type DocumentEntityType = (typeof DocumentEntityType)[keyof typeof DocumentEntityType]
+
+
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const NotificationType = {
+  RENT_DUE: 'RENT_DUE',
+  PAYMENT_RECEIVED: 'PAYMENT_RECEIVED',
+  CONTRACT_EXPIRING: 'CONTRACT_EXPIRING',
+  UTILITY_DUE: 'UTILITY_DUE',
+  CHEQUE_DUE: 'CHEQUE_DUE',
+  SYSTEM: 'SYSTEM',
+  OTHER: 'OTHER'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const NotificationPriority = {
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type NotificationPriority = (typeof NotificationPriority)[keyof typeof NotificationPriority]
+
+
+export const InvestmentType = {
+  CASH: 'CASH',
+  EQUIPMENT: 'EQUIPMENT',
+  CONSTRUCTION: 'CONSTRUCTION',
+  OTHER: 'OTHER'
+} as const
+
+export type InvestmentType = (typeof InvestmentType)[keyof typeof InvestmentType]
+
+
+export const AuditOperation = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT'
+} as const
+
+export type AuditOperation = (typeof AuditOperation)[keyof typeof AuditOperation]
+
+
+export const PaymentMethod = {
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CHEQUE: 'CHEQUE',
+  MOBILE_MONEY: 'MOBILE_MONEY',
+  OTHER: 'OTHER'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const NotificationReferenceType = {
+  CONTRACT: 'CONTRACT',
+  RENT_PAYMENT: 'RENT_PAYMENT',
+  UTILITY_BILL: 'UTILITY_BILL',
+  CHEQUE: 'CHEQUE',
+  TENANT: 'TENANT',
+  SHOP: 'SHOP',
+  OTHER: 'OTHER'
+} as const
+
+export type NotificationReferenceType = (typeof NotificationReferenceType)[keyof typeof NotificationReferenceType]

@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model MarketExpense
- * 
+ * An expense incurred by a market.
  */
 export type MarketExpenseModel = runtime.Types.Result.DefaultSelection<Prisma.$MarketExpensePayload>
 
@@ -37,64 +37,49 @@ export type MarketExpenseSumAggregateOutputType = {
 export type MarketExpenseMinAggregateOutputType = {
   id: string | null
   marketId: string | null
-  expenseDate: Date | null
   categoryId: string | null
   employeeId: string | null
   accountId: string | null
+  expenseNumber: string | null
   amount: runtime.Decimal | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
-  rejectionReason: string | null
+  expenseDate: Date | null
   description: string | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
 }
 
 export type MarketExpenseMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
-  expenseDate: Date | null
   categoryId: string | null
   employeeId: string | null
   accountId: string | null
+  expenseNumber: string | null
   amount: runtime.Decimal | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
-  rejectionReason: string | null
+  expenseDate: Date | null
   description: string | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  deletedAt: Date | null
 }
 
 export type MarketExpenseCountAggregateOutputType = {
   id: number
   marketId: number
-  expenseDate: number
   categoryId: number
   employeeId: number
   accountId: number
+  expenseNumber: number
   amount: number
-  approvalStatus: number
-  approvedBy: number
-  approvedAt: number
-  rejectionReason: number
+  expenseDate: number
   description: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  deletedAt: number
   _all: number
 }
 
@@ -110,64 +95,49 @@ export type MarketExpenseSumAggregateInputType = {
 export type MarketExpenseMinAggregateInputType = {
   id?: true
   marketId?: true
-  expenseDate?: true
   categoryId?: true
   employeeId?: true
   accountId?: true
+  expenseNumber?: true
   amount?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
-  rejectionReason?: true
+  expenseDate?: true
   description?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
 }
 
 export type MarketExpenseMaxAggregateInputType = {
   id?: true
   marketId?: true
-  expenseDate?: true
   categoryId?: true
   employeeId?: true
   accountId?: true
+  expenseNumber?: true
   amount?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
-  rejectionReason?: true
+  expenseDate?: true
   description?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
 }
 
 export type MarketExpenseCountAggregateInputType = {
   id?: true
   marketId?: true
-  expenseDate?: true
   categoryId?: true
   employeeId?: true
   accountId?: true
+  expenseNumber?: true
   amount?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
-  rejectionReason?: true
+  expenseDate?: true
   description?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  deletedAt?: true
   _all?: true
 }
 
@@ -260,22 +230,17 @@ export type MarketExpenseGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type MarketExpenseGroupByOutputType = {
   id: string
   marketId: string
-  expenseDate: Date
-  categoryId: string | null
+  categoryId: string
   employeeId: string | null
   accountId: string | null
+  expenseNumber: string
   amount: runtime.Decimal
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
-  rejectionReason: string | null
+  expenseDate: Date
   description: string | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  deletedAt: Date | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: MarketExpenseCountAggregateOutputType | null
   _avg: MarketExpenseAvgAggregateOutputType | null
   _sum: MarketExpenseSumAggregateOutputType | null
@@ -304,24 +269,19 @@ export type MarketExpenseWhereInput = {
   NOT?: Prisma.MarketExpenseWhereInput | Prisma.MarketExpenseWhereInput[]
   id?: Prisma.UuidFilter<"MarketExpense"> | string
   marketId?: Prisma.UuidFilter<"MarketExpense"> | string
-  expenseDate?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
-  categoryId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  categoryId?: Prisma.UuidFilter<"MarketExpense"> | string
   employeeId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
   accountId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  expenseNumber?: Prisma.StringFilter<"MarketExpense"> | string
   amount?: Prisma.DecimalFilter<"MarketExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
+  expenseDate?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
   description?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
-  createdBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  category?: Prisma.XOR<Prisma.ExpenseCategoryNullableScalarRelationFilter, Prisma.ExpenseCategoryWhereInput> | null
+  category?: Prisma.XOR<Prisma.ExpenseCategoryScalarRelationFilter, Prisma.ExpenseCategoryWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
 }
@@ -329,22 +289,17 @@ export type MarketExpenseWhereInput = {
 export type MarketExpenseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  expenseDate?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   accountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  expenseNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  expenseDate?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   category?: Prisma.ExpenseCategoryOrderByWithRelationInput
   employee?: Prisma.EmployeeOrderByWithRelationInput
@@ -353,51 +308,42 @@ export type MarketExpenseOrderByWithRelationInput = {
 
 export type MarketExpenseWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  marketId_expenseNumber?: Prisma.MarketExpenseMarketIdExpenseNumberCompoundUniqueInput
   AND?: Prisma.MarketExpenseWhereInput | Prisma.MarketExpenseWhereInput[]
   OR?: Prisma.MarketExpenseWhereInput[]
   NOT?: Prisma.MarketExpenseWhereInput | Prisma.MarketExpenseWhereInput[]
   marketId?: Prisma.UuidFilter<"MarketExpense"> | string
-  expenseDate?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
-  categoryId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  categoryId?: Prisma.UuidFilter<"MarketExpense"> | string
   employeeId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
   accountId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  expenseNumber?: Prisma.StringFilter<"MarketExpense"> | string
   amount?: Prisma.DecimalFilter<"MarketExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
+  expenseDate?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
   description?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
-  createdBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  category?: Prisma.XOR<Prisma.ExpenseCategoryNullableScalarRelationFilter, Prisma.ExpenseCategoryWhereInput> | null
+  category?: Prisma.XOR<Prisma.ExpenseCategoryScalarRelationFilter, Prisma.ExpenseCategoryWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
-}, "id">
+}, "id" | "marketId_expenseNumber">
 
 export type MarketExpenseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  expenseDate?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrderInput | Prisma.SortOrder
   accountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  expenseNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  expenseDate?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.MarketExpenseCountOrderByAggregateInput
   _avg?: Prisma.MarketExpenseAvgOrderByAggregateInput
   _max?: Prisma.MarketExpenseMaxOrderByAggregateInput
@@ -411,165 +357,125 @@ export type MarketExpenseScalarWhereWithAggregatesInput = {
   NOT?: Prisma.MarketExpenseScalarWhereWithAggregatesInput | Prisma.MarketExpenseScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"MarketExpense"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"MarketExpense"> | string
-  expenseDate?: Prisma.DateTimeWithAggregatesFilter<"MarketExpense"> | Date | string
-  categoryId?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
+  categoryId?: Prisma.UuidWithAggregatesFilter<"MarketExpense"> | string
   employeeId?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
   accountId?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
+  expenseNumber?: Prisma.StringWithAggregatesFilter<"MarketExpense"> | string
   amount?: Prisma.DecimalWithAggregatesFilter<"MarketExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.StringNullableWithAggregatesFilter<"MarketExpense"> | string | null
-  approvedBy?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
-  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketExpense"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"MarketExpense"> | string | null
+  expenseDate?: Prisma.DateTimeWithAggregatesFilter<"MarketExpense"> | Date | string
   description?: Prisma.StringNullableWithAggregatesFilter<"MarketExpense"> | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketExpense"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketExpense"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketExpense"> | Date | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"MarketExpense"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"MarketExpense"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"MarketExpense"> | Date | string
 }
 
 export type MarketExpenseCreateInput = {
   id?: string
-  expenseDate: Date | string
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutMarketExpensesInput
-  category?: Prisma.ExpenseCategoryCreateNestedOneWithoutMarketExpensesInput
-  employee?: Prisma.EmployeeCreateNestedOneWithoutMarketExpensesInput
-  account?: Prisma.AccountCreateNestedOneWithoutMarketExpensesInput
+  category: Prisma.ExpenseCategoryCreateNestedOneWithoutExpensesInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutExpensesInput
+  account?: Prisma.AccountCreateNestedOneWithoutExpensesInput
 }
 
 export type MarketExpenseUncheckedCreateInput = {
   id?: string
   marketId: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  categoryId: string
   employeeId?: string | null
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutMarketExpensesNestedInput
-  category?: Prisma.ExpenseCategoryUpdateOneWithoutMarketExpensesNestedInput
-  employee?: Prisma.EmployeeUpdateOneWithoutMarketExpensesNestedInput
-  account?: Prisma.AccountUpdateOneWithoutMarketExpensesNestedInput
+  category?: Prisma.ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutExpensesNestedInput
+  account?: Prisma.AccountUpdateOneWithoutExpensesNestedInput
 }
 
 export type MarketExpenseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseCreateManyInput = {
   id?: string
   marketId: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  categoryId: string
   employeeId?: string | null
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseListRelationFilter = {
@@ -582,25 +488,25 @@ export type MarketExpenseOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type MarketExpenseMarketIdExpenseNumberCompoundUniqueInput = {
+  marketId: string
+  expenseNumber: string
+}
+
 export type MarketExpenseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  expenseDate?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  expenseNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrder
+  expenseDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type MarketExpenseAvgOrderByAggregateInput = {
@@ -610,43 +516,33 @@ export type MarketExpenseAvgOrderByAggregateInput = {
 export type MarketExpenseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  expenseDate?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  expenseNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrder
+  expenseDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type MarketExpenseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  expenseDate?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  expenseNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrder
+  expenseDate?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type MarketExpenseSumOrderByAggregateInput = {
@@ -823,42 +719,32 @@ export type MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput = {
 
 export type MarketExpenseCreateWithoutMarketInput = {
   id?: string
-  expenseDate: Date | string
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
-  category?: Prisma.ExpenseCategoryCreateNestedOneWithoutMarketExpensesInput
-  employee?: Prisma.EmployeeCreateNestedOneWithoutMarketExpensesInput
-  account?: Prisma.AccountCreateNestedOneWithoutMarketExpensesInput
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.ExpenseCategoryCreateNestedOneWithoutExpensesInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutExpensesInput
+  account?: Prisma.AccountCreateNestedOneWithoutExpensesInput
 }
 
 export type MarketExpenseUncheckedCreateWithoutMarketInput = {
   id?: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  categoryId: string
   employeeId?: string | null
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseCreateOrConnectWithoutMarketInput = {
@@ -893,61 +779,47 @@ export type MarketExpenseScalarWhereInput = {
   NOT?: Prisma.MarketExpenseScalarWhereInput | Prisma.MarketExpenseScalarWhereInput[]
   id?: Prisma.UuidFilter<"MarketExpense"> | string
   marketId?: Prisma.UuidFilter<"MarketExpense"> | string
-  expenseDate?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
-  categoryId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  categoryId?: Prisma.UuidFilter<"MarketExpense"> | string
   employeeId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
   accountId?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  expenseNumber?: Prisma.StringFilter<"MarketExpense"> | string
   amount?: Prisma.DecimalFilter<"MarketExpense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
+  expenseDate?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
   description?: Prisma.StringNullableFilter<"MarketExpense"> | string | null
-  createdBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"MarketExpense"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"MarketExpense"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"MarketExpense"> | Date | string
 }
 
 export type MarketExpenseCreateWithoutCategoryInput = {
   id?: string
-  expenseDate: Date | string
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutMarketExpensesInput
-  employee?: Prisma.EmployeeCreateNestedOneWithoutMarketExpensesInput
-  account?: Prisma.AccountCreateNestedOneWithoutMarketExpensesInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutExpensesInput
+  account?: Prisma.AccountCreateNestedOneWithoutExpensesInput
 }
 
 export type MarketExpenseUncheckedCreateWithoutCategoryInput = {
   id?: string
-  expenseDate: Date | string
+  marketId: string
   employeeId?: string | null
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseCreateOrConnectWithoutCategoryInput = {
@@ -978,41 +850,32 @@ export type MarketExpenseUpdateManyWithWhereWithoutCategoryInput = {
 
 export type MarketExpenseCreateWithoutEmployeeInput = {
   id?: string
-  expenseDate: Date | string
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutMarketExpensesInput
-  category?: Prisma.ExpenseCategoryCreateNestedOneWithoutMarketExpensesInput
-  account?: Prisma.AccountCreateNestedOneWithoutMarketExpensesInput
+  category: Prisma.ExpenseCategoryCreateNestedOneWithoutExpensesInput
+  account?: Prisma.AccountCreateNestedOneWithoutExpensesInput
 }
 
 export type MarketExpenseUncheckedCreateWithoutEmployeeInput = {
   id?: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  marketId: string
+  categoryId: string
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseCreateOrConnectWithoutEmployeeInput = {
@@ -1043,41 +906,32 @@ export type MarketExpenseUpdateManyWithWhereWithoutEmployeeInput = {
 
 export type MarketExpenseCreateWithoutAccountInput = {
   id?: string
-  expenseDate: Date | string
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutMarketExpensesInput
-  category?: Prisma.ExpenseCategoryCreateNestedOneWithoutMarketExpensesInput
-  employee?: Prisma.EmployeeCreateNestedOneWithoutMarketExpensesInput
+  category: Prisma.ExpenseCategoryCreateNestedOneWithoutExpensesInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutExpensesInput
 }
 
 export type MarketExpenseUncheckedCreateWithoutAccountInput = {
   id?: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  marketId: string
+  categoryId: string
   employeeId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseCreateOrConnectWithoutAccountInput = {
@@ -1108,313 +962,242 @@ export type MarketExpenseUpdateManyWithWhereWithoutAccountInput = {
 
 export type MarketExpenseCreateManyMarketInput = {
   id?: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  categoryId: string
   employeeId?: string | null
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  category?: Prisma.ExpenseCategoryUpdateOneWithoutMarketExpensesNestedInput
-  employee?: Prisma.EmployeeUpdateOneWithoutMarketExpensesNestedInput
-  account?: Prisma.AccountUpdateOneWithoutMarketExpensesNestedInput
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutExpensesNestedInput
+  account?: Prisma.AccountUpdateOneWithoutExpensesNestedInput
 }
 
 export type MarketExpenseUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseCreateManyCategoryInput = {
   id?: string
-  expenseDate: Date | string
+  marketId: string
   employeeId?: string | null
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutMarketExpensesNestedInput
-  employee?: Prisma.EmployeeUpdateOneWithoutMarketExpensesNestedInput
-  account?: Prisma.AccountUpdateOneWithoutMarketExpensesNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutExpensesNestedInput
+  account?: Prisma.AccountUpdateOneWithoutExpensesNestedInput
 }
 
 export type MarketExpenseUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseCreateManyEmployeeInput = {
   id?: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  marketId: string
+  categoryId: string
   accountId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutMarketExpensesNestedInput
-  category?: Prisma.ExpenseCategoryUpdateOneWithoutMarketExpensesNestedInput
-  account?: Prisma.AccountUpdateOneWithoutMarketExpensesNestedInput
+  category?: Prisma.ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput
+  account?: Prisma.AccountUpdateOneWithoutExpensesNestedInput
 }
 
 export type MarketExpenseUncheckedUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseUncheckedUpdateManyWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseCreateManyAccountInput = {
   id?: string
-  expenseDate: Date | string
-  categoryId?: string | null
+  marketId: string
+  categoryId: string
   employeeId?: string | null
+  expenseNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
+  expenseDate: Date | string
   description?: string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type MarketExpenseUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutMarketExpensesNestedInput
-  category?: Prisma.ExpenseCategoryUpdateOneWithoutMarketExpensesNestedInput
-  employee?: Prisma.EmployeeUpdateOneWithoutMarketExpensesNestedInput
+  category?: Prisma.ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutExpensesNestedInput
 }
 
 export type MarketExpenseUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MarketExpenseUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expenseDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1422,24 +1205,19 @@ export type MarketExpenseUncheckedUpdateManyWithoutAccountInput = {
 export type MarketExpenseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  expenseDate?: boolean
   categoryId?: boolean
   employeeId?: boolean
   accountId?: boolean
+  expenseNumber?: boolean
   amount?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
+  expenseDate?: boolean
   description?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.MarketExpense$categoryArgs<ExtArgs>
+  category?: boolean | Prisma.ExpenseCategoryDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.MarketExpense$employeeArgs<ExtArgs>
   account?: boolean | Prisma.MarketExpense$accountArgs<ExtArgs>
 }, ExtArgs["result"]["marketExpense"]>
@@ -1447,24 +1225,19 @@ export type MarketExpenseSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type MarketExpenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  expenseDate?: boolean
   categoryId?: boolean
   employeeId?: boolean
   accountId?: boolean
+  expenseNumber?: boolean
   amount?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
+  expenseDate?: boolean
   description?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.MarketExpense$categoryArgs<ExtArgs>
+  category?: boolean | Prisma.ExpenseCategoryDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.MarketExpense$employeeArgs<ExtArgs>
   account?: boolean | Prisma.MarketExpense$accountArgs<ExtArgs>
 }, ExtArgs["result"]["marketExpense"]>
@@ -1472,24 +1245,19 @@ export type MarketExpenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 export type MarketExpenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  expenseDate?: boolean
   categoryId?: boolean
   employeeId?: boolean
   accountId?: boolean
+  expenseNumber?: boolean
   amount?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
+  expenseDate?: boolean
   description?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.MarketExpense$categoryArgs<ExtArgs>
+  category?: boolean | Prisma.ExpenseCategoryDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.MarketExpense$employeeArgs<ExtArgs>
   account?: boolean | Prisma.MarketExpense$accountArgs<ExtArgs>
 }, ExtArgs["result"]["marketExpense"]>
@@ -1497,40 +1265,35 @@ export type MarketExpenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type MarketExpenseSelectScalar = {
   id?: boolean
   marketId?: boolean
-  expenseDate?: boolean
   categoryId?: boolean
   employeeId?: boolean
   accountId?: boolean
+  expenseNumber?: boolean
   amount?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
+  expenseDate?: boolean
   description?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  deletedAt?: boolean
 }
 
-export type MarketExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "expenseDate" | "categoryId" | "employeeId" | "accountId" | "amount" | "approvalStatus" | "approvedBy" | "approvedAt" | "rejectionReason" | "description" | "createdBy" | "updatedBy" | "deletedBy" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["marketExpense"]>
+export type MarketExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "categoryId" | "employeeId" | "accountId" | "expenseNumber" | "amount" | "expenseDate" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["marketExpense"]>
 export type MarketExpenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.MarketExpense$categoryArgs<ExtArgs>
+  category?: boolean | Prisma.ExpenseCategoryDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.MarketExpense$employeeArgs<ExtArgs>
   account?: boolean | Prisma.MarketExpense$accountArgs<ExtArgs>
 }
 export type MarketExpenseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.MarketExpense$categoryArgs<ExtArgs>
+  category?: boolean | Prisma.ExpenseCategoryDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.MarketExpense$employeeArgs<ExtArgs>
   account?: boolean | Prisma.MarketExpense$accountArgs<ExtArgs>
 }
 export type MarketExpenseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.MarketExpense$categoryArgs<ExtArgs>
+  category?: boolean | Prisma.ExpenseCategoryDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.MarketExpense$employeeArgs<ExtArgs>
   account?: boolean | Prisma.MarketExpense$accountArgs<ExtArgs>
 }
@@ -1539,29 +1302,24 @@ export type $MarketExpensePayload<ExtArgs extends runtime.Types.Extensions.Inter
   name: "MarketExpense"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    category: Prisma.$ExpenseCategoryPayload<ExtArgs> | null
+    category: Prisma.$ExpenseCategoryPayload<ExtArgs>
     employee: Prisma.$EmployeePayload<ExtArgs> | null
     account: Prisma.$AccountPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
-    expenseDate: Date
-    categoryId: string | null
+    categoryId: string
     employeeId: string | null
     accountId: string | null
+    expenseNumber: string
     amount: runtime.Decimal
-    approvalStatus: string | null
-    approvedBy: string | null
-    approvedAt: Date | null
-    rejectionReason: string | null
+    expenseDate: Date
     description: string | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    deletedAt: Date | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["marketExpense"]>
   composites: {}
 }
@@ -1957,7 +1715,7 @@ readonly fields: MarketExpenseFieldRefs;
 export interface Prisma__MarketExpenseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  category<T extends Prisma.MarketExpense$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketExpense$categoryArgs<ExtArgs>>): Prisma.Prisma__ExpenseCategoryClient<runtime.Types.Result.GetResult<Prisma.$ExpenseCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  category<T extends Prisma.ExpenseCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExpenseCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__ExpenseCategoryClient<runtime.Types.Result.GetResult<Prisma.$ExpenseCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.MarketExpense$employeeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketExpense$employeeArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.MarketExpense$accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketExpense$accountArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1991,22 +1749,17 @@ export interface Prisma__MarketExpenseClient<T, Null = never, ExtArgs extends ru
 export interface MarketExpenseFieldRefs {
   readonly id: Prisma.FieldRef<"MarketExpense", 'String'>
   readonly marketId: Prisma.FieldRef<"MarketExpense", 'String'>
-  readonly expenseDate: Prisma.FieldRef<"MarketExpense", 'DateTime'>
   readonly categoryId: Prisma.FieldRef<"MarketExpense", 'String'>
   readonly employeeId: Prisma.FieldRef<"MarketExpense", 'String'>
   readonly accountId: Prisma.FieldRef<"MarketExpense", 'String'>
+  readonly expenseNumber: Prisma.FieldRef<"MarketExpense", 'String'>
   readonly amount: Prisma.FieldRef<"MarketExpense", 'Decimal'>
-  readonly approvalStatus: Prisma.FieldRef<"MarketExpense", 'String'>
-  readonly approvedBy: Prisma.FieldRef<"MarketExpense", 'String'>
-  readonly approvedAt: Prisma.FieldRef<"MarketExpense", 'DateTime'>
-  readonly rejectionReason: Prisma.FieldRef<"MarketExpense", 'String'>
+  readonly expenseDate: Prisma.FieldRef<"MarketExpense", 'DateTime'>
   readonly description: Prisma.FieldRef<"MarketExpense", 'String'>
-  readonly createdBy: Prisma.FieldRef<"MarketExpense", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"MarketExpense", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"MarketExpense", 'String'>
+  readonly createdById: Prisma.FieldRef<"MarketExpense", 'String'>
+  readonly updatedById: Prisma.FieldRef<"MarketExpense", 'String'>
   readonly createdAt: Prisma.FieldRef<"MarketExpense", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"MarketExpense", 'DateTime'>
-  readonly deletedAt: Prisma.FieldRef<"MarketExpense", 'DateTime'>
 }
     
 
@@ -2405,25 +2158,6 @@ export type MarketExpenseDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many MarketExpenses to delete.
    */
   limit?: number
-}
-
-/**
- * MarketExpense.category
- */
-export type MarketExpense$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExpenseCategory
-   */
-  select?: Prisma.ExpenseCategorySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExpenseCategory
-   */
-  omit?: Prisma.ExpenseCategoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExpenseCategoryInclude<ExtArgs> | null
-  where?: Prisma.ExpenseCategoryWhereInput
 }
 
 /**

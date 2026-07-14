@@ -14,31 +14,41 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Account
- * 
+ * A financial account (cash box, bank account, wallet).
  */
 export type AccountModel = runtime.Types.Result.DefaultSelection<Prisma.$AccountPayload>
 
 export type AggregateAccount = {
   _count: AccountCountAggregateOutputType | null
+  _avg: AccountAvgAggregateOutputType | null
+  _sum: AccountSumAggregateOutputType | null
   _min: AccountMinAggregateOutputType | null
   _max: AccountMaxAggregateOutputType | null
+}
+
+export type AccountAvgAggregateOutputType = {
+  currentBalance: runtime.Decimal | null
+  version: number | null
+}
+
+export type AccountSumAggregateOutputType = {
+  currentBalance: runtime.Decimal | null
+  version: number | null
 }
 
 export type AccountMinAggregateOutputType = {
   id: string | null
   marketId: string | null
   name: string | null
-  type: string | null
-  currencyCode: string | null
-  isSystem: boolean | null
-  systemCode: string | null
-  allowOverdraft: boolean | null
+  type: $Enums.AccountType | null
+  currency: $Enums.Currency | null
   description: string | null
+  currentBalance: runtime.Decimal | null
+  version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -46,17 +56,15 @@ export type AccountMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
   name: string | null
-  type: string | null
-  currencyCode: string | null
-  isSystem: boolean | null
-  systemCode: string | null
-  allowOverdraft: boolean | null
+  type: $Enums.AccountType | null
+  currency: $Enums.Currency | null
   description: string | null
+  currentBalance: runtime.Decimal | null
+  version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -65,36 +73,42 @@ export type AccountCountAggregateOutputType = {
   marketId: number
   name: number
   type: number
-  currencyCode: number
-  isSystem: number
-  systemCode: number
-  allowOverdraft: number
+  currency: number
   description: number
+  currentBalance: number
+  version: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
 
+
+export type AccountAvgAggregateInputType = {
+  currentBalance?: true
+  version?: true
+}
+
+export type AccountSumAggregateInputType = {
+  currentBalance?: true
+  version?: true
+}
 
 export type AccountMinAggregateInputType = {
   id?: true
   marketId?: true
   name?: true
   type?: true
-  currencyCode?: true
-  isSystem?: true
-  systemCode?: true
-  allowOverdraft?: true
+  currency?: true
   description?: true
+  currentBalance?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -103,16 +117,14 @@ export type AccountMaxAggregateInputType = {
   marketId?: true
   name?: true
   type?: true
-  currencyCode?: true
-  isSystem?: true
-  systemCode?: true
-  allowOverdraft?: true
+  currency?: true
   description?: true
+  currentBalance?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -121,16 +133,14 @@ export type AccountCountAggregateInputType = {
   marketId?: true
   name?: true
   type?: true
-  currencyCode?: true
-  isSystem?: true
-  systemCode?: true
-  allowOverdraft?: true
+  currency?: true
   description?: true
+  currentBalance?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -173,6 +183,18 @@ export type AccountAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: AccountAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: AccountSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: AccountMinAggregateInputType
@@ -203,6 +225,8 @@ export type AccountGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: AccountCountAggregateInputType | true
+  _avg?: AccountAvgAggregateInputType
+  _sum?: AccountSumAggregateInputType
   _min?: AccountMinAggregateInputType
   _max?: AccountMaxAggregateInputType
 }
@@ -211,19 +235,19 @@ export type AccountGroupByOutputType = {
   id: string
   marketId: string
   name: string
-  type: string
-  currencyCode: string | null
-  isSystem: boolean | null
-  systemCode: string | null
-  allowOverdraft: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  currentBalance: runtime.Decimal
+  version: number
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: AccountCountAggregateOutputType | null
+  _avg: AccountAvgAggregateOutputType | null
+  _sum: AccountSumAggregateOutputType | null
   _min: AccountMinAggregateOutputType | null
   _max: AccountMaxAggregateOutputType | null
 }
@@ -250,27 +274,23 @@ export type AccountWhereInput = {
   id?: Prisma.UuidFilter<"Account"> | string
   marketId?: Prisma.UuidFilter<"Account"> | string
   name?: Prisma.StringFilter<"Account"> | string
-  type?: Prisma.StringFilter<"Account"> | string
-  currencyCode?: Prisma.StringNullableFilter<"Account"> | string | null
-  isSystem?: Prisma.BoolNullableFilter<"Account"> | boolean | null
-  systemCode?: Prisma.StringNullableFilter<"Account"> | string | null
-  allowOverdraft?: Prisma.BoolNullableFilter<"Account"> | boolean | null
+  type?: Prisma.EnumAccountTypeFilter<"Account"> | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableFilter<"Account"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Account"> | string | null
+  currentBalance?: Prisma.DecimalFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFilter<"Account"> | number
+  createdById?: Prisma.UuidNullableFilter<"Account"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  currency?: Prisma.XOR<Prisma.CurrencyNullableScalarRelationFilter, Prisma.CurrencyWhereInput> | null
-  accountTransactions?: Prisma.AccountTransactionListRelationFilter
-  journalEntryLines?: Prisma.JournalEntryLineListRelationFilter
-  rentPayments?: Prisma.RentPaymentListRelationFilter
-  marketExpenses?: Prisma.MarketExpenseListRelationFilter
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeListRelationFilter
-  cheques?: Prisma.ChequeListRelationFilter
+  expenses?: Prisma.MarketExpenseListRelationFilter
+  incomes?: Prisma.MiscellaneousIncomeListRelationFilter
+  transactions?: Prisma.AccountTransactionListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
+  rentPayments?: Prisma.RentPaymentListRelationFilter
+  cheques?: Prisma.ChequeListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -278,78 +298,69 @@ export type AccountOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  isSystem?: Prisma.SortOrderInput | Prisma.SortOrder
-  systemCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  allowOverdraft?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
-  currency?: Prisma.CurrencyOrderByWithRelationInput
-  accountTransactions?: Prisma.AccountTransactionOrderByRelationAggregateInput
-  journalEntryLines?: Prisma.JournalEntryLineOrderByRelationAggregateInput
-  rentPayments?: Prisma.RentPaymentOrderByRelationAggregateInput
-  marketExpenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeOrderByRelationAggregateInput
-  cheques?: Prisma.ChequeOrderByRelationAggregateInput
+  expenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
+  incomes?: Prisma.MiscellaneousIncomeOrderByRelationAggregateInput
+  transactions?: Prisma.AccountTransactionOrderByRelationAggregateInput
   withdrawals?: Prisma.WithdrawalOrderByRelationAggregateInput
+  rentPayments?: Prisma.RentPaymentOrderByRelationAggregateInput
+  cheques?: Prisma.ChequeOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.AccountMarketIdIdCompoundUniqueInput
   AND?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   OR?: Prisma.AccountWhereInput[]
   NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   marketId?: Prisma.UuidFilter<"Account"> | string
   name?: Prisma.StringFilter<"Account"> | string
-  type?: Prisma.StringFilter<"Account"> | string
-  currencyCode?: Prisma.StringNullableFilter<"Account"> | string | null
-  isSystem?: Prisma.BoolNullableFilter<"Account"> | boolean | null
-  systemCode?: Prisma.StringNullableFilter<"Account"> | string | null
-  allowOverdraft?: Prisma.BoolNullableFilter<"Account"> | boolean | null
+  type?: Prisma.EnumAccountTypeFilter<"Account"> | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableFilter<"Account"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Account"> | string | null
+  currentBalance?: Prisma.DecimalFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFilter<"Account"> | number
+  createdById?: Prisma.UuidNullableFilter<"Account"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  currency?: Prisma.XOR<Prisma.CurrencyNullableScalarRelationFilter, Prisma.CurrencyWhereInput> | null
-  accountTransactions?: Prisma.AccountTransactionListRelationFilter
-  journalEntryLines?: Prisma.JournalEntryLineListRelationFilter
-  rentPayments?: Prisma.RentPaymentListRelationFilter
-  marketExpenses?: Prisma.MarketExpenseListRelationFilter
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeListRelationFilter
-  cheques?: Prisma.ChequeListRelationFilter
+  expenses?: Prisma.MarketExpenseListRelationFilter
+  incomes?: Prisma.MiscellaneousIncomeListRelationFilter
+  transactions?: Prisma.AccountTransactionListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
-}, "id" | "marketId_id">
+  rentPayments?: Prisma.RentPaymentListRelationFilter
+  cheques?: Prisma.ChequeListRelationFilter
+}, "id">
 
 export type AccountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  isSystem?: Prisma.SortOrderInput | Prisma.SortOrder
-  systemCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  allowOverdraft?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AccountCountOrderByAggregateInput
+  _avg?: Prisma.AccountAvgOrderByAggregateInput
   _max?: Prisma.AccountMaxOrderByAggregateInput
   _min?: Prisma.AccountMinOrderByAggregateInput
+  _sum?: Prisma.AccountSumOrderByAggregateInput
 }
 
 export type AccountScalarWhereWithAggregatesInput = {
@@ -359,151 +370,134 @@ export type AccountScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Account"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"Account"> | string
   name?: Prisma.StringWithAggregatesFilter<"Account"> | string
-  type?: Prisma.StringWithAggregatesFilter<"Account"> | string
-  currencyCode?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
-  isSystem?: Prisma.BoolNullableWithAggregatesFilter<"Account"> | boolean | null
-  systemCode?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
-  allowOverdraft?: Prisma.BoolNullableWithAggregatesFilter<"Account"> | boolean | null
+  type?: Prisma.EnumAccountTypeWithAggregatesFilter<"Account"> | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyWithAggregatesFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
+  currentBalance?: Prisma.DecimalWithAggregatesFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntWithAggregatesFilter<"Account"> | number
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
 }
 
 export type AccountCreateInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type AccountUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -511,17 +505,15 @@ export type AccountUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -540,27 +532,25 @@ export type AccountNullableScalarRelationFilter = {
   isNot?: Prisma.AccountWhereInput | null
 }
 
-export type AccountMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
-}
-
 export type AccountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
-  systemCode?: Prisma.SortOrder
-  allowOverdraft?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type AccountAvgOrderByAggregateInput = {
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AccountMaxOrderByAggregateInput = {
@@ -568,16 +558,14 @@ export type AccountMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
-  systemCode?: Prisma.SortOrder
-  allowOverdraft?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -586,64 +574,25 @@ export type AccountMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  isSystem?: Prisma.SortOrder
-  systemCode?: Prisma.SortOrder
-  allowOverdraft?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type AccountSumOrderByAggregateInput = {
+  currentBalance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AccountScalarRelationFilter = {
   is?: Prisma.AccountWhereInput
   isNot?: Prisma.AccountWhereInput
-}
-
-export type AccountCreateNestedManyWithoutCurrencyInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutCurrencyInput, Prisma.AccountUncheckedCreateWithoutCurrencyInput> | Prisma.AccountCreateWithoutCurrencyInput[] | Prisma.AccountUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCurrencyInput | Prisma.AccountCreateOrConnectWithoutCurrencyInput[]
-  createMany?: Prisma.AccountCreateManyCurrencyInputEnvelope
-  connect?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-}
-
-export type AccountUncheckedCreateNestedManyWithoutCurrencyInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutCurrencyInput, Prisma.AccountUncheckedCreateWithoutCurrencyInput> | Prisma.AccountCreateWithoutCurrencyInput[] | Prisma.AccountUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCurrencyInput | Prisma.AccountCreateOrConnectWithoutCurrencyInput[]
-  createMany?: Prisma.AccountCreateManyCurrencyInputEnvelope
-  connect?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-}
-
-export type AccountUpdateManyWithoutCurrencyNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutCurrencyInput, Prisma.AccountUncheckedCreateWithoutCurrencyInput> | Prisma.AccountCreateWithoutCurrencyInput[] | Prisma.AccountUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCurrencyInput | Prisma.AccountCreateOrConnectWithoutCurrencyInput[]
-  upsert?: Prisma.AccountUpsertWithWhereUniqueWithoutCurrencyInput | Prisma.AccountUpsertWithWhereUniqueWithoutCurrencyInput[]
-  createMany?: Prisma.AccountCreateManyCurrencyInputEnvelope
-  set?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  disconnect?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  delete?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  connect?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  update?: Prisma.AccountUpdateWithWhereUniqueWithoutCurrencyInput | Prisma.AccountUpdateWithWhereUniqueWithoutCurrencyInput[]
-  updateMany?: Prisma.AccountUpdateManyWithWhereWithoutCurrencyInput | Prisma.AccountUpdateManyWithWhereWithoutCurrencyInput[]
-  deleteMany?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
-}
-
-export type AccountUncheckedUpdateManyWithoutCurrencyNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutCurrencyInput, Prisma.AccountUncheckedCreateWithoutCurrencyInput> | Prisma.AccountCreateWithoutCurrencyInput[] | Prisma.AccountUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutCurrencyInput | Prisma.AccountCreateOrConnectWithoutCurrencyInput[]
-  upsert?: Prisma.AccountUpsertWithWhereUniqueWithoutCurrencyInput | Prisma.AccountUpsertWithWhereUniqueWithoutCurrencyInput[]
-  createMany?: Prisma.AccountCreateManyCurrencyInputEnvelope
-  set?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  disconnect?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  delete?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  connect?: Prisma.AccountWhereUniqueInput | Prisma.AccountWhereUniqueInput[]
-  update?: Prisma.AccountUpdateWithWhereUniqueWithoutCurrencyInput | Prisma.AccountUpdateWithWhereUniqueWithoutCurrencyInput[]
-  updateMany?: Prisma.AccountUpdateManyWithWhereWithoutCurrencyInput | Prisma.AccountUpdateManyWithWhereWithoutCurrencyInput[]
-  deleteMany?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
 }
 
 export type AccountCreateNestedManyWithoutMarketInput = {
@@ -704,64 +653,56 @@ export type AccountUpdateOneWithoutRentPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutRentPaymentsInput, Prisma.AccountUpdateWithoutRentPaymentsInput>, Prisma.AccountUncheckedUpdateWithoutRentPaymentsInput>
 }
 
-export type AccountCreateNestedOneWithoutMarketExpensesInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutMarketExpensesInput, Prisma.AccountUncheckedCreateWithoutMarketExpensesInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutMarketExpensesInput
+export type AccountCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutExpensesInput, Prisma.AccountUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutExpensesInput
   connect?: Prisma.AccountWhereUniqueInput
 }
 
-export type AccountUpdateOneWithoutMarketExpensesNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutMarketExpensesInput, Prisma.AccountUncheckedCreateWithoutMarketExpensesInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutMarketExpensesInput
-  upsert?: Prisma.AccountUpsertWithoutMarketExpensesInput
+export type AccountUpdateOneWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutExpensesInput, Prisma.AccountUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.AccountUpsertWithoutExpensesInput
   disconnect?: Prisma.AccountWhereInput | boolean
   delete?: Prisma.AccountWhereInput | boolean
   connect?: Prisma.AccountWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutMarketExpensesInput, Prisma.AccountUpdateWithoutMarketExpensesInput>, Prisma.AccountUncheckedUpdateWithoutMarketExpensesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutExpensesInput, Prisma.AccountUpdateWithoutExpensesInput>, Prisma.AccountUncheckedUpdateWithoutExpensesInput>
 }
 
-export type AccountCreateNestedOneWithoutMiscellaneousIncomeInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutMiscellaneousIncomeInput, Prisma.AccountUncheckedCreateWithoutMiscellaneousIncomeInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutMiscellaneousIncomeInput
+export type EnumAccountTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AccountType
+}
+
+export type EnumCurrencyFieldUpdateOperationsInput = {
+  set?: $Enums.Currency
+}
+
+export type AccountCreateNestedOneWithoutIncomesInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutIncomesInput, Prisma.AccountUncheckedCreateWithoutIncomesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutIncomesInput
   connect?: Prisma.AccountWhereUniqueInput
 }
 
-export type AccountUpdateOneWithoutMiscellaneousIncomeNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutMiscellaneousIncomeInput, Prisma.AccountUncheckedCreateWithoutMiscellaneousIncomeInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutMiscellaneousIncomeInput
-  upsert?: Prisma.AccountUpsertWithoutMiscellaneousIncomeInput
-  disconnect?: Prisma.AccountWhereInput | boolean
-  delete?: Prisma.AccountWhereInput | boolean
+export type AccountUpdateOneRequiredWithoutIncomesNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutIncomesInput, Prisma.AccountUncheckedCreateWithoutIncomesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutIncomesInput
+  upsert?: Prisma.AccountUpsertWithoutIncomesInput
   connect?: Prisma.AccountWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutMiscellaneousIncomeInput, Prisma.AccountUpdateWithoutMiscellaneousIncomeInput>, Prisma.AccountUncheckedUpdateWithoutMiscellaneousIncomeInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutIncomesInput, Prisma.AccountUpdateWithoutIncomesInput>, Prisma.AccountUncheckedUpdateWithoutIncomesInput>
 }
 
-export type AccountCreateNestedOneWithoutAccountTransactionsInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutAccountTransactionsInput, Prisma.AccountUncheckedCreateWithoutAccountTransactionsInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutAccountTransactionsInput
-  connect?: Prisma.AccountWhereUniqueInput
-}
-
-export type AccountUpdateOneRequiredWithoutAccountTransactionsNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutAccountTransactionsInput, Prisma.AccountUncheckedCreateWithoutAccountTransactionsInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutAccountTransactionsInput
-  upsert?: Prisma.AccountUpsertWithoutAccountTransactionsInput
-  connect?: Prisma.AccountWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutAccountTransactionsInput, Prisma.AccountUpdateWithoutAccountTransactionsInput>, Prisma.AccountUncheckedUpdateWithoutAccountTransactionsInput>
-}
-
-export type AccountCreateNestedOneWithoutJournalEntryLinesInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutJournalEntryLinesInput, Prisma.AccountUncheckedCreateWithoutJournalEntryLinesInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutJournalEntryLinesInput
+export type AccountCreateNestedOneWithoutTransactionsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransactionsInput
   connect?: Prisma.AccountWhereUniqueInput
 }
 
-export type AccountUpdateOneRequiredWithoutJournalEntryLinesNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountCreateWithoutJournalEntryLinesInput, Prisma.AccountUncheckedCreateWithoutJournalEntryLinesInput>
-  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutJournalEntryLinesInput
-  upsert?: Prisma.AccountUpsertWithoutJournalEntryLinesInput
+export type AccountUpdateOneRequiredWithoutTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransactionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutTransactionsInput
+  upsert?: Prisma.AccountUpsertWithoutTransactionsInput
   connect?: Prisma.AccountWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutJournalEntryLinesInput, Prisma.AccountUpdateWithoutJournalEntryLinesInput>, Prisma.AccountUncheckedUpdateWithoutJournalEntryLinesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutTransactionsInput, Prisma.AccountUpdateWithoutTransactionsInput>, Prisma.AccountUncheckedUpdateWithoutTransactionsInput>
 }
 
 export type AccountCreateNestedOneWithoutChequesInput = {
@@ -796,147 +737,46 @@ export type AccountUpdateOneWithoutWithdrawalsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutWithdrawalsInput, Prisma.AccountUpdateWithoutWithdrawalsInput>, Prisma.AccountUncheckedUpdateWithoutWithdrawalsInput>
 }
 
-export type AccountCreateWithoutCurrencyInput = {
-  id?: string
-  name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
-}
-
-export type AccountUncheckedCreateWithoutCurrencyInput = {
-  id?: string
-  marketId: string
-  name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
-}
-
-export type AccountCreateOrConnectWithoutCurrencyInput = {
-  where: Prisma.AccountWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountCreateWithoutCurrencyInput, Prisma.AccountUncheckedCreateWithoutCurrencyInput>
-}
-
-export type AccountCreateManyCurrencyInputEnvelope = {
-  data: Prisma.AccountCreateManyCurrencyInput | Prisma.AccountCreateManyCurrencyInput[]
-  skipDuplicates?: boolean
-}
-
-export type AccountUpsertWithWhereUniqueWithoutCurrencyInput = {
-  where: Prisma.AccountWhereUniqueInput
-  update: Prisma.XOR<Prisma.AccountUpdateWithoutCurrencyInput, Prisma.AccountUncheckedUpdateWithoutCurrencyInput>
-  create: Prisma.XOR<Prisma.AccountCreateWithoutCurrencyInput, Prisma.AccountUncheckedCreateWithoutCurrencyInput>
-}
-
-export type AccountUpdateWithWhereUniqueWithoutCurrencyInput = {
-  where: Prisma.AccountWhereUniqueInput
-  data: Prisma.XOR<Prisma.AccountUpdateWithoutCurrencyInput, Prisma.AccountUncheckedUpdateWithoutCurrencyInput>
-}
-
-export type AccountUpdateManyWithWhereWithoutCurrencyInput = {
-  where: Prisma.AccountScalarWhereInput
-  data: Prisma.XOR<Prisma.AccountUpdateManyMutationInput, Prisma.AccountUncheckedUpdateManyWithoutCurrencyInput>
-}
-
-export type AccountScalarWhereInput = {
-  AND?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
-  OR?: Prisma.AccountScalarWhereInput[]
-  NOT?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Account"> | string
-  marketId?: Prisma.UuidFilter<"Account"> | string
-  name?: Prisma.StringFilter<"Account"> | string
-  type?: Prisma.StringFilter<"Account"> | string
-  currencyCode?: Prisma.StringNullableFilter<"Account"> | string | null
-  isSystem?: Prisma.BoolNullableFilter<"Account"> | boolean | null
-  systemCode?: Prisma.StringNullableFilter<"Account"> | string | null
-  allowOverdraft?: Prisma.BoolNullableFilter<"Account"> | boolean | null
-  description?: Prisma.StringNullableFilter<"Account"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Account"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
-}
-
 export type AccountCreateWithoutMarketInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutMarketInput = {
   id?: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutMarketInput = {
@@ -965,52 +805,65 @@ export type AccountUpdateManyWithWhereWithoutMarketInput = {
   data: Prisma.XOR<Prisma.AccountUpdateManyMutationInput, Prisma.AccountUncheckedUpdateManyWithoutMarketInput>
 }
 
+export type AccountScalarWhereInput = {
+  AND?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
+  OR?: Prisma.AccountScalarWhereInput[]
+  NOT?: Prisma.AccountScalarWhereInput | Prisma.AccountScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Account"> | string
+  marketId?: Prisma.UuidFilter<"Account"> | string
+  name?: Prisma.StringFilter<"Account"> | string
+  type?: Prisma.EnumAccountTypeFilter<"Account"> | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFilter<"Account"> | $Enums.Currency
+  description?: Prisma.StringNullableFilter<"Account"> | string | null
+  currentBalance?: Prisma.DecimalFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFilter<"Account"> | number
+  createdById?: Prisma.UuidNullableFilter<"Account"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Account"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+}
+
 export type AccountCreateWithoutRentPaymentsInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutRentPaymentsInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutRentPaymentsInput = {
@@ -1032,545 +885,385 @@ export type AccountUpdateToOneWithWhereWithoutRentPaymentsInput = {
 export type AccountUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountCreateWithoutMarketExpensesInput = {
+export type AccountCreateWithoutExpensesInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
-export type AccountUncheckedCreateWithoutMarketExpensesInput = {
+export type AccountUncheckedCreateWithoutExpensesInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
-export type AccountCreateOrConnectWithoutMarketExpensesInput = {
+export type AccountCreateOrConnectWithoutExpensesInput = {
   where: Prisma.AccountWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountCreateWithoutMarketExpensesInput, Prisma.AccountUncheckedCreateWithoutMarketExpensesInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutExpensesInput, Prisma.AccountUncheckedCreateWithoutExpensesInput>
 }
 
-export type AccountUpsertWithoutMarketExpensesInput = {
-  update: Prisma.XOR<Prisma.AccountUpdateWithoutMarketExpensesInput, Prisma.AccountUncheckedUpdateWithoutMarketExpensesInput>
-  create: Prisma.XOR<Prisma.AccountCreateWithoutMarketExpensesInput, Prisma.AccountUncheckedCreateWithoutMarketExpensesInput>
+export type AccountUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutExpensesInput, Prisma.AccountUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutExpensesInput, Prisma.AccountUncheckedCreateWithoutExpensesInput>
   where?: Prisma.AccountWhereInput
 }
 
-export type AccountUpdateToOneWithWhereWithoutMarketExpensesInput = {
+export type AccountUpdateToOneWithWhereWithoutExpensesInput = {
   where?: Prisma.AccountWhereInput
-  data: Prisma.XOR<Prisma.AccountUpdateWithoutMarketExpensesInput, Prisma.AccountUncheckedUpdateWithoutMarketExpensesInput>
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutExpensesInput, Prisma.AccountUncheckedUpdateWithoutExpensesInput>
 }
 
-export type AccountUpdateWithoutMarketExpensesInput = {
+export type AccountUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountUncheckedUpdateWithoutMarketExpensesInput = {
+export type AccountUncheckedUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountCreateWithoutMiscellaneousIncomeInput = {
+export type AccountCreateWithoutIncomesInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
-export type AccountUncheckedCreateWithoutMiscellaneousIncomeInput = {
+export type AccountUncheckedCreateWithoutIncomesInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
-export type AccountCreateOrConnectWithoutMiscellaneousIncomeInput = {
+export type AccountCreateOrConnectWithoutIncomesInput = {
   where: Prisma.AccountWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountCreateWithoutMiscellaneousIncomeInput, Prisma.AccountUncheckedCreateWithoutMiscellaneousIncomeInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutIncomesInput, Prisma.AccountUncheckedCreateWithoutIncomesInput>
 }
 
-export type AccountUpsertWithoutMiscellaneousIncomeInput = {
-  update: Prisma.XOR<Prisma.AccountUpdateWithoutMiscellaneousIncomeInput, Prisma.AccountUncheckedUpdateWithoutMiscellaneousIncomeInput>
-  create: Prisma.XOR<Prisma.AccountCreateWithoutMiscellaneousIncomeInput, Prisma.AccountUncheckedCreateWithoutMiscellaneousIncomeInput>
+export type AccountUpsertWithoutIncomesInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutIncomesInput, Prisma.AccountUncheckedUpdateWithoutIncomesInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutIncomesInput, Prisma.AccountUncheckedCreateWithoutIncomesInput>
   where?: Prisma.AccountWhereInput
 }
 
-export type AccountUpdateToOneWithWhereWithoutMiscellaneousIncomeInput = {
+export type AccountUpdateToOneWithWhereWithoutIncomesInput = {
   where?: Prisma.AccountWhereInput
-  data: Prisma.XOR<Prisma.AccountUpdateWithoutMiscellaneousIncomeInput, Prisma.AccountUncheckedUpdateWithoutMiscellaneousIncomeInput>
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutIncomesInput, Prisma.AccountUncheckedUpdateWithoutIncomesInput>
 }
 
-export type AccountUpdateWithoutMiscellaneousIncomeInput = {
+export type AccountUpdateWithoutIncomesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountUncheckedUpdateWithoutMiscellaneousIncomeInput = {
+export type AccountUncheckedUpdateWithoutIncomesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountCreateWithoutAccountTransactionsInput = {
+export type AccountCreateWithoutTransactionsInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
-export type AccountUncheckedCreateWithoutAccountTransactionsInput = {
+export type AccountUncheckedCreateWithoutTransactionsInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
-export type AccountCreateOrConnectWithoutAccountTransactionsInput = {
+export type AccountCreateOrConnectWithoutTransactionsInput = {
   where: Prisma.AccountWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountCreateWithoutAccountTransactionsInput, Prisma.AccountUncheckedCreateWithoutAccountTransactionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransactionsInput>
 }
 
-export type AccountUpsertWithoutAccountTransactionsInput = {
-  update: Prisma.XOR<Prisma.AccountUpdateWithoutAccountTransactionsInput, Prisma.AccountUncheckedUpdateWithoutAccountTransactionsInput>
-  create: Prisma.XOR<Prisma.AccountCreateWithoutAccountTransactionsInput, Prisma.AccountUncheckedCreateWithoutAccountTransactionsInput>
+export type AccountUpsertWithoutTransactionsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutTransactionsInput, Prisma.AccountUncheckedUpdateWithoutTransactionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutTransactionsInput, Prisma.AccountUncheckedCreateWithoutTransactionsInput>
   where?: Prisma.AccountWhereInput
 }
 
-export type AccountUpdateToOneWithWhereWithoutAccountTransactionsInput = {
+export type AccountUpdateToOneWithWhereWithoutTransactionsInput = {
   where?: Prisma.AccountWhereInput
-  data: Prisma.XOR<Prisma.AccountUpdateWithoutAccountTransactionsInput, Prisma.AccountUncheckedUpdateWithoutAccountTransactionsInput>
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutTransactionsInput, Prisma.AccountUncheckedUpdateWithoutTransactionsInput>
 }
 
-export type AccountUpdateWithoutAccountTransactionsInput = {
+export type AccountUpdateWithoutTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountUncheckedUpdateWithoutAccountTransactionsInput = {
+export type AccountUncheckedUpdateWithoutTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
-}
-
-export type AccountCreateWithoutJournalEntryLinesInput = {
-  id?: string
-  name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
-}
-
-export type AccountUncheckedCreateWithoutJournalEntryLinesInput = {
-  id?: string
-  marketId: string
-  name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
-}
-
-export type AccountCreateOrConnectWithoutJournalEntryLinesInput = {
-  where: Prisma.AccountWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountCreateWithoutJournalEntryLinesInput, Prisma.AccountUncheckedCreateWithoutJournalEntryLinesInput>
-}
-
-export type AccountUpsertWithoutJournalEntryLinesInput = {
-  update: Prisma.XOR<Prisma.AccountUpdateWithoutJournalEntryLinesInput, Prisma.AccountUncheckedUpdateWithoutJournalEntryLinesInput>
-  create: Prisma.XOR<Prisma.AccountCreateWithoutJournalEntryLinesInput, Prisma.AccountUncheckedCreateWithoutJournalEntryLinesInput>
-  where?: Prisma.AccountWhereInput
-}
-
-export type AccountUpdateToOneWithWhereWithoutJournalEntryLinesInput = {
-  where?: Prisma.AccountWhereInput
-  data: Prisma.XOR<Prisma.AccountUpdateWithoutJournalEntryLinesInput, Prisma.AccountUncheckedUpdateWithoutJournalEntryLinesInput>
-}
-
-export type AccountUpdateWithoutJournalEntryLinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
-}
-
-export type AccountUncheckedUpdateWithoutJournalEntryLinesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutChequesInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutChequesInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutChequesInput = {
@@ -1592,72 +1285,63 @@ export type AccountUpdateToOneWithWhereWithoutChequesInput = {
 export type AccountUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutWithdrawalsInput = {
   id?: string
   name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountsInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
@@ -1665,23 +1349,20 @@ export type AccountUncheckedCreateWithoutWithdrawalsInput = {
   id?: string
   marketId: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
 }
 
@@ -1704,24 +1385,21 @@ export type AccountUpdateToOneWithWhereWithoutWithdrawalsInput = {
 export type AccountUpdateWithoutWithdrawalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
@@ -1729,187 +1407,92 @@ export type AccountUncheckedUpdateWithoutWithdrawalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
-}
-
-export type AccountCreateManyCurrencyInput = {
-  id?: string
-  marketId: string
-  name: string
-  type: string
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-}
-
-export type AccountUpdateWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
-}
-
-export type AccountUncheckedUpdateWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
-}
-
-export type AccountUncheckedUpdateManyWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AccountCreateManyMarketInput = {
   id?: string
   name: string
-  type: string
-  currencyCode?: string | null
-  isSystem?: boolean | null
-  systemCode?: string | null
-  allowOverdraft?: boolean | null
+  type: $Enums.AccountType
+  currency: $Enums.Currency
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type AccountUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountsNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutAccountNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isSystem?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  systemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  allowOverdraft?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1919,23 +1502,21 @@ export type AccountUncheckedUpdateManyWithoutMarketInput = {
  */
 
 export type AccountCountOutputType = {
-  accountTransactions: number
-  journalEntryLines: number
-  rentPayments: number
-  marketExpenses: number
-  miscellaneousIncome: number
-  cheques: number
+  expenses: number
+  incomes: number
+  transactions: number
   withdrawals: number
+  rentPayments: number
+  cheques: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  accountTransactions?: boolean | AccountCountOutputTypeCountAccountTransactionsArgs
-  journalEntryLines?: boolean | AccountCountOutputTypeCountJournalEntryLinesArgs
-  rentPayments?: boolean | AccountCountOutputTypeCountRentPaymentsArgs
-  marketExpenses?: boolean | AccountCountOutputTypeCountMarketExpensesArgs
-  miscellaneousIncome?: boolean | AccountCountOutputTypeCountMiscellaneousIncomeArgs
-  cheques?: boolean | AccountCountOutputTypeCountChequesArgs
+  expenses?: boolean | AccountCountOutputTypeCountExpensesArgs
+  incomes?: boolean | AccountCountOutputTypeCountIncomesArgs
+  transactions?: boolean | AccountCountOutputTypeCountTransactionsArgs
   withdrawals?: boolean | AccountCountOutputTypeCountWithdrawalsArgs
+  rentPayments?: boolean | AccountCountOutputTypeCountRentPaymentsArgs
+  cheques?: boolean | AccountCountOutputTypeCountChequesArgs
 }
 
 /**
@@ -1951,15 +1532,29 @@ export type AccountCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * AccountCountOutputType without action
  */
-export type AccountCountOutputTypeCountAccountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type AccountCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketExpenseWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountIncomesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MiscellaneousIncomeWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AccountTransactionWhereInput
 }
 
 /**
  * AccountCountOutputType without action
  */
-export type AccountCountOutputTypeCountJournalEntryLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.JournalEntryLineWhereInput
+export type AccountCountOutputTypeCountWithdrawalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WithdrawalWhereInput
 }
 
 /**
@@ -1972,29 +1567,8 @@ export type AccountCountOutputTypeCountRentPaymentsArgs<ExtArgs extends runtime.
 /**
  * AccountCountOutputType without action
  */
-export type AccountCountOutputTypeCountMarketExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MarketExpenseWhereInput
-}
-
-/**
- * AccountCountOutputType without action
- */
-export type AccountCountOutputTypeCountMiscellaneousIncomeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MiscellaneousIncomeWhereInput
-}
-
-/**
- * AccountCountOutputType without action
- */
 export type AccountCountOutputTypeCountChequesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ChequeWhereInput
-}
-
-/**
- * AccountCountOutputType without action
- */
-export type AccountCountOutputTypeCountWithdrawalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WithdrawalWhereInput
 }
 
 
@@ -2003,26 +1577,22 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   marketId?: boolean
   name?: boolean
   type?: boolean
-  currencyCode?: boolean
-  isSystem?: boolean
-  systemCode?: boolean
-  allowOverdraft?: boolean
+  currency?: boolean
   description?: boolean
+  currentBalance?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.Account$currencyArgs<ExtArgs>
-  accountTransactions?: boolean | Prisma.Account$accountTransactionsArgs<ExtArgs>
-  journalEntryLines?: boolean | Prisma.Account$journalEntryLinesArgs<ExtArgs>
-  rentPayments?: boolean | Prisma.Account$rentPaymentsArgs<ExtArgs>
-  marketExpenses?: boolean | Prisma.Account$marketExpensesArgs<ExtArgs>
-  miscellaneousIncome?: boolean | Prisma.Account$miscellaneousIncomeArgs<ExtArgs>
-  cheques?: boolean | Prisma.Account$chequesArgs<ExtArgs>
+  expenses?: boolean | Prisma.Account$expensesArgs<ExtArgs>
+  incomes?: boolean | Prisma.Account$incomesArgs<ExtArgs>
+  transactions?: boolean | Prisma.Account$transactionsArgs<ExtArgs>
   withdrawals?: boolean | Prisma.Account$withdrawalsArgs<ExtArgs>
+  rentPayments?: boolean | Prisma.Account$rentPaymentsArgs<ExtArgs>
+  cheques?: boolean | Prisma.Account$chequesArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -2031,19 +1601,16 @@ export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   marketId?: boolean
   name?: boolean
   type?: boolean
-  currencyCode?: boolean
-  isSystem?: boolean
-  systemCode?: boolean
-  allowOverdraft?: boolean
+  currency?: boolean
   description?: boolean
+  currentBalance?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.Account$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2051,19 +1618,16 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   marketId?: boolean
   name?: boolean
   type?: boolean
-  currencyCode?: boolean
-  isSystem?: boolean
-  systemCode?: boolean
-  allowOverdraft?: boolean
+  currency?: boolean
   description?: boolean
+  currentBalance?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.Account$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectScalar = {
@@ -2071,69 +1635,65 @@ export type AccountSelectScalar = {
   marketId?: boolean
   name?: boolean
   type?: boolean
-  currencyCode?: boolean
-  isSystem?: boolean
-  systemCode?: boolean
-  allowOverdraft?: boolean
+  currency?: boolean
   description?: boolean
+  currentBalance?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "type" | "currencyCode" | "isSystem" | "systemCode" | "allowOverdraft" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "type" | "currency" | "description" | "currentBalance" | "version" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.Account$currencyArgs<ExtArgs>
-  accountTransactions?: boolean | Prisma.Account$accountTransactionsArgs<ExtArgs>
-  journalEntryLines?: boolean | Prisma.Account$journalEntryLinesArgs<ExtArgs>
-  rentPayments?: boolean | Prisma.Account$rentPaymentsArgs<ExtArgs>
-  marketExpenses?: boolean | Prisma.Account$marketExpensesArgs<ExtArgs>
-  miscellaneousIncome?: boolean | Prisma.Account$miscellaneousIncomeArgs<ExtArgs>
-  cheques?: boolean | Prisma.Account$chequesArgs<ExtArgs>
+  expenses?: boolean | Prisma.Account$expensesArgs<ExtArgs>
+  incomes?: boolean | Prisma.Account$incomesArgs<ExtArgs>
+  transactions?: boolean | Prisma.Account$transactionsArgs<ExtArgs>
   withdrawals?: boolean | Prisma.Account$withdrawalsArgs<ExtArgs>
+  rentPayments?: boolean | Prisma.Account$rentPaymentsArgs<ExtArgs>
+  cheques?: boolean | Prisma.Account$chequesArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.Account$currencyArgs<ExtArgs>
 }
 export type AccountIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.Account$currencyArgs<ExtArgs>
 }
 
 export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Account"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    currency: Prisma.$CurrencyPayload<ExtArgs> | null
-    accountTransactions: Prisma.$AccountTransactionPayload<ExtArgs>[]
-    journalEntryLines: Prisma.$JournalEntryLinePayload<ExtArgs>[]
-    rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
-    marketExpenses: Prisma.$MarketExpensePayload<ExtArgs>[]
-    miscellaneousIncome: Prisma.$MiscellaneousIncomePayload<ExtArgs>[]
-    cheques: Prisma.$ChequePayload<ExtArgs>[]
+    expenses: Prisma.$MarketExpensePayload<ExtArgs>[]
+    incomes: Prisma.$MiscellaneousIncomePayload<ExtArgs>[]
+    transactions: Prisma.$AccountTransactionPayload<ExtArgs>[]
     withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+    rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
+    cheques: Prisma.$ChequePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
     name: string
-    type: string
-    currencyCode: string | null
-    isSystem: boolean | null
-    systemCode: string | null
-    allowOverdraft: boolean | null
+    type: $Enums.AccountType
+    currency: $Enums.Currency
     description: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    /**
+     * Running balance, maintained transactionally.
+     */
+    currentBalance: runtime.Decimal
+    /**
+     * Optimistic-locking token.
+     */
+    version: number
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["account"]>
   composites: {}
@@ -2530,14 +2090,12 @@ readonly fields: AccountFieldRefs;
 export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  currency<T extends Prisma.Account$currencyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$currencyArgs<ExtArgs>>): Prisma.Prisma__CurrencyClient<runtime.Types.Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  accountTransactions<T extends Prisma.Account$accountTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$accountTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  journalEntryLines<T extends Prisma.Account$journalEntryLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$journalEntryLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalEntryLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  rentPayments<T extends Prisma.Account$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  marketExpenses<T extends Prisma.Account$marketExpensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$marketExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  miscellaneousIncome<T extends Prisma.Account$miscellaneousIncomeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$miscellaneousIncomeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MiscellaneousIncomePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  cheques<T extends Prisma.Account$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  expenses<T extends Prisma.Account$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  incomes<T extends Prisma.Account$incomesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$incomesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MiscellaneousIncomePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transactions<T extends Prisma.Account$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   withdrawals<T extends Prisma.Account$withdrawalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  rentPayments<T extends Prisma.Account$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cheques<T extends Prisma.Account$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2570,17 +2128,15 @@ export interface AccountFieldRefs {
   readonly id: Prisma.FieldRef<"Account", 'String'>
   readonly marketId: Prisma.FieldRef<"Account", 'String'>
   readonly name: Prisma.FieldRef<"Account", 'String'>
-  readonly type: Prisma.FieldRef<"Account", 'String'>
-  readonly currencyCode: Prisma.FieldRef<"Account", 'String'>
-  readonly isSystem: Prisma.FieldRef<"Account", 'Boolean'>
-  readonly systemCode: Prisma.FieldRef<"Account", 'String'>
-  readonly allowOverdraft: Prisma.FieldRef<"Account", 'Boolean'>
+  readonly type: Prisma.FieldRef<"Account", 'AccountType'>
+  readonly currency: Prisma.FieldRef<"Account", 'Currency'>
   readonly description: Prisma.FieldRef<"Account", 'String'>
+  readonly currentBalance: Prisma.FieldRef<"Account", 'Decimal'>
+  readonly version: Prisma.FieldRef<"Account", 'Int'>
+  readonly createdById: Prisma.FieldRef<"Account", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Account", 'String'>
   readonly createdAt: Prisma.FieldRef<"Account", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Account", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Account", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Account", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Account", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Account", 'DateTime'>
 }
     
@@ -2983,28 +2539,57 @@ export type AccountDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Account.currency
+ * Account.expenses
  */
-export type Account$currencyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Account$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Currency
+   * Select specific fields to fetch from the MarketExpense
    */
-  select?: Prisma.CurrencySelect<ExtArgs> | null
+  select?: Prisma.MarketExpenseSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Currency
+   * Omit specific fields from the MarketExpense
    */
-  omit?: Prisma.CurrencyOmit<ExtArgs> | null
+  omit?: Prisma.MarketExpenseOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.CurrencyInclude<ExtArgs> | null
-  where?: Prisma.CurrencyWhereInput
+  include?: Prisma.MarketExpenseInclude<ExtArgs> | null
+  where?: Prisma.MarketExpenseWhereInput
+  orderBy?: Prisma.MarketExpenseOrderByWithRelationInput | Prisma.MarketExpenseOrderByWithRelationInput[]
+  cursor?: Prisma.MarketExpenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketExpenseScalarFieldEnum | Prisma.MarketExpenseScalarFieldEnum[]
 }
 
 /**
- * Account.accountTransactions
+ * Account.incomes
  */
-export type Account$accountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Account$incomesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MiscellaneousIncome
+   */
+  select?: Prisma.MiscellaneousIncomeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MiscellaneousIncome
+   */
+  omit?: Prisma.MiscellaneousIncomeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MiscellaneousIncomeInclude<ExtArgs> | null
+  where?: Prisma.MiscellaneousIncomeWhereInput
+  orderBy?: Prisma.MiscellaneousIncomeOrderByWithRelationInput | Prisma.MiscellaneousIncomeOrderByWithRelationInput[]
+  cursor?: Prisma.MiscellaneousIncomeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MiscellaneousIncomeScalarFieldEnum | Prisma.MiscellaneousIncomeScalarFieldEnum[]
+}
+
+/**
+ * Account.transactions
+ */
+export type Account$transactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the AccountTransaction
    */
@@ -3026,27 +2611,27 @@ export type Account$accountTransactionsArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
- * Account.journalEntryLines
+ * Account.withdrawals
  */
-export type Account$journalEntryLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Account$withdrawalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the JournalEntryLine
+   * Select specific fields to fetch from the Withdrawal
    */
-  select?: Prisma.JournalEntryLineSelect<ExtArgs> | null
+  select?: Prisma.WithdrawalSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the JournalEntryLine
+   * Omit specific fields from the Withdrawal
    */
-  omit?: Prisma.JournalEntryLineOmit<ExtArgs> | null
+  omit?: Prisma.WithdrawalOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.JournalEntryLineInclude<ExtArgs> | null
-  where?: Prisma.JournalEntryLineWhereInput
-  orderBy?: Prisma.JournalEntryLineOrderByWithRelationInput | Prisma.JournalEntryLineOrderByWithRelationInput[]
-  cursor?: Prisma.JournalEntryLineWhereUniqueInput
+  include?: Prisma.WithdrawalInclude<ExtArgs> | null
+  where?: Prisma.WithdrawalWhereInput
+  orderBy?: Prisma.WithdrawalOrderByWithRelationInput | Prisma.WithdrawalOrderByWithRelationInput[]
+  cursor?: Prisma.WithdrawalWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.JournalEntryLineScalarFieldEnum | Prisma.JournalEntryLineScalarFieldEnum[]
+  distinct?: Prisma.WithdrawalScalarFieldEnum | Prisma.WithdrawalScalarFieldEnum[]
 }
 
 /**
@@ -3074,54 +2659,6 @@ export type Account$rentPaymentsArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Account.marketExpenses
- */
-export type Account$marketExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MarketExpense
-   */
-  select?: Prisma.MarketExpenseSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MarketExpense
-   */
-  omit?: Prisma.MarketExpenseOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MarketExpenseInclude<ExtArgs> | null
-  where?: Prisma.MarketExpenseWhereInput
-  orderBy?: Prisma.MarketExpenseOrderByWithRelationInput | Prisma.MarketExpenseOrderByWithRelationInput[]
-  cursor?: Prisma.MarketExpenseWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MarketExpenseScalarFieldEnum | Prisma.MarketExpenseScalarFieldEnum[]
-}
-
-/**
- * Account.miscellaneousIncome
- */
-export type Account$miscellaneousIncomeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MiscellaneousIncome
-   */
-  select?: Prisma.MiscellaneousIncomeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MiscellaneousIncome
-   */
-  omit?: Prisma.MiscellaneousIncomeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MiscellaneousIncomeInclude<ExtArgs> | null
-  where?: Prisma.MiscellaneousIncomeWhereInput
-  orderBy?: Prisma.MiscellaneousIncomeOrderByWithRelationInput | Prisma.MiscellaneousIncomeOrderByWithRelationInput[]
-  cursor?: Prisma.MiscellaneousIncomeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MiscellaneousIncomeScalarFieldEnum | Prisma.MiscellaneousIncomeScalarFieldEnum[]
-}
-
-/**
  * Account.cheques
  */
 export type Account$chequesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3143,30 +2680,6 @@ export type Account$chequesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ChequeScalarFieldEnum | Prisma.ChequeScalarFieldEnum[]
-}
-
-/**
- * Account.withdrawals
- */
-export type Account$withdrawalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Withdrawal
-   */
-  select?: Prisma.WithdrawalSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Withdrawal
-   */
-  omit?: Prisma.WithdrawalOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WithdrawalInclude<ExtArgs> | null
-  where?: Prisma.WithdrawalWhereInput
-  orderBy?: Prisma.WithdrawalOrderByWithRelationInput | Prisma.WithdrawalOrderByWithRelationInput[]
-  cursor?: Prisma.WithdrawalWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WithdrawalScalarFieldEnum | Prisma.WithdrawalScalarFieldEnum[]
 }
 
 /**

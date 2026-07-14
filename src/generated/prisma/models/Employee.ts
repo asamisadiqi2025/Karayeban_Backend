@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Employee
- * 
+ * A market employee.
  */
 export type EmployeeModel = runtime.Types.Result.DefaultSelection<Prisma.$EmployeePayload>
 
@@ -39,14 +39,13 @@ export type EmployeeMinAggregateOutputType = {
   marketId: string | null
   fullName: string | null
   phone: string | null
-  jobTitle: string | null
+  position: string | null
   salary: runtime.Decimal | null
-  status: string | null
+  status: $Enums.EmployeeStatus | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -55,14 +54,13 @@ export type EmployeeMaxAggregateOutputType = {
   marketId: string | null
   fullName: string | null
   phone: string | null
-  jobTitle: string | null
+  position: string | null
   salary: runtime.Decimal | null
-  status: string | null
+  status: $Enums.EmployeeStatus | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -71,14 +69,13 @@ export type EmployeeCountAggregateOutputType = {
   marketId: number
   fullName: number
   phone: number
-  jobTitle: number
+  position: number
   salary: number
   status: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
@@ -97,14 +94,13 @@ export type EmployeeMinAggregateInputType = {
   marketId?: true
   fullName?: true
   phone?: true
-  jobTitle?: true
+  position?: true
   salary?: true
   status?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -113,14 +109,13 @@ export type EmployeeMaxAggregateInputType = {
   marketId?: true
   fullName?: true
   phone?: true
-  jobTitle?: true
+  position?: true
   salary?: true
   status?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -129,14 +124,13 @@ export type EmployeeCountAggregateInputType = {
   marketId?: true
   fullName?: true
   phone?: true
-  jobTitle?: true
+  position?: true
   salary?: true
   status?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -232,14 +226,13 @@ export type EmployeeGroupByOutputType = {
   marketId: string
   fullName: string
   phone: string | null
-  jobTitle: string | null
+  position: string | null
   salary: runtime.Decimal | null
-  status: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  status: $Enums.EmployeeStatus
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: EmployeeCountAggregateOutputType | null
   _avg: EmployeeAvgAggregateOutputType | null
@@ -271,17 +264,16 @@ export type EmployeeWhereInput = {
   marketId?: Prisma.UuidFilter<"Employee"> | string
   fullName?: Prisma.StringFilter<"Employee"> | string
   phone?: Prisma.StringNullableFilter<"Employee"> | string | null
-  jobTitle?: Prisma.StringNullableFilter<"Employee"> | string | null
+  position?: Prisma.StringNullableFilter<"Employee"> | string | null
   salary?: Prisma.DecimalNullableFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableFilter<"Employee"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  status?: Prisma.EnumEmployeeStatusFilter<"Employee"> | $Enums.EmployeeStatus
+  createdById?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  marketExpenses?: Prisma.MarketExpenseListRelationFilter
+  expenses?: Prisma.MarketExpenseListRelationFilter
 }
 
 export type EmployeeOrderByWithRelationInput = {
@@ -289,54 +281,50 @@ export type EmployeeOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  jobTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  position?: Prisma.SortOrderInput | Prisma.SortOrder
   salary?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
-  marketExpenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
+  expenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
 }
 
 export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.EmployeeMarketIdIdCompoundUniqueInput
   AND?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
   OR?: Prisma.EmployeeWhereInput[]
   NOT?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
   marketId?: Prisma.UuidFilter<"Employee"> | string
   fullName?: Prisma.StringFilter<"Employee"> | string
   phone?: Prisma.StringNullableFilter<"Employee"> | string | null
-  jobTitle?: Prisma.StringNullableFilter<"Employee"> | string | null
+  position?: Prisma.StringNullableFilter<"Employee"> | string | null
   salary?: Prisma.DecimalNullableFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableFilter<"Employee"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  status?: Prisma.EnumEmployeeStatusFilter<"Employee"> | $Enums.EmployeeStatus
+  createdById?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  marketExpenses?: Prisma.MarketExpenseListRelationFilter
-}, "id" | "marketId_id">
+  expenses?: Prisma.MarketExpenseListRelationFilter
+}, "id">
 
 export type EmployeeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  jobTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  position?: Prisma.SortOrderInput | Prisma.SortOrder
   salary?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.EmployeeCountOrderByAggregateInput
   _avg?: Prisma.EmployeeAvgOrderByAggregateInput
@@ -353,14 +341,13 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"Employee"> | string
   fullName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   phone?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
-  jobTitle?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  position?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   salary?: Prisma.DecimalNullableWithAggregatesFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Employee"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Employee"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Employee"> | string | null
+  status?: Prisma.EnumEmployeeStatusWithAggregatesFilter<"Employee"> | $Enums.EmployeeStatus
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Employee"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Employee"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
 }
 
@@ -368,17 +355,16 @@ export type EmployeeCreateInput = {
   id?: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutEmployeesInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutEmployeeInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateInput = {
@@ -386,33 +372,31 @@ export type EmployeeUncheckedCreateInput = {
   marketId: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutEmployeeInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutEmployeesNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutEmployeeNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateInput = {
@@ -420,16 +404,15 @@ export type EmployeeUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutEmployeeNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeCreateManyInput = {
@@ -437,14 +420,13 @@ export type EmployeeCreateManyInput = {
   marketId: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -452,14 +434,13 @@ export type EmployeeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -468,14 +449,13 @@ export type EmployeeUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -489,24 +469,18 @@ export type EmployeeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type EmployeeMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
-}
-
 export type EmployeeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  jobTitle?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   salary?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -519,14 +493,13 @@ export type EmployeeMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  jobTitle?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   salary?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -535,14 +508,13 @@ export type EmployeeMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  jobTitle?: Prisma.SortOrder
+  position?: Prisma.SortOrder
   salary?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -597,52 +569,54 @@ export type EmployeeUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.EmployeeScalarWhereInput | Prisma.EmployeeScalarWhereInput[]
 }
 
-export type EmployeeCreateNestedOneWithoutMarketExpensesInput = {
-  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutMarketExpensesInput, Prisma.EmployeeUncheckedCreateWithoutMarketExpensesInput>
-  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutMarketExpensesInput
+export type EnumEmployeeStatusFieldUpdateOperationsInput = {
+  set?: $Enums.EmployeeStatus
+}
+
+export type EmployeeCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutExpensesInput, Prisma.EmployeeUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutExpensesInput
   connect?: Prisma.EmployeeWhereUniqueInput
 }
 
-export type EmployeeUpdateOneWithoutMarketExpensesNestedInput = {
-  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutMarketExpensesInput, Prisma.EmployeeUncheckedCreateWithoutMarketExpensesInput>
-  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutMarketExpensesInput
-  upsert?: Prisma.EmployeeUpsertWithoutMarketExpensesInput
+export type EmployeeUpdateOneWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeCreateWithoutExpensesInput, Prisma.EmployeeUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.EmployeeCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.EmployeeUpsertWithoutExpensesInput
   disconnect?: Prisma.EmployeeWhereInput | boolean
   delete?: Prisma.EmployeeWhereInput | boolean
   connect?: Prisma.EmployeeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeUpdateToOneWithWhereWithoutMarketExpensesInput, Prisma.EmployeeUpdateWithoutMarketExpensesInput>, Prisma.EmployeeUncheckedUpdateWithoutMarketExpensesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeUpdateToOneWithWhereWithoutExpensesInput, Prisma.EmployeeUpdateWithoutExpensesInput>, Prisma.EmployeeUncheckedUpdateWithoutExpensesInput>
 }
 
 export type EmployeeCreateWithoutMarketInput = {
   id?: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutEmployeeInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeUncheckedCreateWithoutMarketInput = {
   id?: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutEmployeeInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutEmployeeInput
 }
 
 export type EmployeeCreateOrConnectWithoutMarketInput = {
@@ -679,94 +653,89 @@ export type EmployeeScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"Employee"> | string
   fullName?: Prisma.StringFilter<"Employee"> | string
   phone?: Prisma.StringNullableFilter<"Employee"> | string | null
-  jobTitle?: Prisma.StringNullableFilter<"Employee"> | string | null
+  position?: Prisma.StringNullableFilter<"Employee"> | string | null
   salary?: Prisma.DecimalNullableFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableFilter<"Employee"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  status?: Prisma.EnumEmployeeStatusFilter<"Employee"> | $Enums.EmployeeStatus
+  createdById?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Employee"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
 }
 
-export type EmployeeCreateWithoutMarketExpensesInput = {
+export type EmployeeCreateWithoutExpensesInput = {
   id?: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutEmployeesInput
 }
 
-export type EmployeeUncheckedCreateWithoutMarketExpensesInput = {
+export type EmployeeUncheckedCreateWithoutExpensesInput = {
   id?: string
   marketId: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
-export type EmployeeCreateOrConnectWithoutMarketExpensesInput = {
+export type EmployeeCreateOrConnectWithoutExpensesInput = {
   where: Prisma.EmployeeWhereUniqueInput
-  create: Prisma.XOR<Prisma.EmployeeCreateWithoutMarketExpensesInput, Prisma.EmployeeUncheckedCreateWithoutMarketExpensesInput>
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutExpensesInput, Prisma.EmployeeUncheckedCreateWithoutExpensesInput>
 }
 
-export type EmployeeUpsertWithoutMarketExpensesInput = {
-  update: Prisma.XOR<Prisma.EmployeeUpdateWithoutMarketExpensesInput, Prisma.EmployeeUncheckedUpdateWithoutMarketExpensesInput>
-  create: Prisma.XOR<Prisma.EmployeeCreateWithoutMarketExpensesInput, Prisma.EmployeeUncheckedCreateWithoutMarketExpensesInput>
+export type EmployeeUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.EmployeeUpdateWithoutExpensesInput, Prisma.EmployeeUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.EmployeeCreateWithoutExpensesInput, Prisma.EmployeeUncheckedCreateWithoutExpensesInput>
   where?: Prisma.EmployeeWhereInput
 }
 
-export type EmployeeUpdateToOneWithWhereWithoutMarketExpensesInput = {
+export type EmployeeUpdateToOneWithWhereWithoutExpensesInput = {
   where?: Prisma.EmployeeWhereInput
-  data: Prisma.XOR<Prisma.EmployeeUpdateWithoutMarketExpensesInput, Prisma.EmployeeUncheckedUpdateWithoutMarketExpensesInput>
+  data: Prisma.XOR<Prisma.EmployeeUpdateWithoutExpensesInput, Prisma.EmployeeUncheckedUpdateWithoutExpensesInput>
 }
 
-export type EmployeeUpdateWithoutMarketExpensesInput = {
+export type EmployeeUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutEmployeesNestedInput
 }
 
-export type EmployeeUncheckedUpdateWithoutMarketExpensesInput = {
+export type EmployeeUncheckedUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -774,14 +743,13 @@ export type EmployeeCreateManyMarketInput = {
   id?: string
   fullName: string
   phone?: string | null
-  jobTitle?: string | null
+  position?: string | null
   salary?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.EmployeeStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -789,46 +757,43 @@ export type EmployeeUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutEmployeeNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutEmployeeNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutEmployeeNestedInput
 }
 
 export type EmployeeUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salary?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEmployeeStatusFieldUpdateOperationsInput | $Enums.EmployeeStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -838,11 +803,11 @@ export type EmployeeUncheckedUpdateManyWithoutMarketInput = {
  */
 
 export type EmployeeCountOutputType = {
-  marketExpenses: number
+  expenses: number
 }
 
 export type EmployeeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  marketExpenses?: boolean | EmployeeCountOutputTypeCountMarketExpensesArgs
+  expenses?: boolean | EmployeeCountOutputTypeCountExpensesArgs
 }
 
 /**
@@ -858,7 +823,7 @@ export type EmployeeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * EmployeeCountOutputType without action
  */
-export type EmployeeCountOutputTypeCountMarketExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type EmployeeCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MarketExpenseWhereInput
 }
 
@@ -868,17 +833,16 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   marketId?: boolean
   fullName?: boolean
   phone?: boolean
-  jobTitle?: boolean
+  position?: boolean
   salary?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  marketExpenses?: boolean | Prisma.Employee$marketExpensesArgs<ExtArgs>
+  expenses?: boolean | Prisma.Employee$expensesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employee"]>
 
@@ -887,14 +851,13 @@ export type EmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   marketId?: boolean
   fullName?: boolean
   phone?: boolean
-  jobTitle?: boolean
+  position?: boolean
   salary?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employee"]>
@@ -904,14 +867,13 @@ export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   marketId?: boolean
   fullName?: boolean
   phone?: boolean
-  jobTitle?: boolean
+  position?: boolean
   salary?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employee"]>
@@ -921,21 +883,20 @@ export type EmployeeSelectScalar = {
   marketId?: boolean
   fullName?: boolean
   phone?: boolean
-  jobTitle?: boolean
+  position?: boolean
   salary?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "fullName" | "phone" | "jobTitle" | "salary" | "status" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "fullName" | "phone" | "position" | "salary" | "status" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  marketExpenses?: boolean | Prisma.Employee$marketExpensesArgs<ExtArgs>
+  expenses?: boolean | Prisma.Employee$expensesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -949,21 +910,20 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Employee"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    marketExpenses: Prisma.$MarketExpensePayload<ExtArgs>[]
+    expenses: Prisma.$MarketExpensePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
     fullName: string
     phone: string | null
-    jobTitle: string | null
+    position: string | null
     salary: runtime.Decimal | null
-    status: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    status: $Enums.EmployeeStatus
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["employee"]>
   composites: {}
@@ -1360,7 +1320,7 @@ readonly fields: EmployeeFieldRefs;
 export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  marketExpenses<T extends Prisma.Employee$marketExpensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$marketExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  expenses<T extends Prisma.Employee$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Employee$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1394,14 +1354,13 @@ export interface EmployeeFieldRefs {
   readonly marketId: Prisma.FieldRef<"Employee", 'String'>
   readonly fullName: Prisma.FieldRef<"Employee", 'String'>
   readonly phone: Prisma.FieldRef<"Employee", 'String'>
-  readonly jobTitle: Prisma.FieldRef<"Employee", 'String'>
+  readonly position: Prisma.FieldRef<"Employee", 'String'>
   readonly salary: Prisma.FieldRef<"Employee", 'Decimal'>
-  readonly status: Prisma.FieldRef<"Employee", 'String'>
+  readonly status: Prisma.FieldRef<"Employee", 'EmployeeStatus'>
+  readonly createdById: Prisma.FieldRef<"Employee", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Employee", 'String'>
   readonly createdAt: Prisma.FieldRef<"Employee", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Employee", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Employee", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Employee", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Employee", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Employee", 'DateTime'>
 }
     
@@ -1804,9 +1763,9 @@ export type EmployeeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Employee.marketExpenses
+ * Employee.expenses
  */
-export type Employee$marketExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Employee$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the MarketExpense
    */

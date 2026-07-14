@@ -14,153 +14,147 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Tenant
- * 
+ * A tenant — the party that rents a shop.
  */
 export type TenantModel = runtime.Types.Result.DefaultSelection<Prisma.$TenantPayload>
 
 export type AggregateTenant = {
   _count: TenantCountAggregateOutputType | null
+  _avg: TenantAvgAggregateOutputType | null
+  _sum: TenantSumAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
+}
+
+export type TenantAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type TenantSumAggregateOutputType = {
+  version: number | null
 }
 
 export type TenantMinAggregateOutputType = {
   id: string | null
   marketId: string | null
-  fullName: string | null
-  tazkiraNumber: string | null
+  firstName: string | null
+  lastName: string | null
   phone: string | null
-  phone2: string | null
-  emergencyPhone: string | null
+  nationalId: string | null
+  gender: $Enums.Gender | null
   address: string | null
-  businessName: string | null
-  gender: string | null
-  status: string | null
-  debtStatus: string | null
-  photo: string | null
-  description: string | null
+  status: $Enums.TenantStatus | null
+  debtStatus: $Enums.DebtStatus | null
+  version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
 export type TenantMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
-  fullName: string | null
-  tazkiraNumber: string | null
+  firstName: string | null
+  lastName: string | null
   phone: string | null
-  phone2: string | null
-  emergencyPhone: string | null
+  nationalId: string | null
+  gender: $Enums.Gender | null
   address: string | null
-  businessName: string | null
-  gender: string | null
-  status: string | null
-  debtStatus: string | null
-  photo: string | null
-  description: string | null
+  status: $Enums.TenantStatus | null
+  debtStatus: $Enums.DebtStatus | null
+  version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
 export type TenantCountAggregateOutputType = {
   id: number
   marketId: number
-  fullName: number
-  tazkiraNumber: number
+  firstName: number
+  lastName: number
   phone: number
-  phone2: number
-  emergencyPhone: number
-  address: number
-  businessName: number
+  nationalId: number
   gender: number
+  address: number
   status: number
   debtStatus: number
-  photo: number
-  description: number
+  version: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
 
 
+export type TenantAvgAggregateInputType = {
+  version?: true
+}
+
+export type TenantSumAggregateInputType = {
+  version?: true
+}
+
 export type TenantMinAggregateInputType = {
   id?: true
   marketId?: true
-  fullName?: true
-  tazkiraNumber?: true
+  firstName?: true
+  lastName?: true
   phone?: true
-  phone2?: true
-  emergencyPhone?: true
-  address?: true
-  businessName?: true
+  nationalId?: true
   gender?: true
+  address?: true
   status?: true
   debtStatus?: true
-  photo?: true
-  description?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
 export type TenantMaxAggregateInputType = {
   id?: true
   marketId?: true
-  fullName?: true
-  tazkiraNumber?: true
+  firstName?: true
+  lastName?: true
   phone?: true
-  phone2?: true
-  emergencyPhone?: true
-  address?: true
-  businessName?: true
+  nationalId?: true
   gender?: true
+  address?: true
   status?: true
   debtStatus?: true
-  photo?: true
-  description?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
 export type TenantCountAggregateInputType = {
   id?: true
   marketId?: true
-  fullName?: true
-  tazkiraNumber?: true
+  firstName?: true
+  lastName?: true
   phone?: true
-  phone2?: true
-  emergencyPhone?: true
-  address?: true
-  businessName?: true
+  nationalId?: true
   gender?: true
+  address?: true
   status?: true
   debtStatus?: true
-  photo?: true
-  description?: true
+  version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -203,6 +197,18 @@ export type TenantAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TenantAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TenantSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TenantMinAggregateInputType
@@ -233,6 +239,8 @@ export type TenantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: TenantCountAggregateInputType | true
+  _avg?: TenantAvgAggregateInputType
+  _sum?: TenantSumAggregateInputType
   _min?: TenantMinAggregateInputType
   _max?: TenantMaxAggregateInputType
 }
@@ -240,25 +248,23 @@ export type TenantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type TenantGroupByOutputType = {
   id: string
   marketId: string
-  fullName: string
-  tazkiraNumber: string | null
-  phone: string | null
-  phone2: string | null
-  emergencyPhone: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId: string | null
+  gender: $Enums.Gender | null
   address: string | null
-  businessName: string | null
-  gender: string | null
-  status: string | null
-  debtStatus: string | null
-  photo: string | null
-  description: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  status: $Enums.TenantStatus
+  debtStatus: $Enums.DebtStatus
+  version: number
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: TenantCountAggregateOutputType | null
+  _avg: TenantAvgAggregateOutputType | null
+  _sum: TenantSumAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
 }
@@ -284,115 +290,100 @@ export type TenantWhereInput = {
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   id?: Prisma.UuidFilter<"Tenant"> | string
   marketId?: Prisma.UuidFilter<"Tenant"> | string
-  fullName?: Prisma.StringFilter<"Tenant"> | string
-  tazkiraNumber?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  phone?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  phone2?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  emergencyPhone?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  firstName?: Prisma.StringFilter<"Tenant"> | string
+  lastName?: Prisma.StringFilter<"Tenant"> | string
+  phone?: Prisma.StringFilter<"Tenant"> | string
+  nationalId?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  gender?: Prisma.EnumGenderNullableFilter<"Tenant"> | $Enums.Gender | null
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  businessName?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  gender?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  status?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  debtStatus?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  photo?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  description?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  status?: Prisma.EnumTenantStatusFilter<"Tenant"> | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFilter<"Tenant"> | $Enums.DebtStatus
+  version?: Prisma.IntFilter<"Tenant"> | number
+  createdById?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  guarantors?: Prisma.GuarantorListRelationFilter
   contracts?: Prisma.ContractListRelationFilter
-  exitClearances?: Prisma.ExitClearanceListRelationFilter
+  guarantors?: Prisma.GuarantorListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
+  exitClearances?: Prisma.ExitClearanceListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
-  tazkiraNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone2?: Prisma.SortOrderInput | Prisma.SortOrder
-  emergencyPhone?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
-  businessName?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  nationalId?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  debtStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  photo?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  debtStatus?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
-  guarantors?: Prisma.GuarantorOrderByRelationAggregateInput
   contracts?: Prisma.ContractOrderByRelationAggregateInput
-  exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
+  guarantors?: Prisma.GuarantorOrderByRelationAggregateInput
   cheques?: Prisma.ChequeOrderByRelationAggregateInput
+  exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.TenantMarketIdIdCompoundUniqueInput
   AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   OR?: Prisma.TenantWhereInput[]
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   marketId?: Prisma.UuidFilter<"Tenant"> | string
-  fullName?: Prisma.StringFilter<"Tenant"> | string
-  tazkiraNumber?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  phone?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  phone2?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  emergencyPhone?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  firstName?: Prisma.StringFilter<"Tenant"> | string
+  lastName?: Prisma.StringFilter<"Tenant"> | string
+  phone?: Prisma.StringFilter<"Tenant"> | string
+  nationalId?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  gender?: Prisma.EnumGenderNullableFilter<"Tenant"> | $Enums.Gender | null
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  businessName?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  gender?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  status?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  debtStatus?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  photo?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  description?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  status?: Prisma.EnumTenantStatusFilter<"Tenant"> | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFilter<"Tenant"> | $Enums.DebtStatus
+  version?: Prisma.IntFilter<"Tenant"> | number
+  createdById?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  guarantors?: Prisma.GuarantorListRelationFilter
   contracts?: Prisma.ContractListRelationFilter
-  exitClearances?: Prisma.ExitClearanceListRelationFilter
+  guarantors?: Prisma.GuarantorListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
-}, "id" | "marketId_id">
+  exitClearances?: Prisma.ExitClearanceListRelationFilter
+}, "id">
 
 export type TenantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
-  tazkiraNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone2?: Prisma.SortOrderInput | Prisma.SortOrder
-  emergencyPhone?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
-  businessName?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  nationalId?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  debtStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  photo?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  debtStatus?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
+  _avg?: Prisma.TenantAvgOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
   _min?: Prisma.TenantMinOrderByAggregateInput
+  _sum?: Prisma.TenantSumOrderByAggregateInput
 }
 
 export type TenantScalarWhereWithAggregatesInput = {
@@ -401,199 +392,167 @@ export type TenantScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TenantScalarWhereWithAggregatesInput | Prisma.TenantScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Tenant"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"Tenant"> | string
-  fullName?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
-  tazkiraNumber?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  phone?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  phone2?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  emergencyPhone?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  firstName?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  lastName?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  phone?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
+  nationalId?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  gender?: Prisma.EnumGenderNullableWithAggregatesFilter<"Tenant"> | $Enums.Gender | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  businessName?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  gender?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  debtStatus?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  photo?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  description?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Tenant"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Tenant"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Tenant"> | string | null
+  status?: Prisma.EnumTenantStatusWithAggregatesFilter<"Tenant"> | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusWithAggregatesFilter<"Tenant"> | $Enums.DebtStatus
+  version?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Tenant"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Tenant"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tenant"> | Date | string | null
 }
 
 export type TenantCreateInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutTenantsInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
   id?: string
   marketId: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutTenantsNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
   id?: string
   marketId: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type TenantUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type TenantUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -607,88 +566,74 @@ export type TenantOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type TenantMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
-}
-
 export type TenantCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
-  tazkiraNumber?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  phone2?: Prisma.SortOrder
-  emergencyPhone?: Prisma.SortOrder
-  address?: Prisma.SortOrder
-  businessName?: Prisma.SortOrder
+  nationalId?: Prisma.SortOrder
   gender?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   status?: Prisma.SortOrder
   debtStatus?: Prisma.SortOrder
-  photo?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type TenantAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type TenantMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
-  tazkiraNumber?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  phone2?: Prisma.SortOrder
-  emergencyPhone?: Prisma.SortOrder
-  address?: Prisma.SortOrder
-  businessName?: Prisma.SortOrder
+  nationalId?: Prisma.SortOrder
   gender?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   status?: Prisma.SortOrder
   debtStatus?: Prisma.SortOrder
-  photo?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type TenantMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  fullName?: Prisma.SortOrder
-  tazkiraNumber?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
-  phone2?: Prisma.SortOrder
-  emergencyPhone?: Prisma.SortOrder
-  address?: Prisma.SortOrder
-  businessName?: Prisma.SortOrder
+  nationalId?: Prisma.SortOrder
   gender?: Prisma.SortOrder
+  address?: Prisma.SortOrder
   status?: Prisma.SortOrder
   debtStatus?: Prisma.SortOrder
-  photo?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type TenantSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type TenantScalarRelationFilter = {
   is?: Prisma.TenantWhereInput
   isNot?: Prisma.TenantWhereInput
-}
-
-export type TenantNullableScalarRelationFilter = {
-  is?: Prisma.TenantWhereInput | null
-  isNot?: Prisma.TenantWhereInput | null
 }
 
 export type TenantCreateNestedManyWithoutMarketInput = {
@@ -731,6 +676,18 @@ export type TenantUncheckedUpdateManyWithoutMarketNestedInput = {
   update?: Prisma.TenantUpdateWithWhereUniqueWithoutMarketInput | Prisma.TenantUpdateWithWhereUniqueWithoutMarketInput[]
   updateMany?: Prisma.TenantUpdateManyWithWhereWithoutMarketInput | Prisma.TenantUpdateManyWithWhereWithoutMarketInput[]
   deleteMany?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
+}
+
+export type NullableEnumGenderFieldUpdateOperationsInput = {
+  set?: $Enums.Gender | null
+}
+
+export type EnumTenantStatusFieldUpdateOperationsInput = {
+  set?: $Enums.TenantStatus
+}
+
+export type EnumDebtStatusFieldUpdateOperationsInput = {
+  set?: $Enums.DebtStatus
 }
 
 export type TenantCreateNestedOneWithoutGuarantorsInput = {
@@ -781,66 +738,56 @@ export type TenantCreateNestedOneWithoutChequesInput = {
   connect?: Prisma.TenantWhereUniqueInput
 }
 
-export type TenantUpdateOneWithoutChequesNestedInput = {
+export type TenantUpdateOneRequiredWithoutChequesNestedInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutChequesInput, Prisma.TenantUncheckedCreateWithoutChequesInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutChequesInput
   upsert?: Prisma.TenantUpsertWithoutChequesInput
-  disconnect?: Prisma.TenantWhereInput | boolean
-  delete?: Prisma.TenantWhereInput | boolean
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutChequesInput, Prisma.TenantUpdateWithoutChequesInput>, Prisma.TenantUncheckedUpdateWithoutChequesInput>
 }
 
 export type TenantCreateWithoutMarketInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutMarketInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutMarketInput = {
@@ -875,76 +822,64 @@ export type TenantScalarWhereInput = {
   NOT?: Prisma.TenantScalarWhereInput | Prisma.TenantScalarWhereInput[]
   id?: Prisma.UuidFilter<"Tenant"> | string
   marketId?: Prisma.UuidFilter<"Tenant"> | string
-  fullName?: Prisma.StringFilter<"Tenant"> | string
-  tazkiraNumber?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  phone?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  phone2?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  emergencyPhone?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  firstName?: Prisma.StringFilter<"Tenant"> | string
+  lastName?: Prisma.StringFilter<"Tenant"> | string
+  phone?: Prisma.StringFilter<"Tenant"> | string
+  nationalId?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  gender?: Prisma.EnumGenderNullableFilter<"Tenant"> | $Enums.Gender | null
   address?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  businessName?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  gender?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  status?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  debtStatus?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  photo?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  description?: Prisma.StringNullableFilter<"Tenant"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  status?: Prisma.EnumTenantStatusFilter<"Tenant"> | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFilter<"Tenant"> | $Enums.DebtStatus
+  version?: Prisma.IntFilter<"Tenant"> | number
+  createdById?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Tenant"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Tenant"> | Date | string | null
 }
 
 export type TenantCreateWithoutGuarantorsInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutTenantsInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutGuarantorsInput = {
   id?: string
   marketId: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutGuarantorsInput = {
@@ -965,106 +900,90 @@ export type TenantUpdateToOneWithWhereWithoutGuarantorsInput = {
 
 export type TenantUpdateWithoutGuarantorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutTenantsNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutGuarantorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutContractsInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutTenantsInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutContractsInput = {
   id?: string
   marketId: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutTenantInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutContractsInput = {
@@ -1085,105 +1004,89 @@ export type TenantUpdateToOneWithWhereWithoutContractsInput = {
 
 export type TenantUpdateWithoutContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutTenantsNestedInput
   guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutExitClearancesInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutTenantsInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutExitClearancesInput = {
   id?: string
   marketId: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1205,105 +1108,89 @@ export type TenantUpdateToOneWithWhereWithoutExitClearancesInput = {
 
 export type TenantUpdateWithoutExitClearancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutTenantsNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutExitClearancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutChequesInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutTenantsInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutTenantInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutChequesInput = {
   id?: string
   marketId: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutTenantInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutTenantInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1325,149 +1212,125 @@ export type TenantUpdateToOneWithWhereWithoutChequesInput = {
 
 export type TenantUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutTenantsNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyMarketInput = {
   id?: string
-  fullName: string
-  tazkiraNumber?: string | null
-  phone?: string | null
-  phone2?: string | null
-  emergencyPhone?: string | null
+  firstName: string
+  lastName: string
+  phone: string
+  nationalId?: string | null
+  gender?: $Enums.Gender | null
   address?: string | null
-  businessName?: string | null
-  gender?: string | null
-  status?: string | null
-  debtStatus?: string | null
-  photo?: string | null
-  description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  status?: $Enums.TenantStatus
+  debtStatus?: $Enums.DebtStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type TenantUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutTenantNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutTenantNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutTenantNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  tazkiraNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emergencyPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  nationalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  debtStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  debtStatus?: Prisma.EnumDebtStatusFieldUpdateOperationsInput | $Enums.DebtStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -1477,17 +1340,17 @@ export type TenantUncheckedUpdateManyWithoutMarketInput = {
  */
 
 export type TenantCountOutputType = {
-  guarantors: number
   contracts: number
-  exitClearances: number
+  guarantors: number
   cheques: number
+  exitClearances: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  guarantors?: boolean | TenantCountOutputTypeCountGuarantorsArgs
   contracts?: boolean | TenantCountOutputTypeCountContractsArgs
-  exitClearances?: boolean | TenantCountOutputTypeCountExitClearancesArgs
+  guarantors?: boolean | TenantCountOutputTypeCountGuarantorsArgs
   cheques?: boolean | TenantCountOutputTypeCountChequesArgs
+  exitClearances?: boolean | TenantCountOutputTypeCountExitClearancesArgs
 }
 
 /**
@@ -1503,13 +1366,6 @@ export type TenantCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * TenantCountOutputType without action
  */
-export type TenantCountOutputTypeCountGuarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GuarantorWhereInput
-}
-
-/**
- * TenantCountOutputType without action
- */
 export type TenantCountOutputTypeCountContractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ContractWhereInput
 }
@@ -1517,8 +1373,8 @@ export type TenantCountOutputTypeCountContractsArgs<ExtArgs extends runtime.Type
 /**
  * TenantCountOutputType without action
  */
-export type TenantCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExitClearanceWhereInput
+export type TenantCountOutputTypeCountGuarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuarantorWhereInput
 }
 
 /**
@@ -1528,56 +1384,55 @@ export type TenantCountOutputTypeCountChequesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ChequeWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExitClearanceWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  fullName?: boolean
-  tazkiraNumber?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  phone2?: boolean
-  emergencyPhone?: boolean
-  address?: boolean
-  businessName?: boolean
+  nationalId?: boolean
   gender?: boolean
+  address?: boolean
   status?: boolean
   debtStatus?: boolean
-  photo?: boolean
-  description?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  guarantors?: boolean | Prisma.Tenant$guarantorsArgs<ExtArgs>
   contracts?: boolean | Prisma.Tenant$contractsArgs<ExtArgs>
-  exitClearances?: boolean | Prisma.Tenant$exitClearancesArgs<ExtArgs>
+  guarantors?: boolean | Prisma.Tenant$guarantorsArgs<ExtArgs>
   cheques?: boolean | Prisma.Tenant$chequesArgs<ExtArgs>
+  exitClearances?: boolean | Prisma.Tenant$exitClearancesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
 export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  fullName?: boolean
-  tazkiraNumber?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  phone2?: boolean
-  emergencyPhone?: boolean
-  address?: boolean
-  businessName?: boolean
+  nationalId?: boolean
   gender?: boolean
+  address?: boolean
   status?: boolean
   debtStatus?: boolean
-  photo?: boolean
-  description?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -1585,23 +1440,19 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  fullName?: boolean
-  tazkiraNumber?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  phone2?: boolean
-  emergencyPhone?: boolean
-  address?: boolean
-  businessName?: boolean
+  nationalId?: boolean
   gender?: boolean
+  address?: boolean
   status?: boolean
   debtStatus?: boolean
-  photo?: boolean
-  description?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -1609,33 +1460,29 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type TenantSelectScalar = {
   id?: boolean
   marketId?: boolean
-  fullName?: boolean
-  tazkiraNumber?: boolean
+  firstName?: boolean
+  lastName?: boolean
   phone?: boolean
-  phone2?: boolean
-  emergencyPhone?: boolean
-  address?: boolean
-  businessName?: boolean
+  nationalId?: boolean
   gender?: boolean
+  address?: boolean
   status?: boolean
   debtStatus?: boolean
-  photo?: boolean
-  description?: boolean
+  version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "fullName" | "tazkiraNumber" | "phone" | "phone2" | "emergencyPhone" | "address" | "businessName" | "gender" | "status" | "debtStatus" | "photo" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "firstName" | "lastName" | "phone" | "nationalId" | "gender" | "address" | "status" | "debtStatus" | "version" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  guarantors?: boolean | Prisma.Tenant$guarantorsArgs<ExtArgs>
   contracts?: boolean | Prisma.Tenant$contractsArgs<ExtArgs>
-  exitClearances?: boolean | Prisma.Tenant$exitClearancesArgs<ExtArgs>
+  guarantors?: boolean | Prisma.Tenant$guarantorsArgs<ExtArgs>
   cheques?: boolean | Prisma.Tenant$chequesArgs<ExtArgs>
+  exitClearances?: boolean | Prisma.Tenant$exitClearancesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1649,31 +1496,30 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Tenant"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    guarantors: Prisma.$GuarantorPayload<ExtArgs>[]
     contracts: Prisma.$ContractPayload<ExtArgs>[]
-    exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
+    guarantors: Prisma.$GuarantorPayload<ExtArgs>[]
     cheques: Prisma.$ChequePayload<ExtArgs>[]
+    exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
-    fullName: string
-    tazkiraNumber: string | null
-    phone: string | null
-    phone2: string | null
-    emergencyPhone: string | null
+    firstName: string
+    lastName: string
+    phone: string
+    nationalId: string | null
+    gender: $Enums.Gender | null
     address: string | null
-    businessName: string | null
-    gender: string | null
-    status: string | null
-    debtStatus: string | null
-    photo: string | null
-    description: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    status: $Enums.TenantStatus
+    debtStatus: $Enums.DebtStatus
+    /**
+     * Optimistic-locking token.
+     */
+    version: number
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["tenant"]>
   composites: {}
@@ -2070,10 +1916,10 @@ readonly fields: TenantFieldRefs;
 export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  guarantors<T extends Prisma.Tenant$guarantorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$guarantorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuarantorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contracts<T extends Prisma.Tenant$contractsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  exitClearances<T extends Prisma.Tenant$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  guarantors<T extends Prisma.Tenant$guarantorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$guarantorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuarantorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cheques<T extends Prisma.Tenant$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exitClearances<T extends Prisma.Tenant$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2105,23 +1951,19 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
 export interface TenantFieldRefs {
   readonly id: Prisma.FieldRef<"Tenant", 'String'>
   readonly marketId: Prisma.FieldRef<"Tenant", 'String'>
-  readonly fullName: Prisma.FieldRef<"Tenant", 'String'>
-  readonly tazkiraNumber: Prisma.FieldRef<"Tenant", 'String'>
+  readonly firstName: Prisma.FieldRef<"Tenant", 'String'>
+  readonly lastName: Prisma.FieldRef<"Tenant", 'String'>
   readonly phone: Prisma.FieldRef<"Tenant", 'String'>
-  readonly phone2: Prisma.FieldRef<"Tenant", 'String'>
-  readonly emergencyPhone: Prisma.FieldRef<"Tenant", 'String'>
+  readonly nationalId: Prisma.FieldRef<"Tenant", 'String'>
+  readonly gender: Prisma.FieldRef<"Tenant", 'Gender'>
   readonly address: Prisma.FieldRef<"Tenant", 'String'>
-  readonly businessName: Prisma.FieldRef<"Tenant", 'String'>
-  readonly gender: Prisma.FieldRef<"Tenant", 'String'>
-  readonly status: Prisma.FieldRef<"Tenant", 'String'>
-  readonly debtStatus: Prisma.FieldRef<"Tenant", 'String'>
-  readonly photo: Prisma.FieldRef<"Tenant", 'String'>
-  readonly description: Prisma.FieldRef<"Tenant", 'String'>
+  readonly status: Prisma.FieldRef<"Tenant", 'TenantStatus'>
+  readonly debtStatus: Prisma.FieldRef<"Tenant", 'DebtStatus'>
+  readonly version: Prisma.FieldRef<"Tenant", 'Int'>
+  readonly createdById: Prisma.FieldRef<"Tenant", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Tenant", 'String'>
   readonly createdAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Tenant", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Tenant", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Tenant", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
 }
     
@@ -2524,30 +2366,6 @@ export type TenantDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Tenant.guarantors
- */
-export type Tenant$guarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Guarantor
-   */
-  select?: Prisma.GuarantorSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Guarantor
-   */
-  omit?: Prisma.GuarantorOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.GuarantorInclude<ExtArgs> | null
-  where?: Prisma.GuarantorWhereInput
-  orderBy?: Prisma.GuarantorOrderByWithRelationInput | Prisma.GuarantorOrderByWithRelationInput[]
-  cursor?: Prisma.GuarantorWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.GuarantorScalarFieldEnum | Prisma.GuarantorScalarFieldEnum[]
-}
-
-/**
  * Tenant.contracts
  */
 export type Tenant$contractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2572,27 +2390,27 @@ export type Tenant$contractsArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Tenant.exitClearances
+ * Tenant.guarantors
  */
-export type Tenant$exitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Tenant$guarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ExitClearance
+   * Select specific fields to fetch from the Guarantor
    */
-  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
+  select?: Prisma.GuarantorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ExitClearance
+   * Omit specific fields from the Guarantor
    */
-  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
+  omit?: Prisma.GuarantorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
-  where?: Prisma.ExitClearanceWhereInput
-  orderBy?: Prisma.ExitClearanceOrderByWithRelationInput | Prisma.ExitClearanceOrderByWithRelationInput[]
-  cursor?: Prisma.ExitClearanceWhereUniqueInput
+  include?: Prisma.GuarantorInclude<ExtArgs> | null
+  where?: Prisma.GuarantorWhereInput
+  orderBy?: Prisma.GuarantorOrderByWithRelationInput | Prisma.GuarantorOrderByWithRelationInput[]
+  cursor?: Prisma.GuarantorWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
+  distinct?: Prisma.GuarantorScalarFieldEnum | Prisma.GuarantorScalarFieldEnum[]
 }
 
 /**
@@ -2617,6 +2435,30 @@ export type Tenant$chequesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ChequeScalarFieldEnum | Prisma.ChequeScalarFieldEnum[]
+}
+
+/**
+ * Tenant.exitClearances
+ */
+export type Tenant$exitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExitClearance
+   */
+  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExitClearance
+   */
+  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
+  where?: Prisma.ExitClearanceWhereInput
+  orderBy?: Prisma.ExitClearanceOrderByWithRelationInput | Prisma.ExitClearanceOrderByWithRelationInput[]
+  cursor?: Prisma.ExitClearanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
 }
 
 /**

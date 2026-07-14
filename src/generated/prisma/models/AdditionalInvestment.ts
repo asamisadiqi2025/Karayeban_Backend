@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model AdditionalInvestment
- * 
+ * A capital top-up by a shareholder.
  */
 export type AdditionalInvestmentModel = runtime.Types.Result.DefaultSelection<Prisma.$AdditionalInvestmentPayload>
 
@@ -39,14 +39,13 @@ export type AdditionalInvestmentMinAggregateOutputType = {
   marketId: string | null
   shareholderId: string | null
   amount: runtime.Decimal | null
+  investmentType: $Enums.InvestmentType | null
   investmentDate: Date | null
-  type: string | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
-  createdBy: string | null
+  updatedAt: Date | null
 }
 
 export type AdditionalInvestmentMaxAggregateOutputType = {
@@ -54,14 +53,13 @@ export type AdditionalInvestmentMaxAggregateOutputType = {
   marketId: string | null
   shareholderId: string | null
   amount: runtime.Decimal | null
+  investmentType: $Enums.InvestmentType | null
   investmentDate: Date | null
-  type: string | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
-  createdBy: string | null
+  updatedAt: Date | null
 }
 
 export type AdditionalInvestmentCountAggregateOutputType = {
@@ -69,14 +67,13 @@ export type AdditionalInvestmentCountAggregateOutputType = {
   marketId: number
   shareholderId: number
   amount: number
+  investmentType: number
   investmentDate: number
-  type: number
-  approvalStatus: number
-  approvedBy: number
-  approvedAt: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
-  createdBy: number
+  updatedAt: number
   _all: number
 }
 
@@ -94,14 +91,13 @@ export type AdditionalInvestmentMinAggregateInputType = {
   marketId?: true
   shareholderId?: true
   amount?: true
+  investmentType?: true
   investmentDate?: true
-  type?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
 }
 
 export type AdditionalInvestmentMaxAggregateInputType = {
@@ -109,14 +105,13 @@ export type AdditionalInvestmentMaxAggregateInputType = {
   marketId?: true
   shareholderId?: true
   amount?: true
+  investmentType?: true
   investmentDate?: true
-  type?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
 }
 
 export type AdditionalInvestmentCountAggregateInputType = {
@@ -124,14 +119,13 @@ export type AdditionalInvestmentCountAggregateInputType = {
   marketId?: true
   shareholderId?: true
   amount?: true
+  investmentType?: true
   investmentDate?: true
-  type?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -226,14 +220,13 @@ export type AdditionalInvestmentGroupByOutputType = {
   marketId: string
   shareholderId: string
   amount: runtime.Decimal
+  investmentType: $Enums.InvestmentType
   investmentDate: Date
-  type: string | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
   description: string | null
-  createdAt: Date | null
-  createdBy: string | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: AdditionalInvestmentCountAggregateOutputType | null
   _avg: AdditionalInvestmentAvgAggregateOutputType | null
   _sum: AdditionalInvestmentSumAggregateOutputType | null
@@ -264,14 +257,13 @@ export type AdditionalInvestmentWhereInput = {
   marketId?: Prisma.UuidFilter<"AdditionalInvestment"> | string
   shareholderId?: Prisma.UuidFilter<"AdditionalInvestment"> | string
   amount?: Prisma.DecimalFilter<"AdditionalInvestment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFilter<"AdditionalInvestment"> | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
-  type?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  approvalStatus?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"AdditionalInvestment"> | Date | string | null
   description?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"AdditionalInvestment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
 }
@@ -281,14 +273,13 @@ export type AdditionalInvestmentOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   shareholderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
   investmentDate?: Prisma.SortOrder
-  type?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shareholder?: Prisma.ShareholderOrderByWithRelationInput
 }
@@ -301,14 +292,13 @@ export type AdditionalInvestmentWhereUniqueInput = Prisma.AtLeast<{
   marketId?: Prisma.UuidFilter<"AdditionalInvestment"> | string
   shareholderId?: Prisma.UuidFilter<"AdditionalInvestment"> | string
   amount?: Prisma.DecimalFilter<"AdditionalInvestment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFilter<"AdditionalInvestment"> | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
-  type?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  approvalStatus?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"AdditionalInvestment"> | Date | string | null
   description?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"AdditionalInvestment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
 }, "id">
@@ -318,14 +308,13 @@ export type AdditionalInvestmentOrderByWithAggregationInput = {
   marketId?: Prisma.SortOrder
   shareholderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
   investmentDate?: Prisma.SortOrder
-  type?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.AdditionalInvestmentCountOrderByAggregateInput
   _avg?: Prisma.AdditionalInvestmentAvgOrderByAggregateInput
   _max?: Prisma.AdditionalInvestmentMaxOrderByAggregateInput
@@ -341,27 +330,25 @@ export type AdditionalInvestmentScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"AdditionalInvestment"> | string
   shareholderId?: Prisma.UuidWithAggregatesFilter<"AdditionalInvestment"> | string
   amount?: Prisma.DecimalWithAggregatesFilter<"AdditionalInvestment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeWithAggregatesFilter<"AdditionalInvestment"> | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeWithAggregatesFilter<"AdditionalInvestment"> | Date | string
-  type?: Prisma.StringNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
-  approvalStatus?: Prisma.StringNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
-  approvedBy?: Prisma.UuidNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
-  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AdditionalInvestment"> | Date | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AdditionalInvestment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"AdditionalInvestment"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AdditionalInvestment"> | Date | string
 }
 
 export type AdditionalInvestmentCreateInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutAdditionalInvestmentsInput
   shareholder: Prisma.ShareholderCreateNestedOneWithoutAdditionalInvestmentsInput
 }
@@ -371,27 +358,25 @@ export type AdditionalInvestmentUncheckedCreateInput = {
   marketId: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdditionalInvestmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
 }
@@ -401,14 +386,13 @@ export type AdditionalInvestmentUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdditionalInvestmentCreateManyInput = {
@@ -416,27 +400,25 @@ export type AdditionalInvestmentCreateManyInput = {
   marketId: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdditionalInvestmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdditionalInvestmentUncheckedUpdateManyInput = {
@@ -444,14 +426,13 @@ export type AdditionalInvestmentUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdditionalInvestmentListRelationFilter = {
@@ -469,14 +450,13 @@ export type AdditionalInvestmentCountOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   shareholderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
   investmentDate?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentAvgOrderByAggregateInput = {
@@ -488,14 +468,13 @@ export type AdditionalInvestmentMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   shareholderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
   investmentDate?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentMinOrderByAggregateInput = {
@@ -503,14 +482,13 @@ export type AdditionalInvestmentMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   shareholderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  investmentType?: Prisma.SortOrder
   investmentDate?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentSumOrderByAggregateInput = {
@@ -601,17 +579,20 @@ export type AdditionalInvestmentUncheckedUpdateManyWithoutShareholderNestedInput
   deleteMany?: Prisma.AdditionalInvestmentScalarWhereInput | Prisma.AdditionalInvestmentScalarWhereInput[]
 }
 
+export type EnumInvestmentTypeFieldUpdateOperationsInput = {
+  set?: $Enums.InvestmentType
+}
+
 export type AdditionalInvestmentCreateWithoutMarketInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   shareholder: Prisma.ShareholderCreateNestedOneWithoutAdditionalInvestmentsInput
 }
 
@@ -619,14 +600,13 @@ export type AdditionalInvestmentUncheckedCreateWithoutMarketInput = {
   id?: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdditionalInvestmentCreateOrConnectWithoutMarketInput = {
@@ -663,41 +643,39 @@ export type AdditionalInvestmentScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"AdditionalInvestment"> | string
   shareholderId?: Prisma.UuidFilter<"AdditionalInvestment"> | string
   amount?: Prisma.DecimalFilter<"AdditionalInvestment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFilter<"AdditionalInvestment"> | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
-  type?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  approvalStatus?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"AdditionalInvestment"> | Date | string | null
   description?: Prisma.StringNullableFilter<"AdditionalInvestment"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"AdditionalInvestment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
 }
 
 export type AdditionalInvestmentCreateWithoutShareholderInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutAdditionalInvestmentsInput
 }
 
 export type AdditionalInvestmentUncheckedCreateWithoutShareholderInput = {
   id?: string
+  marketId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdditionalInvestmentCreateOrConnectWithoutShareholderInput = {
@@ -730,27 +708,25 @@ export type AdditionalInvestmentCreateManyMarketInput = {
   id?: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdditionalInvestmentUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
 }
 
@@ -758,81 +734,78 @@ export type AdditionalInvestmentUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdditionalInvestmentUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdditionalInvestmentCreateManyShareholderInput = {
   id?: string
+  marketId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType: $Enums.InvestmentType
   investmentDate: Date | string
-  type?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AdditionalInvestmentUpdateWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
 }
 
 export type AdditionalInvestmentUncheckedUpdateWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AdditionalInvestmentUncheckedUpdateManyWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  investmentType?: Prisma.EnumInvestmentTypeFieldUpdateOperationsInput | $Enums.InvestmentType
   investmentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -842,14 +815,13 @@ export type AdditionalInvestmentSelect<ExtArgs extends runtime.Types.Extensions.
   marketId?: boolean
   shareholderId?: boolean
   amount?: boolean
+  investmentType?: boolean
   investmentDate?: boolean
-  type?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["additionalInvestment"]>
@@ -859,14 +831,13 @@ export type AdditionalInvestmentSelectCreateManyAndReturn<ExtArgs extends runtim
   marketId?: boolean
   shareholderId?: boolean
   amount?: boolean
+  investmentType?: boolean
   investmentDate?: boolean
-  type?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["additionalInvestment"]>
@@ -876,14 +847,13 @@ export type AdditionalInvestmentSelectUpdateManyAndReturn<ExtArgs extends runtim
   marketId?: boolean
   shareholderId?: boolean
   amount?: boolean
+  investmentType?: boolean
   investmentDate?: boolean
-  type?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["additionalInvestment"]>
@@ -893,17 +863,16 @@ export type AdditionalInvestmentSelectScalar = {
   marketId?: boolean
   shareholderId?: boolean
   amount?: boolean
+  investmentType?: boolean
   investmentDate?: boolean
-  type?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
 }
 
-export type AdditionalInvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "amount" | "investmentDate" | "type" | "approvalStatus" | "approvedBy" | "approvedAt" | "description" | "createdAt" | "createdBy", ExtArgs["result"]["additionalInvestment"]>
+export type AdditionalInvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "amount" | "investmentType" | "investmentDate" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["additionalInvestment"]>
 export type AdditionalInvestmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
@@ -928,14 +897,13 @@ export type $AdditionalInvestmentPayload<ExtArgs extends runtime.Types.Extension
     marketId: string
     shareholderId: string
     amount: runtime.Decimal
+    investmentType: $Enums.InvestmentType
     investmentDate: Date
-    type: string | null
-    approvalStatus: string | null
-    approvedBy: string | null
-    approvedAt: Date | null
     description: string | null
-    createdAt: Date | null
-    createdBy: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["additionalInvestment"]>
   composites: {}
 }
@@ -1365,14 +1333,13 @@ export interface AdditionalInvestmentFieldRefs {
   readonly marketId: Prisma.FieldRef<"AdditionalInvestment", 'String'>
   readonly shareholderId: Prisma.FieldRef<"AdditionalInvestment", 'String'>
   readonly amount: Prisma.FieldRef<"AdditionalInvestment", 'Decimal'>
+  readonly investmentType: Prisma.FieldRef<"AdditionalInvestment", 'InvestmentType'>
   readonly investmentDate: Prisma.FieldRef<"AdditionalInvestment", 'DateTime'>
-  readonly type: Prisma.FieldRef<"AdditionalInvestment", 'String'>
-  readonly approvalStatus: Prisma.FieldRef<"AdditionalInvestment", 'String'>
-  readonly approvedBy: Prisma.FieldRef<"AdditionalInvestment", 'String'>
-  readonly approvedAt: Prisma.FieldRef<"AdditionalInvestment", 'DateTime'>
   readonly description: Prisma.FieldRef<"AdditionalInvestment", 'String'>
+  readonly createdById: Prisma.FieldRef<"AdditionalInvestment", 'String'>
+  readonly updatedById: Prisma.FieldRef<"AdditionalInvestment", 'String'>
   readonly createdAt: Prisma.FieldRef<"AdditionalInvestment", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"AdditionalInvestment", 'String'>
+  readonly updatedAt: Prisma.FieldRef<"AdditionalInvestment", 'DateTime'>
 }
     
 

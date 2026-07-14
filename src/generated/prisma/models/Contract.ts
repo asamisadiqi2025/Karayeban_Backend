@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Contract
- * 
+ * A rental contract between a tenant and a shop.
  */
 export type ContractModel = runtime.Types.Result.DefaultSelection<Prisma.$ContractPayload>
 
@@ -27,218 +27,188 @@ export type AggregateContract = {
 }
 
 export type ContractAvgAggregateOutputType = {
+  renewalCount: number | null
   monthlyRent: runtime.Decimal | null
   depositAmount: runtime.Decimal | null
-  renewCount: number | null
   version: number | null
 }
 
 export type ContractSumAggregateOutputType = {
+  renewalCount: number | null
   monthlyRent: runtime.Decimal | null
   depositAmount: runtime.Decimal | null
-  renewCount: number | null
   version: number | null
 }
 
 export type ContractMinAggregateOutputType = {
   id: string | null
   marketId: string | null
-  contractNumber: string | null
   shopId: string | null
   tenantId: string | null
+  contractNumber: string | null
   previousContractId: string | null
+  renewalCount: number | null
   startDate: Date | null
   endDate: Date | null
   monthlyRent: runtime.Decimal | null
   depositAmount: runtime.Decimal | null
-  status: string | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
-  rejectionReason: string | null
-  renewCount: number | null
-  nextContractDate: Date | null
-  signedAt: Date | null
-  terminatedBy: string | null
+  status: $Enums.ContractStatus | null
+  signedDate: Date | null
+  approvedById: string | null
+  terminatedById: string | null
   terminationReason: string | null
   description: string | null
   version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
 export type ContractMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
-  contractNumber: string | null
   shopId: string | null
   tenantId: string | null
+  contractNumber: string | null
   previousContractId: string | null
+  renewalCount: number | null
   startDate: Date | null
   endDate: Date | null
   monthlyRent: runtime.Decimal | null
   depositAmount: runtime.Decimal | null
-  status: string | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
-  rejectionReason: string | null
-  renewCount: number | null
-  nextContractDate: Date | null
-  signedAt: Date | null
-  terminatedBy: string | null
+  status: $Enums.ContractStatus | null
+  signedDate: Date | null
+  approvedById: string | null
+  terminatedById: string | null
   terminationReason: string | null
   description: string | null
   version: number | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
 export type ContractCountAggregateOutputType = {
   id: number
   marketId: number
-  contractNumber: number
   shopId: number
   tenantId: number
+  contractNumber: number
   previousContractId: number
+  renewalCount: number
   startDate: number
   endDate: number
   monthlyRent: number
   depositAmount: number
   status: number
-  approvalStatus: number
-  approvedBy: number
-  approvedAt: number
-  rejectionReason: number
-  renewCount: number
-  nextContractDate: number
-  signedAt: number
-  terminatedBy: number
+  signedDate: number
+  approvedById: number
+  terminatedById: number
   terminationReason: number
   description: number
   version: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
 
 
 export type ContractAvgAggregateInputType = {
+  renewalCount?: true
   monthlyRent?: true
   depositAmount?: true
-  renewCount?: true
   version?: true
 }
 
 export type ContractSumAggregateInputType = {
+  renewalCount?: true
   monthlyRent?: true
   depositAmount?: true
-  renewCount?: true
   version?: true
 }
 
 export type ContractMinAggregateInputType = {
   id?: true
   marketId?: true
-  contractNumber?: true
   shopId?: true
   tenantId?: true
+  contractNumber?: true
   previousContractId?: true
+  renewalCount?: true
   startDate?: true
   endDate?: true
   monthlyRent?: true
   depositAmount?: true
   status?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
-  rejectionReason?: true
-  renewCount?: true
-  nextContractDate?: true
-  signedAt?: true
-  terminatedBy?: true
+  signedDate?: true
+  approvedById?: true
+  terminatedById?: true
   terminationReason?: true
   description?: true
   version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
 export type ContractMaxAggregateInputType = {
   id?: true
   marketId?: true
-  contractNumber?: true
   shopId?: true
   tenantId?: true
+  contractNumber?: true
   previousContractId?: true
+  renewalCount?: true
   startDate?: true
   endDate?: true
   monthlyRent?: true
   depositAmount?: true
   status?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
-  rejectionReason?: true
-  renewCount?: true
-  nextContractDate?: true
-  signedAt?: true
-  terminatedBy?: true
+  signedDate?: true
+  approvedById?: true
+  terminatedById?: true
   terminationReason?: true
   description?: true
   version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
 export type ContractCountAggregateInputType = {
   id?: true
   marketId?: true
-  contractNumber?: true
   shopId?: true
   tenantId?: true
+  contractNumber?: true
   previousContractId?: true
+  renewalCount?: true
   startDate?: true
   endDate?: true
   monthlyRent?: true
   depositAmount?: true
   status?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
-  rejectionReason?: true
-  renewCount?: true
-  nextContractDate?: true
-  signedAt?: true
-  terminatedBy?: true
+  signedDate?: true
+  approvedById?: true
+  terminatedById?: true
   terminationReason?: true
   description?: true
   version?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -332,31 +302,26 @@ export type ContractGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ContractGroupByOutputType = {
   id: string
   marketId: string
-  contractNumber: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId: string | null
+  renewalCount: number
   startDate: Date
   endDate: Date | null
-  monthlyRent: runtime.Decimal | null
-  depositAmount: runtime.Decimal | null
-  status: string | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
-  rejectionReason: string | null
-  renewCount: number | null
-  nextContractDate: Date | null
-  signedAt: Date | null
-  terminatedBy: string | null
+  monthlyRent: runtime.Decimal
+  depositAmount: runtime.Decimal
+  status: $Enums.ContractStatus
+  signedDate: Date | null
+  approvedById: string | null
+  terminatedById: string | null
   terminationReason: string | null
   description: string | null
   version: number
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: ContractCountAggregateOutputType | null
   _avg: ContractAvgAggregateOutputType | null
@@ -386,155 +351,134 @@ export type ContractWhereInput = {
   NOT?: Prisma.ContractWhereInput | Prisma.ContractWhereInput[]
   id?: Prisma.UuidFilter<"Contract"> | string
   marketId?: Prisma.UuidFilter<"Contract"> | string
-  contractNumber?: Prisma.StringNullableFilter<"Contract"> | string | null
   shopId?: Prisma.UuidFilter<"Contract"> | string
   tenantId?: Prisma.UuidFilter<"Contract"> | string
+  contractNumber?: Prisma.StringFilter<"Contract"> | string
   previousContractId?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  renewalCount?: Prisma.IntFilter<"Contract"> | number
   startDate?: Prisma.DateTimeFilter<"Contract"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  monthlyRent?: Prisma.DecimalNullableFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.DecimalNullableFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableFilter<"Contract"> | string | null
-  approvalStatus?: Prisma.StringNullableFilter<"Contract"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableFilter<"Contract"> | string | null
-  renewCount?: Prisma.IntNullableFilter<"Contract"> | number | null
-  nextContractDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  signedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  terminatedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  monthlyRent?: Prisma.DecimalFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFilter<"Contract"> | $Enums.ContractStatus
+  signedDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
+  approvedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  terminatedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
   terminationReason?: Prisma.StringNullableFilter<"Contract"> | string | null
   description?: Prisma.StringNullableFilter<"Contract"> | string | null
   version?: Prisma.IntFilter<"Contract"> | number
-  createdAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Contract"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Contract"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   previousContract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
-  renewedFrom?: Prisma.ContractListRelationFilter
-  contractTerms?: Prisma.ContractTermListRelationFilter
+  nextContracts?: Prisma.ContractListRelationFilter
+  terms?: Prisma.ContractTermListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
-  exitClearances?: Prisma.ExitClearanceListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
+  exitClearance?: Prisma.XOR<Prisma.ExitClearanceNullableScalarRelationFilter, Prisma.ExitClearanceWhereInput> | null
 }
 
 export type ContractOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  contractNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   shopId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  contractNumber?: Prisma.SortOrder
   previousContractId?: Prisma.SortOrderInput | Prisma.SortOrder
+  renewalCount?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  monthlyRent?: Prisma.SortOrderInput | Prisma.SortOrder
-  depositAmount?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
-  renewCount?: Prisma.SortOrderInput | Prisma.SortOrder
-  nextContractDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  signedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  terminatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  monthlyRent?: Prisma.SortOrder
+  depositAmount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  signedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  terminatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   terminationReason?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shop?: Prisma.ShopOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   previousContract?: Prisma.ContractOrderByWithRelationInput
-  renewedFrom?: Prisma.ContractOrderByRelationAggregateInput
-  contractTerms?: Prisma.ContractTermOrderByRelationAggregateInput
+  nextContracts?: Prisma.ContractOrderByRelationAggregateInput
+  terms?: Prisma.ContractTermOrderByRelationAggregateInput
   rentPayments?: Prisma.RentPaymentOrderByRelationAggregateInput
-  exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
   cheques?: Prisma.ChequeOrderByRelationAggregateInput
+  exitClearance?: Prisma.ExitClearanceOrderByWithRelationInput
 }
 
 export type ContractWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.ContractMarketIdIdCompoundUniqueInput
   AND?: Prisma.ContractWhereInput | Prisma.ContractWhereInput[]
   OR?: Prisma.ContractWhereInput[]
   NOT?: Prisma.ContractWhereInput | Prisma.ContractWhereInput[]
   marketId?: Prisma.UuidFilter<"Contract"> | string
-  contractNumber?: Prisma.StringNullableFilter<"Contract"> | string | null
   shopId?: Prisma.UuidFilter<"Contract"> | string
   tenantId?: Prisma.UuidFilter<"Contract"> | string
+  contractNumber?: Prisma.StringFilter<"Contract"> | string
   previousContractId?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  renewalCount?: Prisma.IntFilter<"Contract"> | number
   startDate?: Prisma.DateTimeFilter<"Contract"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  monthlyRent?: Prisma.DecimalNullableFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.DecimalNullableFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableFilter<"Contract"> | string | null
-  approvalStatus?: Prisma.StringNullableFilter<"Contract"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableFilter<"Contract"> | string | null
-  renewCount?: Prisma.IntNullableFilter<"Contract"> | number | null
-  nextContractDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  signedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  terminatedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  monthlyRent?: Prisma.DecimalFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFilter<"Contract"> | $Enums.ContractStatus
+  signedDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
+  approvedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  terminatedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
   terminationReason?: Prisma.StringNullableFilter<"Contract"> | string | null
   description?: Prisma.StringNullableFilter<"Contract"> | string | null
   version?: Prisma.IntFilter<"Contract"> | number
-  createdAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Contract"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Contract"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   previousContract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
-  renewedFrom?: Prisma.ContractListRelationFilter
-  contractTerms?: Prisma.ContractTermListRelationFilter
+  nextContracts?: Prisma.ContractListRelationFilter
+  terms?: Prisma.ContractTermListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
-  exitClearances?: Prisma.ExitClearanceListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
-}, "id" | "marketId_id">
+  exitClearance?: Prisma.XOR<Prisma.ExitClearanceNullableScalarRelationFilter, Prisma.ExitClearanceWhereInput> | null
+}, "id">
 
 export type ContractOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  contractNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   shopId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  contractNumber?: Prisma.SortOrder
   previousContractId?: Prisma.SortOrderInput | Prisma.SortOrder
+  renewalCount?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  monthlyRent?: Prisma.SortOrderInput | Prisma.SortOrder
-  depositAmount?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
-  renewCount?: Prisma.SortOrderInput | Prisma.SortOrder
-  nextContractDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  signedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  terminatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  monthlyRent?: Prisma.SortOrder
+  depositAmount?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  signedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  terminatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   terminationReason?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ContractCountOrderByAggregateInput
   _avg?: Prisma.ContractAvgOrderByAggregateInput
@@ -549,264 +493,224 @@ export type ContractScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ContractScalarWhereWithAggregatesInput | Prisma.ContractScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Contract"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"Contract"> | string
-  contractNumber?: Prisma.StringNullableWithAggregatesFilter<"Contract"> | string | null
   shopId?: Prisma.UuidWithAggregatesFilter<"Contract"> | string
   tenantId?: Prisma.UuidWithAggregatesFilter<"Contract"> | string
+  contractNumber?: Prisma.StringWithAggregatesFilter<"Contract"> | string
   previousContractId?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
+  renewalCount?: Prisma.IntWithAggregatesFilter<"Contract"> | number
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Contract"> | Date | string
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
-  monthlyRent?: Prisma.DecimalNullableWithAggregatesFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.DecimalNullableWithAggregatesFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"Contract"> | string | null
-  approvalStatus?: Prisma.StringNullableWithAggregatesFilter<"Contract"> | string | null
-  approvedBy?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
-  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Contract"> | string | null
-  renewCount?: Prisma.IntNullableWithAggregatesFilter<"Contract"> | number | null
-  nextContractDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
-  signedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
-  terminatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
+  monthlyRent?: Prisma.DecimalWithAggregatesFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalWithAggregatesFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusWithAggregatesFilter<"Contract"> | $Enums.ContractStatus
+  signedDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
+  approvedById?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
+  terminatedById?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
   terminationReason?: Prisma.StringNullableWithAggregatesFilter<"Contract"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Contract"> | string | null
   version?: Prisma.IntWithAggregatesFilter<"Contract"> | number
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Contract"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Contract"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Contract"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Contract"> | Date | string | null
 }
 
 export type ContractCreateInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractCreateManyInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ContractUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ContractUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -825,115 +729,95 @@ export type ContractNullableScalarRelationFilter = {
   isNot?: Prisma.ContractWhereInput | null
 }
 
-export type ContractMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
-}
-
 export type ContractCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  contractNumber?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  contractNumber?: Prisma.SortOrder
   previousContractId?: Prisma.SortOrder
+  renewalCount?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   monthlyRent?: Prisma.SortOrder
   depositAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrder
-  renewCount?: Prisma.SortOrder
-  nextContractDate?: Prisma.SortOrder
-  signedAt?: Prisma.SortOrder
-  terminatedBy?: Prisma.SortOrder
+  signedDate?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  terminatedById?: Prisma.SortOrder
   terminationReason?: Prisma.SortOrder
   description?: Prisma.SortOrder
   version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type ContractAvgOrderByAggregateInput = {
+  renewalCount?: Prisma.SortOrder
   monthlyRent?: Prisma.SortOrder
   depositAmount?: Prisma.SortOrder
-  renewCount?: Prisma.SortOrder
   version?: Prisma.SortOrder
 }
 
 export type ContractMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  contractNumber?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  contractNumber?: Prisma.SortOrder
   previousContractId?: Prisma.SortOrder
+  renewalCount?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   monthlyRent?: Prisma.SortOrder
   depositAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrder
-  renewCount?: Prisma.SortOrder
-  nextContractDate?: Prisma.SortOrder
-  signedAt?: Prisma.SortOrder
-  terminatedBy?: Prisma.SortOrder
+  signedDate?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  terminatedById?: Prisma.SortOrder
   terminationReason?: Prisma.SortOrder
   description?: Prisma.SortOrder
   version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type ContractMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  contractNumber?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  contractNumber?: Prisma.SortOrder
   previousContractId?: Prisma.SortOrder
+  renewalCount?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   monthlyRent?: Prisma.SortOrder
   depositAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
-  rejectionReason?: Prisma.SortOrder
-  renewCount?: Prisma.SortOrder
-  nextContractDate?: Prisma.SortOrder
-  signedAt?: Prisma.SortOrder
-  terminatedBy?: Prisma.SortOrder
+  signedDate?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
+  terminatedById?: Prisma.SortOrder
   terminationReason?: Prisma.SortOrder
   description?: Prisma.SortOrder
   version?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type ContractSumOrderByAggregateInput = {
+  renewalCount?: Prisma.SortOrder
   monthlyRent?: Prisma.SortOrder
   depositAmount?: Prisma.SortOrder
-  renewCount?: Prisma.SortOrder
   version?: Prisma.SortOrder
 }
 
@@ -1068,9 +952,9 @@ export type ContractUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.ContractScalarWhereInput | Prisma.ContractScalarWhereInput[]
 }
 
-export type ContractCreateNestedOneWithoutRenewedFromInput = {
-  create?: Prisma.XOR<Prisma.ContractCreateWithoutRenewedFromInput, Prisma.ContractUncheckedCreateWithoutRenewedFromInput>
-  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutRenewedFromInput
+export type ContractCreateNestedOneWithoutNextContractsInput = {
+  create?: Prisma.XOR<Prisma.ContractCreateWithoutNextContractsInput, Prisma.ContractUncheckedCreateWithoutNextContractsInput>
+  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutNextContractsInput
   connect?: Prisma.ContractWhereUniqueInput
 }
 
@@ -1088,22 +972,18 @@ export type ContractUncheckedCreateNestedManyWithoutPreviousContractInput = {
   connect?: Prisma.ContractWhereUniqueInput | Prisma.ContractWhereUniqueInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type EnumContractStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ContractStatus
 }
 
-export type ContractUpdateOneWithoutRenewedFromNestedInput = {
-  create?: Prisma.XOR<Prisma.ContractCreateWithoutRenewedFromInput, Prisma.ContractUncheckedCreateWithoutRenewedFromInput>
-  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutRenewedFromInput
-  upsert?: Prisma.ContractUpsertWithoutRenewedFromInput
+export type ContractUpdateOneWithoutNextContractsNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractCreateWithoutNextContractsInput, Prisma.ContractUncheckedCreateWithoutNextContractsInput>
+  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutNextContractsInput
+  upsert?: Prisma.ContractUpsertWithoutNextContractsInput
   disconnect?: Prisma.ContractWhereInput | boolean
   delete?: Prisma.ContractWhereInput | boolean
   connect?: Prisma.ContractWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutRenewedFromInput, Prisma.ContractUpdateWithoutRenewedFromInput>, Prisma.ContractUncheckedUpdateWithoutRenewedFromInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutNextContractsInput, Prisma.ContractUpdateWithoutNextContractsInput>, Prisma.ContractUncheckedUpdateWithoutNextContractsInput>
 }
 
 export type ContractUpdateManyWithoutPreviousContractNestedInput = {
@@ -1134,18 +1014,18 @@ export type ContractUncheckedUpdateManyWithoutPreviousContractNestedInput = {
   deleteMany?: Prisma.ContractScalarWhereInput | Prisma.ContractScalarWhereInput[]
 }
 
-export type ContractCreateNestedOneWithoutContractTermsInput = {
-  create?: Prisma.XOR<Prisma.ContractCreateWithoutContractTermsInput, Prisma.ContractUncheckedCreateWithoutContractTermsInput>
-  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutContractTermsInput
+export type ContractCreateNestedOneWithoutTermsInput = {
+  create?: Prisma.XOR<Prisma.ContractCreateWithoutTermsInput, Prisma.ContractUncheckedCreateWithoutTermsInput>
+  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutTermsInput
   connect?: Prisma.ContractWhereUniqueInput
 }
 
-export type ContractUpdateOneRequiredWithoutContractTermsNestedInput = {
-  create?: Prisma.XOR<Prisma.ContractCreateWithoutContractTermsInput, Prisma.ContractUncheckedCreateWithoutContractTermsInput>
-  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutContractTermsInput
-  upsert?: Prisma.ContractUpsertWithoutContractTermsInput
+export type ContractUpdateOneRequiredWithoutTermsNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractCreateWithoutTermsInput, Prisma.ContractUncheckedCreateWithoutTermsInput>
+  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutTermsInput
+  upsert?: Prisma.ContractUpsertWithoutTermsInput
   connect?: Prisma.ContractWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutContractTermsInput, Prisma.ContractUpdateWithoutContractTermsInput>, Prisma.ContractUncheckedUpdateWithoutContractTermsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutTermsInput, Prisma.ContractUpdateWithoutTermsInput>, Prisma.ContractUncheckedUpdateWithoutTermsInput>
 }
 
 export type ContractCreateNestedOneWithoutRentPaymentsInput = {
@@ -1162,18 +1042,18 @@ export type ContractUpdateOneRequiredWithoutRentPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutRentPaymentsInput, Prisma.ContractUpdateWithoutRentPaymentsInput>, Prisma.ContractUncheckedUpdateWithoutRentPaymentsInput>
 }
 
-export type ContractCreateNestedOneWithoutExitClearancesInput = {
-  create?: Prisma.XOR<Prisma.ContractCreateWithoutExitClearancesInput, Prisma.ContractUncheckedCreateWithoutExitClearancesInput>
-  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutExitClearancesInput
+export type ContractCreateNestedOneWithoutExitClearanceInput = {
+  create?: Prisma.XOR<Prisma.ContractCreateWithoutExitClearanceInput, Prisma.ContractUncheckedCreateWithoutExitClearanceInput>
+  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutExitClearanceInput
   connect?: Prisma.ContractWhereUniqueInput
 }
 
-export type ContractUpdateOneRequiredWithoutExitClearancesNestedInput = {
-  create?: Prisma.XOR<Prisma.ContractCreateWithoutExitClearancesInput, Prisma.ContractUncheckedCreateWithoutExitClearancesInput>
-  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutExitClearancesInput
-  upsert?: Prisma.ContractUpsertWithoutExitClearancesInput
+export type ContractUpdateOneRequiredWithoutExitClearanceNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractCreateWithoutExitClearanceInput, Prisma.ContractUncheckedCreateWithoutExitClearanceInput>
+  connectOrCreate?: Prisma.ContractCreateOrConnectWithoutExitClearanceInput
+  upsert?: Prisma.ContractUpsertWithoutExitClearanceInput
   connect?: Prisma.ContractWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutExitClearancesInput, Prisma.ContractUpdateWithoutExitClearancesInput>, Prisma.ContractUncheckedUpdateWithoutExitClearancesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractUpdateToOneWithWhereWithoutExitClearanceInput, Prisma.ContractUpdateWithoutExitClearanceInput>, Prisma.ContractUncheckedUpdateWithoutExitClearanceInput>
 }
 
 export type ContractCreateNestedOneWithoutChequesInput = {
@@ -1194,72 +1074,62 @@ export type ContractUpdateOneWithoutChequesNestedInput = {
 
 export type ContractCreateWithoutMarketInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateWithoutMarketInput = {
   id?: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractCreateOrConnectWithoutMarketInput = {
@@ -1294,101 +1164,87 @@ export type ContractScalarWhereInput = {
   NOT?: Prisma.ContractScalarWhereInput | Prisma.ContractScalarWhereInput[]
   id?: Prisma.UuidFilter<"Contract"> | string
   marketId?: Prisma.UuidFilter<"Contract"> | string
-  contractNumber?: Prisma.StringNullableFilter<"Contract"> | string | null
   shopId?: Prisma.UuidFilter<"Contract"> | string
   tenantId?: Prisma.UuidFilter<"Contract"> | string
+  contractNumber?: Prisma.StringFilter<"Contract"> | string
   previousContractId?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  renewalCount?: Prisma.IntFilter<"Contract"> | number
   startDate?: Prisma.DateTimeFilter<"Contract"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  monthlyRent?: Prisma.DecimalNullableFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.DecimalNullableFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.StringNullableFilter<"Contract"> | string | null
-  approvalStatus?: Prisma.StringNullableFilter<"Contract"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  rejectionReason?: Prisma.StringNullableFilter<"Contract"> | string | null
-  renewCount?: Prisma.IntNullableFilter<"Contract"> | number | null
-  nextContractDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  signedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  terminatedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  monthlyRent?: Prisma.DecimalFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFilter<"Contract"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFilter<"Contract"> | $Enums.ContractStatus
+  signedDate?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
+  approvedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  terminatedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
   terminationReason?: Prisma.StringNullableFilter<"Contract"> | string | null
   description?: Prisma.StringNullableFilter<"Contract"> | string | null
   version?: Prisma.IntFilter<"Contract"> | number
-  createdAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Contract"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Contract"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Contract"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Contract"> | Date | string | null
 }
 
 export type ContractCreateWithoutShopInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateWithoutShopInput = {
   id?: string
-  contractNumber?: string | null
+  marketId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractCreateOrConnectWithoutShopInput = {
@@ -1419,71 +1275,62 @@ export type ContractUpdateManyWithWhereWithoutShopInput = {
 
 export type ContractCreateWithoutTenantInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateWithoutTenantInput = {
   id?: string
-  contractNumber?: string | null
+  marketId: string
   shopId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractCreateOrConnectWithoutTenantInput = {
@@ -1512,148 +1359,129 @@ export type ContractUpdateManyWithWhereWithoutTenantInput = {
   data: Prisma.XOR<Prisma.ContractUpdateManyMutationInput, Prisma.ContractUncheckedUpdateManyWithoutTenantInput>
 }
 
-export type ContractCreateWithoutRenewedFromInput = {
+export type ContractCreateWithoutNextContractsInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
-export type ContractUncheckedCreateWithoutRenewedFromInput = {
+export type ContractUncheckedCreateWithoutNextContractsInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
-export type ContractCreateOrConnectWithoutRenewedFromInput = {
+export type ContractCreateOrConnectWithoutNextContractsInput = {
   where: Prisma.ContractWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContractCreateWithoutRenewedFromInput, Prisma.ContractUncheckedCreateWithoutRenewedFromInput>
+  create: Prisma.XOR<Prisma.ContractCreateWithoutNextContractsInput, Prisma.ContractUncheckedCreateWithoutNextContractsInput>
 }
 
 export type ContractCreateWithoutPreviousContractInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateWithoutPreviousContractInput = {
   id?: string
-  contractNumber?: string | null
+  marketId: string
   shopId: string
   tenantId: string
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractCreateOrConnectWithoutPreviousContractInput = {
@@ -1666,85 +1494,75 @@ export type ContractCreateManyPreviousContractInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type ContractUpsertWithoutRenewedFromInput = {
-  update: Prisma.XOR<Prisma.ContractUpdateWithoutRenewedFromInput, Prisma.ContractUncheckedUpdateWithoutRenewedFromInput>
-  create: Prisma.XOR<Prisma.ContractCreateWithoutRenewedFromInput, Prisma.ContractUncheckedCreateWithoutRenewedFromInput>
+export type ContractUpsertWithoutNextContractsInput = {
+  update: Prisma.XOR<Prisma.ContractUpdateWithoutNextContractsInput, Prisma.ContractUncheckedUpdateWithoutNextContractsInput>
+  create: Prisma.XOR<Prisma.ContractCreateWithoutNextContractsInput, Prisma.ContractUncheckedCreateWithoutNextContractsInput>
   where?: Prisma.ContractWhereInput
 }
 
-export type ContractUpdateToOneWithWhereWithoutRenewedFromInput = {
+export type ContractUpdateToOneWithWhereWithoutNextContractsInput = {
   where?: Prisma.ContractWhereInput
-  data: Prisma.XOR<Prisma.ContractUpdateWithoutRenewedFromInput, Prisma.ContractUncheckedUpdateWithoutRenewedFromInput>
+  data: Prisma.XOR<Prisma.ContractUpdateWithoutNextContractsInput, Prisma.ContractUncheckedUpdateWithoutNextContractsInput>
 }
 
-export type ContractUpdateWithoutRenewedFromInput = {
+export type ContractUpdateWithoutNextContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
-export type ContractUncheckedUpdateWithoutRenewedFromInput = {
+export type ContractUncheckedUpdateWithoutNextContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUpsertWithWhereUniqueWithoutPreviousContractInput = {
@@ -1763,230 +1581,200 @@ export type ContractUpdateManyWithWhereWithoutPreviousContractInput = {
   data: Prisma.XOR<Prisma.ContractUpdateManyMutationInput, Prisma.ContractUncheckedUpdateManyWithoutPreviousContractInput>
 }
 
-export type ContractCreateWithoutContractTermsInput = {
+export type ContractCreateWithoutTermsInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
-export type ContractUncheckedCreateWithoutContractTermsInput = {
+export type ContractUncheckedCreateWithoutTermsInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
-export type ContractCreateOrConnectWithoutContractTermsInput = {
+export type ContractCreateOrConnectWithoutTermsInput = {
   where: Prisma.ContractWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContractCreateWithoutContractTermsInput, Prisma.ContractUncheckedCreateWithoutContractTermsInput>
+  create: Prisma.XOR<Prisma.ContractCreateWithoutTermsInput, Prisma.ContractUncheckedCreateWithoutTermsInput>
 }
 
-export type ContractUpsertWithoutContractTermsInput = {
-  update: Prisma.XOR<Prisma.ContractUpdateWithoutContractTermsInput, Prisma.ContractUncheckedUpdateWithoutContractTermsInput>
-  create: Prisma.XOR<Prisma.ContractCreateWithoutContractTermsInput, Prisma.ContractUncheckedCreateWithoutContractTermsInput>
+export type ContractUpsertWithoutTermsInput = {
+  update: Prisma.XOR<Prisma.ContractUpdateWithoutTermsInput, Prisma.ContractUncheckedUpdateWithoutTermsInput>
+  create: Prisma.XOR<Prisma.ContractCreateWithoutTermsInput, Prisma.ContractUncheckedCreateWithoutTermsInput>
   where?: Prisma.ContractWhereInput
 }
 
-export type ContractUpdateToOneWithWhereWithoutContractTermsInput = {
+export type ContractUpdateToOneWithWhereWithoutTermsInput = {
   where?: Prisma.ContractWhereInput
-  data: Prisma.XOR<Prisma.ContractUpdateWithoutContractTermsInput, Prisma.ContractUncheckedUpdateWithoutContractTermsInput>
+  data: Prisma.XOR<Prisma.ContractUpdateWithoutTermsInput, Prisma.ContractUncheckedUpdateWithoutTermsInput>
 }
 
-export type ContractUpdateWithoutContractTermsInput = {
+export type ContractUpdateWithoutTermsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
-export type ContractUncheckedUpdateWithoutContractTermsInput = {
+export type ContractUncheckedUpdateWithoutTermsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractCreateWithoutRentPaymentsInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateWithoutRentPaymentsInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractCreateOrConnectWithoutRentPaymentsInput = {
@@ -2007,298 +1795,258 @@ export type ContractUpdateToOneWithWhereWithoutRentPaymentsInput = {
 
 export type ContractUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
-export type ContractCreateWithoutExitClearancesInput = {
+export type ContractCreateWithoutExitClearanceInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutContractInput
 }
 
-export type ContractUncheckedCreateWithoutExitClearancesInput = {
+export type ContractUncheckedCreateWithoutExitClearanceInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutContractInput
 }
 
-export type ContractCreateOrConnectWithoutExitClearancesInput = {
+export type ContractCreateOrConnectWithoutExitClearanceInput = {
   where: Prisma.ContractWhereUniqueInput
-  create: Prisma.XOR<Prisma.ContractCreateWithoutExitClearancesInput, Prisma.ContractUncheckedCreateWithoutExitClearancesInput>
+  create: Prisma.XOR<Prisma.ContractCreateWithoutExitClearanceInput, Prisma.ContractUncheckedCreateWithoutExitClearanceInput>
 }
 
-export type ContractUpsertWithoutExitClearancesInput = {
-  update: Prisma.XOR<Prisma.ContractUpdateWithoutExitClearancesInput, Prisma.ContractUncheckedUpdateWithoutExitClearancesInput>
-  create: Prisma.XOR<Prisma.ContractCreateWithoutExitClearancesInput, Prisma.ContractUncheckedCreateWithoutExitClearancesInput>
+export type ContractUpsertWithoutExitClearanceInput = {
+  update: Prisma.XOR<Prisma.ContractUpdateWithoutExitClearanceInput, Prisma.ContractUncheckedUpdateWithoutExitClearanceInput>
+  create: Prisma.XOR<Prisma.ContractCreateWithoutExitClearanceInput, Prisma.ContractUncheckedCreateWithoutExitClearanceInput>
   where?: Prisma.ContractWhereInput
 }
 
-export type ContractUpdateToOneWithWhereWithoutExitClearancesInput = {
+export type ContractUpdateToOneWithWhereWithoutExitClearanceInput = {
   where?: Prisma.ContractWhereInput
-  data: Prisma.XOR<Prisma.ContractUpdateWithoutExitClearancesInput, Prisma.ContractUncheckedUpdateWithoutExitClearancesInput>
+  data: Prisma.XOR<Prisma.ContractUpdateWithoutExitClearanceInput, Prisma.ContractUncheckedUpdateWithoutExitClearanceInput>
 }
 
-export type ContractUpdateWithoutExitClearancesInput = {
+export type ContractUpdateWithoutExitClearanceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
 }
 
-export type ContractUncheckedUpdateWithoutExitClearancesInput = {
+export type ContractUncheckedUpdateWithoutExitClearanceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
 }
 
 export type ContractCreateWithoutChequesInput = {
   id?: string
-  contractNumber?: string | null
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutContractsInput
   shop: Prisma.ShopCreateNestedOneWithoutContractsInput
   tenant: Prisma.TenantCreateNestedOneWithoutContractsInput
-  previousContract?: Prisma.ContractCreateNestedOneWithoutRenewedFromInput
-  renewedFrom?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
+  previousContract?: Prisma.ContractCreateNestedOneWithoutNextContractsInput
+  nextContracts?: Prisma.ContractCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceCreateNestedOneWithoutContractInput
 }
 
 export type ContractUncheckedCreateWithoutChequesInput = {
   id?: string
   marketId: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
+  nextContracts?: Prisma.ContractUncheckedCreateNestedManyWithoutPreviousContractInput
+  terms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutContractInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutContractInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutContractInput
+  exitClearance?: Prisma.ExitClearanceUncheckedCreateNestedOneWithoutContractInput
 }
 
 export type ContractCreateOrConnectWithoutChequesInput = {
@@ -2319,582 +2067,501 @@ export type ContractUpdateToOneWithWhereWithoutChequesInput = {
 
 export type ContractUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractCreateManyMarketInput = {
   id?: string
-  contractNumber?: string | null
   shopId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ContractUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ContractCreateManyShopInput = {
   id?: string
-  contractNumber?: string | null
+  marketId: string
   tenantId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ContractUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateManyWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ContractCreateManyTenantInput = {
   id?: string
-  contractNumber?: string | null
+  marketId: string
   shopId: string
+  contractNumber: string
   previousContractId?: string | null
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ContractUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
-  previousContract?: Prisma.ContractUpdateOneWithoutRenewedFromNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  previousContract?: Prisma.ContractUpdateOneWithoutNextContractsNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
   previousContractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ContractCreateManyPreviousContractInput = {
   id?: string
-  contractNumber?: string | null
+  marketId: string
   shopId: string
   tenantId: string
+  contractNumber: string
+  renewalCount?: number
   startDate: Date | string
   endDate?: Date | string | null
-  monthlyRent?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: string | null
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  rejectionReason?: string | null
-  renewCount?: number | null
-  nextContractDate?: Date | string | null
-  signedAt?: Date | string | null
-  terminatedBy?: string | null
+  monthlyRent: runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.ContractStatus
+  signedDate?: Date | string | null
+  approvedById?: string | null
+  terminatedById?: string | null
   terminationReason?: string | null
   description?: string | null
   version?: number
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
 export type ContractUpdateWithoutPreviousContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutContractsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutContractsNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutContractsNestedInput
-  renewedFrom?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateWithoutPreviousContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renewedFrom?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
+  nextContracts?: Prisma.ContractUncheckedUpdateManyWithoutPreviousContractNestedInput
+  terms?: Prisma.ContractTermUncheckedUpdateManyWithoutContractNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutContractNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutContractNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutContractNestedInput
+  exitClearance?: Prisma.ExitClearanceUncheckedUpdateOneWithoutContractNestedInput
 }
 
 export type ContractUncheckedUpdateManyWithoutPreviousContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  contractNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  renewalCount?: Prisma.IntFieldUpdateOperationsInput | number
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  monthlyRent?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  depositAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  renewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nextContractDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  signedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  terminatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyRent?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  depositAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumContractStatusFieldUpdateOperationsInput | $Enums.ContractStatus
+  signedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  terminatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   terminationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -2904,18 +2571,16 @@ export type ContractUncheckedUpdateManyWithoutPreviousContractInput = {
  */
 
 export type ContractCountOutputType = {
-  renewedFrom: number
-  contractTerms: number
+  nextContracts: number
+  terms: number
   rentPayments: number
-  exitClearances: number
   cheques: number
 }
 
 export type ContractCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  renewedFrom?: boolean | ContractCountOutputTypeCountRenewedFromArgs
-  contractTerms?: boolean | ContractCountOutputTypeCountContractTermsArgs
+  nextContracts?: boolean | ContractCountOutputTypeCountNextContractsArgs
+  terms?: boolean | ContractCountOutputTypeCountTermsArgs
   rentPayments?: boolean | ContractCountOutputTypeCountRentPaymentsArgs
-  exitClearances?: boolean | ContractCountOutputTypeCountExitClearancesArgs
   cheques?: boolean | ContractCountOutputTypeCountChequesArgs
 }
 
@@ -2932,14 +2597,14 @@ export type ContractCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * ContractCountOutputType without action
  */
-export type ContractCountOutputTypeCountRenewedFromArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ContractCountOutputTypeCountNextContractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ContractWhereInput
 }
 
 /**
  * ContractCountOutputType without action
  */
-export type ContractCountOutputTypeCountContractTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ContractCountOutputTypeCountTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ContractTermWhereInput
 }
 
@@ -2953,13 +2618,6 @@ export type ContractCountOutputTypeCountRentPaymentsArgs<ExtArgs extends runtime
 /**
  * ContractCountOutputType without action
  */
-export type ContractCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExitClearanceWhereInput
-}
-
-/**
- * ContractCountOutputType without action
- */
 export type ContractCountOutputTypeCountChequesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ChequeWhereInput
 }
@@ -2968,72 +2626,62 @@ export type ContractCountOutputTypeCountChequesArgs<ExtArgs extends runtime.Type
 export type ContractSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  contractNumber?: boolean
   shopId?: boolean
   tenantId?: boolean
+  contractNumber?: boolean
   previousContractId?: boolean
+  renewalCount?: boolean
   startDate?: boolean
   endDate?: boolean
   monthlyRent?: boolean
   depositAmount?: boolean
   status?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
-  renewCount?: boolean
-  nextContractDate?: boolean
-  signedAt?: boolean
-  terminatedBy?: boolean
+  signedDate?: boolean
+  approvedById?: boolean
+  terminatedById?: boolean
   terminationReason?: boolean
   description?: boolean
   version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   previousContract?: boolean | Prisma.Contract$previousContractArgs<ExtArgs>
-  renewedFrom?: boolean | Prisma.Contract$renewedFromArgs<ExtArgs>
-  contractTerms?: boolean | Prisma.Contract$contractTermsArgs<ExtArgs>
+  nextContracts?: boolean | Prisma.Contract$nextContractsArgs<ExtArgs>
+  terms?: boolean | Prisma.Contract$termsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Contract$rentPaymentsArgs<ExtArgs>
-  exitClearances?: boolean | Prisma.Contract$exitClearancesArgs<ExtArgs>
   cheques?: boolean | Prisma.Contract$chequesArgs<ExtArgs>
+  exitClearance?: boolean | Prisma.Contract$exitClearanceArgs<ExtArgs>
   _count?: boolean | Prisma.ContractCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contract"]>
 
 export type ContractSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  contractNumber?: boolean
   shopId?: boolean
   tenantId?: boolean
+  contractNumber?: boolean
   previousContractId?: boolean
+  renewalCount?: boolean
   startDate?: boolean
   endDate?: boolean
   monthlyRent?: boolean
   depositAmount?: boolean
   status?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
-  renewCount?: boolean
-  nextContractDate?: boolean
-  signedAt?: boolean
-  terminatedBy?: boolean
+  signedDate?: boolean
+  approvedById?: boolean
+  terminatedById?: boolean
   terminationReason?: boolean
   description?: boolean
   version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
@@ -3044,31 +2692,26 @@ export type ContractSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ContractSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  contractNumber?: boolean
   shopId?: boolean
   tenantId?: boolean
+  contractNumber?: boolean
   previousContractId?: boolean
+  renewalCount?: boolean
   startDate?: boolean
   endDate?: boolean
   monthlyRent?: boolean
   depositAmount?: boolean
   status?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
-  renewCount?: boolean
-  nextContractDate?: boolean
-  signedAt?: boolean
-  terminatedBy?: boolean
+  signedDate?: boolean
+  approvedById?: boolean
+  terminatedById?: boolean
   terminationReason?: boolean
   description?: boolean
   version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
@@ -3079,45 +2722,40 @@ export type ContractSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ContractSelectScalar = {
   id?: boolean
   marketId?: boolean
-  contractNumber?: boolean
   shopId?: boolean
   tenantId?: boolean
+  contractNumber?: boolean
   previousContractId?: boolean
+  renewalCount?: boolean
   startDate?: boolean
   endDate?: boolean
   monthlyRent?: boolean
   depositAmount?: boolean
   status?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
-  rejectionReason?: boolean
-  renewCount?: boolean
-  nextContractDate?: boolean
-  signedAt?: boolean
-  terminatedBy?: boolean
+  signedDate?: boolean
+  approvedById?: boolean
+  terminatedById?: boolean
   terminationReason?: boolean
   description?: boolean
   version?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type ContractOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "contractNumber" | "shopId" | "tenantId" | "previousContractId" | "startDate" | "endDate" | "monthlyRent" | "depositAmount" | "status" | "approvalStatus" | "approvedBy" | "approvedAt" | "rejectionReason" | "renewCount" | "nextContractDate" | "signedAt" | "terminatedBy" | "terminationReason" | "description" | "version" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["contract"]>
+export type ContractOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "tenantId" | "contractNumber" | "previousContractId" | "renewalCount" | "startDate" | "endDate" | "monthlyRent" | "depositAmount" | "status" | "signedDate" | "approvedById" | "terminatedById" | "terminationReason" | "description" | "version" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["contract"]>
 export type ContractInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   previousContract?: boolean | Prisma.Contract$previousContractArgs<ExtArgs>
-  renewedFrom?: boolean | Prisma.Contract$renewedFromArgs<ExtArgs>
-  contractTerms?: boolean | Prisma.Contract$contractTermsArgs<ExtArgs>
+  nextContracts?: boolean | Prisma.Contract$nextContractsArgs<ExtArgs>
+  terms?: boolean | Prisma.Contract$termsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Contract$rentPaymentsArgs<ExtArgs>
-  exitClearances?: boolean | Prisma.Contract$exitClearancesArgs<ExtArgs>
   cheques?: boolean | Prisma.Contract$chequesArgs<ExtArgs>
+  exitClearance?: boolean | Prisma.Contract$exitClearanceArgs<ExtArgs>
   _count?: boolean | Prisma.ContractCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ContractIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3140,40 +2778,44 @@ export type $ContractPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     shop: Prisma.$ShopPayload<ExtArgs>
     tenant: Prisma.$TenantPayload<ExtArgs>
     previousContract: Prisma.$ContractPayload<ExtArgs> | null
-    renewedFrom: Prisma.$ContractPayload<ExtArgs>[]
-    contractTerms: Prisma.$ContractTermPayload<ExtArgs>[]
+    nextContracts: Prisma.$ContractPayload<ExtArgs>[]
+    terms: Prisma.$ContractTermPayload<ExtArgs>[]
     rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
-    exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
     cheques: Prisma.$ChequePayload<ExtArgs>[]
+    exitClearance: Prisma.$ExitClearancePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
-    contractNumber: string | null
     shopId: string
     tenantId: string
+    contractNumber: string
+    /**
+     * Self-relation chain to the contract this one renewed/replaced.
+     */
     previousContractId: string | null
+    /**
+     * Number of times this contract line has been renewed.
+     */
+    renewalCount: number
     startDate: Date
     endDate: Date | null
-    monthlyRent: runtime.Decimal | null
-    depositAmount: runtime.Decimal | null
-    status: string | null
-    approvalStatus: string | null
-    approvedBy: string | null
-    approvedAt: Date | null
-    rejectionReason: string | null
-    renewCount: number | null
-    nextContractDate: Date | null
-    signedAt: Date | null
-    terminatedBy: string | null
+    monthlyRent: runtime.Decimal
+    depositAmount: runtime.Decimal
+    status: $Enums.ContractStatus
+    signedDate: Date | null
+    approvedById: string | null
+    terminatedById: string | null
     terminationReason: string | null
     description: string | null
+    /**
+     * Optimistic-locking token.
+     */
     version: number
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["contract"]>
   composites: {}
@@ -3573,11 +3215,11 @@ export interface Prisma__ContractClient<T, Null = never, ExtArgs extends runtime
   shop<T extends Prisma.ShopDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopDefaultArgs<ExtArgs>>): Prisma.Prisma__ShopClient<runtime.Types.Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   previousContract<T extends Prisma.Contract$previousContractArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$previousContractArgs<ExtArgs>>): Prisma.Prisma__ContractClient<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  renewedFrom<T extends Prisma.Contract$renewedFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$renewedFromArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  contractTerms<T extends Prisma.Contract$contractTermsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$contractTermsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractTermPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  nextContracts<T extends Prisma.Contract$nextContractsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$nextContractsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  terms<T extends Prisma.Contract$termsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$termsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractTermPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rentPayments<T extends Prisma.Contract$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  exitClearances<T extends Prisma.Contract$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cheques<T extends Prisma.Contract$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exitClearance<T extends Prisma.Contract$exitClearanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contract$exitClearanceArgs<ExtArgs>>): Prisma.Prisma__ExitClearanceClient<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3609,31 +3251,26 @@ export interface Prisma__ContractClient<T, Null = never, ExtArgs extends runtime
 export interface ContractFieldRefs {
   readonly id: Prisma.FieldRef<"Contract", 'String'>
   readonly marketId: Prisma.FieldRef<"Contract", 'String'>
-  readonly contractNumber: Prisma.FieldRef<"Contract", 'String'>
   readonly shopId: Prisma.FieldRef<"Contract", 'String'>
   readonly tenantId: Prisma.FieldRef<"Contract", 'String'>
+  readonly contractNumber: Prisma.FieldRef<"Contract", 'String'>
   readonly previousContractId: Prisma.FieldRef<"Contract", 'String'>
+  readonly renewalCount: Prisma.FieldRef<"Contract", 'Int'>
   readonly startDate: Prisma.FieldRef<"Contract", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Contract", 'DateTime'>
   readonly monthlyRent: Prisma.FieldRef<"Contract", 'Decimal'>
   readonly depositAmount: Prisma.FieldRef<"Contract", 'Decimal'>
-  readonly status: Prisma.FieldRef<"Contract", 'String'>
-  readonly approvalStatus: Prisma.FieldRef<"Contract", 'String'>
-  readonly approvedBy: Prisma.FieldRef<"Contract", 'String'>
-  readonly approvedAt: Prisma.FieldRef<"Contract", 'DateTime'>
-  readonly rejectionReason: Prisma.FieldRef<"Contract", 'String'>
-  readonly renewCount: Prisma.FieldRef<"Contract", 'Int'>
-  readonly nextContractDate: Prisma.FieldRef<"Contract", 'DateTime'>
-  readonly signedAt: Prisma.FieldRef<"Contract", 'DateTime'>
-  readonly terminatedBy: Prisma.FieldRef<"Contract", 'String'>
+  readonly status: Prisma.FieldRef<"Contract", 'ContractStatus'>
+  readonly signedDate: Prisma.FieldRef<"Contract", 'DateTime'>
+  readonly approvedById: Prisma.FieldRef<"Contract", 'String'>
+  readonly terminatedById: Prisma.FieldRef<"Contract", 'String'>
   readonly terminationReason: Prisma.FieldRef<"Contract", 'String'>
   readonly description: Prisma.FieldRef<"Contract", 'String'>
   readonly version: Prisma.FieldRef<"Contract", 'Int'>
+  readonly createdById: Prisma.FieldRef<"Contract", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Contract", 'String'>
   readonly createdAt: Prisma.FieldRef<"Contract", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Contract", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Contract", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Contract", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Contract", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Contract", 'DateTime'>
 }
     
@@ -4055,9 +3692,9 @@ export type Contract$previousContractArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * Contract.renewedFrom
+ * Contract.nextContracts
  */
-export type Contract$renewedFromArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Contract$nextContractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Contract
    */
@@ -4079,9 +3716,9 @@ export type Contract$renewedFromArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Contract.contractTerms
+ * Contract.terms
  */
-export type Contract$contractTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Contract$termsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the ContractTerm
    */
@@ -4127,30 +3764,6 @@ export type Contract$rentPaymentsArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * Contract.exitClearances
- */
-export type Contract$exitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExitClearance
-   */
-  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExitClearance
-   */
-  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
-  where?: Prisma.ExitClearanceWhereInput
-  orderBy?: Prisma.ExitClearanceOrderByWithRelationInput | Prisma.ExitClearanceOrderByWithRelationInput[]
-  cursor?: Prisma.ExitClearanceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
-}
-
-/**
  * Contract.cheques
  */
 export type Contract$chequesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4172,6 +3785,25 @@ export type Contract$chequesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ChequeScalarFieldEnum | Prisma.ChequeScalarFieldEnum[]
+}
+
+/**
+ * Contract.exitClearance
+ */
+export type Contract$exitClearanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExitClearance
+   */
+  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExitClearance
+   */
+  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
+  where?: Prisma.ExitClearanceWhereInput
 }
 
 /**

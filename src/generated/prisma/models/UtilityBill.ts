@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model UtilityBill
- * 
+ * A monthly utility bill for a shop.
  */
 export type UtilityBillModel = runtime.Types.Result.DefaultSelection<Prisma.$UtilityBillPayload>
 
@@ -27,6 +27,9 @@ export type AggregateUtilityBill = {
 }
 
 export type UtilityBillAvgAggregateOutputType = {
+  previousMeter: runtime.Decimal | null
+  currentMeter: runtime.Decimal | null
+  unitsConsumed: runtime.Decimal | null
   rate: runtime.Decimal | null
   amount: runtime.Decimal | null
   billMonth: number | null
@@ -34,6 +37,9 @@ export type UtilityBillAvgAggregateOutputType = {
 }
 
 export type UtilityBillSumAggregateOutputType = {
+  previousMeter: runtime.Decimal | null
+  currentMeter: runtime.Decimal | null
+  unitsConsumed: runtime.Decimal | null
   rate: runtime.Decimal | null
   amount: runtime.Decimal | null
   billMonth: number | null
@@ -44,53 +50,52 @@ export type UtilityBillMinAggregateOutputType = {
   id: string | null
   marketId: string | null
   shopId: string | null
-  serviceType: string | null
-  previousMeter: string | null
-  currentMeter: string | null
+  type: $Enums.UtilityType | null
+  previousMeter: runtime.Decimal | null
+  currentMeter: runtime.Decimal | null
+  unitsConsumed: runtime.Decimal | null
   rate: runtime.Decimal | null
   amount: runtime.Decimal | null
   billMonth: number | null
   billYear: number | null
   dueDate: Date | null
-  status: string | null
+  status: $Enums.UtilityPaymentStatus | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
 }
 
 export type UtilityBillMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
   shopId: string | null
-  serviceType: string | null
-  previousMeter: string | null
-  currentMeter: string | null
+  type: $Enums.UtilityType | null
+  previousMeter: runtime.Decimal | null
+  currentMeter: runtime.Decimal | null
+  unitsConsumed: runtime.Decimal | null
   rate: runtime.Decimal | null
   amount: runtime.Decimal | null
   billMonth: number | null
   billYear: number | null
   dueDate: Date | null
-  status: string | null
+  status: $Enums.UtilityPaymentStatus | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
 }
 
 export type UtilityBillCountAggregateOutputType = {
   id: number
   marketId: number
   shopId: number
-  serviceType: number
+  type: number
   previousMeter: number
   currentMeter: number
+  unitsConsumed: number
   rate: number
   amount: number
   billMonth: number
@@ -98,17 +103,18 @@ export type UtilityBillCountAggregateOutputType = {
   dueDate: number
   status: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
-  deletedAt: number
   _all: number
 }
 
 
 export type UtilityBillAvgAggregateInputType = {
+  previousMeter?: true
+  currentMeter?: true
+  unitsConsumed?: true
   rate?: true
   amount?: true
   billMonth?: true
@@ -116,6 +122,9 @@ export type UtilityBillAvgAggregateInputType = {
 }
 
 export type UtilityBillSumAggregateInputType = {
+  previousMeter?: true
+  currentMeter?: true
+  unitsConsumed?: true
   rate?: true
   amount?: true
   billMonth?: true
@@ -126,9 +135,10 @@ export type UtilityBillMinAggregateInputType = {
   id?: true
   marketId?: true
   shopId?: true
-  serviceType?: true
+  type?: true
   previousMeter?: true
   currentMeter?: true
+  unitsConsumed?: true
   rate?: true
   amount?: true
   billMonth?: true
@@ -136,21 +146,20 @@ export type UtilityBillMinAggregateInputType = {
   dueDate?: true
   status?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
 }
 
 export type UtilityBillMaxAggregateInputType = {
   id?: true
   marketId?: true
   shopId?: true
-  serviceType?: true
+  type?: true
   previousMeter?: true
   currentMeter?: true
+  unitsConsumed?: true
   rate?: true
   amount?: true
   billMonth?: true
@@ -158,21 +167,20 @@ export type UtilityBillMaxAggregateInputType = {
   dueDate?: true
   status?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
 }
 
 export type UtilityBillCountAggregateInputType = {
   id?: true
   marketId?: true
   shopId?: true
-  serviceType?: true
+  type?: true
   previousMeter?: true
   currentMeter?: true
+  unitsConsumed?: true
   rate?: true
   amount?: true
   billMonth?: true
@@ -180,12 +188,10 @@ export type UtilityBillCountAggregateInputType = {
   dueDate?: true
   status?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
   _all?: true
 }
 
@@ -279,22 +285,21 @@ export type UtilityBillGroupByOutputType = {
   id: string
   marketId: string
   shopId: string
-  serviceType: string
-  previousMeter: string | null
-  currentMeter: string | null
+  type: $Enums.UtilityType
+  previousMeter: runtime.Decimal | null
+  currentMeter: runtime.Decimal | null
+  unitsConsumed: runtime.Decimal | null
   rate: runtime.Decimal | null
-  amount: runtime.Decimal | null
-  billMonth: number | null
-  billYear: number | null
+  amount: runtime.Decimal
+  billMonth: number
+  billYear: number
   dueDate: Date | null
-  status: string | null
+  status: $Enums.UtilityPaymentStatus
   description: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: UtilityBillCountAggregateOutputType | null
   _avg: UtilityBillAvgAggregateOutputType | null
   _sum: UtilityBillSumAggregateOutputType | null
@@ -324,22 +329,21 @@ export type UtilityBillWhereInput = {
   id?: Prisma.UuidFilter<"UtilityBill"> | string
   marketId?: Prisma.UuidFilter<"UtilityBill"> | string
   shopId?: Prisma.UuidFilter<"UtilityBill"> | string
-  serviceType?: Prisma.StringFilter<"UtilityBill"> | string
-  previousMeter?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
-  currentMeter?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
+  type?: Prisma.EnumUtilityTypeFilter<"UtilityBill"> | $Enums.UtilityType
+  previousMeter?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.IntNullableFilter<"UtilityBill"> | number | null
-  billYear?: Prisma.IntNullableFilter<"UtilityBill"> | number | null
+  amount?: Prisma.DecimalFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFilter<"UtilityBill"> | number
+  billYear?: Prisma.IntFilter<"UtilityBill"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  status?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFilter<"UtilityBill"> | $Enums.UtilityPaymentStatus
   description?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
 }
@@ -348,73 +352,71 @@ export type UtilityBillOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
-  serviceType?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   previousMeter?: Prisma.SortOrderInput | Prisma.SortOrder
   currentMeter?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrderInput | Prisma.SortOrder
   rate?: Prisma.SortOrderInput | Prisma.SortOrder
-  amount?: Prisma.SortOrderInput | Prisma.SortOrder
-  billMonth?: Prisma.SortOrderInput | Prisma.SortOrder
-  billYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  amount?: Prisma.SortOrder
+  billMonth?: Prisma.SortOrder
+  billYear?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shop?: Prisma.ShopOrderByWithRelationInput
 }
 
 export type UtilityBillWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  shopId_type_billYear_billMonth?: Prisma.UtilityBillShopIdTypeBillYearBillMonthCompoundUniqueInput
   AND?: Prisma.UtilityBillWhereInput | Prisma.UtilityBillWhereInput[]
   OR?: Prisma.UtilityBillWhereInput[]
   NOT?: Prisma.UtilityBillWhereInput | Prisma.UtilityBillWhereInput[]
   marketId?: Prisma.UuidFilter<"UtilityBill"> | string
   shopId?: Prisma.UuidFilter<"UtilityBill"> | string
-  serviceType?: Prisma.StringFilter<"UtilityBill"> | string
-  previousMeter?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
-  currentMeter?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
+  type?: Prisma.EnumUtilityTypeFilter<"UtilityBill"> | $Enums.UtilityType
+  previousMeter?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.IntNullableFilter<"UtilityBill"> | number | null
-  billYear?: Prisma.IntNullableFilter<"UtilityBill"> | number | null
+  amount?: Prisma.DecimalFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFilter<"UtilityBill"> | number
+  billYear?: Prisma.IntFilter<"UtilityBill"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  status?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFilter<"UtilityBill"> | $Enums.UtilityPaymentStatus
   description?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
-}, "id">
+}, "id" | "shopId_type_billYear_billMonth">
 
 export type UtilityBillOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
-  serviceType?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   previousMeter?: Prisma.SortOrderInput | Prisma.SortOrder
   currentMeter?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrderInput | Prisma.SortOrder
   rate?: Prisma.SortOrderInput | Prisma.SortOrder
-  amount?: Prisma.SortOrderInput | Prisma.SortOrder
-  billMonth?: Prisma.SortOrderInput | Prisma.SortOrder
-  billYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  amount?: Prisma.SortOrder
+  billMonth?: Prisma.SortOrder
+  billYear?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.UtilityBillCountOrderByAggregateInput
   _avg?: Prisma.UtilityBillAvgOrderByAggregateInput
   _max?: Prisma.UtilityBillMaxOrderByAggregateInput
@@ -429,42 +431,40 @@ export type UtilityBillScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"UtilityBill"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"UtilityBill"> | string
   shopId?: Prisma.UuidWithAggregatesFilter<"UtilityBill"> | string
-  serviceType?: Prisma.StringWithAggregatesFilter<"UtilityBill"> | string
-  previousMeter?: Prisma.StringNullableWithAggregatesFilter<"UtilityBill"> | string | null
-  currentMeter?: Prisma.StringNullableWithAggregatesFilter<"UtilityBill"> | string | null
+  type?: Prisma.EnumUtilityTypeWithAggregatesFilter<"UtilityBill"> | $Enums.UtilityType
+  previousMeter?: Prisma.DecimalNullableWithAggregatesFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.DecimalNullableWithAggregatesFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.DecimalNullableWithAggregatesFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.DecimalNullableWithAggregatesFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.DecimalNullableWithAggregatesFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.IntNullableWithAggregatesFilter<"UtilityBill"> | number | null
-  billYear?: Prisma.IntNullableWithAggregatesFilter<"UtilityBill"> | number | null
+  amount?: Prisma.DecimalWithAggregatesFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntWithAggregatesFilter<"UtilityBill"> | number
+  billYear?: Prisma.IntWithAggregatesFilter<"UtilityBill"> | number
   dueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"UtilityBill"> | Date | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"UtilityBill"> | string | null
+  status?: Prisma.EnumUtilityPaymentStatusWithAggregatesFilter<"UtilityBill"> | $Enums.UtilityPaymentStatus
   description?: Prisma.StringNullableWithAggregatesFilter<"UtilityBill"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UtilityBill"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UtilityBill"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"UtilityBill"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"UtilityBill"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"UtilityBill"> | string | null
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UtilityBill"> | Date | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"UtilityBill"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"UtilityBill"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"UtilityBill"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UtilityBill"> | Date | string
 }
 
 export type UtilityBillCreateInput = {
   id?: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutUtilityBillsInput
   shop: Prisma.ShopCreateNestedOneWithoutUtilityBillsInput
 }
@@ -473,42 +473,40 @@ export type UtilityBillUncheckedCreateInput = {
   id?: string
   marketId: string
   shopId: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UtilityBillUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutUtilityBillsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutUtilityBillsNestedInput
 }
@@ -517,86 +515,82 @@ export type UtilityBillUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UtilityBillCreateManyInput = {
   id?: string
   marketId: string
   shopId: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UtilityBillUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UtilityBillUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UtilityBillListRelationFilter = {
@@ -609,13 +603,21 @@ export type UtilityBillOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type UtilityBillShopIdTypeBillYearBillMonthCompoundUniqueInput = {
+  shopId: string
+  type: $Enums.UtilityType
+  billYear: number
+  billMonth: number
+}
+
 export type UtilityBillCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
-  serviceType?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   previousMeter?: Prisma.SortOrder
   currentMeter?: Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrder
   rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
@@ -623,15 +625,16 @@ export type UtilityBillCountOrderByAggregateInput = {
   dueDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type UtilityBillAvgOrderByAggregateInput = {
+  previousMeter?: Prisma.SortOrder
+  currentMeter?: Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrder
   rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
@@ -642,9 +645,10 @@ export type UtilityBillMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
-  serviceType?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   previousMeter?: Prisma.SortOrder
   currentMeter?: Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrder
   rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
@@ -652,21 +656,20 @@ export type UtilityBillMaxOrderByAggregateInput = {
   dueDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type UtilityBillMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
-  serviceType?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   previousMeter?: Prisma.SortOrder
   currentMeter?: Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrder
   rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
@@ -674,15 +677,16 @@ export type UtilityBillMinOrderByAggregateInput = {
   dueDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type UtilityBillSumOrderByAggregateInput = {
+  previousMeter?: Prisma.SortOrder
+  currentMeter?: Prisma.SortOrder
+  unitsConsumed?: Prisma.SortOrder
   rate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
@@ -773,46 +777,52 @@ export type UtilityBillUncheckedUpdateManyWithoutShopNestedInput = {
   deleteMany?: Prisma.UtilityBillScalarWhereInput | Prisma.UtilityBillScalarWhereInput[]
 }
 
+export type EnumUtilityTypeFieldUpdateOperationsInput = {
+  set?: $Enums.UtilityType
+}
+
+export type EnumUtilityPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.UtilityPaymentStatus
+}
+
 export type UtilityBillCreateWithoutMarketInput = {
   id?: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   shop: Prisma.ShopCreateNestedOneWithoutUtilityBillsInput
 }
 
 export type UtilityBillUncheckedCreateWithoutMarketInput = {
   id?: string
   shopId: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UtilityBillCreateOrConnectWithoutMarketInput = {
@@ -848,63 +858,61 @@ export type UtilityBillScalarWhereInput = {
   id?: Prisma.UuidFilter<"UtilityBill"> | string
   marketId?: Prisma.UuidFilter<"UtilityBill"> | string
   shopId?: Prisma.UuidFilter<"UtilityBill"> | string
-  serviceType?: Prisma.StringFilter<"UtilityBill"> | string
-  previousMeter?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
-  currentMeter?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
+  type?: Prisma.EnumUtilityTypeFilter<"UtilityBill"> | $Enums.UtilityType
+  previousMeter?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.DecimalNullableFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.IntNullableFilter<"UtilityBill"> | number | null
-  billYear?: Prisma.IntNullableFilter<"UtilityBill"> | number | null
+  amount?: Prisma.DecimalFilter<"UtilityBill"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFilter<"UtilityBill"> | number
+  billYear?: Prisma.IntFilter<"UtilityBill"> | number
   dueDate?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  status?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFilter<"UtilityBill"> | $Enums.UtilityPaymentStatus
   description?: Prisma.StringNullableFilter<"UtilityBill"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"UtilityBill"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
 }
 
 export type UtilityBillCreateWithoutShopInput = {
   id?: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutUtilityBillsInput
 }
 
 export type UtilityBillUncheckedCreateWithoutShopInput = {
   id?: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  marketId: string
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UtilityBillCreateOrConnectWithoutShopInput = {
@@ -936,166 +944,161 @@ export type UtilityBillUpdateManyWithWhereWithoutShopInput = {
 export type UtilityBillCreateManyMarketInput = {
   id?: string
   shopId: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UtilityBillUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shop?: Prisma.ShopUpdateOneRequiredWithoutUtilityBillsNestedInput
 }
 
 export type UtilityBillUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UtilityBillUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UtilityBillCreateManyShopInput = {
   id?: string
-  serviceType: string
-  previousMeter?: string | null
-  currentMeter?: string | null
+  marketId: string
+  type: $Enums.UtilityType
+  previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: number | null
-  billYear?: number | null
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth: number
+  billYear: number
   dueDate?: Date | string | null
-  status?: string | null
+  status?: $Enums.UtilityPaymentStatus
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UtilityBillUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutUtilityBillsNestedInput
 }
 
 export type UtilityBillUncheckedUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UtilityBillUncheckedUpdateManyWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  serviceType?: Prisma.StringFieldUpdateOperationsInput | string
-  previousMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currentMeter?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumUtilityTypeFieldUpdateOperationsInput | $Enums.UtilityType
+  previousMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentMeter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitsConsumed?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  billMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  billYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billMonth?: Prisma.IntFieldUpdateOperationsInput | number
+  billYear?: Prisma.IntFieldUpdateOperationsInput | number
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumUtilityPaymentStatusFieldUpdateOperationsInput | $Enums.UtilityPaymentStatus
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1104,9 +1107,10 @@ export type UtilityBillSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   marketId?: boolean
   shopId?: boolean
-  serviceType?: boolean
+  type?: boolean
   previousMeter?: boolean
   currentMeter?: boolean
+  unitsConsumed?: boolean
   rate?: boolean
   amount?: boolean
   billMonth?: boolean
@@ -1114,12 +1118,10 @@ export type UtilityBillSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   dueDate?: boolean
   status?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["utilityBill"]>
@@ -1128,9 +1130,10 @@ export type UtilityBillSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   marketId?: boolean
   shopId?: boolean
-  serviceType?: boolean
+  type?: boolean
   previousMeter?: boolean
   currentMeter?: boolean
+  unitsConsumed?: boolean
   rate?: boolean
   amount?: boolean
   billMonth?: boolean
@@ -1138,12 +1141,10 @@ export type UtilityBillSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   dueDate?: boolean
   status?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["utilityBill"]>
@@ -1152,9 +1153,10 @@ export type UtilityBillSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   marketId?: boolean
   shopId?: boolean
-  serviceType?: boolean
+  type?: boolean
   previousMeter?: boolean
   currentMeter?: boolean
+  unitsConsumed?: boolean
   rate?: boolean
   amount?: boolean
   billMonth?: boolean
@@ -1162,12 +1164,10 @@ export type UtilityBillSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   dueDate?: boolean
   status?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["utilityBill"]>
@@ -1176,9 +1176,10 @@ export type UtilityBillSelectScalar = {
   id?: boolean
   marketId?: boolean
   shopId?: boolean
-  serviceType?: boolean
+  type?: boolean
   previousMeter?: boolean
   currentMeter?: boolean
+  unitsConsumed?: boolean
   rate?: boolean
   amount?: boolean
   billMonth?: boolean
@@ -1186,15 +1187,13 @@ export type UtilityBillSelectScalar = {
   dueDate?: boolean
   status?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
 }
 
-export type UtilityBillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "serviceType" | "previousMeter" | "currentMeter" | "rate" | "amount" | "billMonth" | "billYear" | "dueDate" | "status" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["utilityBill"]>
+export type UtilityBillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "type" | "previousMeter" | "currentMeter" | "unitsConsumed" | "rate" | "amount" | "billMonth" | "billYear" | "dueDate" | "status" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["utilityBill"]>
 export type UtilityBillInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
@@ -1218,22 +1217,24 @@ export type $UtilityBillPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     marketId: string
     shopId: string
-    serviceType: string
-    previousMeter: string | null
-    currentMeter: string | null
+    type: $Enums.UtilityType
+    previousMeter: runtime.Decimal | null
+    currentMeter: runtime.Decimal | null
+    unitsConsumed: runtime.Decimal | null
     rate: runtime.Decimal | null
-    amount: runtime.Decimal | null
-    billMonth: number | null
-    billYear: number | null
+    amount: runtime.Decimal
+    /**
+     * Billing period.
+     */
+    billMonth: number
+    billYear: number
     dueDate: Date | null
-    status: string | null
+    status: $Enums.UtilityPaymentStatus
     description: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
-    deletedAt: Date | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["utilityBill"]>
   composites: {}
 }
@@ -1662,22 +1663,21 @@ export interface UtilityBillFieldRefs {
   readonly id: Prisma.FieldRef<"UtilityBill", 'String'>
   readonly marketId: Prisma.FieldRef<"UtilityBill", 'String'>
   readonly shopId: Prisma.FieldRef<"UtilityBill", 'String'>
-  readonly serviceType: Prisma.FieldRef<"UtilityBill", 'String'>
-  readonly previousMeter: Prisma.FieldRef<"UtilityBill", 'String'>
-  readonly currentMeter: Prisma.FieldRef<"UtilityBill", 'String'>
+  readonly type: Prisma.FieldRef<"UtilityBill", 'UtilityType'>
+  readonly previousMeter: Prisma.FieldRef<"UtilityBill", 'Decimal'>
+  readonly currentMeter: Prisma.FieldRef<"UtilityBill", 'Decimal'>
+  readonly unitsConsumed: Prisma.FieldRef<"UtilityBill", 'Decimal'>
   readonly rate: Prisma.FieldRef<"UtilityBill", 'Decimal'>
   readonly amount: Prisma.FieldRef<"UtilityBill", 'Decimal'>
   readonly billMonth: Prisma.FieldRef<"UtilityBill", 'Int'>
   readonly billYear: Prisma.FieldRef<"UtilityBill", 'Int'>
   readonly dueDate: Prisma.FieldRef<"UtilityBill", 'DateTime'>
-  readonly status: Prisma.FieldRef<"UtilityBill", 'String'>
+  readonly status: Prisma.FieldRef<"UtilityBill", 'UtilityPaymentStatus'>
   readonly description: Prisma.FieldRef<"UtilityBill", 'String'>
+  readonly createdById: Prisma.FieldRef<"UtilityBill", 'String'>
+  readonly updatedById: Prisma.FieldRef<"UtilityBill", 'String'>
   readonly createdAt: Prisma.FieldRef<"UtilityBill", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UtilityBill", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"UtilityBill", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"UtilityBill", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"UtilityBill", 'String'>
-  readonly deletedAt: Prisma.FieldRef<"UtilityBill", 'DateTime'>
 }
     
 

@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Document
- * 
+ * A file attached to a business object (polymorphic).
  */
 export type DocumentModel = runtime.Types.Result.DefaultSelection<Prisma.$DocumentPayload>
 
@@ -37,67 +37,46 @@ export type DocumentSumAggregateOutputType = {
 export type DocumentMinAggregateOutputType = {
   id: string | null
   marketId: string | null
-  referenceTable: string | null
-  referenceId: string | null
-  fileType: string | null
+  entityType: $Enums.DocumentEntityType | null
+  entityId: string | null
+  fileName: string | null
   filePath: string | null
-  originalFilename: string | null
+  fileType: string | null
   mimeType: string | null
+  extension: string | null
   fileSize: bigint | null
-  checksum: string | null
-  storageProvider: string | null
-  storageKey: string | null
-  uploadedBy: string | null
-  uploadedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  updatedAt: Date | null
-  deletedAt: Date | null
+  uploadedById: string | null
+  createdAt: Date | null
 }
 
 export type DocumentMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
-  referenceTable: string | null
-  referenceId: string | null
-  fileType: string | null
+  entityType: $Enums.DocumentEntityType | null
+  entityId: string | null
+  fileName: string | null
   filePath: string | null
-  originalFilename: string | null
+  fileType: string | null
   mimeType: string | null
+  extension: string | null
   fileSize: bigint | null
-  checksum: string | null
-  storageProvider: string | null
-  storageKey: string | null
-  uploadedBy: string | null
-  uploadedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  updatedAt: Date | null
-  deletedAt: Date | null
+  uploadedById: string | null
+  createdAt: Date | null
 }
 
 export type DocumentCountAggregateOutputType = {
   id: number
   marketId: number
-  referenceTable: number
-  referenceId: number
-  fileType: number
+  entityType: number
+  entityId: number
+  fileName: number
   filePath: number
-  originalFilename: number
+  fileType: number
   mimeType: number
+  extension: number
   fileSize: number
-  checksum: number
-  storageProvider: number
-  storageKey: number
-  uploadedBy: number
-  uploadedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
-  updatedAt: number
-  deletedAt: number
+  uploadedById: number
+  createdAt: number
   _all: number
 }
 
@@ -113,67 +92,46 @@ export type DocumentSumAggregateInputType = {
 export type DocumentMinAggregateInputType = {
   id?: true
   marketId?: true
-  referenceTable?: true
-  referenceId?: true
-  fileType?: true
+  entityType?: true
+  entityId?: true
+  fileName?: true
   filePath?: true
-  originalFilename?: true
+  fileType?: true
   mimeType?: true
+  extension?: true
   fileSize?: true
-  checksum?: true
-  storageProvider?: true
-  storageKey?: true
-  uploadedBy?: true
-  uploadedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  updatedAt?: true
-  deletedAt?: true
+  uploadedById?: true
+  createdAt?: true
 }
 
 export type DocumentMaxAggregateInputType = {
   id?: true
   marketId?: true
-  referenceTable?: true
-  referenceId?: true
-  fileType?: true
+  entityType?: true
+  entityId?: true
+  fileName?: true
   filePath?: true
-  originalFilename?: true
+  fileType?: true
   mimeType?: true
+  extension?: true
   fileSize?: true
-  checksum?: true
-  storageProvider?: true
-  storageKey?: true
-  uploadedBy?: true
-  uploadedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  updatedAt?: true
-  deletedAt?: true
+  uploadedById?: true
+  createdAt?: true
 }
 
 export type DocumentCountAggregateInputType = {
   id?: true
   marketId?: true
-  referenceTable?: true
-  referenceId?: true
-  fileType?: true
+  entityType?: true
+  entityId?: true
+  fileName?: true
   filePath?: true
-  originalFilename?: true
+  fileType?: true
   mimeType?: true
+  extension?: true
   fileSize?: true
-  checksum?: true
-  storageProvider?: true
-  storageKey?: true
-  uploadedBy?: true
-  uploadedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  updatedAt?: true
-  deletedAt?: true
+  uploadedById?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -265,24 +223,17 @@ export type DocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type DocumentGroupByOutputType = {
   id: string
-  marketId: string | null
-  referenceTable: string
-  referenceId: string
-  fileType: string | null
+  marketId: string
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename: string | null
+  fileType: string
   mimeType: string | null
+  extension: string | null
   fileSize: bigint | null
-  checksum: string | null
-  storageProvider: string | null
-  storageKey: string | null
-  uploadedBy: string | null
-  uploadedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  updatedAt: Date | null
-  deletedAt: Date | null
+  uploadedById: string | null
+  createdAt: Date
   _count: DocumentCountAggregateOutputType | null
   _avg: DocumentAvgAggregateOutputType | null
   _sum: DocumentSumAggregateOutputType | null
@@ -310,50 +261,34 @@ export type DocumentWhereInput = {
   OR?: Prisma.DocumentWhereInput[]
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   id?: Prisma.UuidFilter<"Document"> | string
-  marketId?: Prisma.UuidNullableFilter<"Document"> | string | null
-  referenceTable?: Prisma.StringFilter<"Document"> | string
-  referenceId?: Prisma.UuidFilter<"Document"> | string
-  fileType?: Prisma.StringNullableFilter<"Document"> | string | null
+  marketId?: Prisma.UuidFilter<"Document"> | string
+  entityType?: Prisma.EnumDocumentEntityTypeFilter<"Document"> | $Enums.DocumentEntityType
+  entityId?: Prisma.UuidFilter<"Document"> | string
+  fileName?: Prisma.StringFilter<"Document"> | string
   filePath?: Prisma.StringFilter<"Document"> | string
-  originalFilename?: Prisma.StringNullableFilter<"Document"> | string | null
+  fileType?: Prisma.StringFilter<"Document"> | string
   mimeType?: Prisma.StringNullableFilter<"Document"> | string | null
+  extension?: Prisma.StringNullableFilter<"Document"> | string | null
   fileSize?: Prisma.BigIntNullableFilter<"Document"> | bigint | number | null
-  checksum?: Prisma.StringNullableFilter<"Document"> | string | null
-  storageProvider?: Prisma.StringNullableFilter<"Document"> | string | null
-  storageKey?: Prisma.StringNullableFilter<"Document"> | string | null
-  uploadedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  uploadedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  market?: Prisma.XOR<Prisma.MarketNullableScalarRelationFilter, Prisma.MarketWhereInput> | null
-  entityType?: Prisma.XOR<Prisma.EntityTypeScalarRelationFilter, Prisma.EntityTypeWhereInput>
+  uploadedById?: Prisma.UuidNullableFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
 }
 
 export type DocumentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrderInput | Prisma.SortOrder
-  referenceTable?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
-  fileType?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketId?: Prisma.SortOrder
+  entityType?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
-  originalFilename?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  extension?: Prisma.SortOrderInput | Prisma.SortOrder
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
-  checksum?: Prisma.SortOrderInput | Prisma.SortOrder
-  storageProvider?: Prisma.SortOrderInput | Prisma.SortOrder
-  storageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  uploadedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
-  entityType?: Prisma.EntityTypeOrderByWithRelationInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -361,48 +296,33 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   OR?: Prisma.DocumentWhereInput[]
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
-  marketId?: Prisma.UuidNullableFilter<"Document"> | string | null
-  referenceTable?: Prisma.StringFilter<"Document"> | string
-  referenceId?: Prisma.UuidFilter<"Document"> | string
-  fileType?: Prisma.StringNullableFilter<"Document"> | string | null
+  marketId?: Prisma.UuidFilter<"Document"> | string
+  entityType?: Prisma.EnumDocumentEntityTypeFilter<"Document"> | $Enums.DocumentEntityType
+  entityId?: Prisma.UuidFilter<"Document"> | string
+  fileName?: Prisma.StringFilter<"Document"> | string
   filePath?: Prisma.StringFilter<"Document"> | string
-  originalFilename?: Prisma.StringNullableFilter<"Document"> | string | null
+  fileType?: Prisma.StringFilter<"Document"> | string
   mimeType?: Prisma.StringNullableFilter<"Document"> | string | null
+  extension?: Prisma.StringNullableFilter<"Document"> | string | null
   fileSize?: Prisma.BigIntNullableFilter<"Document"> | bigint | number | null
-  checksum?: Prisma.StringNullableFilter<"Document"> | string | null
-  storageProvider?: Prisma.StringNullableFilter<"Document"> | string | null
-  storageKey?: Prisma.StringNullableFilter<"Document"> | string | null
-  uploadedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  uploadedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  market?: Prisma.XOR<Prisma.MarketNullableScalarRelationFilter, Prisma.MarketWhereInput> | null
-  entityType?: Prisma.XOR<Prisma.EntityTypeScalarRelationFilter, Prisma.EntityTypeWhereInput>
+  uploadedById?: Prisma.UuidNullableFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
+  market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
 }, "id">
 
 export type DocumentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrderInput | Prisma.SortOrder
-  referenceTable?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
-  fileType?: Prisma.SortOrderInput | Prisma.SortOrder
+  marketId?: Prisma.SortOrder
+  entityType?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
-  originalFilename?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  extension?: Prisma.SortOrderInput | Prisma.SortOrder
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
-  checksum?: Prisma.SortOrderInput | Prisma.SortOrder
-  storageProvider?: Prisma.SortOrderInput | Prisma.SortOrder
-  storageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  uploadedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
   _avg?: Prisma.DocumentAvgOrderByAggregateInput
   _max?: Prisma.DocumentMaxOrderByAggregateInput
@@ -415,176 +335,121 @@ export type DocumentScalarWhereWithAggregatesInput = {
   OR?: Prisma.DocumentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DocumentScalarWhereWithAggregatesInput | Prisma.DocumentScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Document"> | string
-  marketId?: Prisma.UuidNullableWithAggregatesFilter<"Document"> | string | null
-  referenceTable?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  referenceId?: Prisma.UuidWithAggregatesFilter<"Document"> | string
-  fileType?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
+  marketId?: Prisma.UuidWithAggregatesFilter<"Document"> | string
+  entityType?: Prisma.EnumDocumentEntityTypeWithAggregatesFilter<"Document"> | $Enums.DocumentEntityType
+  entityId?: Prisma.UuidWithAggregatesFilter<"Document"> | string
+  fileName?: Prisma.StringWithAggregatesFilter<"Document"> | string
   filePath?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  originalFilename?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
+  fileType?: Prisma.StringWithAggregatesFilter<"Document"> | string
   mimeType?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
+  extension?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   fileSize?: Prisma.BigIntNullableWithAggregatesFilter<"Document"> | bigint | number | null
-  checksum?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
-  storageProvider?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
-  storageKey?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
-  uploadedBy?: Prisma.UuidNullableWithAggregatesFilter<"Document"> | string | null
-  uploadedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Document"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Document"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Document"> | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
+  uploadedById?: Prisma.UuidNullableWithAggregatesFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
 }
 
 export type DocumentCreateInput = {
   id?: string
-  referenceId: string
-  fileType?: string | null
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename?: string | null
+  fileType: string
   mimeType?: string | null
+  extension?: string | null
   fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
-  market?: Prisma.MarketCreateNestedOneWithoutDocumentsInput
-  entityType: Prisma.EntityTypeCreateNestedOneWithoutDocumentsInput
+  uploadedById?: string | null
+  createdAt?: Date | string
+  market: Prisma.MarketCreateNestedOneWithoutDocumentsInput
 }
 
 export type DocumentUncheckedCreateInput = {
   id?: string
-  marketId?: string | null
-  referenceTable: string
-  referenceId: string
-  fileType?: string | null
+  marketId: string
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename?: string | null
+  fileType: string
   mimeType?: string | null
+  extension?: string | null
   fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  uploadedById?: string | null
+  createdAt?: Date | string
 }
 
 export type DocumentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  market?: Prisma.MarketUpdateOneWithoutDocumentsNestedInput
-  entityType?: Prisma.EntityTypeUpdateOneRequiredWithoutDocumentsNestedInput
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  market?: Prisma.MarketUpdateOneRequiredWithoutDocumentsNestedInput
 }
 
 export type DocumentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceTable?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DocumentCreateManyInput = {
   id?: string
-  marketId?: string | null
-  referenceTable: string
-  referenceId: string
-  fileType?: string | null
+  marketId: string
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename?: string | null
+  fileType: string
   mimeType?: string | null
+  extension?: string | null
   fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  uploadedById?: string | null
+  createdAt?: Date | string
 }
 
 export type DocumentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DocumentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceTable?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DocumentListRelationFilter = {
@@ -600,23 +465,16 @@ export type DocumentOrderByRelationAggregateInput = {
 export type DocumentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  referenceTable?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
-  fileType?: Prisma.SortOrder
+  entityType?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
-  originalFilename?: Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
+  extension?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
-  checksum?: Prisma.SortOrder
-  storageProvider?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
+  uploadedById?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type DocumentAvgOrderByAggregateInput = {
@@ -626,45 +484,31 @@ export type DocumentAvgOrderByAggregateInput = {
 export type DocumentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  referenceTable?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
-  fileType?: Prisma.SortOrder
+  entityType?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
-  originalFilename?: Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
+  extension?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
-  checksum?: Prisma.SortOrder
-  storageProvider?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
+  uploadedById?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type DocumentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  referenceTable?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
-  fileType?: Prisma.SortOrder
+  entityType?: Prisma.SortOrder
+  entityId?: Prisma.SortOrder
+  fileName?: Prisma.SortOrder
   filePath?: Prisma.SortOrder
-  originalFilename?: Prisma.SortOrder
+  fileType?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
+  extension?: Prisma.SortOrder
   fileSize?: Prisma.SortOrder
-  checksum?: Prisma.SortOrder
-  storageProvider?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
-  uploadedBy?: Prisma.SortOrder
-  uploadedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
+  uploadedById?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type DocumentSumOrderByAggregateInput = {
@@ -713,46 +557,8 @@ export type DocumentUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
-export type DocumentCreateNestedManyWithoutEntityTypeInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutEntityTypeInput, Prisma.DocumentUncheckedCreateWithoutEntityTypeInput> | Prisma.DocumentCreateWithoutEntityTypeInput[] | Prisma.DocumentUncheckedCreateWithoutEntityTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutEntityTypeInput | Prisma.DocumentCreateOrConnectWithoutEntityTypeInput[]
-  createMany?: Prisma.DocumentCreateManyEntityTypeInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUncheckedCreateNestedManyWithoutEntityTypeInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutEntityTypeInput, Prisma.DocumentUncheckedCreateWithoutEntityTypeInput> | Prisma.DocumentCreateWithoutEntityTypeInput[] | Prisma.DocumentUncheckedCreateWithoutEntityTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutEntityTypeInput | Prisma.DocumentCreateOrConnectWithoutEntityTypeInput[]
-  createMany?: Prisma.DocumentCreateManyEntityTypeInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUpdateManyWithoutEntityTypeNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutEntityTypeInput, Prisma.DocumentUncheckedCreateWithoutEntityTypeInput> | Prisma.DocumentCreateWithoutEntityTypeInput[] | Prisma.DocumentUncheckedCreateWithoutEntityTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutEntityTypeInput | Prisma.DocumentCreateOrConnectWithoutEntityTypeInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutEntityTypeInput | Prisma.DocumentUpsertWithWhereUniqueWithoutEntityTypeInput[]
-  createMany?: Prisma.DocumentCreateManyEntityTypeInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutEntityTypeInput | Prisma.DocumentUpdateWithWhereUniqueWithoutEntityTypeInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutEntityTypeInput | Prisma.DocumentUpdateManyWithWhereWithoutEntityTypeInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUncheckedUpdateManyWithoutEntityTypeNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutEntityTypeInput, Prisma.DocumentUncheckedCreateWithoutEntityTypeInput> | Prisma.DocumentCreateWithoutEntityTypeInput[] | Prisma.DocumentUncheckedCreateWithoutEntityTypeInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutEntityTypeInput | Prisma.DocumentCreateOrConnectWithoutEntityTypeInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutEntityTypeInput | Prisma.DocumentUpsertWithWhereUniqueWithoutEntityTypeInput[]
-  createMany?: Prisma.DocumentCreateManyEntityTypeInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutEntityTypeInput | Prisma.DocumentUpdateWithWhereUniqueWithoutEntityTypeInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutEntityTypeInput | Prisma.DocumentUpdateManyWithWhereWithoutEntityTypeInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+export type EnumDocumentEntityTypeFieldUpdateOperationsInput = {
+  set?: $Enums.DocumentEntityType
 }
 
 export type NullableBigIntFieldUpdateOperationsInput = {
@@ -765,44 +571,30 @@ export type NullableBigIntFieldUpdateOperationsInput = {
 
 export type DocumentCreateWithoutMarketInput = {
   id?: string
-  referenceId: string
-  fileType?: string | null
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename?: string | null
+  fileType: string
   mimeType?: string | null
+  extension?: string | null
   fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
-  entityType: Prisma.EntityTypeCreateNestedOneWithoutDocumentsInput
+  uploadedById?: string | null
+  createdAt?: Date | string
 }
 
 export type DocumentUncheckedCreateWithoutMarketInput = {
   id?: string
-  referenceTable: string
-  referenceId: string
-  fileType?: string | null
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename?: string | null
+  fileType: string
   mimeType?: string | null
+  extension?: string | null
   fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  uploadedById?: string | null
+  createdAt?: Date | string
 }
 
 export type DocumentCreateOrConnectWithoutMarketInput = {
@@ -836,260 +628,73 @@ export type DocumentScalarWhereInput = {
   OR?: Prisma.DocumentScalarWhereInput[]
   NOT?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
   id?: Prisma.UuidFilter<"Document"> | string
-  marketId?: Prisma.UuidNullableFilter<"Document"> | string | null
-  referenceTable?: Prisma.StringFilter<"Document"> | string
-  referenceId?: Prisma.UuidFilter<"Document"> | string
-  fileType?: Prisma.StringNullableFilter<"Document"> | string | null
+  marketId?: Prisma.UuidFilter<"Document"> | string
+  entityType?: Prisma.EnumDocumentEntityTypeFilter<"Document"> | $Enums.DocumentEntityType
+  entityId?: Prisma.UuidFilter<"Document"> | string
+  fileName?: Prisma.StringFilter<"Document"> | string
   filePath?: Prisma.StringFilter<"Document"> | string
-  originalFilename?: Prisma.StringNullableFilter<"Document"> | string | null
+  fileType?: Prisma.StringFilter<"Document"> | string
   mimeType?: Prisma.StringNullableFilter<"Document"> | string | null
+  extension?: Prisma.StringNullableFilter<"Document"> | string | null
   fileSize?: Prisma.BigIntNullableFilter<"Document"> | bigint | number | null
-  checksum?: Prisma.StringNullableFilter<"Document"> | string | null
-  storageProvider?: Prisma.StringNullableFilter<"Document"> | string | null
-  storageKey?: Prisma.StringNullableFilter<"Document"> | string | null
-  uploadedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  uploadedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Document"> | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
-}
-
-export type DocumentCreateWithoutEntityTypeInput = {
-  id?: string
-  referenceId: string
-  fileType?: string | null
-  filePath: string
-  originalFilename?: string | null
-  mimeType?: string | null
-  fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
-  market?: Prisma.MarketCreateNestedOneWithoutDocumentsInput
-}
-
-export type DocumentUncheckedCreateWithoutEntityTypeInput = {
-  id?: string
-  marketId?: string | null
-  referenceId: string
-  fileType?: string | null
-  filePath: string
-  originalFilename?: string | null
-  mimeType?: string | null
-  fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
-}
-
-export type DocumentCreateOrConnectWithoutEntityTypeInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutEntityTypeInput, Prisma.DocumentUncheckedCreateWithoutEntityTypeInput>
-}
-
-export type DocumentCreateManyEntityTypeInputEnvelope = {
-  data: Prisma.DocumentCreateManyEntityTypeInput | Prisma.DocumentCreateManyEntityTypeInput[]
-  skipDuplicates?: boolean
-}
-
-export type DocumentUpsertWithWhereUniqueWithoutEntityTypeInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutEntityTypeInput, Prisma.DocumentUncheckedUpdateWithoutEntityTypeInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutEntityTypeInput, Prisma.DocumentUncheckedCreateWithoutEntityTypeInput>
-}
-
-export type DocumentUpdateWithWhereUniqueWithoutEntityTypeInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutEntityTypeInput, Prisma.DocumentUncheckedUpdateWithoutEntityTypeInput>
-}
-
-export type DocumentUpdateManyWithWhereWithoutEntityTypeInput = {
-  where: Prisma.DocumentScalarWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutEntityTypeInput>
+  uploadedById?: Prisma.UuidNullableFilter<"Document"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
 }
 
 export type DocumentCreateManyMarketInput = {
   id?: string
-  referenceTable: string
-  referenceId: string
-  fileType?: string | null
+  entityType: $Enums.DocumentEntityType
+  entityId: string
+  fileName: string
   filePath: string
-  originalFilename?: string | null
+  fileType: string
   mimeType?: string | null
+  extension?: string | null
   fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
+  uploadedById?: string | null
+  createdAt?: Date | string
 }
 
 export type DocumentUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  entityType?: Prisma.EntityTypeUpdateOneRequiredWithoutDocumentsNestedInput
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DocumentUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceTable?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DocumentUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceTable?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  entityType?: Prisma.EnumDocumentEntityTypeFieldUpdateOperationsInput | $Enums.DocumentEntityType
+  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  fileName?: Prisma.StringFieldUpdateOperationsInput | string
   filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileType?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extension?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type DocumentCreateManyEntityTypeInput = {
-  id?: string
-  marketId?: string | null
-  referenceId: string
-  fileType?: string | null
-  filePath: string
-  originalFilename?: string | null
-  mimeType?: string | null
-  fileSize?: bigint | number | null
-  checksum?: string | null
-  storageProvider?: string | null
-  storageKey?: string | null
-  uploadedBy?: string | null
-  uploadedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  updatedAt?: Date | string | null
-  deletedAt?: Date | string | null
-}
-
-export type DocumentUpdateWithoutEntityTypeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  market?: Prisma.MarketUpdateOneWithoutDocumentsNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutEntityTypeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type DocumentUncheckedUpdateManyWithoutEntityTypeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.StringFieldUpdateOperationsInput | string
-  fileType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  filePath?: Prisma.StringFieldUpdateOperationsInput | string
-  originalFilename?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  fileSize?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  uploadedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  uploadedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1097,137 +702,101 @@ export type DocumentUncheckedUpdateManyWithoutEntityTypeInput = {
 export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  referenceTable?: boolean
-  referenceId?: boolean
-  fileType?: boolean
+  entityType?: boolean
+  entityId?: boolean
+  fileName?: boolean
   filePath?: boolean
-  originalFilename?: boolean
+  fileType?: boolean
   mimeType?: boolean
+  extension?: boolean
   fileSize?: boolean
-  checksum?: boolean
-  storageProvider?: boolean
-  storageKey?: boolean
-  uploadedBy?: boolean
-  uploadedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  updatedAt?: boolean
-  deletedAt?: boolean
-  market?: boolean | Prisma.Document$marketArgs<ExtArgs>
-  entityType?: boolean | Prisma.EntityTypeDefaultArgs<ExtArgs>
+  uploadedById?: boolean
+  createdAt?: boolean
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  referenceTable?: boolean
-  referenceId?: boolean
-  fileType?: boolean
+  entityType?: boolean
+  entityId?: boolean
+  fileName?: boolean
   filePath?: boolean
-  originalFilename?: boolean
+  fileType?: boolean
   mimeType?: boolean
+  extension?: boolean
   fileSize?: boolean
-  checksum?: boolean
-  storageProvider?: boolean
-  storageKey?: boolean
-  uploadedBy?: boolean
-  uploadedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  updatedAt?: boolean
-  deletedAt?: boolean
-  market?: boolean | Prisma.Document$marketArgs<ExtArgs>
-  entityType?: boolean | Prisma.EntityTypeDefaultArgs<ExtArgs>
+  uploadedById?: boolean
+  createdAt?: boolean
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
-  referenceTable?: boolean
-  referenceId?: boolean
-  fileType?: boolean
+  entityType?: boolean
+  entityId?: boolean
+  fileName?: boolean
   filePath?: boolean
-  originalFilename?: boolean
+  fileType?: boolean
   mimeType?: boolean
+  extension?: boolean
   fileSize?: boolean
-  checksum?: boolean
-  storageProvider?: boolean
-  storageKey?: boolean
-  uploadedBy?: boolean
-  uploadedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  updatedAt?: boolean
-  deletedAt?: boolean
-  market?: boolean | Prisma.Document$marketArgs<ExtArgs>
-  entityType?: boolean | Prisma.EntityTypeDefaultArgs<ExtArgs>
+  uploadedById?: boolean
+  createdAt?: boolean
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
   id?: boolean
   marketId?: boolean
-  referenceTable?: boolean
-  referenceId?: boolean
-  fileType?: boolean
+  entityType?: boolean
+  entityId?: boolean
+  fileName?: boolean
   filePath?: boolean
-  originalFilename?: boolean
+  fileType?: boolean
   mimeType?: boolean
+  extension?: boolean
   fileSize?: boolean
-  checksum?: boolean
-  storageProvider?: boolean
-  storageKey?: boolean
-  uploadedBy?: boolean
-  uploadedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  updatedAt?: boolean
-  deletedAt?: boolean
+  uploadedById?: boolean
+  createdAt?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "referenceTable" | "referenceId" | "fileType" | "filePath" | "originalFilename" | "mimeType" | "fileSize" | "checksum" | "storageProvider" | "storageKey" | "uploadedBy" | "uploadedAt" | "createdBy" | "updatedBy" | "deletedBy" | "updatedAt" | "deletedAt", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "entityType" | "entityId" | "fileName" | "filePath" | "fileType" | "mimeType" | "extension" | "fileSize" | "uploadedById" | "createdAt", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  market?: boolean | Prisma.Document$marketArgs<ExtArgs>
-  entityType?: boolean | Prisma.EntityTypeDefaultArgs<ExtArgs>
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }
 export type DocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  market?: boolean | Prisma.Document$marketArgs<ExtArgs>
-  entityType?: boolean | Prisma.EntityTypeDefaultArgs<ExtArgs>
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }
 export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  market?: boolean | Prisma.Document$marketArgs<ExtArgs>
-  entityType?: boolean | Prisma.EntityTypeDefaultArgs<ExtArgs>
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }
 
 export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Document"
   objects: {
-    market: Prisma.$MarketPayload<ExtArgs> | null
-    entityType: Prisma.$EntityTypePayload<ExtArgs>
+    market: Prisma.$MarketPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    marketId: string | null
-    referenceTable: string
-    referenceId: string
-    fileType: string | null
+    marketId: string
+    /**
+     * Polymorphic soft-reference (no FK enforced — see header).
+     */
+    entityType: $Enums.DocumentEntityType
+    entityId: string
+    /**
+     * File metadata.
+     */
+    fileName: string
     filePath: string
-    originalFilename: string | null
+    fileType: string
     mimeType: string | null
+    extension: string | null
     fileSize: bigint | null
-    checksum: string | null
-    storageProvider: string | null
-    storageKey: string | null
-    uploadedBy: string | null
-    uploadedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
-    updatedAt: Date | null
-    deletedAt: Date | null
+    uploadedById: string | null
+    createdAt: Date
   }, ExtArgs["result"]["document"]>
   composites: {}
 }
@@ -1622,8 +1191,7 @@ readonly fields: DocumentFieldRefs;
  */
 export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  market<T extends Prisma.Document$marketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$marketArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  entityType<T extends Prisma.EntityTypeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EntityTypeDefaultArgs<ExtArgs>>): Prisma.Prisma__EntityTypeClient<runtime.Types.Result.GetResult<Prisma.$EntityTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1655,23 +1223,16 @@ export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime
 export interface DocumentFieldRefs {
   readonly id: Prisma.FieldRef<"Document", 'String'>
   readonly marketId: Prisma.FieldRef<"Document", 'String'>
-  readonly referenceTable: Prisma.FieldRef<"Document", 'String'>
-  readonly referenceId: Prisma.FieldRef<"Document", 'String'>
-  readonly fileType: Prisma.FieldRef<"Document", 'String'>
+  readonly entityType: Prisma.FieldRef<"Document", 'DocumentEntityType'>
+  readonly entityId: Prisma.FieldRef<"Document", 'String'>
+  readonly fileName: Prisma.FieldRef<"Document", 'String'>
   readonly filePath: Prisma.FieldRef<"Document", 'String'>
-  readonly originalFilename: Prisma.FieldRef<"Document", 'String'>
+  readonly fileType: Prisma.FieldRef<"Document", 'String'>
   readonly mimeType: Prisma.FieldRef<"Document", 'String'>
+  readonly extension: Prisma.FieldRef<"Document", 'String'>
   readonly fileSize: Prisma.FieldRef<"Document", 'BigInt'>
-  readonly checksum: Prisma.FieldRef<"Document", 'String'>
-  readonly storageProvider: Prisma.FieldRef<"Document", 'String'>
-  readonly storageKey: Prisma.FieldRef<"Document", 'String'>
-  readonly uploadedBy: Prisma.FieldRef<"Document", 'String'>
-  readonly uploadedAt: Prisma.FieldRef<"Document", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Document", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Document", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Document", 'String'>
-  readonly updatedAt: Prisma.FieldRef<"Document", 'DateTime'>
-  readonly deletedAt: Prisma.FieldRef<"Document", 'DateTime'>
+  readonly uploadedById: Prisma.FieldRef<"Document", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
 }
     
 
@@ -2070,25 +1631,6 @@ export type DocumentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Documents to delete.
    */
   limit?: number
-}
-
-/**
- * Document.market
- */
-export type Document$marketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Market
-   */
-  select?: Prisma.MarketSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Market
-   */
-  omit?: Prisma.MarketOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MarketInclude<ExtArgs> | null
-  where?: Prisma.MarketWhereInput
 }
 
 /**

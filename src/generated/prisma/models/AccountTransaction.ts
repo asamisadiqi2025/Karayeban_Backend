@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model AccountTransaction
- * 
+ * An immutable ledger entry against an account.
  */
 export type AccountTransactionModel = runtime.Types.Result.DefaultSelection<Prisma.$AccountTransactionPayload>
 
@@ -28,180 +28,124 @@ export type AggregateAccountTransaction = {
 
 export type AccountTransactionAvgAggregateOutputType = {
   amount: runtime.Decimal | null
-  exchangeRate: runtime.Decimal | null
-  openingBalance: runtime.Decimal | null
-  closingBalance: runtime.Decimal | null
   balanceAfterTransaction: runtime.Decimal | null
+  sequenceNo: number | null
 }
 
 export type AccountTransactionSumAggregateOutputType = {
   amount: runtime.Decimal | null
-  exchangeRate: runtime.Decimal | null
-  openingBalance: runtime.Decimal | null
-  closingBalance: runtime.Decimal | null
   balanceAfterTransaction: runtime.Decimal | null
+  sequenceNo: bigint | null
 }
 
 export type AccountTransactionMinAggregateOutputType = {
   id: string | null
   marketId: string | null
   accountId: string | null
-  transactionNumber: string | null
-  voucherNumber: string | null
-  type: string | null
+  type: $Enums.TransactionType | null
   amount: runtime.Decimal | null
-  currencyCode: string | null
-  exchangeRate: runtime.Decimal | null
-  openingBalance: runtime.Decimal | null
-  closingBalance: runtime.Decimal | null
-  referenceType: string | null
+  referenceType: $Enums.TransactionReferenceType | null
   referenceId: string | null
-  description: string | null
-  isPosted: boolean | null
-  postedBy: string | null
-  postedAt: Date | null
-  createdAt: Date | null
-  transactionDate: Date | null
-  createdBy: string | null
   balanceAfterTransaction: runtime.Decimal | null
+  sequenceNo: bigint | null
+  description: string | null
+  createdById: string | null
+  transactionDate: Date | null
+  createdAt: Date | null
 }
 
 export type AccountTransactionMaxAggregateOutputType = {
   id: string | null
   marketId: string | null
   accountId: string | null
-  transactionNumber: string | null
-  voucherNumber: string | null
-  type: string | null
+  type: $Enums.TransactionType | null
   amount: runtime.Decimal | null
-  currencyCode: string | null
-  exchangeRate: runtime.Decimal | null
-  openingBalance: runtime.Decimal | null
-  closingBalance: runtime.Decimal | null
-  referenceType: string | null
+  referenceType: $Enums.TransactionReferenceType | null
   referenceId: string | null
-  description: string | null
-  isPosted: boolean | null
-  postedBy: string | null
-  postedAt: Date | null
-  createdAt: Date | null
-  transactionDate: Date | null
-  createdBy: string | null
   balanceAfterTransaction: runtime.Decimal | null
+  sequenceNo: bigint | null
+  description: string | null
+  createdById: string | null
+  transactionDate: Date | null
+  createdAt: Date | null
 }
 
 export type AccountTransactionCountAggregateOutputType = {
   id: number
   marketId: number
   accountId: number
-  transactionNumber: number
-  voucherNumber: number
   type: number
   amount: number
-  currencyCode: number
-  exchangeRate: number
-  openingBalance: number
-  closingBalance: number
   referenceType: number
   referenceId: number
-  description: number
-  isPosted: number
-  postedBy: number
-  postedAt: number
-  createdAt: number
-  transactionDate: number
-  createdBy: number
   balanceAfterTransaction: number
+  sequenceNo: number
+  description: number
+  createdById: number
+  transactionDate: number
+  createdAt: number
   _all: number
 }
 
 
 export type AccountTransactionAvgAggregateInputType = {
   amount?: true
-  exchangeRate?: true
-  openingBalance?: true
-  closingBalance?: true
   balanceAfterTransaction?: true
+  sequenceNo?: true
 }
 
 export type AccountTransactionSumAggregateInputType = {
   amount?: true
-  exchangeRate?: true
-  openingBalance?: true
-  closingBalance?: true
   balanceAfterTransaction?: true
+  sequenceNo?: true
 }
 
 export type AccountTransactionMinAggregateInputType = {
   id?: true
   marketId?: true
   accountId?: true
-  transactionNumber?: true
-  voucherNumber?: true
   type?: true
   amount?: true
-  currencyCode?: true
-  exchangeRate?: true
-  openingBalance?: true
-  closingBalance?: true
   referenceType?: true
   referenceId?: true
-  description?: true
-  isPosted?: true
-  postedBy?: true
-  postedAt?: true
-  createdAt?: true
-  transactionDate?: true
-  createdBy?: true
   balanceAfterTransaction?: true
+  sequenceNo?: true
+  description?: true
+  createdById?: true
+  transactionDate?: true
+  createdAt?: true
 }
 
 export type AccountTransactionMaxAggregateInputType = {
   id?: true
   marketId?: true
   accountId?: true
-  transactionNumber?: true
-  voucherNumber?: true
   type?: true
   amount?: true
-  currencyCode?: true
-  exchangeRate?: true
-  openingBalance?: true
-  closingBalance?: true
   referenceType?: true
   referenceId?: true
-  description?: true
-  isPosted?: true
-  postedBy?: true
-  postedAt?: true
-  createdAt?: true
-  transactionDate?: true
-  createdBy?: true
   balanceAfterTransaction?: true
+  sequenceNo?: true
+  description?: true
+  createdById?: true
+  transactionDate?: true
+  createdAt?: true
 }
 
 export type AccountTransactionCountAggregateInputType = {
   id?: true
   marketId?: true
   accountId?: true
-  transactionNumber?: true
-  voucherNumber?: true
   type?: true
   amount?: true
-  currencyCode?: true
-  exchangeRate?: true
-  openingBalance?: true
-  closingBalance?: true
   referenceType?: true
   referenceId?: true
-  description?: true
-  isPosted?: true
-  postedBy?: true
-  postedAt?: true
-  createdAt?: true
-  transactionDate?: true
-  createdBy?: true
   balanceAfterTransaction?: true
+  sequenceNo?: true
+  description?: true
+  createdById?: true
+  transactionDate?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -295,24 +239,16 @@ export type AccountTransactionGroupByOutputType = {
   id: string
   marketId: string
   accountId: string
-  transactionNumber: string | null
-  voucherNumber: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal
-  currencyCode: string | null
-  exchangeRate: runtime.Decimal | null
-  openingBalance: runtime.Decimal | null
-  closingBalance: runtime.Decimal | null
-  referenceType: string | null
+  referenceType: $Enums.TransactionReferenceType | null
   referenceId: string | null
+  balanceAfterTransaction: runtime.Decimal
+  sequenceNo: bigint
   description: string | null
-  isPosted: boolean | null
-  postedBy: string | null
-  postedAt: Date | null
+  createdById: string | null
+  transactionDate: Date
   createdAt: Date
-  transactionDate: Date | null
-  createdBy: string | null
-  balanceAfterTransaction: runtime.Decimal | null
   _count: AccountTransactionCountAggregateOutputType | null
   _avg: AccountTransactionAvgAggregateOutputType | null
   _sum: AccountTransactionSumAggregateOutputType | null
@@ -342,109 +278,73 @@ export type AccountTransactionWhereInput = {
   id?: Prisma.UuidFilter<"AccountTransaction"> | string
   marketId?: Prisma.UuidFilter<"AccountTransaction"> | string
   accountId?: Prisma.UuidFilter<"AccountTransaction"> | string
-  transactionNumber?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  voucherNumber?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  type?: Prisma.StringFilter<"AccountTransaction"> | string
+  type?: Prisma.EnumTransactionTypeFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  exchangeRate?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
+  referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  balanceAfterTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFilter<"AccountTransaction"> | bigint | number
   description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  isPosted?: Prisma.BoolNullableFilter<"AccountTransaction"> | boolean | null
-  postedBy?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  postedAt?: Prisma.DateTimeNullableFilter<"AccountTransaction"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  transactionDate?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
-  transactionDate?: Prisma.DateTimeNullableFilter<"AccountTransaction"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  balanceAfterTransaction?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
-  currency?: Prisma.XOR<Prisma.CurrencyNullableScalarRelationFilter, Prisma.CurrencyWhereInput> | null
 }
 
 export type AccountTransactionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  transactionNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  voucherNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrderInput | Prisma.SortOrder
-  openingBalance?: Prisma.SortOrderInput | Prisma.SortOrder
-  closingBalance?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceType?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  balanceAfterTransaction?: Prisma.SortOrder
+  sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  isPosted?: Prisma.SortOrderInput | Prisma.SortOrder
-  postedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  postedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  transactionDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  balanceAfterTransaction?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   account?: Prisma.AccountOrderByWithRelationInput
-  currency?: Prisma.CurrencyOrderByWithRelationInput
 }
 
 export type AccountTransactionWhereUniqueInput = Prisma.AtLeast<{
-  id_createdAt?: Prisma.AccountTransactionIdCreatedAtCompoundUniqueInput
+  id?: string
+  sequenceNo?: bigint | number
   AND?: Prisma.AccountTransactionWhereInput | Prisma.AccountTransactionWhereInput[]
   OR?: Prisma.AccountTransactionWhereInput[]
   NOT?: Prisma.AccountTransactionWhereInput | Prisma.AccountTransactionWhereInput[]
-  id?: Prisma.UuidFilter<"AccountTransaction"> | string
   marketId?: Prisma.UuidFilter<"AccountTransaction"> | string
   accountId?: Prisma.UuidFilter<"AccountTransaction"> | string
-  transactionNumber?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  voucherNumber?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  type?: Prisma.StringFilter<"AccountTransaction"> | string
+  type?: Prisma.EnumTransactionTypeFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  exchangeRate?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
+  referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  balanceAfterTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  isPosted?: Prisma.BoolNullableFilter<"AccountTransaction"> | boolean | null
-  postedBy?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  postedAt?: Prisma.DateTimeNullableFilter<"AccountTransaction"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  transactionDate?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
-  transactionDate?: Prisma.DateTimeNullableFilter<"AccountTransaction"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  balanceAfterTransaction?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
-  currency?: Prisma.XOR<Prisma.CurrencyNullableScalarRelationFilter, Prisma.CurrencyWhereInput> | null
-}, "id_createdAt">
+}, "id" | "sequenceNo">
 
 export type AccountTransactionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  transactionNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  voucherNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrderInput | Prisma.SortOrder
-  openingBalance?: Prisma.SortOrderInput | Prisma.SortOrder
-  closingBalance?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceType?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  balanceAfterTransaction?: Prisma.SortOrder
+  sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  isPosted?: Prisma.SortOrderInput | Prisma.SortOrder
-  postedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  postedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  transactionDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  balanceAfterTransaction?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AccountTransactionCountOrderByAggregateInput
   _avg?: Prisma.AccountTransactionAvgOrderByAggregateInput
   _max?: Prisma.AccountTransactionMaxOrderByAggregateInput
@@ -459,189 +359,126 @@ export type AccountTransactionScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"AccountTransaction"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"AccountTransaction"> | string
   accountId?: Prisma.UuidWithAggregatesFilter<"AccountTransaction"> | string
-  transactionNumber?: Prisma.StringNullableWithAggregatesFilter<"AccountTransaction"> | string | null
-  voucherNumber?: Prisma.StringNullableWithAggregatesFilter<"AccountTransaction"> | string | null
-  type?: Prisma.StringWithAggregatesFilter<"AccountTransaction"> | string
+  type?: Prisma.EnumTransactionTypeWithAggregatesFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.StringNullableWithAggregatesFilter<"AccountTransaction"> | string | null
-  exchangeRate?: Prisma.DecimalNullableWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.DecimalNullableWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.DecimalNullableWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.StringNullableWithAggregatesFilter<"AccountTransaction"> | string | null
+  referenceType?: Prisma.EnumTransactionReferenceTypeNullableWithAggregatesFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
+  balanceAfterTransaction?: Prisma.DecimalWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntWithAggregatesFilter<"AccountTransaction"> | bigint | number
   description?: Prisma.StringNullableWithAggregatesFilter<"AccountTransaction"> | string | null
-  isPosted?: Prisma.BoolNullableWithAggregatesFilter<"AccountTransaction"> | boolean | null
-  postedBy?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
-  postedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AccountTransaction"> | Date | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
+  transactionDate?: Prisma.DateTimeWithAggregatesFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AccountTransaction"> | Date | string
-  transactionDate?: Prisma.DateTimeNullableWithAggregatesFilter<"AccountTransaction"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
-  balanceAfterTransaction?: Prisma.DecimalNullableWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionCreateInput = {
   id?: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
-  account: Prisma.AccountCreateNestedOneWithoutAccountTransactionsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateInput = {
   id?: string
   marketId: string
   accountId: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: string | null
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutAccountTransactionsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionCreateManyInput = {
   id?: string
   marketId: string
   accountId: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: string | null
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionListRelationFilter = {
@@ -654,139 +491,64 @@ export type AccountTransactionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type AccountTransactionIdCreatedAtCompoundUniqueInput = {
-  id: string
-  createdAt: Date | string
-}
-
 export type AccountTransactionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  transactionNumber?: Prisma.SortOrder
-  voucherNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrder
-  openingBalance?: Prisma.SortOrder
-  closingBalance?: Prisma.SortOrder
   referenceType?: Prisma.SortOrder
   referenceId?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  isPosted?: Prisma.SortOrder
-  postedBy?: Prisma.SortOrder
-  postedAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  transactionDate?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
+  sequenceNo?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type AccountTransactionAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrder
-  openingBalance?: Prisma.SortOrder
-  closingBalance?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
+  sequenceNo?: Prisma.SortOrder
 }
 
 export type AccountTransactionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  transactionNumber?: Prisma.SortOrder
-  voucherNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrder
-  openingBalance?: Prisma.SortOrder
-  closingBalance?: Prisma.SortOrder
   referenceType?: Prisma.SortOrder
   referenceId?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  isPosted?: Prisma.SortOrder
-  postedBy?: Prisma.SortOrder
-  postedAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  transactionDate?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
+  sequenceNo?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type AccountTransactionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
-  transactionNumber?: Prisma.SortOrder
-  voucherNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrder
-  openingBalance?: Prisma.SortOrder
-  closingBalance?: Prisma.SortOrder
   referenceType?: Prisma.SortOrder
   referenceId?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  isPosted?: Prisma.SortOrder
-  postedBy?: Prisma.SortOrder
-  postedAt?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  transactionDate?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
+  sequenceNo?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  transactionDate?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type AccountTransactionSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
-  exchangeRate?: Prisma.SortOrder
-  openingBalance?: Prisma.SortOrder
-  closingBalance?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
-}
-
-export type AccountTransactionCreateNestedManyWithoutCurrencyInput = {
-  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput> | Prisma.AccountTransactionCreateWithoutCurrencyInput[] | Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput | Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput[]
-  createMany?: Prisma.AccountTransactionCreateManyCurrencyInputEnvelope
-  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-}
-
-export type AccountTransactionUncheckedCreateNestedManyWithoutCurrencyInput = {
-  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput> | Prisma.AccountTransactionCreateWithoutCurrencyInput[] | Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput | Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput[]
-  createMany?: Prisma.AccountTransactionCreateManyCurrencyInputEnvelope
-  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-}
-
-export type AccountTransactionUpdateManyWithoutCurrencyNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput> | Prisma.AccountTransactionCreateWithoutCurrencyInput[] | Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput | Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput[]
-  upsert?: Prisma.AccountTransactionUpsertWithWhereUniqueWithoutCurrencyInput | Prisma.AccountTransactionUpsertWithWhereUniqueWithoutCurrencyInput[]
-  createMany?: Prisma.AccountTransactionCreateManyCurrencyInputEnvelope
-  set?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  disconnect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  delete?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  update?: Prisma.AccountTransactionUpdateWithWhereUniqueWithoutCurrencyInput | Prisma.AccountTransactionUpdateWithWhereUniqueWithoutCurrencyInput[]
-  updateMany?: Prisma.AccountTransactionUpdateManyWithWhereWithoutCurrencyInput | Prisma.AccountTransactionUpdateManyWithWhereWithoutCurrencyInput[]
-  deleteMany?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
-}
-
-export type AccountTransactionUncheckedUpdateManyWithoutCurrencyNestedInput = {
-  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput> | Prisma.AccountTransactionCreateWithoutCurrencyInput[] | Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput | Prisma.AccountTransactionCreateOrConnectWithoutCurrencyInput[]
-  upsert?: Prisma.AccountTransactionUpsertWithWhereUniqueWithoutCurrencyInput | Prisma.AccountTransactionUpsertWithWhereUniqueWithoutCurrencyInput[]
-  createMany?: Prisma.AccountTransactionCreateManyCurrencyInputEnvelope
-  set?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  disconnect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  delete?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
-  update?: Prisma.AccountTransactionUpdateWithWhereUniqueWithoutCurrencyInput | Prisma.AccountTransactionUpdateWithWhereUniqueWithoutCurrencyInput[]
-  updateMany?: Prisma.AccountTransactionUpdateManyWithWhereWithoutCurrencyInput | Prisma.AccountTransactionUpdateManyWithWhereWithoutCurrencyInput[]
-  deleteMany?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
+  sequenceNo?: Prisma.SortOrder
 }
 
 export type AccountTransactionCreateNestedManyWithoutMarketInput = {
@@ -873,149 +635,50 @@ export type AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput = {
   deleteMany?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
 }
 
-export type AccountTransactionCreateWithoutCurrencyInput = {
-  id?: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
-  referenceId?: string | null
-  description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
-  createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
-  account: Prisma.AccountCreateNestedOneWithoutAccountTransactionsInput
+export type EnumTransactionTypeFieldUpdateOperationsInput = {
+  set?: $Enums.TransactionType
 }
 
-export type AccountTransactionUncheckedCreateWithoutCurrencyInput = {
-  id?: string
-  marketId: string
-  accountId: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
-  referenceId?: string | null
-  description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
-  createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+export type NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.TransactionReferenceType | null
 }
 
-export type AccountTransactionCreateOrConnectWithoutCurrencyInput = {
-  where: Prisma.AccountTransactionWhereUniqueInput
-  create: Prisma.XOR<Prisma.AccountTransactionCreateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput>
-}
-
-export type AccountTransactionCreateManyCurrencyInputEnvelope = {
-  data: Prisma.AccountTransactionCreateManyCurrencyInput | Prisma.AccountTransactionCreateManyCurrencyInput[]
-  skipDuplicates?: boolean
-}
-
-export type AccountTransactionUpsertWithWhereUniqueWithoutCurrencyInput = {
-  where: Prisma.AccountTransactionWhereUniqueInput
-  update: Prisma.XOR<Prisma.AccountTransactionUpdateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedUpdateWithoutCurrencyInput>
-  create: Prisma.XOR<Prisma.AccountTransactionCreateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedCreateWithoutCurrencyInput>
-}
-
-export type AccountTransactionUpdateWithWhereUniqueWithoutCurrencyInput = {
-  where: Prisma.AccountTransactionWhereUniqueInput
-  data: Prisma.XOR<Prisma.AccountTransactionUpdateWithoutCurrencyInput, Prisma.AccountTransactionUncheckedUpdateWithoutCurrencyInput>
-}
-
-export type AccountTransactionUpdateManyWithWhereWithoutCurrencyInput = {
-  where: Prisma.AccountTransactionScalarWhereInput
-  data: Prisma.XOR<Prisma.AccountTransactionUpdateManyMutationInput, Prisma.AccountTransactionUncheckedUpdateManyWithoutCurrencyInput>
-}
-
-export type AccountTransactionScalarWhereInput = {
-  AND?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
-  OR?: Prisma.AccountTransactionScalarWhereInput[]
-  NOT?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
-  id?: Prisma.UuidFilter<"AccountTransaction"> | string
-  marketId?: Prisma.UuidFilter<"AccountTransaction"> | string
-  accountId?: Prisma.UuidFilter<"AccountTransaction"> | string
-  transactionNumber?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  voucherNumber?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  type?: Prisma.StringFilter<"AccountTransaction"> | string
-  amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  exchangeRate?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
-  isPosted?: Prisma.BoolNullableFilter<"AccountTransaction"> | boolean | null
-  postedBy?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  postedAt?: Prisma.DateTimeNullableFilter<"AccountTransaction"> | Date | string | null
-  createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
-  transactionDate?: Prisma.DateTimeNullableFilter<"AccountTransaction"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
-  balanceAfterTransaction?: Prisma.DecimalNullableFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+export type BigIntFieldUpdateOperationsInput = {
+  set?: bigint | number
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
 }
 
 export type AccountTransactionCreateWithoutMarketInput = {
   id?: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  account: Prisma.AccountCreateNestedOneWithoutAccountTransactionsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateWithoutMarketInput = {
   id?: string
   accountId: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: string | null
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionCreateOrConnectWithoutMarketInput = {
@@ -1044,49 +707,53 @@ export type AccountTransactionUpdateManyWithWhereWithoutMarketInput = {
   data: Prisma.XOR<Prisma.AccountTransactionUpdateManyMutationInput, Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketInput>
 }
 
+export type AccountTransactionScalarWhereInput = {
+  AND?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
+  OR?: Prisma.AccountTransactionScalarWhereInput[]
+  NOT?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
+  id?: Prisma.UuidFilter<"AccountTransaction"> | string
+  marketId?: Prisma.UuidFilter<"AccountTransaction"> | string
+  accountId?: Prisma.UuidFilter<"AccountTransaction"> | string
+  type?: Prisma.EnumTransactionTypeFilter<"AccountTransaction"> | $Enums.TransactionType
+  amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  balanceAfterTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFilter<"AccountTransaction"> | bigint | number
+  description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  transactionDate?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
+  createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
+}
+
 export type AccountTransactionCreateWithoutAccountInput = {
   id?: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
-  currency?: Prisma.CurrencyCreateNestedOneWithoutAccountTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateWithoutAccountInput = {
   id?: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  marketId: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: string | null
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionCreateOrConnectWithoutAccountInput = {
@@ -1115,277 +782,124 @@ export type AccountTransactionUpdateManyWithWhereWithoutAccountInput = {
   data: Prisma.XOR<Prisma.AccountTransactionUpdateManyMutationInput, Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountInput>
 }
 
-export type AccountTransactionCreateManyCurrencyInput = {
-  id?: string
-  marketId: string
-  accountId: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
-  referenceId?: string | null
-  description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
-  createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type AccountTransactionUpdateWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutAccountTransactionsNestedInput
-}
-
-export type AccountTransactionUncheckedUpdateWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
-export type AccountTransactionUncheckedUpdateManyWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-}
-
 export type AccountTransactionCreateManyMarketInput = {
   id?: string
   accountId: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: string | null
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  account?: Prisma.AccountUpdateOneRequiredWithoutAccountTransactionsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionCreateManyAccountInput = {
   id?: string
-  transactionNumber?: string | null
-  voucherNumber?: string | null
-  type: string
+  marketId: string
+  type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: string | null
-  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: string | null
+  referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
   description?: string | null
-  isPosted?: boolean | null
-  postedBy?: string | null
-  postedAt?: Date | string | null
+  createdById?: string | null
+  transactionDate?: Date | string
   createdAt?: Date | string
-  transactionDate?: Date | string | null
-  createdBy?: string | null
-  balanceAfterTransaction?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
-  currency?: Prisma.CurrencyUpdateOneWithoutAccountTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type AccountTransactionUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  voucherNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  exchangeRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  openingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  closingBalance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPosted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  postedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactionDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  balanceAfterTransaction?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 
@@ -1394,122 +908,84 @@ export type AccountTransactionSelect<ExtArgs extends runtime.Types.Extensions.In
   id?: boolean
   marketId?: boolean
   accountId?: boolean
-  transactionNumber?: boolean
-  voucherNumber?: boolean
   type?: boolean
   amount?: boolean
-  currencyCode?: boolean
-  exchangeRate?: boolean
-  openingBalance?: boolean
-  closingBalance?: boolean
   referenceType?: boolean
   referenceId?: boolean
-  description?: boolean
-  isPosted?: boolean
-  postedBy?: boolean
-  postedAt?: boolean
-  createdAt?: boolean
-  transactionDate?: boolean
-  createdBy?: boolean
   balanceAfterTransaction?: boolean
+  sequenceNo?: boolean
+  description?: boolean
+  createdById?: boolean
+  transactionDate?: boolean
+  createdAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.AccountTransaction$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["accountTransaction"]>
 
 export type AccountTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
   accountId?: boolean
-  transactionNumber?: boolean
-  voucherNumber?: boolean
   type?: boolean
   amount?: boolean
-  currencyCode?: boolean
-  exchangeRate?: boolean
-  openingBalance?: boolean
-  closingBalance?: boolean
   referenceType?: boolean
   referenceId?: boolean
-  description?: boolean
-  isPosted?: boolean
-  postedBy?: boolean
-  postedAt?: boolean
-  createdAt?: boolean
-  transactionDate?: boolean
-  createdBy?: boolean
   balanceAfterTransaction?: boolean
+  sequenceNo?: boolean
+  description?: boolean
+  createdById?: boolean
+  transactionDate?: boolean
+  createdAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.AccountTransaction$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["accountTransaction"]>
 
 export type AccountTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   marketId?: boolean
   accountId?: boolean
-  transactionNumber?: boolean
-  voucherNumber?: boolean
   type?: boolean
   amount?: boolean
-  currencyCode?: boolean
-  exchangeRate?: boolean
-  openingBalance?: boolean
-  closingBalance?: boolean
   referenceType?: boolean
   referenceId?: boolean
-  description?: boolean
-  isPosted?: boolean
-  postedBy?: boolean
-  postedAt?: boolean
-  createdAt?: boolean
-  transactionDate?: boolean
-  createdBy?: boolean
   balanceAfterTransaction?: boolean
+  sequenceNo?: boolean
+  description?: boolean
+  createdById?: boolean
+  transactionDate?: boolean
+  createdAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.AccountTransaction$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["accountTransaction"]>
 
 export type AccountTransactionSelectScalar = {
   id?: boolean
   marketId?: boolean
   accountId?: boolean
-  transactionNumber?: boolean
-  voucherNumber?: boolean
   type?: boolean
   amount?: boolean
-  currencyCode?: boolean
-  exchangeRate?: boolean
-  openingBalance?: boolean
-  closingBalance?: boolean
   referenceType?: boolean
   referenceId?: boolean
-  description?: boolean
-  isPosted?: boolean
-  postedBy?: boolean
-  postedAt?: boolean
-  createdAt?: boolean
-  transactionDate?: boolean
-  createdBy?: boolean
   balanceAfterTransaction?: boolean
+  sequenceNo?: boolean
+  description?: boolean
+  createdById?: boolean
+  transactionDate?: boolean
+  createdAt?: boolean
 }
 
-export type AccountTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "accountId" | "transactionNumber" | "voucherNumber" | "type" | "amount" | "currencyCode" | "exchangeRate" | "openingBalance" | "closingBalance" | "referenceType" | "referenceId" | "description" | "isPosted" | "postedBy" | "postedAt" | "createdAt" | "transactionDate" | "createdBy" | "balanceAfterTransaction", ExtArgs["result"]["accountTransaction"]>
+export type AccountTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "accountId" | "type" | "amount" | "referenceType" | "referenceId" | "balanceAfterTransaction" | "sequenceNo" | "description" | "createdById" | "transactionDate" | "createdAt", ExtArgs["result"]["accountTransaction"]>
 export type AccountTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.AccountTransaction$currencyArgs<ExtArgs>
 }
 export type AccountTransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.AccountTransaction$currencyArgs<ExtArgs>
 }
 export type AccountTransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  currency?: boolean | Prisma.AccountTransaction$currencyArgs<ExtArgs>
 }
 
 export type $AccountTransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1517,30 +993,27 @@ export type $AccountTransactionPayload<ExtArgs extends runtime.Types.Extensions.
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
     account: Prisma.$AccountPayload<ExtArgs>
-    currency: Prisma.$CurrencyPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
     accountId: string
-    transactionNumber: string | null
-    voucherNumber: string | null
-    type: string
+    type: $Enums.TransactionType
     amount: runtime.Decimal
-    currencyCode: string | null
-    exchangeRate: runtime.Decimal | null
-    openingBalance: runtime.Decimal | null
-    closingBalance: runtime.Decimal | null
-    referenceType: string | null
+    /**
+     * Polymorphic soft-reference to the source object (no FK enforced).
+     */
+    referenceType: $Enums.TransactionReferenceType | null
     referenceId: string | null
+    balanceAfterTransaction: runtime.Decimal
+    /**
+     * Monotonic ledger sequence for deterministic ordering / reconciliation.
+     */
+    sequenceNo: bigint
     description: string | null
-    isPosted: boolean | null
-    postedBy: string | null
-    postedAt: Date | null
+    createdById: string | null
+    transactionDate: Date
     createdAt: Date
-    transactionDate: Date | null
-    createdBy: string | null
-    balanceAfterTransaction: runtime.Decimal | null
   }, ExtArgs["result"]["accountTransaction"]>
   composites: {}
 }
@@ -1937,7 +1410,6 @@ export interface Prisma__AccountTransactionClient<T, Null = never, ExtArgs exten
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  currency<T extends Prisma.AccountTransaction$currencyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountTransaction$currencyArgs<ExtArgs>>): Prisma.Prisma__CurrencyClient<runtime.Types.Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1970,24 +1442,16 @@ export interface AccountTransactionFieldRefs {
   readonly id: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly marketId: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly accountId: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly transactionNumber: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly voucherNumber: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly type: Prisma.FieldRef<"AccountTransaction", 'String'>
+  readonly type: Prisma.FieldRef<"AccountTransaction", 'TransactionType'>
   readonly amount: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
-  readonly currencyCode: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly exchangeRate: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
-  readonly openingBalance: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
-  readonly closingBalance: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
-  readonly referenceType: Prisma.FieldRef<"AccountTransaction", 'String'>
+  readonly referenceType: Prisma.FieldRef<"AccountTransaction", 'TransactionReferenceType'>
   readonly referenceId: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly description: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly isPosted: Prisma.FieldRef<"AccountTransaction", 'Boolean'>
-  readonly postedBy: Prisma.FieldRef<"AccountTransaction", 'String'>
-  readonly postedAt: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
-  readonly createdAt: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
-  readonly transactionDate: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly balanceAfterTransaction: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
+  readonly sequenceNo: Prisma.FieldRef<"AccountTransaction", 'BigInt'>
+  readonly description: Prisma.FieldRef<"AccountTransaction", 'String'>
+  readonly createdById: Prisma.FieldRef<"AccountTransaction", 'String'>
+  readonly transactionDate: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
+  readonly createdAt: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
 }
     
 
@@ -2386,25 +1850,6 @@ export type AccountTransactionDeleteManyArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many AccountTransactions to delete.
    */
   limit?: number
-}
-
-/**
- * AccountTransaction.currency
- */
-export type AccountTransaction$currencyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Currency
-   */
-  select?: Prisma.CurrencySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Currency
-   */
-  omit?: Prisma.CurrencyOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CurrencyInclude<ExtArgs> | null
-  where?: Prisma.CurrencyWhereInput
 }
 
 /**

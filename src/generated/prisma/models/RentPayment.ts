@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model RentPayment
- * 
+ * A monthly rent payment record for a contract.
  */
 export type RentPaymentModel = runtime.Types.Result.DefaultSelection<Prisma.$RentPaymentPayload>
 
@@ -27,19 +27,23 @@ export type AggregateRentPayment = {
 }
 
 export type RentPaymentAvgAggregateOutputType = {
-  amount: runtime.Decimal | null
+  amountDue: runtime.Decimal | null
+  amountPaid: runtime.Decimal | null
+  remainingAmount: runtime.Decimal | null
   year: number | null
+  month: number | null
   lateFee: runtime.Decimal | null
   discount: runtime.Decimal | null
-  netAmount: runtime.Decimal | null
 }
 
 export type RentPaymentSumAggregateOutputType = {
-  amount: runtime.Decimal | null
+  amountDue: runtime.Decimal | null
+  amountPaid: runtime.Decimal | null
+  remainingAmount: runtime.Decimal | null
   year: number | null
+  month: number | null
   lateFee: runtime.Decimal | null
   discount: runtime.Decimal | null
-  netAmount: runtime.Decimal | null
 }
 
 export type RentPaymentMinAggregateOutputType = {
@@ -47,23 +51,23 @@ export type RentPaymentMinAggregateOutputType = {
   marketId: string | null
   shopId: string | null
   contractId: string | null
-  amount: runtime.Decimal | null
+  accountId: string | null
+  amountDue: runtime.Decimal | null
+  amountPaid: runtime.Decimal | null
+  remainingAmount: runtime.Decimal | null
   paymentDate: Date | null
-  paymentMethod: string | null
-  status: string | null
+  paymentMethod: $Enums.PaymentMethod | null
+  status: $Enums.PaymentStatus | null
   year: number | null
+  month: number | null
   lateFee: runtime.Decimal | null
   discount: runtime.Decimal | null
-  netAmount: runtime.Decimal | null
-  accountId: string | null
-  receivedBy: string | null
+  receivedById: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
 }
 
 export type RentPaymentMaxAggregateOutputType = {
@@ -71,23 +75,23 @@ export type RentPaymentMaxAggregateOutputType = {
   marketId: string | null
   shopId: string | null
   contractId: string | null
-  amount: runtime.Decimal | null
+  accountId: string | null
+  amountDue: runtime.Decimal | null
+  amountPaid: runtime.Decimal | null
+  remainingAmount: runtime.Decimal | null
   paymentDate: Date | null
-  paymentMethod: string | null
-  status: string | null
+  paymentMethod: $Enums.PaymentMethod | null
+  status: $Enums.PaymentStatus | null
   year: number | null
+  month: number | null
   lateFee: runtime.Decimal | null
   discount: runtime.Decimal | null
-  netAmount: runtime.Decimal | null
-  accountId: string | null
-  receivedBy: string | null
+  receivedById: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
 }
 
 export type RentPaymentCountAggregateOutputType = {
@@ -95,41 +99,45 @@ export type RentPaymentCountAggregateOutputType = {
   marketId: number
   shopId: number
   contractId: number
-  amount: number
+  accountId: number
+  amountDue: number
+  amountPaid: number
+  remainingAmount: number
   paymentDate: number
   paymentMethod: number
   status: number
   year: number
+  month: number
   lateFee: number
   discount: number
-  netAmount: number
-  accountId: number
-  receivedBy: number
+  receivedById: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
-  deletedAt: number
   _all: number
 }
 
 
 export type RentPaymentAvgAggregateInputType = {
-  amount?: true
+  amountDue?: true
+  amountPaid?: true
+  remainingAmount?: true
   year?: true
+  month?: true
   lateFee?: true
   discount?: true
-  netAmount?: true
 }
 
 export type RentPaymentSumAggregateInputType = {
-  amount?: true
+  amountDue?: true
+  amountPaid?: true
+  remainingAmount?: true
   year?: true
+  month?: true
   lateFee?: true
   discount?: true
-  netAmount?: true
 }
 
 export type RentPaymentMinAggregateInputType = {
@@ -137,23 +145,23 @@ export type RentPaymentMinAggregateInputType = {
   marketId?: true
   shopId?: true
   contractId?: true
-  amount?: true
+  accountId?: true
+  amountDue?: true
+  amountPaid?: true
+  remainingAmount?: true
   paymentDate?: true
   paymentMethod?: true
   status?: true
   year?: true
+  month?: true
   lateFee?: true
   discount?: true
-  netAmount?: true
-  accountId?: true
-  receivedBy?: true
+  receivedById?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
 }
 
 export type RentPaymentMaxAggregateInputType = {
@@ -161,23 +169,23 @@ export type RentPaymentMaxAggregateInputType = {
   marketId?: true
   shopId?: true
   contractId?: true
-  amount?: true
+  accountId?: true
+  amountDue?: true
+  amountPaid?: true
+  remainingAmount?: true
   paymentDate?: true
   paymentMethod?: true
   status?: true
   year?: true
+  month?: true
   lateFee?: true
   discount?: true
-  netAmount?: true
-  accountId?: true
-  receivedBy?: true
+  receivedById?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
 }
 
 export type RentPaymentCountAggregateInputType = {
@@ -185,23 +193,23 @@ export type RentPaymentCountAggregateInputType = {
   marketId?: true
   shopId?: true
   contractId?: true
-  amount?: true
+  accountId?: true
+  amountDue?: true
+  amountPaid?: true
+  remainingAmount?: true
   paymentDate?: true
   paymentMethod?: true
   status?: true
   year?: true
+  month?: true
   lateFee?: true
   discount?: true
-  netAmount?: true
-  accountId?: true
-  receivedBy?: true
+  receivedById?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
   _all?: true
 }
 
@@ -296,23 +304,23 @@ export type RentPaymentGroupByOutputType = {
   marketId: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal
-  paymentDate: Date
-  paymentMethod: string | null
-  status: string | null
+  accountId: string | null
+  amountDue: runtime.Decimal
+  amountPaid: runtime.Decimal
+  remainingAmount: runtime.Decimal
+  paymentDate: Date | null
+  paymentMethod: $Enums.PaymentMethod | null
+  status: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee: runtime.Decimal | null
   discount: runtime.Decimal | null
-  netAmount: runtime.Decimal | null
-  accountId: string | null
-  receivedBy: string | null
+  receivedById: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
+  updatedAt: Date
   _count: RentPaymentCountAggregateOutputType | null
   _avg: RentPaymentAvgAggregateOutputType | null
   _sum: RentPaymentSumAggregateOutputType | null
@@ -343,23 +351,23 @@ export type RentPaymentWhereInput = {
   marketId?: Prisma.UuidFilter<"RentPayment"> | string
   shopId?: Prisma.UuidFilter<"RentPayment"> | string
   contractId?: Prisma.UuidFilter<"RentPayment"> | string
-  amount?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
-  paymentMethod?: Prisma.StringNullableFilter<"RentPayment"> | string | null
-  status?: Prisma.StringNullableFilter<"RentPayment"> | string | null
+  accountId?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  amountDue?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"RentPayment"> | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFilter<"RentPayment"> | $Enums.PaymentStatus
   year?: Prisma.IntFilter<"RentPayment"> | number
+  month?: Prisma.IntFilter<"RentPayment"> | number
   lateFee?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  receivedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  receivedById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
   description?: Prisma.StringNullableFilter<"RentPayment"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
@@ -371,23 +379,23 @@ export type RentPaymentOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  paymentDate?: Prisma.SortOrder
+  accountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
+  paymentDate?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrderInput | Prisma.SortOrder
   discount?: Prisma.SortOrderInput | Prisma.SortOrder
-  netAmount?: Prisma.SortOrderInput | Prisma.SortOrder
-  accountId?: Prisma.SortOrderInput | Prisma.SortOrder
-  receivedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  receivedById?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shop?: Prisma.ShopOrderByWithRelationInput
   contract?: Prisma.ContractOrderByWithRelationInput
@@ -395,59 +403,59 @@ export type RentPaymentOrderByWithRelationInput = {
 }
 
 export type RentPaymentWhereUniqueInput = Prisma.AtLeast<{
-  id_createdAt?: Prisma.RentPaymentIdCreatedAtCompoundUniqueInput
+  id?: string
+  contractId_year_month?: Prisma.RentPaymentContractIdYearMonthCompoundUniqueInput
   AND?: Prisma.RentPaymentWhereInput | Prisma.RentPaymentWhereInput[]
   OR?: Prisma.RentPaymentWhereInput[]
   NOT?: Prisma.RentPaymentWhereInput | Prisma.RentPaymentWhereInput[]
-  id?: Prisma.UuidFilter<"RentPayment"> | string
   marketId?: Prisma.UuidFilter<"RentPayment"> | string
   shopId?: Prisma.UuidFilter<"RentPayment"> | string
   contractId?: Prisma.UuidFilter<"RentPayment"> | string
-  amount?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
-  paymentMethod?: Prisma.StringNullableFilter<"RentPayment"> | string | null
-  status?: Prisma.StringNullableFilter<"RentPayment"> | string | null
+  accountId?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  amountDue?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"RentPayment"> | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFilter<"RentPayment"> | $Enums.PaymentStatus
   year?: Prisma.IntFilter<"RentPayment"> | number
+  month?: Prisma.IntFilter<"RentPayment"> | number
   lateFee?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  receivedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  receivedById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
   description?: Prisma.StringNullableFilter<"RentPayment"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
-}, "id_createdAt">
+}, "id" | "contractId_year_month">
 
 export type RentPaymentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  paymentDate?: Prisma.SortOrder
+  accountId?: Prisma.SortOrderInput | Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
+  paymentDate?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrderInput | Prisma.SortOrder
   discount?: Prisma.SortOrderInput | Prisma.SortOrder
-  netAmount?: Prisma.SortOrderInput | Prisma.SortOrder
-  accountId?: Prisma.SortOrderInput | Prisma.SortOrder
-  receivedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  receivedById?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.RentPaymentCountOrderByAggregateInput
   _avg?: Prisma.RentPaymentAvgOrderByAggregateInput
   _max?: Prisma.RentPaymentMaxOrderByAggregateInput
@@ -463,43 +471,43 @@ export type RentPaymentScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"RentPayment"> | string
   shopId?: Prisma.UuidWithAggregatesFilter<"RentPayment"> | string
   contractId?: Prisma.UuidWithAggregatesFilter<"RentPayment"> | string
-  amount?: Prisma.DecimalWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeWithAggregatesFilter<"RentPayment"> | Date | string
-  paymentMethod?: Prisma.StringNullableWithAggregatesFilter<"RentPayment"> | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"RentPayment"> | string | null
+  accountId?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
+  amountDue?: Prisma.DecimalWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.DateTimeNullableWithAggregatesFilter<"RentPayment"> | Date | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableWithAggregatesFilter<"RentPayment"> | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusWithAggregatesFilter<"RentPayment"> | $Enums.PaymentStatus
   year?: Prisma.IntWithAggregatesFilter<"RentPayment"> | number
+  month?: Prisma.IntWithAggregatesFilter<"RentPayment"> | number
   lateFee?: Prisma.DecimalNullableWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.DecimalNullableWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.DecimalNullableWithAggregatesFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
-  receivedBy?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
+  receivedById?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"RentPayment"> | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RentPayment"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RentPayment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"RentPayment"> | string | null
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RentPayment"> | Date | string | null
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"RentPayment"> | Date | string
 }
 
 export type RentPaymentCreateInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutRentPaymentsInput
   shop: Prisma.ShopCreateNestedOneWithoutRentPaymentsInput
   contract: Prisma.ContractCreateNestedOneWithoutRentPaymentsInput
@@ -511,43 +519,43 @@ export type RentPaymentUncheckedCreateInput = {
   marketId: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutRentPaymentsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutRentPaymentsNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutRentPaymentsNestedInput
@@ -559,23 +567,23 @@ export type RentPaymentUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentCreateManyInput = {
@@ -583,43 +591,43 @@ export type RentPaymentCreateManyInput = {
   marketId: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentUncheckedUpdateManyInput = {
@@ -627,23 +635,23 @@ export type RentPaymentUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentListRelationFilter = {
@@ -656,9 +664,10 @@ export type RentPaymentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type RentPaymentIdCreatedAtCompoundUniqueInput = {
-  id: string
-  createdAt: Date | string
+export type RentPaymentContractIdYearMonthCompoundUniqueInput = {
+  contractId: string
+  year: number
+  month: number
 }
 
 export type RentPaymentCountOrderByAggregateInput = {
@@ -666,31 +675,33 @@ export type RentPaymentCountOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
   paymentDate?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
   status?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrder
   discount?: Prisma.SortOrder
-  netAmount?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  receivedBy?: Prisma.SortOrder
+  receivedById?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type RentPaymentAvgOrderByAggregateInput = {
-  amount?: Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrder
   discount?: Prisma.SortOrder
-  netAmount?: Prisma.SortOrder
 }
 
 export type RentPaymentMaxOrderByAggregateInput = {
@@ -698,23 +709,23 @@ export type RentPaymentMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
   paymentDate?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
   status?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrder
   discount?: Prisma.SortOrder
-  netAmount?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  receivedBy?: Prisma.SortOrder
+  receivedById?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type RentPaymentMinOrderByAggregateInput = {
@@ -722,31 +733,33 @@ export type RentPaymentMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   shopId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
-  amount?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
   paymentDate?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
   status?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrder
   discount?: Prisma.SortOrder
-  netAmount?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  receivedBy?: Prisma.SortOrder
+  receivedById?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type RentPaymentSumOrderByAggregateInput = {
-  amount?: Prisma.SortOrder
+  amountDue?: Prisma.SortOrder
+  amountPaid?: Prisma.SortOrder
+  remainingAmount?: Prisma.SortOrder
   year?: Prisma.SortOrder
+  month?: Prisma.SortOrder
   lateFee?: Prisma.SortOrder
   discount?: Prisma.SortOrder
-  netAmount?: Prisma.SortOrder
 }
 
 export type RentPaymentCreateNestedManyWithoutMarketInput = {
@@ -875,6 +888,22 @@ export type RentPaymentUncheckedUpdateManyWithoutContractNestedInput = {
   deleteMany?: Prisma.RentPaymentScalarWhereInput | Prisma.RentPaymentScalarWhereInput[]
 }
 
+export type NullableEnumPaymentMethodFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentMethod | null
+}
+
+export type EnumPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentStatus
+}
+
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type RentPaymentCreateNestedManyWithoutAccountInput = {
   create?: Prisma.XOR<Prisma.RentPaymentCreateWithoutAccountInput, Prisma.RentPaymentUncheckedCreateWithoutAccountInput> | Prisma.RentPaymentCreateWithoutAccountInput[] | Prisma.RentPaymentUncheckedCreateWithoutAccountInput[]
   connectOrCreate?: Prisma.RentPaymentCreateOrConnectWithoutAccountInput | Prisma.RentPaymentCreateOrConnectWithoutAccountInput[]
@@ -919,22 +948,22 @@ export type RentPaymentUncheckedUpdateManyWithoutAccountNestedInput = {
 
 export type RentPaymentCreateWithoutMarketInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
   shop: Prisma.ShopCreateNestedOneWithoutRentPaymentsInput
   contract: Prisma.ContractCreateNestedOneWithoutRentPaymentsInput
   account?: Prisma.AccountCreateNestedOneWithoutRentPaymentsInput
@@ -944,23 +973,23 @@ export type RentPaymentUncheckedCreateWithoutMarketInput = {
   id?: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentCreateOrConnectWithoutMarketInput = {
@@ -997,43 +1026,43 @@ export type RentPaymentScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"RentPayment"> | string
   shopId?: Prisma.UuidFilter<"RentPayment"> | string
   contractId?: Prisma.UuidFilter<"RentPayment"> | string
-  amount?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
-  paymentMethod?: Prisma.StringNullableFilter<"RentPayment"> | string | null
-  status?: Prisma.StringNullableFilter<"RentPayment"> | string | null
+  accountId?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  amountDue?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"RentPayment"> | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFilter<"RentPayment"> | $Enums.PaymentStatus
   year?: Prisma.IntFilter<"RentPayment"> | number
+  month?: Prisma.IntFilter<"RentPayment"> | number
   lateFee?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.DecimalNullableFilter<"RentPayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  receivedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  receivedById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
   description?: Prisma.StringNullableFilter<"RentPayment"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"RentPayment"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"RentPayment"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"RentPayment"> | Date | string
 }
 
 export type RentPaymentCreateWithoutShopInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutRentPaymentsInput
   contract: Prisma.ContractCreateNestedOneWithoutRentPaymentsInput
   account?: Prisma.AccountCreateNestedOneWithoutRentPaymentsInput
@@ -1041,24 +1070,25 @@ export type RentPaymentCreateWithoutShopInput = {
 
 export type RentPaymentUncheckedCreateWithoutShopInput = {
   id?: string
+  marketId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentCreateOrConnectWithoutShopInput = {
@@ -1089,22 +1119,22 @@ export type RentPaymentUpdateManyWithWhereWithoutShopInput = {
 
 export type RentPaymentCreateWithoutContractInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutRentPaymentsInput
   shop: Prisma.ShopCreateNestedOneWithoutRentPaymentsInput
   account?: Prisma.AccountCreateNestedOneWithoutRentPaymentsInput
@@ -1112,24 +1142,25 @@ export type RentPaymentCreateWithoutContractInput = {
 
 export type RentPaymentUncheckedCreateWithoutContractInput = {
   id?: string
+  marketId: string
   shopId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentCreateOrConnectWithoutContractInput = {
@@ -1160,22 +1191,22 @@ export type RentPaymentUpdateManyWithWhereWithoutContractInput = {
 
 export type RentPaymentCreateWithoutAccountInput = {
   id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutRentPaymentsInput
   shop: Prisma.ShopCreateNestedOneWithoutRentPaymentsInput
   contract: Prisma.ContractCreateNestedOneWithoutRentPaymentsInput
@@ -1183,24 +1214,25 @@ export type RentPaymentCreateWithoutAccountInput = {
 
 export type RentPaymentUncheckedCreateWithoutAccountInput = {
   id?: string
+  marketId: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentCreateOrConnectWithoutAccountInput = {
@@ -1233,43 +1265,43 @@ export type RentPaymentCreateManyMarketInput = {
   id?: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shop?: Prisma.ShopUpdateOneRequiredWithoutRentPaymentsNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutRentPaymentsNestedInput
   account?: Prisma.AccountUpdateOneWithoutRentPaymentsNestedInput
@@ -1279,88 +1311,89 @@ export type RentPaymentUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentCreateManyShopInput = {
   id?: string
+  marketId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutRentPaymentsNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutRentPaymentsNestedInput
   account?: Prisma.AccountUpdateOneWithoutRentPaymentsNestedInput
@@ -1368,88 +1401,91 @@ export type RentPaymentUpdateWithoutShopInput = {
 
 export type RentPaymentUncheckedUpdateWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentUncheckedUpdateManyWithoutShopInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentCreateManyContractInput = {
   id?: string
+  marketId: string
   shopId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  accountId?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutRentPaymentsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutRentPaymentsNestedInput
   account?: Prisma.AccountUpdateOneWithoutRentPaymentsNestedInput
@@ -1457,88 +1493,91 @@ export type RentPaymentUpdateWithoutContractInput = {
 
 export type RentPaymentUncheckedUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentUncheckedUpdateManyWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentCreateManyAccountInput = {
   id?: string
+  marketId: string
   shopId: string
   contractId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate: Date | string
-  paymentMethod?: string | null
-  status?: string | null
+  amountDue: runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Date | string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  status?: $Enums.PaymentStatus
   year: number
+  month: number
   lateFee?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: string | null
+  receivedById?: string | null
   description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  updatedAt?: Date | string
 }
 
 export type RentPaymentUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutRentPaymentsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutRentPaymentsNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutRentPaymentsNestedInput
@@ -1546,46 +1585,48 @@ export type RentPaymentUpdateWithoutAccountInput = {
 
 export type RentPaymentUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type RentPaymentUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shopId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  paymentDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  amountDue?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  amountPaid?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  remainingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  month?: Prisma.IntFieldUpdateOperationsInput | number
   lateFee?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   discount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  netAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  receivedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  receivedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1595,23 +1636,23 @@ export type RentPaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   marketId?: boolean
   shopId?: boolean
   contractId?: boolean
-  amount?: boolean
+  accountId?: boolean
+  amountDue?: boolean
+  amountPaid?: boolean
+  remainingAmount?: boolean
   paymentDate?: boolean
   paymentMethod?: boolean
   status?: boolean
   year?: boolean
+  month?: boolean
   lateFee?: boolean
   discount?: boolean
-  netAmount?: boolean
-  accountId?: boolean
-  receivedBy?: boolean
+  receivedById?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -1623,23 +1664,23 @@ export type RentPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   marketId?: boolean
   shopId?: boolean
   contractId?: boolean
-  amount?: boolean
+  accountId?: boolean
+  amountDue?: boolean
+  amountPaid?: boolean
+  remainingAmount?: boolean
   paymentDate?: boolean
   paymentMethod?: boolean
   status?: boolean
   year?: boolean
+  month?: boolean
   lateFee?: boolean
   discount?: boolean
-  netAmount?: boolean
-  accountId?: boolean
-  receivedBy?: boolean
+  receivedById?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -1651,23 +1692,23 @@ export type RentPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   marketId?: boolean
   shopId?: boolean
   contractId?: boolean
-  amount?: boolean
+  accountId?: boolean
+  amountDue?: boolean
+  amountPaid?: boolean
+  remainingAmount?: boolean
   paymentDate?: boolean
   paymentMethod?: boolean
   status?: boolean
   year?: boolean
+  month?: boolean
   lateFee?: boolean
   discount?: boolean
-  netAmount?: boolean
-  accountId?: boolean
-  receivedBy?: boolean
+  receivedById?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -1679,26 +1720,26 @@ export type RentPaymentSelectScalar = {
   marketId?: boolean
   shopId?: boolean
   contractId?: boolean
-  amount?: boolean
+  accountId?: boolean
+  amountDue?: boolean
+  amountPaid?: boolean
+  remainingAmount?: boolean
   paymentDate?: boolean
   paymentMethod?: boolean
   status?: boolean
   year?: boolean
+  month?: boolean
   lateFee?: boolean
   discount?: boolean
-  netAmount?: boolean
-  accountId?: boolean
-  receivedBy?: boolean
+  receivedById?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
 }
 
-export type RentPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "contractId" | "amount" | "paymentDate" | "paymentMethod" | "status" | "year" | "lateFee" | "discount" | "netAmount" | "accountId" | "receivedBy" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["rentPayment"]>
+export type RentPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "contractId" | "accountId" | "amountDue" | "amountPaid" | "remainingAmount" | "paymentDate" | "paymentMethod" | "status" | "year" | "month" | "lateFee" | "discount" | "receivedById" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["rentPayment"]>
 export type RentPaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
@@ -1731,26 +1772,26 @@ export type $RentPaymentPayload<ExtArgs extends runtime.Types.Extensions.Interna
     marketId: string
     shopId: string
     contractId: string
-    amount: runtime.Decimal
-    paymentDate: Date
-    paymentMethod: string | null
-    status: string | null
+    accountId: string | null
+    amountDue: runtime.Decimal
+    amountPaid: runtime.Decimal
+    remainingAmount: runtime.Decimal
+    paymentDate: Date | null
+    paymentMethod: $Enums.PaymentMethod | null
+    status: $Enums.PaymentStatus
+    /**
+     * Billing period.
+     */
     year: number
+    month: number
     lateFee: runtime.Decimal | null
     discount: runtime.Decimal | null
-    /**
-     * ستون GENERATED STORED در دیتابیس (amount + late_fee - discount). هرگز مقدار ننویس.
-     */
-    netAmount: runtime.Decimal | null
-    accountId: string | null
-    receivedBy: string | null
+    receivedById: string | null
     description: string | null
+    createdById: string | null
+    updatedById: string | null
     createdAt: Date
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
-    deletedAt: Date | null
+    updatedAt: Date
   }, ExtArgs["result"]["rentPayment"]>
   composites: {}
 }
@@ -2182,23 +2223,23 @@ export interface RentPaymentFieldRefs {
   readonly marketId: Prisma.FieldRef<"RentPayment", 'String'>
   readonly shopId: Prisma.FieldRef<"RentPayment", 'String'>
   readonly contractId: Prisma.FieldRef<"RentPayment", 'String'>
-  readonly amount: Prisma.FieldRef<"RentPayment", 'Decimal'>
+  readonly accountId: Prisma.FieldRef<"RentPayment", 'String'>
+  readonly amountDue: Prisma.FieldRef<"RentPayment", 'Decimal'>
+  readonly amountPaid: Prisma.FieldRef<"RentPayment", 'Decimal'>
+  readonly remainingAmount: Prisma.FieldRef<"RentPayment", 'Decimal'>
   readonly paymentDate: Prisma.FieldRef<"RentPayment", 'DateTime'>
-  readonly paymentMethod: Prisma.FieldRef<"RentPayment", 'String'>
-  readonly status: Prisma.FieldRef<"RentPayment", 'String'>
+  readonly paymentMethod: Prisma.FieldRef<"RentPayment", 'PaymentMethod'>
+  readonly status: Prisma.FieldRef<"RentPayment", 'PaymentStatus'>
   readonly year: Prisma.FieldRef<"RentPayment", 'Int'>
+  readonly month: Prisma.FieldRef<"RentPayment", 'Int'>
   readonly lateFee: Prisma.FieldRef<"RentPayment", 'Decimal'>
   readonly discount: Prisma.FieldRef<"RentPayment", 'Decimal'>
-  readonly netAmount: Prisma.FieldRef<"RentPayment", 'Decimal'>
-  readonly accountId: Prisma.FieldRef<"RentPayment", 'String'>
-  readonly receivedBy: Prisma.FieldRef<"RentPayment", 'String'>
+  readonly receivedById: Prisma.FieldRef<"RentPayment", 'String'>
   readonly description: Prisma.FieldRef<"RentPayment", 'String'>
+  readonly createdById: Prisma.FieldRef<"RentPayment", 'String'>
+  readonly updatedById: Prisma.FieldRef<"RentPayment", 'String'>
   readonly createdAt: Prisma.FieldRef<"RentPayment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"RentPayment", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"RentPayment", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"RentPayment", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"RentPayment", 'String'>
-  readonly deletedAt: Prisma.FieldRef<"RentPayment", 'DateTime'>
 }
     
 

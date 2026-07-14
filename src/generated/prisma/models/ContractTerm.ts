@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model ContractTerm
- * 
+ * Detailed terms attached to a contract.
  */
 export type ContractTermModel = runtime.Types.Result.DefaultSelection<Prisma.$ContractTermPayload>
 
@@ -27,11 +27,11 @@ export type AggregateContractTerm = {
 }
 
 export type ContractTermAvgAggregateOutputType = {
-  monthlyOffDays: number | null
+  monthlyHoliday: number | null
 }
 
 export type ContractTermSumAggregateOutputType = {
-  monthlyOffDays: number | null
+  monthlyHoliday: number | null
 }
 
 export type ContractTermMinAggregateOutputType = {
@@ -39,9 +39,10 @@ export type ContractTermMinAggregateOutputType = {
   marketId: string | null
   contractId: string | null
   workingHours: string | null
-  monthlyOffDays: number | null
-  terminationConditions: string | null
+  monthlyHoliday: number | null
+  terminationCondition: string | null
   specialConditions: string | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
@@ -50,9 +51,10 @@ export type ContractTermMaxAggregateOutputType = {
   marketId: string | null
   contractId: string | null
   workingHours: string | null
-  monthlyOffDays: number | null
-  terminationConditions: string | null
+  monthlyHoliday: number | null
+  terminationCondition: string | null
   specialConditions: string | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
@@ -61,20 +63,21 @@ export type ContractTermCountAggregateOutputType = {
   marketId: number
   contractId: number
   workingHours: number
-  monthlyOffDays: number
-  terminationConditions: number
+  monthlyHoliday: number
+  terminationCondition: number
   specialConditions: number
+  createdAt: number
   updatedAt: number
   _all: number
 }
 
 
 export type ContractTermAvgAggregateInputType = {
-  monthlyOffDays?: true
+  monthlyHoliday?: true
 }
 
 export type ContractTermSumAggregateInputType = {
-  monthlyOffDays?: true
+  monthlyHoliday?: true
 }
 
 export type ContractTermMinAggregateInputType = {
@@ -82,9 +85,10 @@ export type ContractTermMinAggregateInputType = {
   marketId?: true
   contractId?: true
   workingHours?: true
-  monthlyOffDays?: true
-  terminationConditions?: true
+  monthlyHoliday?: true
+  terminationCondition?: true
   specialConditions?: true
+  createdAt?: true
   updatedAt?: true
 }
 
@@ -93,9 +97,10 @@ export type ContractTermMaxAggregateInputType = {
   marketId?: true
   contractId?: true
   workingHours?: true
-  monthlyOffDays?: true
-  terminationConditions?: true
+  monthlyHoliday?: true
+  terminationCondition?: true
   specialConditions?: true
+  createdAt?: true
   updatedAt?: true
 }
 
@@ -104,9 +109,10 @@ export type ContractTermCountAggregateInputType = {
   marketId?: true
   contractId?: true
   workingHours?: true
-  monthlyOffDays?: true
-  terminationConditions?: true
+  monthlyHoliday?: true
+  terminationCondition?: true
   specialConditions?: true
+  createdAt?: true
   updatedAt?: true
   _all?: true
 }
@@ -202,10 +208,11 @@ export type ContractTermGroupByOutputType = {
   marketId: string
   contractId: string
   workingHours: string | null
-  monthlyOffDays: number | null
-  terminationConditions: string | null
+  monthlyHoliday: number | null
+  terminationCondition: string | null
   specialConditions: string | null
-  updatedAt: Date | null
+  createdAt: Date
+  updatedAt: Date
   _count: ContractTermCountAggregateOutputType | null
   _avg: ContractTermAvgAggregateOutputType | null
   _sum: ContractTermSumAggregateOutputType | null
@@ -236,10 +243,11 @@ export type ContractTermWhereInput = {
   marketId?: Prisma.UuidFilter<"ContractTerm"> | string
   contractId?: Prisma.UuidFilter<"ContractTerm"> | string
   workingHours?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
-  monthlyOffDays?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
-  terminationConditions?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
+  monthlyHoliday?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
+  terminationCondition?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
   specialConditions?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ContractTerm"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
 }
@@ -249,10 +257,11 @@ export type ContractTermOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
   workingHours?: Prisma.SortOrderInput | Prisma.SortOrder
-  monthlyOffDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  terminationConditions?: Prisma.SortOrderInput | Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrderInput | Prisma.SortOrder
+  terminationCondition?: Prisma.SortOrderInput | Prisma.SortOrder
   specialConditions?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   contract?: Prisma.ContractOrderByWithRelationInput
 }
@@ -265,10 +274,11 @@ export type ContractTermWhereUniqueInput = Prisma.AtLeast<{
   marketId?: Prisma.UuidFilter<"ContractTerm"> | string
   contractId?: Prisma.UuidFilter<"ContractTerm"> | string
   workingHours?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
-  monthlyOffDays?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
-  terminationConditions?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
+  monthlyHoliday?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
+  terminationCondition?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
   specialConditions?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ContractTerm"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
 }, "id">
@@ -278,10 +288,11 @@ export type ContractTermOrderByWithAggregationInput = {
   marketId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
   workingHours?: Prisma.SortOrderInput | Prisma.SortOrder
-  monthlyOffDays?: Prisma.SortOrderInput | Prisma.SortOrder
-  terminationConditions?: Prisma.SortOrderInput | Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrderInput | Prisma.SortOrder
+  terminationCondition?: Prisma.SortOrderInput | Prisma.SortOrder
   specialConditions?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ContractTermCountOrderByAggregateInput
   _avg?: Prisma.ContractTermAvgOrderByAggregateInput
   _max?: Prisma.ContractTermMaxOrderByAggregateInput
@@ -297,21 +308,23 @@ export type ContractTermScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"ContractTerm"> | string
   contractId?: Prisma.UuidWithAggregatesFilter<"ContractTerm"> | string
   workingHours?: Prisma.StringNullableWithAggregatesFilter<"ContractTerm"> | string | null
-  monthlyOffDays?: Prisma.IntNullableWithAggregatesFilter<"ContractTerm"> | number | null
-  terminationConditions?: Prisma.StringNullableWithAggregatesFilter<"ContractTerm"> | string | null
+  monthlyHoliday?: Prisma.IntNullableWithAggregatesFilter<"ContractTerm"> | number | null
+  terminationCondition?: Prisma.StringNullableWithAggregatesFilter<"ContractTerm"> | string | null
   specialConditions?: Prisma.StringNullableWithAggregatesFilter<"ContractTerm"> | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ContractTerm"> | Date | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"ContractTerm"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ContractTerm"> | Date | string
 }
 
 export type ContractTermCreateInput = {
   id?: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutContractTermsInput
-  contract: Prisma.ContractCreateNestedOneWithoutContractTermsInput
+  contract: Prisma.ContractCreateNestedOneWithoutTermsInput
 }
 
 export type ContractTermUncheckedCreateInput = {
@@ -319,21 +332,23 @@ export type ContractTermUncheckedCreateInput = {
   marketId: string
   contractId: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContractTermUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutContractTermsNestedInput
-  contract?: Prisma.ContractUpdateOneRequiredWithoutContractTermsNestedInput
+  contract?: Prisma.ContractUpdateOneRequiredWithoutTermsNestedInput
 }
 
 export type ContractTermUncheckedUpdateInput = {
@@ -341,10 +356,11 @@ export type ContractTermUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermCreateManyInput = {
@@ -352,19 +368,21 @@ export type ContractTermCreateManyInput = {
   marketId: string
   contractId: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContractTermUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermUncheckedUpdateManyInput = {
@@ -372,10 +390,11 @@ export type ContractTermUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermListRelationFilter = {
@@ -393,14 +412,15 @@ export type ContractTermCountOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
   workingHours?: Prisma.SortOrder
-  monthlyOffDays?: Prisma.SortOrder
-  terminationConditions?: Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrder
+  terminationCondition?: Prisma.SortOrder
   specialConditions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type ContractTermAvgOrderByAggregateInput = {
-  monthlyOffDays?: Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrder
 }
 
 export type ContractTermMaxOrderByAggregateInput = {
@@ -408,9 +428,10 @@ export type ContractTermMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
   workingHours?: Prisma.SortOrder
-  monthlyOffDays?: Prisma.SortOrder
-  terminationConditions?: Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrder
+  terminationCondition?: Prisma.SortOrder
   specialConditions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -419,14 +440,15 @@ export type ContractTermMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
   workingHours?: Prisma.SortOrder
-  monthlyOffDays?: Prisma.SortOrder
-  terminationConditions?: Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrder
+  terminationCondition?: Prisma.SortOrder
   specialConditions?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type ContractTermSumOrderByAggregateInput = {
-  monthlyOffDays?: Prisma.SortOrder
+  monthlyHoliday?: Prisma.SortOrder
 }
 
 export type ContractTermCreateNestedManyWithoutMarketInput = {
@@ -513,24 +535,34 @@ export type ContractTermUncheckedUpdateManyWithoutContractNestedInput = {
   deleteMany?: Prisma.ContractTermScalarWhereInput | Prisma.ContractTermScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type ContractTermCreateWithoutMarketInput = {
   id?: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
-  contract: Prisma.ContractCreateNestedOneWithoutContractTermsInput
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  contract: Prisma.ContractCreateNestedOneWithoutTermsInput
 }
 
 export type ContractTermUncheckedCreateWithoutMarketInput = {
   id?: string
   contractId: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContractTermCreateOrConnectWithoutMarketInput = {
@@ -567,29 +599,33 @@ export type ContractTermScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"ContractTerm"> | string
   contractId?: Prisma.UuidFilter<"ContractTerm"> | string
   workingHours?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
-  monthlyOffDays?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
-  terminationConditions?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
+  monthlyHoliday?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
+  terminationCondition?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
   specialConditions?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ContractTerm"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
 }
 
 export type ContractTermCreateWithoutContractInput = {
   id?: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutContractTermsInput
 }
 
 export type ContractTermUncheckedCreateWithoutContractInput = {
   id?: string
+  marketId: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContractTermCreateOrConnectWithoutContractInput = {
@@ -622,77 +658,88 @@ export type ContractTermCreateManyMarketInput = {
   id?: string
   contractId: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContractTermUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  contract?: Prisma.ContractUpdateOneRequiredWithoutContractTermsNestedInput
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contract?: Prisma.ContractUpdateOneRequiredWithoutTermsNestedInput
 }
 
 export type ContractTermUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermCreateManyContractInput = {
   id?: string
+  marketId: string
   workingHours?: string | null
-  monthlyOffDays?: number | null
-  terminationConditions?: string | null
+  monthlyHoliday?: number | null
+  terminationCondition?: string | null
   specialConditions?: string | null
-  updatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ContractTermUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutContractTermsNestedInput
 }
 
 export type ContractTermUncheckedUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermUncheckedUpdateManyWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyOffDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -702,9 +749,10 @@ export type ContractTermSelect<ExtArgs extends runtime.Types.Extensions.Internal
   marketId?: boolean
   contractId?: boolean
   workingHours?: boolean
-  monthlyOffDays?: boolean
-  terminationConditions?: boolean
+  monthlyHoliday?: boolean
+  terminationCondition?: boolean
   specialConditions?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -715,9 +763,10 @@ export type ContractTermSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   marketId?: boolean
   contractId?: boolean
   workingHours?: boolean
-  monthlyOffDays?: boolean
-  terminationConditions?: boolean
+  monthlyHoliday?: boolean
+  terminationCondition?: boolean
   specialConditions?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -728,9 +777,10 @@ export type ContractTermSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   marketId?: boolean
   contractId?: boolean
   workingHours?: boolean
-  monthlyOffDays?: boolean
-  terminationConditions?: boolean
+  monthlyHoliday?: boolean
+  terminationCondition?: boolean
   specialConditions?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -741,13 +791,14 @@ export type ContractTermSelectScalar = {
   marketId?: boolean
   contractId?: boolean
   workingHours?: boolean
-  monthlyOffDays?: boolean
-  terminationConditions?: boolean
+  monthlyHoliday?: boolean
+  terminationCondition?: boolean
   specialConditions?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ContractTermOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "contractId" | "workingHours" | "monthlyOffDays" | "terminationConditions" | "specialConditions" | "updatedAt", ExtArgs["result"]["contractTerm"]>
+export type ContractTermOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "contractId" | "workingHours" | "monthlyHoliday" | "terminationCondition" | "specialConditions" | "createdAt" | "updatedAt", ExtArgs["result"]["contractTerm"]>
 export type ContractTermInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -772,10 +823,11 @@ export type $ContractTermPayload<ExtArgs extends runtime.Types.Extensions.Intern
     marketId: string
     contractId: string
     workingHours: string | null
-    monthlyOffDays: number | null
-    terminationConditions: string | null
+    monthlyHoliday: number | null
+    terminationCondition: string | null
     specialConditions: string | null
-    updatedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["contractTerm"]>
   composites: {}
 }
@@ -1205,9 +1257,10 @@ export interface ContractTermFieldRefs {
   readonly marketId: Prisma.FieldRef<"ContractTerm", 'String'>
   readonly contractId: Prisma.FieldRef<"ContractTerm", 'String'>
   readonly workingHours: Prisma.FieldRef<"ContractTerm", 'String'>
-  readonly monthlyOffDays: Prisma.FieldRef<"ContractTerm", 'Int'>
-  readonly terminationConditions: Prisma.FieldRef<"ContractTerm", 'String'>
+  readonly monthlyHoliday: Prisma.FieldRef<"ContractTerm", 'Int'>
+  readonly terminationCondition: Prisma.FieldRef<"ContractTerm", 'String'>
   readonly specialConditions: Prisma.FieldRef<"ContractTerm", 'String'>
+  readonly createdAt: Prisma.FieldRef<"ContractTerm", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ContractTerm", 'DateTime'>
 }
     

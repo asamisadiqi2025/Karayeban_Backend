@@ -14,7 +14,10 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model OwnershipHistory
- * 
+ * A shareholder's ownership percentage over a period.
+ * NOTE: non-overlapping periods cannot be expressed in Prisma;
+ * enforce with a Postgres EXCLUDE (GiST) constraint in a raw
+ * migration, or validate at the application layer.
  */
 export type OwnershipHistoryModel = runtime.Types.Result.DefaultSelection<Prisma.$OwnershipHistoryPayload>
 
@@ -41,8 +44,9 @@ export type OwnershipHistoryMinAggregateOutputType = {
   percentage: runtime.Decimal | null
   startDate: Date | null
   endDate: Date | null
+  approvedById: string | null
   createdAt: Date | null
-  createdBy: string | null
+  updatedAt: Date | null
 }
 
 export type OwnershipHistoryMaxAggregateOutputType = {
@@ -52,8 +56,9 @@ export type OwnershipHistoryMaxAggregateOutputType = {
   percentage: runtime.Decimal | null
   startDate: Date | null
   endDate: Date | null
+  approvedById: string | null
   createdAt: Date | null
-  createdBy: string | null
+  updatedAt: Date | null
 }
 
 export type OwnershipHistoryCountAggregateOutputType = {
@@ -63,8 +68,9 @@ export type OwnershipHistoryCountAggregateOutputType = {
   percentage: number
   startDate: number
   endDate: number
+  approvedById: number
   createdAt: number
-  createdBy: number
+  updatedAt: number
   _all: number
 }
 
@@ -84,8 +90,9 @@ export type OwnershipHistoryMinAggregateInputType = {
   percentage?: true
   startDate?: true
   endDate?: true
+  approvedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
 }
 
 export type OwnershipHistoryMaxAggregateInputType = {
@@ -95,8 +102,9 @@ export type OwnershipHistoryMaxAggregateInputType = {
   percentage?: true
   startDate?: true
   endDate?: true
+  approvedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
 }
 
 export type OwnershipHistoryCountAggregateInputType = {
@@ -106,8 +114,9 @@ export type OwnershipHistoryCountAggregateInputType = {
   percentage?: true
   startDate?: true
   endDate?: true
+  approvedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -204,8 +213,9 @@ export type OwnershipHistoryGroupByOutputType = {
   percentage: runtime.Decimal
   startDate: Date
   endDate: Date | null
-  createdAt: Date | null
-  createdBy: string | null
+  approvedById: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: OwnershipHistoryCountAggregateOutputType | null
   _avg: OwnershipHistoryAvgAggregateOutputType | null
   _sum: OwnershipHistorySumAggregateOutputType | null
@@ -238,8 +248,9 @@ export type OwnershipHistoryWhereInput = {
   percentage?: Prisma.DecimalFilter<"OwnershipHistory"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"OwnershipHistory"> | Date | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"OwnershipHistory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"OwnershipHistory"> | string | null
+  approvedById?: Prisma.UuidNullableFilter<"OwnershipHistory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
 }
@@ -251,8 +262,9 @@ export type OwnershipHistoryOrderByWithRelationInput = {
   percentage?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shareholder?: Prisma.ShareholderOrderByWithRelationInput
 }
@@ -267,8 +279,9 @@ export type OwnershipHistoryWhereUniqueInput = Prisma.AtLeast<{
   percentage?: Prisma.DecimalFilter<"OwnershipHistory"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"OwnershipHistory"> | Date | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"OwnershipHistory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"OwnershipHistory"> | string | null
+  approvedById?: Prisma.UuidNullableFilter<"OwnershipHistory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
 }, "id">
@@ -280,8 +293,9 @@ export type OwnershipHistoryOrderByWithAggregationInput = {
   percentage?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.OwnershipHistoryCountOrderByAggregateInput
   _avg?: Prisma.OwnershipHistoryAvgOrderByAggregateInput
   _max?: Prisma.OwnershipHistoryMaxOrderByAggregateInput
@@ -299,8 +313,9 @@ export type OwnershipHistoryScalarWhereWithAggregatesInput = {
   percentage?: Prisma.DecimalWithAggregatesFilter<"OwnershipHistory"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"OwnershipHistory"> | Date | string
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"OwnershipHistory"> | Date | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OwnershipHistory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"OwnershipHistory"> | string | null
+  approvedById?: Prisma.UuidNullableWithAggregatesFilter<"OwnershipHistory"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"OwnershipHistory"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"OwnershipHistory"> | Date | string
 }
 
 export type OwnershipHistoryCreateInput = {
@@ -308,8 +323,9 @@ export type OwnershipHistoryCreateInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutOwnershipHistoriesInput
   shareholder: Prisma.ShareholderCreateNestedOneWithoutOwnershipHistoriesInput
 }
@@ -321,8 +337,9 @@ export type OwnershipHistoryUncheckedCreateInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OwnershipHistoryUpdateInput = {
@@ -330,8 +347,9 @@ export type OwnershipHistoryUpdateInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
 }
@@ -343,8 +361,9 @@ export type OwnershipHistoryUncheckedUpdateInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OwnershipHistoryCreateManyInput = {
@@ -354,8 +373,9 @@ export type OwnershipHistoryCreateManyInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OwnershipHistoryUpdateManyMutationInput = {
@@ -363,8 +383,9 @@ export type OwnershipHistoryUpdateManyMutationInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OwnershipHistoryUncheckedUpdateManyInput = {
@@ -374,8 +395,9 @@ export type OwnershipHistoryUncheckedUpdateManyInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OwnershipHistoryListRelationFilter = {
@@ -395,8 +417,9 @@ export type OwnershipHistoryCountOrderByAggregateInput = {
   percentage?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type OwnershipHistoryAvgOrderByAggregateInput = {
@@ -410,8 +433,9 @@ export type OwnershipHistoryMaxOrderByAggregateInput = {
   percentage?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type OwnershipHistoryMinOrderByAggregateInput = {
@@ -421,8 +445,9 @@ export type OwnershipHistoryMinOrderByAggregateInput = {
   percentage?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  approvedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type OwnershipHistorySumOrderByAggregateInput = {
@@ -518,8 +543,9 @@ export type OwnershipHistoryCreateWithoutMarketInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   shareholder: Prisma.ShareholderCreateNestedOneWithoutOwnershipHistoriesInput
 }
 
@@ -529,8 +555,9 @@ export type OwnershipHistoryUncheckedCreateWithoutMarketInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OwnershipHistoryCreateOrConnectWithoutMarketInput = {
@@ -569,8 +596,9 @@ export type OwnershipHistoryScalarWhereInput = {
   percentage?: Prisma.DecimalFilter<"OwnershipHistory"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"OwnershipHistory"> | Date | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"OwnershipHistory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"OwnershipHistory"> | string | null
+  approvedById?: Prisma.UuidNullableFilter<"OwnershipHistory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"OwnershipHistory"> | Date | string
 }
 
 export type OwnershipHistoryCreateWithoutShareholderInput = {
@@ -578,18 +606,21 @@ export type OwnershipHistoryCreateWithoutShareholderInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutOwnershipHistoriesInput
 }
 
 export type OwnershipHistoryUncheckedCreateWithoutShareholderInput = {
   id?: string
+  marketId: string
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OwnershipHistoryCreateOrConnectWithoutShareholderInput = {
@@ -624,8 +655,9 @@ export type OwnershipHistoryCreateManyMarketInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OwnershipHistoryUpdateWithoutMarketInput = {
@@ -633,8 +665,9 @@ export type OwnershipHistoryUpdateWithoutMarketInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
 }
 
@@ -644,8 +677,9 @@ export type OwnershipHistoryUncheckedUpdateWithoutMarketInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OwnershipHistoryUncheckedUpdateManyWithoutMarketInput = {
@@ -654,17 +688,20 @@ export type OwnershipHistoryUncheckedUpdateManyWithoutMarketInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OwnershipHistoryCreateManyShareholderInput = {
   id?: string
+  marketId: string
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  approvedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type OwnershipHistoryUpdateWithoutShareholderInput = {
@@ -672,27 +709,32 @@ export type OwnershipHistoryUpdateWithoutShareholderInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
 }
 
 export type OwnershipHistoryUncheckedUpdateWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OwnershipHistoryUncheckedUpdateManyWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -704,8 +746,9 @@ export type OwnershipHistorySelect<ExtArgs extends runtime.Types.Extensions.Inte
   percentage?: boolean
   startDate?: boolean
   endDate?: boolean
+  approvedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ownershipHistory"]>
@@ -717,8 +760,9 @@ export type OwnershipHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   percentage?: boolean
   startDate?: boolean
   endDate?: boolean
+  approvedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ownershipHistory"]>
@@ -730,8 +774,9 @@ export type OwnershipHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   percentage?: boolean
   startDate?: boolean
   endDate?: boolean
+  approvedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ownershipHistory"]>
@@ -743,11 +788,12 @@ export type OwnershipHistorySelectScalar = {
   percentage?: boolean
   startDate?: boolean
   endDate?: boolean
+  approvedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
 }
 
-export type OwnershipHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "percentage" | "startDate" | "endDate" | "createdAt" | "createdBy", ExtArgs["result"]["ownershipHistory"]>
+export type OwnershipHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "percentage" | "startDate" | "endDate" | "approvedById" | "createdAt" | "updatedAt", ExtArgs["result"]["ownershipHistory"]>
 export type OwnershipHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
@@ -774,8 +820,9 @@ export type $OwnershipHistoryPayload<ExtArgs extends runtime.Types.Extensions.In
     percentage: runtime.Decimal
     startDate: Date
     endDate: Date | null
-    createdAt: Date | null
-    createdBy: string | null
+    approvedById: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["ownershipHistory"]>
   composites: {}
 }
@@ -1207,8 +1254,9 @@ export interface OwnershipHistoryFieldRefs {
   readonly percentage: Prisma.FieldRef<"OwnershipHistory", 'Decimal'>
   readonly startDate: Prisma.FieldRef<"OwnershipHistory", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"OwnershipHistory", 'DateTime'>
+  readonly approvedById: Prisma.FieldRef<"OwnershipHistory", 'String'>
   readonly createdAt: Prisma.FieldRef<"OwnershipHistory", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"OwnershipHistory", 'String'>
+  readonly updatedAt: Prisma.FieldRef<"OwnershipHistory", 'DateTime'>
 }
     
 

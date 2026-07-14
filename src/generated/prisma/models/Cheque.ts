@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Cheque
- * 
+ * A post-dated cheque received from a tenant.
  */
 export type ChequeModel = runtime.Types.Result.DefaultSelection<Prisma.$ChequePayload>
 
@@ -39,22 +39,23 @@ export type ChequeMinAggregateOutputType = {
   marketId: string | null
   tenantId: string | null
   contractId: string | null
+  accountId: string | null
   bankName: string | null
   chequeNumber: string | null
   amount: runtime.Decimal | null
   issueDate: Date | null
   dueDate: Date | null
-  status: string | null
-  image: string | null
-  accountId: string | null
-  bounceReason: string | null
+  receivedDate: Date | null
+  returnedDate: Date | null
+  clearedDate: Date | null
+  status: $Enums.ChequeStatus | null
+  returnReason: string | null
+  imageUrl: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
 }
 
 export type ChequeMaxAggregateOutputType = {
@@ -62,22 +63,23 @@ export type ChequeMaxAggregateOutputType = {
   marketId: string | null
   tenantId: string | null
   contractId: string | null
+  accountId: string | null
   bankName: string | null
   chequeNumber: string | null
   amount: runtime.Decimal | null
   issueDate: Date | null
   dueDate: Date | null
-  status: string | null
-  image: string | null
-  accountId: string | null
-  bounceReason: string | null
+  receivedDate: Date | null
+  returnedDate: Date | null
+  clearedDate: Date | null
+  status: $Enums.ChequeStatus | null
+  returnReason: string | null
+  imageUrl: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
 }
 
 export type ChequeCountAggregateOutputType = {
@@ -85,22 +87,23 @@ export type ChequeCountAggregateOutputType = {
   marketId: number
   tenantId: number
   contractId: number
+  accountId: number
   bankName: number
   chequeNumber: number
   amount: number
   issueDate: number
   dueDate: number
+  receivedDate: number
+  returnedDate: number
+  clearedDate: number
   status: number
-  image: number
-  accountId: number
-  bounceReason: number
+  returnReason: number
+  imageUrl: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
-  deletedAt: number
   _all: number
 }
 
@@ -118,22 +121,23 @@ export type ChequeMinAggregateInputType = {
   marketId?: true
   tenantId?: true
   contractId?: true
+  accountId?: true
   bankName?: true
   chequeNumber?: true
   amount?: true
   issueDate?: true
   dueDate?: true
+  receivedDate?: true
+  returnedDate?: true
+  clearedDate?: true
   status?: true
-  image?: true
-  accountId?: true
-  bounceReason?: true
+  returnReason?: true
+  imageUrl?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
 }
 
 export type ChequeMaxAggregateInputType = {
@@ -141,22 +145,23 @@ export type ChequeMaxAggregateInputType = {
   marketId?: true
   tenantId?: true
   contractId?: true
+  accountId?: true
   bankName?: true
   chequeNumber?: true
   amount?: true
   issueDate?: true
   dueDate?: true
+  receivedDate?: true
+  returnedDate?: true
+  clearedDate?: true
   status?: true
-  image?: true
-  accountId?: true
-  bounceReason?: true
+  returnReason?: true
+  imageUrl?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
 }
 
 export type ChequeCountAggregateInputType = {
@@ -164,22 +169,23 @@ export type ChequeCountAggregateInputType = {
   marketId?: true
   tenantId?: true
   contractId?: true
+  accountId?: true
   bankName?: true
   chequeNumber?: true
   amount?: true
   issueDate?: true
   dueDate?: true
+  receivedDate?: true
+  returnedDate?: true
+  clearedDate?: true
   status?: true
-  image?: true
-  accountId?: true
-  bounceReason?: true
+  returnReason?: true
+  imageUrl?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
-  deletedAt?: true
   _all?: true
 }
 
@@ -272,24 +278,25 @@ export type ChequeGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type ChequeGroupByOutputType = {
   id: string
   marketId: string
-  tenantId: string | null
+  tenantId: string
   contractId: string | null
-  bankName: string | null
-  chequeNumber: string | null
-  amount: runtime.Decimal
-  issueDate: Date | null
-  dueDate: Date | null
-  status: string | null
-  image: string | null
   accountId: string | null
-  bounceReason: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal
+  issueDate: Date
+  dueDate: Date
+  receivedDate: Date | null
+  returnedDate: Date | null
+  clearedDate: Date | null
+  status: $Enums.ChequeStatus
+  returnReason: string | null
+  imageUrl: string | null
   description: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
-  deletedAt: Date | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: ChequeCountAggregateOutputType | null
   _avg: ChequeAvgAggregateOutputType | null
   _sum: ChequeSumAggregateOutputType | null
@@ -318,26 +325,27 @@ export type ChequeWhereInput = {
   NOT?: Prisma.ChequeWhereInput | Prisma.ChequeWhereInput[]
   id?: Prisma.UuidFilter<"Cheque"> | string
   marketId?: Prisma.UuidFilter<"Cheque"> | string
-  tenantId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  tenantId?: Prisma.UuidFilter<"Cheque"> | string
   contractId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  bankName?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  chequeNumber?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  amount?: Prisma.DecimalFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  dueDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  status?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  image?: Prisma.StringNullableFilter<"Cheque"> | string | null
   accountId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  bounceReason?: Prisma.StringNullableFilter<"Cheque"> | string | null
+  bankName?: Prisma.StringFilter<"Cheque"> | string
+  chequeNumber?: Prisma.StringFilter<"Cheque"> | string
+  amount?: Prisma.DecimalFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  dueDate?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  receivedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  returnedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  clearedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  status?: Prisma.EnumChequeStatusFilter<"Cheque"> | $Enums.ChequeStatus
+  returnReason?: Prisma.StringNullableFilter<"Cheque"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Cheque"> | string | null
   description?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  tenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
 }
@@ -345,24 +353,25 @@ export type ChequeWhereInput = {
 export type ChequeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   contractId?: Prisma.SortOrderInput | Prisma.SortOrder
-  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
-  chequeNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  issueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  image?: Prisma.SortOrderInput | Prisma.SortOrder
   accountId?: Prisma.SortOrderInput | Prisma.SortOrder
-  bounceReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  chequeNumber?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
+  issueDate?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrder
+  receivedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  returnedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  clearedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  returnReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   contract?: Prisma.ContractOrderByWithRelationInput
@@ -371,55 +380,58 @@ export type ChequeOrderByWithRelationInput = {
 
 export type ChequeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  marketId_bankName_chequeNumber?: Prisma.ChequeMarketIdBankNameChequeNumberCompoundUniqueInput
   AND?: Prisma.ChequeWhereInput | Prisma.ChequeWhereInput[]
   OR?: Prisma.ChequeWhereInput[]
   NOT?: Prisma.ChequeWhereInput | Prisma.ChequeWhereInput[]
   marketId?: Prisma.UuidFilter<"Cheque"> | string
-  tenantId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  tenantId?: Prisma.UuidFilter<"Cheque"> | string
   contractId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  bankName?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  chequeNumber?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  amount?: Prisma.DecimalFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  dueDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  status?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  image?: Prisma.StringNullableFilter<"Cheque"> | string | null
   accountId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  bounceReason?: Prisma.StringNullableFilter<"Cheque"> | string | null
+  bankName?: Prisma.StringFilter<"Cheque"> | string
+  chequeNumber?: Prisma.StringFilter<"Cheque"> | string
+  amount?: Prisma.DecimalFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  dueDate?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  receivedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  returnedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  clearedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  status?: Prisma.EnumChequeStatusFilter<"Cheque"> | $Enums.ChequeStatus
+  returnReason?: Prisma.StringNullableFilter<"Cheque"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Cheque"> | string | null
   description?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  tenant?: Prisma.XOR<Prisma.TenantNullableScalarRelationFilter, Prisma.TenantWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
-}, "id">
+}, "id" | "marketId_bankName_chequeNumber">
 
 export type ChequeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrderInput | Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
   contractId?: Prisma.SortOrderInput | Prisma.SortOrder
-  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
-  chequeNumber?: Prisma.SortOrderInput | Prisma.SortOrder
-  amount?: Prisma.SortOrder
-  issueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  image?: Prisma.SortOrderInput | Prisma.SortOrder
   accountId?: Prisma.SortOrderInput | Prisma.SortOrder
-  bounceReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  chequeNumber?: Prisma.SortOrder
+  amount?: Prisma.SortOrder
+  issueDate?: Prisma.SortOrder
+  dueDate?: Prisma.SortOrder
+  receivedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  returnedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  clearedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  returnReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ChequeCountOrderByAggregateInput
   _avg?: Prisma.ChequeAvgOrderByAggregateInput
   _max?: Prisma.ChequeMaxOrderByAggregateInput
@@ -433,45 +445,47 @@ export type ChequeScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ChequeScalarWhereWithAggregatesInput | Prisma.ChequeScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Cheque"> | string
   marketId?: Prisma.UuidWithAggregatesFilter<"Cheque"> | string
-  tenantId?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
+  tenantId?: Prisma.UuidWithAggregatesFilter<"Cheque"> | string
   contractId?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
-  bankName?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
-  chequeNumber?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
-  amount?: Prisma.DecimalWithAggregatesFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
-  dueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
-  image?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
   accountId?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
-  bounceReason?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
+  bankName?: Prisma.StringWithAggregatesFilter<"Cheque"> | string
+  chequeNumber?: Prisma.StringWithAggregatesFilter<"Cheque"> | string
+  amount?: Prisma.DecimalWithAggregatesFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeWithAggregatesFilter<"Cheque"> | Date | string
+  dueDate?: Prisma.DateTimeWithAggregatesFilter<"Cheque"> | Date | string
+  receivedDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
+  returnedDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
+  clearedDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
+  status?: Prisma.EnumChequeStatusWithAggregatesFilter<"Cheque"> | $Enums.ChequeStatus
+  returnReason?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Cheque"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
-  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Cheque"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Cheque"> | Date | string
 }
 
 export type ChequeCreateInput = {
   id?: string
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
-  tenant?: Prisma.TenantCreateNestedOneWithoutChequesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
 }
@@ -479,45 +493,47 @@ export type ChequeCreateInput = {
 export type ChequeUncheckedCreateInput = {
   id?: string
   marketId: string
-  tenantId?: string | null
+  tenantId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
-  tenant?: Prisma.TenantUpdateOneWithoutChequesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
 }
@@ -525,89 +541,93 @@ export type ChequeUpdateInput = {
 export type ChequeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeCreateManyInput = {
   id?: string
   marketId: string
-  tenantId?: string | null
+  tenantId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeListRelationFilter = {
@@ -620,27 +640,34 @@ export type ChequeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ChequeMarketIdBankNameChequeNumberCompoundUniqueInput = {
+  marketId: string
+  bankName: string
+  chequeNumber: string
+}
+
 export type ChequeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
   bankName?: Prisma.SortOrder
   chequeNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
+  receivedDate?: Prisma.SortOrder
+  returnedDate?: Prisma.SortOrder
+  clearedDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  image?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  bounceReason?: Prisma.SortOrder
+  returnReason?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type ChequeAvgOrderByAggregateInput = {
@@ -652,22 +679,23 @@ export type ChequeMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
   bankName?: Prisma.SortOrder
   chequeNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
+  receivedDate?: Prisma.SortOrder
+  returnedDate?: Prisma.SortOrder
+  clearedDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  image?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  bounceReason?: Prisma.SortOrder
+  returnReason?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type ChequeMinOrderByAggregateInput = {
@@ -675,22 +703,23 @@ export type ChequeMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   contractId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
   bankName?: Prisma.SortOrder
   chequeNumber?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
+  receivedDate?: Prisma.SortOrder
+  returnedDate?: Prisma.SortOrder
+  clearedDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  image?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  bounceReason?: Prisma.SortOrder
+  returnReason?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
-  deletedAt?: Prisma.SortOrder
 }
 
 export type ChequeSumOrderByAggregateInput = {
@@ -865,48 +894,54 @@ export type ChequeUncheckedUpdateManyWithoutAccountNestedInput = {
   deleteMany?: Prisma.ChequeScalarWhereInput | Prisma.ChequeScalarWhereInput[]
 }
 
+export type EnumChequeStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ChequeStatus
+}
+
 export type ChequeCreateWithoutMarketInput = {
   id?: string
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  tenant?: Prisma.TenantCreateNestedOneWithoutChequesInput
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutMarketInput = {
   id?: string
-  tenantId?: string | null
+  tenantId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeCreateOrConnectWithoutMarketInput = {
@@ -941,43 +976,45 @@ export type ChequeScalarWhereInput = {
   NOT?: Prisma.ChequeScalarWhereInput | Prisma.ChequeScalarWhereInput[]
   id?: Prisma.UuidFilter<"Cheque"> | string
   marketId?: Prisma.UuidFilter<"Cheque"> | string
-  tenantId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  tenantId?: Prisma.UuidFilter<"Cheque"> | string
   contractId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  bankName?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  chequeNumber?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  amount?: Prisma.DecimalFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  dueDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  status?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  image?: Prisma.StringNullableFilter<"Cheque"> | string | null
   accountId?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  bounceReason?: Prisma.StringNullableFilter<"Cheque"> | string | null
+  bankName?: Prisma.StringFilter<"Cheque"> | string
+  chequeNumber?: Prisma.StringFilter<"Cheque"> | string
+  amount?: Prisma.DecimalFilter<"Cheque"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  dueDate?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  receivedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  returnedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  clearedDate?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  status?: Prisma.EnumChequeStatusFilter<"Cheque"> | $Enums.ChequeStatus
+  returnReason?: Prisma.StringNullableFilter<"Cheque"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Cheque"> | string | null
   description?: Prisma.StringNullableFilter<"Cheque"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Cheque"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  createdById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
 }
 
 export type ChequeCreateWithoutTenantInput = {
   id?: string
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
@@ -985,23 +1022,25 @@ export type ChequeCreateWithoutTenantInput = {
 
 export type ChequeUncheckedCreateWithoutTenantInput = {
   id?: string
+  marketId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeCreateOrConnectWithoutTenantInput = {
@@ -1032,45 +1071,48 @@ export type ChequeUpdateManyWithWhereWithoutTenantInput = {
 
 export type ChequeCreateWithoutContractInput = {
   id?: string
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
-  tenant?: Prisma.TenantCreateNestedOneWithoutChequesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutContractInput = {
   id?: string
-  tenantId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
+  marketId: string
+  tenantId: string
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeCreateOrConnectWithoutContractInput = {
@@ -1101,45 +1143,48 @@ export type ChequeUpdateManyWithWhereWithoutContractInput = {
 
 export type ChequeCreateWithoutAccountInput = {
   id?: string
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
-  tenant?: Prisma.TenantCreateNestedOneWithoutChequesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutAccountInput = {
   id?: string
-  tenantId?: string | null
+  marketId: string
+  tenantId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeCreateOrConnectWithoutAccountInput = {
@@ -1170,130 +1215,137 @@ export type ChequeUpdateManyWithWhereWithoutAccountInput = {
 
 export type ChequeCreateManyMarketInput = {
   id?: string
-  tenantId?: string | null
+  tenantId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  tenant?: Prisma.TenantUpdateOneWithoutChequesNestedInput
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
 }
 
 export type ChequeUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeCreateManyTenantInput = {
   id?: string
+  marketId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
@@ -1301,214 +1353,232 @@ export type ChequeUpdateWithoutTenantInput = {
 
 export type ChequeUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeCreateManyContractInput = {
   id?: string
-  tenantId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
+  marketId: string
+  tenantId: string
   accountId?: string | null
-  bounceReason?: string | null
+  bankName: string
+  chequeNumber: string
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
-  tenant?: Prisma.TenantUpdateOneWithoutChequesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
 }
 
 export type ChequeUncheckedUpdateWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeUncheckedUpdateManyWithoutContractInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeCreateManyAccountInput = {
   id?: string
-  tenantId?: string | null
+  marketId: string
+  tenantId: string
   contractId?: string | null
-  bankName?: string | null
-  chequeNumber?: string | null
+  bankName: string
+  chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Date | string | null
-  dueDate?: Date | string | null
-  status?: string | null
-  image?: string | null
-  bounceReason?: string | null
+  issueDate: Date | string
+  dueDate: Date | string
+  receivedDate?: Date | string | null
+  returnedDate?: Date | string | null
+  clearedDate?: Date | string | null
+  status?: $Enums.ChequeStatus
+  returnReason?: string | null
+  imageUrl?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ChequeUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
-  tenant?: Prisma.TenantUpdateOneWithoutChequesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
 }
 
 export type ChequeUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ChequeUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  chequeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.StringFieldUpdateOperationsInput | string
+  chequeNumber?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  issueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bounceReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receivedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  returnedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clearedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumChequeStatusFieldUpdateOperationsInput | $Enums.ChequeStatus
+  returnReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1518,24 +1588,25 @@ export type ChequeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   marketId?: boolean
   tenantId?: boolean
   contractId?: boolean
+  accountId?: boolean
   bankName?: boolean
   chequeNumber?: boolean
   amount?: boolean
   issueDate?: boolean
   dueDate?: boolean
+  receivedDate?: boolean
+  returnedDate?: boolean
+  clearedDate?: boolean
   status?: boolean
-  image?: boolean
-  accountId?: boolean
-  bounceReason?: boolean
+  returnReason?: boolean
+  imageUrl?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.Cheque$tenantArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
   account?: boolean | Prisma.Cheque$accountArgs<ExtArgs>
 }, ExtArgs["result"]["cheque"]>
@@ -1545,24 +1616,25 @@ export type ChequeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   marketId?: boolean
   tenantId?: boolean
   contractId?: boolean
+  accountId?: boolean
   bankName?: boolean
   chequeNumber?: boolean
   amount?: boolean
   issueDate?: boolean
   dueDate?: boolean
+  receivedDate?: boolean
+  returnedDate?: boolean
+  clearedDate?: boolean
   status?: boolean
-  image?: boolean
-  accountId?: boolean
-  bounceReason?: boolean
+  returnReason?: boolean
+  imageUrl?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.Cheque$tenantArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
   account?: boolean | Prisma.Cheque$accountArgs<ExtArgs>
 }, ExtArgs["result"]["cheque"]>
@@ -1572,24 +1644,25 @@ export type ChequeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   marketId?: boolean
   tenantId?: boolean
   contractId?: boolean
+  accountId?: boolean
   bankName?: boolean
   chequeNumber?: boolean
   amount?: boolean
   issueDate?: boolean
   dueDate?: boolean
+  receivedDate?: boolean
+  returnedDate?: boolean
+  clearedDate?: boolean
   status?: boolean
-  image?: boolean
-  accountId?: boolean
-  bounceReason?: boolean
+  returnReason?: boolean
+  imageUrl?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.Cheque$tenantArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
   account?: boolean | Prisma.Cheque$accountArgs<ExtArgs>
 }, ExtArgs["result"]["cheque"]>
@@ -1599,40 +1672,41 @@ export type ChequeSelectScalar = {
   marketId?: boolean
   tenantId?: boolean
   contractId?: boolean
+  accountId?: boolean
   bankName?: boolean
   chequeNumber?: boolean
   amount?: boolean
   issueDate?: boolean
   dueDate?: boolean
+  receivedDate?: boolean
+  returnedDate?: boolean
+  clearedDate?: boolean
   status?: boolean
-  image?: boolean
-  accountId?: boolean
-  bounceReason?: boolean
+  returnReason?: boolean
+  imageUrl?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
-  deletedAt?: boolean
 }
 
-export type ChequeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "tenantId" | "contractId" | "bankName" | "chequeNumber" | "amount" | "issueDate" | "dueDate" | "status" | "image" | "accountId" | "bounceReason" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["cheque"]>
+export type ChequeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "tenantId" | "contractId" | "accountId" | "bankName" | "chequeNumber" | "amount" | "issueDate" | "dueDate" | "receivedDate" | "returnedDate" | "clearedDate" | "status" | "returnReason" | "imageUrl" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["cheque"]>
 export type ChequeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.Cheque$tenantArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
   account?: boolean | Prisma.Cheque$accountArgs<ExtArgs>
 }
 export type ChequeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.Cheque$tenantArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
   account?: boolean | Prisma.Cheque$accountArgs<ExtArgs>
 }
 export type ChequeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.Cheque$tenantArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
   account?: boolean | Prisma.Cheque$accountArgs<ExtArgs>
 }
@@ -1641,31 +1715,35 @@ export type $ChequePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Cheque"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    tenant: Prisma.$TenantPayload<ExtArgs> | null
+    tenant: Prisma.$TenantPayload<ExtArgs>
     contract: Prisma.$ContractPayload<ExtArgs> | null
     account: Prisma.$AccountPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
-    tenantId: string | null
+    tenantId: string
     contractId: string | null
-    bankName: string | null
-    chequeNumber: string | null
-    amount: runtime.Decimal
-    issueDate: Date | null
-    dueDate: Date | null
-    status: string | null
-    image: string | null
     accountId: string | null
-    bounceReason: string | null
+    bankName: string
+    chequeNumber: string
+    amount: runtime.Decimal
+    issueDate: Date
+    dueDate: Date
+    /**
+     * Lifecycle timestamps.
+     */
+    receivedDate: Date | null
+    returnedDate: Date | null
+    clearedDate: Date | null
+    status: $Enums.ChequeStatus
+    returnReason: string | null
+    imageUrl: string | null
     description: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
-    deletedAt: Date | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["cheque"]>
   composites: {}
 }
@@ -2061,7 +2139,7 @@ readonly fields: ChequeFieldRefs;
 export interface Prisma__ChequeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  tenant<T extends Prisma.Cheque$tenantArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cheque$tenantArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   contract<T extends Prisma.Cheque$contractArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cheque$contractArgs<ExtArgs>>): Prisma.Prisma__ContractClient<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.Cheque$accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Cheque$accountArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -2097,22 +2175,23 @@ export interface ChequeFieldRefs {
   readonly marketId: Prisma.FieldRef<"Cheque", 'String'>
   readonly tenantId: Prisma.FieldRef<"Cheque", 'String'>
   readonly contractId: Prisma.FieldRef<"Cheque", 'String'>
+  readonly accountId: Prisma.FieldRef<"Cheque", 'String'>
   readonly bankName: Prisma.FieldRef<"Cheque", 'String'>
   readonly chequeNumber: Prisma.FieldRef<"Cheque", 'String'>
   readonly amount: Prisma.FieldRef<"Cheque", 'Decimal'>
   readonly issueDate: Prisma.FieldRef<"Cheque", 'DateTime'>
   readonly dueDate: Prisma.FieldRef<"Cheque", 'DateTime'>
-  readonly status: Prisma.FieldRef<"Cheque", 'String'>
-  readonly image: Prisma.FieldRef<"Cheque", 'String'>
-  readonly accountId: Prisma.FieldRef<"Cheque", 'String'>
-  readonly bounceReason: Prisma.FieldRef<"Cheque", 'String'>
+  readonly receivedDate: Prisma.FieldRef<"Cheque", 'DateTime'>
+  readonly returnedDate: Prisma.FieldRef<"Cheque", 'DateTime'>
+  readonly clearedDate: Prisma.FieldRef<"Cheque", 'DateTime'>
+  readonly status: Prisma.FieldRef<"Cheque", 'ChequeStatus'>
+  readonly returnReason: Prisma.FieldRef<"Cheque", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"Cheque", 'String'>
   readonly description: Prisma.FieldRef<"Cheque", 'String'>
+  readonly createdById: Prisma.FieldRef<"Cheque", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Cheque", 'String'>
   readonly createdAt: Prisma.FieldRef<"Cheque", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Cheque", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Cheque", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Cheque", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Cheque", 'String'>
-  readonly deletedAt: Prisma.FieldRef<"Cheque", 'DateTime'>
 }
     
 
@@ -2511,25 +2590,6 @@ export type ChequeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Cheques to delete.
    */
   limit?: number
-}
-
-/**
- * Cheque.tenant
- */
-export type Cheque$tenantArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Tenant
-   */
-  select?: Prisma.TenantSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Tenant
-   */
-  omit?: Prisma.TenantOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TenantInclude<ExtArgs> | null
-  where?: Prisma.TenantWhereInput
 }
 
 /**

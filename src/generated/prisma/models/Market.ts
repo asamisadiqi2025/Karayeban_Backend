@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Market
- * 
+ * A market — the top-level tenant boundary of the SaaS.
  */
 export type MarketModel = runtime.Types.Result.DefaultSelection<Prisma.$MarketPayload>
 
@@ -28,21 +28,13 @@ export type MarketMinAggregateOutputType = {
   id: string | null
   name: string | null
   code: string | null
-  ownerName: string | null
-  phone: string | null
-  email: string | null
-  country: string | null
-  city: string | null
   address: string | null
-  logo: string | null
-  currencyCode: string | null
-  description: string | null
-  status: string | null
+  phone: string | null
+  status: $Enums.MarketStatus | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -50,21 +42,13 @@ export type MarketMaxAggregateOutputType = {
   id: string | null
   name: string | null
   code: string | null
-  ownerName: string | null
-  phone: string | null
-  email: string | null
-  country: string | null
-  city: string | null
   address: string | null
-  logo: string | null
-  currencyCode: string | null
-  description: string | null
-  status: string | null
+  phone: string | null
+  status: $Enums.MarketStatus | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -72,21 +56,13 @@ export type MarketCountAggregateOutputType = {
   id: number
   name: number
   code: number
-  ownerName: number
-  phone: number
-  email: number
-  country: number
-  city: number
   address: number
-  logo: number
-  currencyCode: number
-  description: number
+  phone: number
   status: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
@@ -96,21 +72,13 @@ export type MarketMinAggregateInputType = {
   id?: true
   name?: true
   code?: true
-  ownerName?: true
-  phone?: true
-  email?: true
-  country?: true
-  city?: true
   address?: true
-  logo?: true
-  currencyCode?: true
-  description?: true
+  phone?: true
   status?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -118,21 +86,13 @@ export type MarketMaxAggregateInputType = {
   id?: true
   name?: true
   code?: true
-  ownerName?: true
-  phone?: true
-  email?: true
-  country?: true
-  city?: true
   address?: true
-  logo?: true
-  currencyCode?: true
-  description?: true
+  phone?: true
   status?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -140,21 +100,13 @@ export type MarketCountAggregateInputType = {
   id?: true
   name?: true
   code?: true
-  ownerName?: true
-  phone?: true
-  email?: true
-  country?: true
-  city?: true
   address?: true
-  logo?: true
-  currencyCode?: true
-  description?: true
+  phone?: true
   status?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -235,21 +187,13 @@ export type MarketGroupByOutputType = {
   id: string
   name: string
   code: string
-  ownerName: string | null
-  phone: string | null
-  email: string | null
-  country: string | null
-  city: string | null
   address: string | null
-  logo: string | null
-  currencyCode: string | null
-  description: string | null
-  status: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  phone: string | null
+  status: $Enums.MarketStatus
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: MarketCountAggregateOutputType | null
   _min: MarketMinAggregateOutputType | null
@@ -278,114 +222,78 @@ export type MarketWhereInput = {
   id?: Prisma.UuidFilter<"Market"> | string
   name?: Prisma.StringFilter<"Market"> | string
   code?: Prisma.StringFilter<"Market"> | string
-  ownerName?: Prisma.StringNullableFilter<"Market"> | string | null
-  phone?: Prisma.StringNullableFilter<"Market"> | string | null
-  email?: Prisma.StringNullableFilter<"Market"> | string | null
-  country?: Prisma.StringNullableFilter<"Market"> | string | null
-  city?: Prisma.StringNullableFilter<"Market"> | string | null
   address?: Prisma.StringNullableFilter<"Market"> | string | null
-  logo?: Prisma.StringNullableFilter<"Market"> | string | null
-  currencyCode?: Prisma.StringNullableFilter<"Market"> | string | null
-  description?: Prisma.StringNullableFilter<"Market"> | string | null
-  status?: Prisma.StringNullableFilter<"Market"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Market"> | string | null
+  phone?: Prisma.StringNullableFilter<"Market"> | string | null
+  status?: Prisma.EnumMarketStatusFilter<"Market"> | $Enums.MarketStatus
+  createdById?: Prisma.UuidNullableFilter<"Market"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Market"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Market"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Market"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  currency?: Prisma.XOR<Prisma.CurrencyNullableScalarRelationFilter, Prisma.CurrencyWhereInput> | null
-  settings?: Prisma.XOR<Prisma.MarketSettingNullableScalarRelationFilter, Prisma.MarketSettingWhereInput> | null
-  contractSequence?: Prisma.XOR<Prisma.MarketContractSequenceNullableScalarRelationFilter, Prisma.MarketContractSequenceWhereInput> | null
-  accountSequence?: Prisma.XOR<Prisma.AccountSequenceNullableScalarRelationFilter, Prisma.AccountSequenceWhereInput> | null
   floors?: Prisma.FloorListRelationFilter
-  shopCategories?: Prisma.ShopCategoryListRelationFilter
   shops?: Prisma.ShopListRelationFilter
+  shopCategories?: Prisma.ShopCategoryListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
-  guarantors?: Prisma.GuarantorListRelationFilter
   contracts?: Prisma.ContractListRelationFilter
-  contractTerms?: Prisma.ContractTermListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
   utilityBills?: Prisma.UtilityBillListRelationFilter
   expenseCategories?: Prisma.ExpenseCategoryListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
   marketExpenses?: Prisma.MarketExpenseListRelationFilter
-  exitClearances?: Prisma.ExitClearanceListRelationFilter
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeListRelationFilter
   accountTransactions?: Prisma.AccountTransactionListRelationFilter
-  journalEntries?: Prisma.JournalEntryListRelationFilter
-  journalEntryLines?: Prisma.JournalEntryLineListRelationFilter
+  exitClearances?: Prisma.ExitClearanceListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
-  users?: Prisma.UserListRelationFilter
-  shareholders?: Prisma.ShareholderListRelationFilter
+  userMarkets?: Prisma.UserMarketListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  guarantors?: Prisma.GuarantorListRelationFilter
+  contractTerms?: Prisma.ContractTermListRelationFilter
   ownershipHistories?: Prisma.OwnershipHistoryListRelationFilter
+  shareholders?: Prisma.ShareholderListRelationFilter
   additionalInvestments?: Prisma.AdditionalInvestmentListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
-  apiKeys?: Prisma.ApiKeyListRelationFilter
-  webhooks?: Prisma.WebhookListRelationFilter
-  externalIntegrations?: Prisma.ExternalIntegrationListRelationFilter
-  loginHistory?: Prisma.LoginHistoryListRelationFilter
-  failedLoginAttempts?: Prisma.FailedLoginAttemptListRelationFilter
 }
 
 export type MarketOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  ownerName?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
-  country?: Prisma.SortOrderInput | Prisma.SortOrder
-  city?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  logo?: Prisma.SortOrderInput | Prisma.SortOrder
-  currencyCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  currency?: Prisma.CurrencyOrderByWithRelationInput
-  settings?: Prisma.MarketSettingOrderByWithRelationInput
-  contractSequence?: Prisma.MarketContractSequenceOrderByWithRelationInput
-  accountSequence?: Prisma.AccountSequenceOrderByWithRelationInput
   floors?: Prisma.FloorOrderByRelationAggregateInput
-  shopCategories?: Prisma.ShopCategoryOrderByRelationAggregateInput
   shops?: Prisma.ShopOrderByRelationAggregateInput
+  shopCategories?: Prisma.ShopCategoryOrderByRelationAggregateInput
   tenants?: Prisma.TenantOrderByRelationAggregateInput
-  guarantors?: Prisma.GuarantorOrderByRelationAggregateInput
   contracts?: Prisma.ContractOrderByRelationAggregateInput
-  contractTerms?: Prisma.ContractTermOrderByRelationAggregateInput
   rentPayments?: Prisma.RentPaymentOrderByRelationAggregateInput
   utilityBills?: Prisma.UtilityBillOrderByRelationAggregateInput
   expenseCategories?: Prisma.ExpenseCategoryOrderByRelationAggregateInput
   employees?: Prisma.EmployeeOrderByRelationAggregateInput
   marketExpenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
-  exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeOrderByRelationAggregateInput
   accountTransactions?: Prisma.AccountTransactionOrderByRelationAggregateInput
-  journalEntries?: Prisma.JournalEntryOrderByRelationAggregateInput
-  journalEntryLines?: Prisma.JournalEntryLineOrderByRelationAggregateInput
+  exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
   cheques?: Prisma.ChequeOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
-  users?: Prisma.UserOrderByRelationAggregateInput
-  shareholders?: Prisma.ShareholderOrderByRelationAggregateInput
+  userMarkets?: Prisma.UserMarketOrderByRelationAggregateInput
+  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  guarantors?: Prisma.GuarantorOrderByRelationAggregateInput
+  contractTerms?: Prisma.ContractTermOrderByRelationAggregateInput
   ownershipHistories?: Prisma.OwnershipHistoryOrderByRelationAggregateInput
+  shareholders?: Prisma.ShareholderOrderByRelationAggregateInput
   additionalInvestments?: Prisma.AdditionalInvestmentOrderByRelationAggregateInput
   withdrawals?: Prisma.WithdrawalOrderByRelationAggregateInput
-  notifications?: Prisma.NotificationOrderByRelationAggregateInput
-  apiKeys?: Prisma.ApiKeyOrderByRelationAggregateInput
-  webhooks?: Prisma.WebhookOrderByRelationAggregateInput
-  externalIntegrations?: Prisma.ExternalIntegrationOrderByRelationAggregateInput
-  loginHistory?: Prisma.LoginHistoryOrderByRelationAggregateInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptOrderByRelationAggregateInput
 }
 
 export type MarketWhereUniqueInput = Prisma.AtLeast<{
@@ -395,78 +303,52 @@ export type MarketWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MarketWhereInput | Prisma.MarketWhereInput[]
   name?: Prisma.StringFilter<"Market"> | string
   code?: Prisma.StringFilter<"Market"> | string
-  ownerName?: Prisma.StringNullableFilter<"Market"> | string | null
-  phone?: Prisma.StringNullableFilter<"Market"> | string | null
-  email?: Prisma.StringNullableFilter<"Market"> | string | null
-  country?: Prisma.StringNullableFilter<"Market"> | string | null
-  city?: Prisma.StringNullableFilter<"Market"> | string | null
   address?: Prisma.StringNullableFilter<"Market"> | string | null
-  logo?: Prisma.StringNullableFilter<"Market"> | string | null
-  currencyCode?: Prisma.StringNullableFilter<"Market"> | string | null
-  description?: Prisma.StringNullableFilter<"Market"> | string | null
-  status?: Prisma.StringNullableFilter<"Market"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Market"> | string | null
+  phone?: Prisma.StringNullableFilter<"Market"> | string | null
+  status?: Prisma.EnumMarketStatusFilter<"Market"> | $Enums.MarketStatus
+  createdById?: Prisma.UuidNullableFilter<"Market"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Market"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Market"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Market"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  currency?: Prisma.XOR<Prisma.CurrencyNullableScalarRelationFilter, Prisma.CurrencyWhereInput> | null
-  settings?: Prisma.XOR<Prisma.MarketSettingNullableScalarRelationFilter, Prisma.MarketSettingWhereInput> | null
-  contractSequence?: Prisma.XOR<Prisma.MarketContractSequenceNullableScalarRelationFilter, Prisma.MarketContractSequenceWhereInput> | null
-  accountSequence?: Prisma.XOR<Prisma.AccountSequenceNullableScalarRelationFilter, Prisma.AccountSequenceWhereInput> | null
   floors?: Prisma.FloorListRelationFilter
-  shopCategories?: Prisma.ShopCategoryListRelationFilter
   shops?: Prisma.ShopListRelationFilter
+  shopCategories?: Prisma.ShopCategoryListRelationFilter
   tenants?: Prisma.TenantListRelationFilter
-  guarantors?: Prisma.GuarantorListRelationFilter
   contracts?: Prisma.ContractListRelationFilter
-  contractTerms?: Prisma.ContractTermListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
   utilityBills?: Prisma.UtilityBillListRelationFilter
   expenseCategories?: Prisma.ExpenseCategoryListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
   marketExpenses?: Prisma.MarketExpenseListRelationFilter
-  exitClearances?: Prisma.ExitClearanceListRelationFilter
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeListRelationFilter
   accountTransactions?: Prisma.AccountTransactionListRelationFilter
-  journalEntries?: Prisma.JournalEntryListRelationFilter
-  journalEntryLines?: Prisma.JournalEntryLineListRelationFilter
+  exitClearances?: Prisma.ExitClearanceListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
-  users?: Prisma.UserListRelationFilter
-  shareholders?: Prisma.ShareholderListRelationFilter
+  userMarkets?: Prisma.UserMarketListRelationFilter
+  auditLogs?: Prisma.AuditLogListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  guarantors?: Prisma.GuarantorListRelationFilter
+  contractTerms?: Prisma.ContractTermListRelationFilter
   ownershipHistories?: Prisma.OwnershipHistoryListRelationFilter
+  shareholders?: Prisma.ShareholderListRelationFilter
   additionalInvestments?: Prisma.AdditionalInvestmentListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
-  apiKeys?: Prisma.ApiKeyListRelationFilter
-  webhooks?: Prisma.WebhookListRelationFilter
-  externalIntegrations?: Prisma.ExternalIntegrationListRelationFilter
-  loginHistory?: Prisma.LoginHistoryListRelationFilter
-  failedLoginAttempts?: Prisma.FailedLoginAttemptListRelationFilter
 }, "id">
 
 export type MarketOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  ownerName?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
-  country?: Prisma.SortOrderInput | Prisma.SortOrder
-  city?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  logo?: Prisma.SortOrderInput | Prisma.SortOrder
-  currencyCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.MarketCountOrderByAggregateInput
   _max?: Prisma.MarketMaxOrderByAggregateInput
@@ -480,21 +362,13 @@ export type MarketScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Market"> | string
   name?: Prisma.StringWithAggregatesFilter<"Market"> | string
   code?: Prisma.StringWithAggregatesFilter<"Market"> | string
-  ownerName?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  phone?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  email?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  country?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  city?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  logo?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  currencyCode?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  description?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  status?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Market"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Market"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Market"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"Market"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"Market"> | string | null
+  phone?: Prisma.StringNullableWithAggregatesFilter<"Market"> | string | null
+  status?: Prisma.EnumMarketStatusWithAggregatesFilter<"Market"> | $Enums.MarketStatus
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Market"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Market"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Market"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Market"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Market"> | Date | string | null
 }
 
@@ -502,245 +376,169 @@ export type MarketCreateInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateManyInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -748,20 +546,13 @@ export type MarketUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -769,53 +560,27 @@ export type MarketUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type MarketListRelationFilter = {
-  every?: Prisma.MarketWhereInput
-  some?: Prisma.MarketWhereInput
-  none?: Prisma.MarketWhereInput
-}
-
-export type MarketOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type MarketCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  ownerName?: Prisma.SortOrder
-  phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
-  country?: Prisma.SortOrder
-  city?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  logo?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -823,21 +588,13 @@ export type MarketMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  ownerName?: Prisma.SortOrder
-  phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
-  country?: Prisma.SortOrder
-  city?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  logo?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -845,21 +602,13 @@ export type MarketMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
-  ownerName?: Prisma.SortOrder
-  phone?: Prisma.SortOrder
-  email?: Prisma.SortOrder
-  country?: Prisma.SortOrder
-  city?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  logo?: Prisma.SortOrder
-  currencyCode?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -873,74 +622,24 @@ export type MarketNullableScalarRelationFilter = {
   isNot?: Prisma.MarketWhereInput | null
 }
 
-export type MarketCreateNestedManyWithoutCurrencyInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutCurrencyInput, Prisma.MarketUncheckedCreateWithoutCurrencyInput> | Prisma.MarketCreateWithoutCurrencyInput[] | Prisma.MarketUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutCurrencyInput | Prisma.MarketCreateOrConnectWithoutCurrencyInput[]
-  createMany?: Prisma.MarketCreateManyCurrencyInputEnvelope
-  connect?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
+export type StringFieldUpdateOperationsInput = {
+  set?: string
 }
 
-export type MarketUncheckedCreateNestedManyWithoutCurrencyInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutCurrencyInput, Prisma.MarketUncheckedCreateWithoutCurrencyInput> | Prisma.MarketCreateWithoutCurrencyInput[] | Prisma.MarketUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutCurrencyInput | Prisma.MarketCreateOrConnectWithoutCurrencyInput[]
-  createMany?: Prisma.MarketCreateManyCurrencyInputEnvelope
-  connect?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
-export type MarketUpdateManyWithoutCurrencyNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutCurrencyInput, Prisma.MarketUncheckedCreateWithoutCurrencyInput> | Prisma.MarketCreateWithoutCurrencyInput[] | Prisma.MarketUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutCurrencyInput | Prisma.MarketCreateOrConnectWithoutCurrencyInput[]
-  upsert?: Prisma.MarketUpsertWithWhereUniqueWithoutCurrencyInput | Prisma.MarketUpsertWithWhereUniqueWithoutCurrencyInput[]
-  createMany?: Prisma.MarketCreateManyCurrencyInputEnvelope
-  set?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  disconnect?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  delete?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  connect?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  update?: Prisma.MarketUpdateWithWhereUniqueWithoutCurrencyInput | Prisma.MarketUpdateWithWhereUniqueWithoutCurrencyInput[]
-  updateMany?: Prisma.MarketUpdateManyWithWhereWithoutCurrencyInput | Prisma.MarketUpdateManyWithWhereWithoutCurrencyInput[]
-  deleteMany?: Prisma.MarketScalarWhereInput | Prisma.MarketScalarWhereInput[]
+export type EnumMarketStatusFieldUpdateOperationsInput = {
+  set?: $Enums.MarketStatus
 }
 
-export type MarketUncheckedUpdateManyWithoutCurrencyNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutCurrencyInput, Prisma.MarketUncheckedCreateWithoutCurrencyInput> | Prisma.MarketCreateWithoutCurrencyInput[] | Prisma.MarketUncheckedCreateWithoutCurrencyInput[]
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutCurrencyInput | Prisma.MarketCreateOrConnectWithoutCurrencyInput[]
-  upsert?: Prisma.MarketUpsertWithWhereUniqueWithoutCurrencyInput | Prisma.MarketUpsertWithWhereUniqueWithoutCurrencyInput[]
-  createMany?: Prisma.MarketCreateManyCurrencyInputEnvelope
-  set?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  disconnect?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  delete?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  connect?: Prisma.MarketWhereUniqueInput | Prisma.MarketWhereUniqueInput[]
-  update?: Prisma.MarketUpdateWithWhereUniqueWithoutCurrencyInput | Prisma.MarketUpdateWithWhereUniqueWithoutCurrencyInput[]
-  updateMany?: Prisma.MarketUpdateManyWithWhereWithoutCurrencyInput | Prisma.MarketUpdateManyWithWhereWithoutCurrencyInput[]
-  deleteMany?: Prisma.MarketScalarWhereInput | Prisma.MarketScalarWhereInput[]
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
 }
 
-export type MarketCreateNestedOneWithoutSettingsInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutSettingsInput, Prisma.MarketUncheckedCreateWithoutSettingsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutSettingsInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutSettingsNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutSettingsInput, Prisma.MarketUncheckedCreateWithoutSettingsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutSettingsInput
-  upsert?: Prisma.MarketUpsertWithoutSettingsInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutSettingsInput, Prisma.MarketUpdateWithoutSettingsInput>, Prisma.MarketUncheckedUpdateWithoutSettingsInput>
-}
-
-export type MarketCreateNestedOneWithoutContractSequenceInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutContractSequenceInput, Prisma.MarketUncheckedCreateWithoutContractSequenceInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutContractSequenceInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutContractSequenceNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutContractSequenceInput, Prisma.MarketUncheckedCreateWithoutContractSequenceInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutContractSequenceInput
-  upsert?: Prisma.MarketUpsertWithoutContractSequenceInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutContractSequenceInput, Prisma.MarketUpdateWithoutContractSequenceInput>, Prisma.MarketUncheckedUpdateWithoutContractSequenceInput>
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type MarketCreateNestedOneWithoutFloorsInput = {
@@ -957,20 +656,6 @@ export type MarketUpdateOneRequiredWithoutFloorsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutFloorsInput, Prisma.MarketUpdateWithoutFloorsInput>, Prisma.MarketUncheckedUpdateWithoutFloorsInput>
 }
 
-export type MarketCreateNestedOneWithoutShopCategoriesInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutShopCategoriesInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutShopCategoriesNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutShopCategoriesInput
-  upsert?: Prisma.MarketUpsertWithoutShopCategoriesInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutShopCategoriesInput, Prisma.MarketUpdateWithoutShopCategoriesInput>, Prisma.MarketUncheckedUpdateWithoutShopCategoriesInput>
-}
-
 export type MarketCreateNestedOneWithoutShopsInput = {
   create?: Prisma.XOR<Prisma.MarketCreateWithoutShopsInput, Prisma.MarketUncheckedCreateWithoutShopsInput>
   connectOrCreate?: Prisma.MarketCreateOrConnectWithoutShopsInput
@@ -983,6 +668,20 @@ export type MarketUpdateOneRequiredWithoutShopsNestedInput = {
   upsert?: Prisma.MarketUpsertWithoutShopsInput
   connect?: Prisma.MarketWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutShopsInput, Prisma.MarketUpdateWithoutShopsInput>, Prisma.MarketUncheckedUpdateWithoutShopsInput>
+}
+
+export type MarketCreateNestedOneWithoutShopCategoriesInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutShopCategoriesInput
+  connect?: Prisma.MarketWhereUniqueInput
+}
+
+export type MarketUpdateOneRequiredWithoutShopCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutShopCategoriesInput
+  upsert?: Prisma.MarketUpsertWithoutShopCategoriesInput
+  connect?: Prisma.MarketWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutShopCategoriesInput, Prisma.MarketUpdateWithoutShopCategoriesInput>, Prisma.MarketUncheckedUpdateWithoutShopCategoriesInput>
 }
 
 export type MarketCreateNestedOneWithoutTenantsInput = {
@@ -1111,34 +810,6 @@ export type MarketUpdateOneRequiredWithoutMarketExpensesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutMarketExpensesInput, Prisma.MarketUpdateWithoutMarketExpensesInput>, Prisma.MarketUncheckedUpdateWithoutMarketExpensesInput>
 }
 
-export type MarketCreateNestedOneWithoutExitClearancesInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutExitClearancesInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutExitClearancesNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutExitClearancesInput
-  upsert?: Prisma.MarketUpsertWithoutExitClearancesInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutExitClearancesInput, Prisma.MarketUpdateWithoutExitClearancesInput>, Prisma.MarketUncheckedUpdateWithoutExitClearancesInput>
-}
-
-export type MarketCreateNestedOneWithoutMiscellaneousIncomeInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomeInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomeInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutMiscellaneousIncomeInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutMiscellaneousIncomeNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomeInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomeInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutMiscellaneousIncomeInput
-  upsert?: Prisma.MarketUpsertWithoutMiscellaneousIncomeInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutMiscellaneousIncomeInput, Prisma.MarketUpdateWithoutMiscellaneousIncomeInput>, Prisma.MarketUncheckedUpdateWithoutMiscellaneousIncomeInput>
-}
-
 export type MarketCreateNestedOneWithoutAccountsInput = {
   create?: Prisma.XOR<Prisma.MarketCreateWithoutAccountsInput, Prisma.MarketUncheckedCreateWithoutAccountsInput>
   connectOrCreate?: Prisma.MarketCreateOrConnectWithoutAccountsInput
@@ -1153,18 +824,18 @@ export type MarketUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutAccountsInput, Prisma.MarketUpdateWithoutAccountsInput>, Prisma.MarketUncheckedUpdateWithoutAccountsInput>
 }
 
-export type MarketCreateNestedOneWithoutAccountSequenceInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutAccountSequenceInput, Prisma.MarketUncheckedCreateWithoutAccountSequenceInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutAccountSequenceInput
+export type MarketCreateNestedOneWithoutMiscellaneousIncomesInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomesInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomesInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutMiscellaneousIncomesInput
   connect?: Prisma.MarketWhereUniqueInput
 }
 
-export type MarketUpdateOneRequiredWithoutAccountSequenceNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutAccountSequenceInput, Prisma.MarketUncheckedCreateWithoutAccountSequenceInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutAccountSequenceInput
-  upsert?: Prisma.MarketUpsertWithoutAccountSequenceInput
+export type MarketUpdateOneRequiredWithoutMiscellaneousIncomesNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomesInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomesInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutMiscellaneousIncomesInput
+  upsert?: Prisma.MarketUpsertWithoutMiscellaneousIncomesInput
   connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutAccountSequenceInput, Prisma.MarketUpdateWithoutAccountSequenceInput>, Prisma.MarketUncheckedUpdateWithoutAccountSequenceInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutMiscellaneousIncomesInput, Prisma.MarketUpdateWithoutMiscellaneousIncomesInput>, Prisma.MarketUncheckedUpdateWithoutMiscellaneousIncomesInput>
 }
 
 export type MarketCreateNestedOneWithoutAccountTransactionsInput = {
@@ -1181,32 +852,18 @@ export type MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutAccountTransactionsInput, Prisma.MarketUpdateWithoutAccountTransactionsInput>, Prisma.MarketUncheckedUpdateWithoutAccountTransactionsInput>
 }
 
-export type MarketCreateNestedOneWithoutJournalEntriesInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntriesInput, Prisma.MarketUncheckedCreateWithoutJournalEntriesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutJournalEntriesInput
+export type MarketCreateNestedOneWithoutExitClearancesInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutExitClearancesInput
   connect?: Prisma.MarketWhereUniqueInput
 }
 
-export type MarketUpdateOneRequiredWithoutJournalEntriesNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntriesInput, Prisma.MarketUncheckedCreateWithoutJournalEntriesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutJournalEntriesInput
-  upsert?: Prisma.MarketUpsertWithoutJournalEntriesInput
+export type MarketUpdateOneRequiredWithoutExitClearancesNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutExitClearancesInput
+  upsert?: Prisma.MarketUpsertWithoutExitClearancesInput
   connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutJournalEntriesInput, Prisma.MarketUpdateWithoutJournalEntriesInput>, Prisma.MarketUncheckedUpdateWithoutJournalEntriesInput>
-}
-
-export type MarketCreateNestedOneWithoutJournalEntryLinesInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntryLinesInput, Prisma.MarketUncheckedCreateWithoutJournalEntryLinesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutJournalEntryLinesInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutJournalEntryLinesNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntryLinesInput, Prisma.MarketUncheckedCreateWithoutJournalEntryLinesInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutJournalEntryLinesInput
-  upsert?: Prisma.MarketUpsertWithoutJournalEntryLinesInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutJournalEntryLinesInput, Prisma.MarketUpdateWithoutJournalEntryLinesInput>, Prisma.MarketUncheckedUpdateWithoutJournalEntryLinesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutExitClearancesInput, Prisma.MarketUpdateWithoutExitClearancesInput>, Prisma.MarketUncheckedUpdateWithoutExitClearancesInput>
 }
 
 export type MarketCreateNestedOneWithoutChequesInput = {
@@ -1229,62 +886,56 @@ export type MarketCreateNestedOneWithoutDocumentsInput = {
   connect?: Prisma.MarketWhereUniqueInput
 }
 
-export type MarketUpdateOneWithoutDocumentsNestedInput = {
+export type MarketUpdateOneRequiredWithoutDocumentsNestedInput = {
   create?: Prisma.XOR<Prisma.MarketCreateWithoutDocumentsInput, Prisma.MarketUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.MarketCreateOrConnectWithoutDocumentsInput
   upsert?: Prisma.MarketUpsertWithoutDocumentsInput
-  disconnect?: Prisma.MarketWhereInput | boolean
-  delete?: Prisma.MarketWhereInput | boolean
   connect?: Prisma.MarketWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutDocumentsInput, Prisma.MarketUpdateWithoutDocumentsInput>, Prisma.MarketUncheckedUpdateWithoutDocumentsInput>
 }
 
-export type MarketCreateNestedOneWithoutUsersInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUsersInput
+export type MarketCreateNestedOneWithoutUserMarketsInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutUserMarketsInput, Prisma.MarketUncheckedCreateWithoutUserMarketsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUserMarketsInput
   connect?: Prisma.MarketWhereUniqueInput
 }
 
-export type MarketUpdateOneWithoutUsersNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUsersInput
-  upsert?: Prisma.MarketUpsertWithoutUsersInput
+export type MarketUpdateOneRequiredWithoutUserMarketsNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutUserMarketsInput, Prisma.MarketUncheckedCreateWithoutUserMarketsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUserMarketsInput
+  upsert?: Prisma.MarketUpsertWithoutUserMarketsInput
+  connect?: Prisma.MarketWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutUserMarketsInput, Prisma.MarketUpdateWithoutUserMarketsInput>, Prisma.MarketUncheckedUpdateWithoutUserMarketsInput>
+}
+
+export type MarketCreateNestedOneWithoutAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutAuditLogsInput, Prisma.MarketUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutAuditLogsInput
+  connect?: Prisma.MarketWhereUniqueInput
+}
+
+export type MarketUpdateOneWithoutAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutAuditLogsInput, Prisma.MarketUncheckedCreateWithoutAuditLogsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutAuditLogsInput
+  upsert?: Prisma.MarketUpsertWithoutAuditLogsInput
   disconnect?: Prisma.MarketWhereInput | boolean
   delete?: Prisma.MarketWhereInput | boolean
   connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutUsersInput, Prisma.MarketUpdateWithoutUsersInput>, Prisma.MarketUncheckedUpdateWithoutUsersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.MarketUpdateWithoutAuditLogsInput>, Prisma.MarketUncheckedUpdateWithoutAuditLogsInput>
 }
 
-export type MarketCreateNestedOneWithoutLoginHistoryInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutLoginHistoryInput, Prisma.MarketUncheckedCreateWithoutLoginHistoryInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutLoginHistoryInput
+export type MarketCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutNotificationsInput, Prisma.MarketUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutNotificationsInput
   connect?: Prisma.MarketWhereUniqueInput
 }
 
-export type MarketUpdateOneWithoutLoginHistoryNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutLoginHistoryInput, Prisma.MarketUncheckedCreateWithoutLoginHistoryInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutLoginHistoryInput
-  upsert?: Prisma.MarketUpsertWithoutLoginHistoryInput
-  disconnect?: Prisma.MarketWhereInput | boolean
-  delete?: Prisma.MarketWhereInput | boolean
+export type MarketUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutNotificationsInput, Prisma.MarketUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.MarketUpsertWithoutNotificationsInput
   connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutLoginHistoryInput, Prisma.MarketUpdateWithoutLoginHistoryInput>, Prisma.MarketUncheckedUpdateWithoutLoginHistoryInput>
-}
-
-export type MarketCreateNestedOneWithoutFailedLoginAttemptsInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutFailedLoginAttemptsInput, Prisma.MarketUncheckedCreateWithoutFailedLoginAttemptsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutFailedLoginAttemptsInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneWithoutFailedLoginAttemptsNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutFailedLoginAttemptsInput, Prisma.MarketUncheckedCreateWithoutFailedLoginAttemptsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutFailedLoginAttemptsInput
-  upsert?: Prisma.MarketUpsertWithoutFailedLoginAttemptsInput
-  disconnect?: Prisma.MarketWhereInput | boolean
-  delete?: Prisma.MarketWhereInput | boolean
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutFailedLoginAttemptsInput, Prisma.MarketUpdateWithoutFailedLoginAttemptsInput>, Prisma.MarketUncheckedUpdateWithoutFailedLoginAttemptsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutNotificationsInput, Prisma.MarketUpdateWithoutNotificationsInput>, Prisma.MarketUncheckedUpdateWithoutNotificationsInput>
 }
 
 export type MarketCreateNestedOneWithoutShareholdersInput = {
@@ -1343,805 +994,80 @@ export type MarketUpdateOneRequiredWithoutWithdrawalsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutWithdrawalsInput, Prisma.MarketUpdateWithoutWithdrawalsInput>, Prisma.MarketUncheckedUpdateWithoutWithdrawalsInput>
 }
 
-export type MarketCreateNestedOneWithoutNotificationsInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutNotificationsInput, Prisma.MarketUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutNotificationsInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneWithoutNotificationsNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutNotificationsInput, Prisma.MarketUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutNotificationsInput
-  upsert?: Prisma.MarketUpsertWithoutNotificationsInput
-  disconnect?: Prisma.MarketWhereInput | boolean
-  delete?: Prisma.MarketWhereInput | boolean
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutNotificationsInput, Prisma.MarketUpdateWithoutNotificationsInput>, Prisma.MarketUncheckedUpdateWithoutNotificationsInput>
-}
-
-export type MarketCreateNestedOneWithoutApiKeysInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutApiKeysInput, Prisma.MarketUncheckedCreateWithoutApiKeysInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutApiKeysInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutApiKeysNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutApiKeysInput, Prisma.MarketUncheckedCreateWithoutApiKeysInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutApiKeysInput
-  upsert?: Prisma.MarketUpsertWithoutApiKeysInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutApiKeysInput, Prisma.MarketUpdateWithoutApiKeysInput>, Prisma.MarketUncheckedUpdateWithoutApiKeysInput>
-}
-
-export type MarketCreateNestedOneWithoutWebhooksInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutWebhooksInput, Prisma.MarketUncheckedCreateWithoutWebhooksInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutWebhooksInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutWebhooksNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutWebhooksInput, Prisma.MarketUncheckedCreateWithoutWebhooksInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutWebhooksInput
-  upsert?: Prisma.MarketUpsertWithoutWebhooksInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutWebhooksInput, Prisma.MarketUpdateWithoutWebhooksInput>, Prisma.MarketUncheckedUpdateWithoutWebhooksInput>
-}
-
-export type MarketCreateNestedOneWithoutExternalIntegrationsInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutExternalIntegrationsInput, Prisma.MarketUncheckedCreateWithoutExternalIntegrationsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutExternalIntegrationsInput
-  connect?: Prisma.MarketWhereUniqueInput
-}
-
-export type MarketUpdateOneRequiredWithoutExternalIntegrationsNestedInput = {
-  create?: Prisma.XOR<Prisma.MarketCreateWithoutExternalIntegrationsInput, Prisma.MarketUncheckedCreateWithoutExternalIntegrationsInput>
-  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutExternalIntegrationsInput
-  upsert?: Prisma.MarketUpsertWithoutExternalIntegrationsInput
-  connect?: Prisma.MarketWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutExternalIntegrationsInput, Prisma.MarketUpdateWithoutExternalIntegrationsInput>, Prisma.MarketUncheckedUpdateWithoutExternalIntegrationsInput>
-}
-
-export type MarketCreateWithoutCurrencyInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutCurrencyInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutCurrencyInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutCurrencyInput, Prisma.MarketUncheckedCreateWithoutCurrencyInput>
-}
-
-export type MarketCreateManyCurrencyInputEnvelope = {
-  data: Prisma.MarketCreateManyCurrencyInput | Prisma.MarketCreateManyCurrencyInput[]
-  skipDuplicates?: boolean
-}
-
-export type MarketUpsertWithWhereUniqueWithoutCurrencyInput = {
-  where: Prisma.MarketWhereUniqueInput
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutCurrencyInput, Prisma.MarketUncheckedUpdateWithoutCurrencyInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutCurrencyInput, Prisma.MarketUncheckedCreateWithoutCurrencyInput>
-}
-
-export type MarketUpdateWithWhereUniqueWithoutCurrencyInput = {
-  where: Prisma.MarketWhereUniqueInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutCurrencyInput, Prisma.MarketUncheckedUpdateWithoutCurrencyInput>
-}
-
-export type MarketUpdateManyWithWhereWithoutCurrencyInput = {
-  where: Prisma.MarketScalarWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateManyMutationInput, Prisma.MarketUncheckedUpdateManyWithoutCurrencyInput>
-}
-
-export type MarketScalarWhereInput = {
-  AND?: Prisma.MarketScalarWhereInput | Prisma.MarketScalarWhereInput[]
-  OR?: Prisma.MarketScalarWhereInput[]
-  NOT?: Prisma.MarketScalarWhereInput | Prisma.MarketScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Market"> | string
-  name?: Prisma.StringFilter<"Market"> | string
-  code?: Prisma.StringFilter<"Market"> | string
-  ownerName?: Prisma.StringNullableFilter<"Market"> | string | null
-  phone?: Prisma.StringNullableFilter<"Market"> | string | null
-  email?: Prisma.StringNullableFilter<"Market"> | string | null
-  country?: Prisma.StringNullableFilter<"Market"> | string | null
-  city?: Prisma.StringNullableFilter<"Market"> | string | null
-  address?: Prisma.StringNullableFilter<"Market"> | string | null
-  logo?: Prisma.StringNullableFilter<"Market"> | string | null
-  currencyCode?: Prisma.StringNullableFilter<"Market"> | string | null
-  description?: Prisma.StringNullableFilter<"Market"> | string | null
-  status?: Prisma.StringNullableFilter<"Market"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"Market"> | string | null
-  deletedAt?: Prisma.DateTimeNullableFilter<"Market"> | Date | string | null
-}
-
-export type MarketCreateWithoutSettingsInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutSettingsInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutSettingsInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutSettingsInput, Prisma.MarketUncheckedCreateWithoutSettingsInput>
-}
-
-export type MarketUpsertWithoutSettingsInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutSettingsInput, Prisma.MarketUncheckedUpdateWithoutSettingsInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutSettingsInput, Prisma.MarketUncheckedCreateWithoutSettingsInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutSettingsInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutSettingsInput, Prisma.MarketUncheckedUpdateWithoutSettingsInput>
-}
-
-export type MarketUpdateWithoutSettingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutSettingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutContractSequenceInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutContractSequenceInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutContractSequenceInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutContractSequenceInput, Prisma.MarketUncheckedCreateWithoutContractSequenceInput>
-}
-
-export type MarketUpsertWithoutContractSequenceInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutContractSequenceInput, Prisma.MarketUncheckedUpdateWithoutContractSequenceInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutContractSequenceInput, Prisma.MarketUncheckedCreateWithoutContractSequenceInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutContractSequenceInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutContractSequenceInput, Prisma.MarketUncheckedUpdateWithoutContractSequenceInput>
-}
-
-export type MarketUpdateWithoutContractSequenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutContractSequenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
 export type MarketCreateWithoutFloorsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutFloorsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutFloorsInput = {
@@ -2164,456 +1090,152 @@ export type MarketUpdateWithoutFloorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutFloorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
+  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
   shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutShopCategoriesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutShopCategoriesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutShopCategoriesInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
-}
-
-export type MarketUpsertWithoutShopCategoriesInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutShopCategoriesInput, Prisma.MarketUncheckedUpdateWithoutShopCategoriesInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutShopCategoriesInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutShopCategoriesInput, Prisma.MarketUncheckedUpdateWithoutShopCategoriesInput>
-}
-
-export type MarketUpdateWithoutShopCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutShopCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
   contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutShopsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
   shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutShopsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
   shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutShopsInput = {
@@ -2636,220 +1258,320 @@ export type MarketUpdateWithoutShopsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
   shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutShopsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
   shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
+}
+
+export type MarketCreateWithoutShopCategoriesInput = {
+  id?: string
+  name: string
+  code: string
+  address?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
+  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
+  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
+  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
+  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
+  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
+}
+
+export type MarketUncheckedCreateWithoutShopCategoriesInput = {
+  id?: string
+  name: string
+  code: string
+  address?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
+  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
+  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
+  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
+  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
+}
+
+export type MarketCreateOrConnectWithoutShopCategoriesInput = {
+  where: Prisma.MarketWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
+}
+
+export type MarketUpsertWithoutShopCategoriesInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutShopCategoriesInput, Prisma.MarketUncheckedUpdateWithoutShopCategoriesInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutShopCategoriesInput, Prisma.MarketUncheckedCreateWithoutShopCategoriesInput>
+  where?: Prisma.MarketWhereInput
+}
+
+export type MarketUpdateToOneWithWhereWithoutShopCategoriesInput = {
+  where?: Prisma.MarketWhereInput
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutShopCategoriesInput, Prisma.MarketUncheckedUpdateWithoutShopCategoriesInput>
+}
+
+export type MarketUpdateWithoutShopCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
+  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
+  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
+  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
+  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
+}
+
+export type MarketUncheckedUpdateWithoutShopCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
+  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
+  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
+  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
+  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutTenantsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutTenantsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutTenantsInput = {
@@ -2872,220 +1594,152 @@ export type MarketUpdateWithoutTenantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutTenantsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutGuarantorsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutGuarantorsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutGuarantorsInput = {
@@ -3108,220 +1762,152 @@ export type MarketUpdateWithoutGuarantorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutGuarantorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutContractsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutContractsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutContractsInput = {
@@ -3344,220 +1930,152 @@ export type MarketUpdateWithoutContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutContractsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutContractTermsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutContractTermsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutContractTermsInput = {
@@ -3580,220 +2098,152 @@ export type MarketUpdateWithoutContractTermsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutContractTermsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutRentPaymentsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutRentPaymentsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutRentPaymentsInput = {
@@ -3816,220 +2266,152 @@ export type MarketUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutRentPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutUtilityBillsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutUtilityBillsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutUtilityBillsInput = {
@@ -4052,220 +2434,152 @@ export type MarketUpdateWithoutUtilityBillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutUtilityBillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutExpenseCategoriesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutExpenseCategoriesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutExpenseCategoriesInput = {
@@ -4288,220 +2602,152 @@ export type MarketUpdateWithoutExpenseCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutExpenseCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutEmployeesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutEmployeesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutEmployeesInput = {
@@ -4524,220 +2770,152 @@ export type MarketUpdateWithoutEmployeesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutEmployeesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutMarketExpensesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutMarketExpensesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutMarketExpensesInput = {
@@ -4760,692 +2938,152 @@ export type MarketUpdateWithoutMarketExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutMarketExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutExitClearancesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutExitClearancesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutExitClearancesInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
-}
-
-export type MarketUpsertWithoutExitClearancesInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutExitClearancesInput, Prisma.MarketUncheckedUpdateWithoutExitClearancesInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutExitClearancesInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutExitClearancesInput, Prisma.MarketUncheckedUpdateWithoutExitClearancesInput>
-}
-
-export type MarketUpdateWithoutExitClearancesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutExitClearancesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
   contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutMiscellaneousIncomeInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutMiscellaneousIncomeInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutMiscellaneousIncomeInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomeInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomeInput>
-}
-
-export type MarketUpsertWithoutMiscellaneousIncomeInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutMiscellaneousIncomeInput, Prisma.MarketUncheckedUpdateWithoutMiscellaneousIncomeInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomeInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomeInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutMiscellaneousIncomeInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutMiscellaneousIncomeInput, Prisma.MarketUncheckedUpdateWithoutMiscellaneousIncomeInput>
-}
-
-export type MarketUpdateWithoutMiscellaneousIncomeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutMiscellaneousIncomeInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutAccountsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutAccountsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutAccountsInput = {
@@ -5468,456 +3106,320 @@ export type MarketUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutAccountSequenceInput = {
+export type MarketCreateWithoutMiscellaneousIncomesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutAccountSequenceInput = {
+export type MarketUncheckedCreateWithoutMiscellaneousIncomesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutAccountSequenceInput = {
+export type MarketCreateOrConnectWithoutMiscellaneousIncomesInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutAccountSequenceInput, Prisma.MarketUncheckedCreateWithoutAccountSequenceInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomesInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomesInput>
 }
 
-export type MarketUpsertWithoutAccountSequenceInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutAccountSequenceInput, Prisma.MarketUncheckedUpdateWithoutAccountSequenceInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutAccountSequenceInput, Prisma.MarketUncheckedCreateWithoutAccountSequenceInput>
+export type MarketUpsertWithoutMiscellaneousIncomesInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutMiscellaneousIncomesInput, Prisma.MarketUncheckedUpdateWithoutMiscellaneousIncomesInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutMiscellaneousIncomesInput, Prisma.MarketUncheckedCreateWithoutMiscellaneousIncomesInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutAccountSequenceInput = {
+export type MarketUpdateToOneWithWhereWithoutMiscellaneousIncomesInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutAccountSequenceInput, Prisma.MarketUncheckedUpdateWithoutAccountSequenceInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutMiscellaneousIncomesInput, Prisma.MarketUncheckedUpdateWithoutMiscellaneousIncomesInput>
 }
 
-export type MarketUpdateWithoutAccountSequenceInput = {
+export type MarketUpdateWithoutMiscellaneousIncomesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutAccountSequenceInput = {
+export type MarketUncheckedUpdateWithoutMiscellaneousIncomesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutAccountTransactionsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutAccountTransactionsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutAccountTransactionsInput = {
@@ -5940,692 +3442,320 @@ export type MarketUpdateWithoutAccountTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutAccountTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutJournalEntriesInput = {
+export type MarketCreateWithoutExitClearancesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutJournalEntriesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutJournalEntriesInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntriesInput, Prisma.MarketUncheckedCreateWithoutJournalEntriesInput>
-}
-
-export type MarketUpsertWithoutJournalEntriesInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutJournalEntriesInput, Prisma.MarketUncheckedUpdateWithoutJournalEntriesInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntriesInput, Prisma.MarketUncheckedCreateWithoutJournalEntriesInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutJournalEntriesInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutJournalEntriesInput, Prisma.MarketUncheckedUpdateWithoutJournalEntriesInput>
-}
-
-export type MarketUpdateWithoutJournalEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutJournalEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutJournalEntryLinesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
   contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutJournalEntryLinesInput = {
+export type MarketUncheckedCreateWithoutExitClearancesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutJournalEntryLinesInput = {
+export type MarketCreateOrConnectWithoutExitClearancesInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntryLinesInput, Prisma.MarketUncheckedCreateWithoutJournalEntryLinesInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
 }
 
-export type MarketUpsertWithoutJournalEntryLinesInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutJournalEntryLinesInput, Prisma.MarketUncheckedUpdateWithoutJournalEntryLinesInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutJournalEntryLinesInput, Prisma.MarketUncheckedCreateWithoutJournalEntryLinesInput>
+export type MarketUpsertWithoutExitClearancesInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutExitClearancesInput, Prisma.MarketUncheckedUpdateWithoutExitClearancesInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutExitClearancesInput, Prisma.MarketUncheckedCreateWithoutExitClearancesInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutJournalEntryLinesInput = {
+export type MarketUpdateToOneWithWhereWithoutExitClearancesInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutJournalEntryLinesInput, Prisma.MarketUncheckedUpdateWithoutJournalEntryLinesInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutExitClearancesInput, Prisma.MarketUncheckedUpdateWithoutExitClearancesInput>
 }
 
-export type MarketUpdateWithoutJournalEntryLinesInput = {
+export type MarketUpdateWithoutExitClearancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutJournalEntryLinesInput = {
+export type MarketUncheckedUpdateWithoutExitClearancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutChequesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutChequesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutChequesInput = {
@@ -6648,220 +3778,152 @@ export type MarketUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutChequesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutDocumentsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutDocumentsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutDocumentsInput = {
@@ -6884,1872 +3946,488 @@ export type MarketUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
   shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutUsersInput = {
+export type MarketCreateWithoutUserMarketsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutUsersInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutUsersInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
-}
-
-export type MarketUpsertWithoutUsersInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutUsersInput, Prisma.MarketUncheckedUpdateWithoutUsersInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutUsersInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutUsersInput, Prisma.MarketUncheckedUpdateWithoutUsersInput>
-}
-
-export type MarketUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutLoginHistoryInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
   contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutLoginHistoryInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutLoginHistoryInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutLoginHistoryInput, Prisma.MarketUncheckedCreateWithoutLoginHistoryInput>
-}
-
-export type MarketUpsertWithoutLoginHistoryInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutLoginHistoryInput, Prisma.MarketUncheckedUpdateWithoutLoginHistoryInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutLoginHistoryInput, Prisma.MarketUncheckedCreateWithoutLoginHistoryInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutLoginHistoryInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutLoginHistoryInput, Prisma.MarketUncheckedUpdateWithoutLoginHistoryInput>
-}
-
-export type MarketUpdateWithoutLoginHistoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutLoginHistoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutFailedLoginAttemptsInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutFailedLoginAttemptsInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutFailedLoginAttemptsInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutFailedLoginAttemptsInput, Prisma.MarketUncheckedCreateWithoutFailedLoginAttemptsInput>
-}
-
-export type MarketUpsertWithoutFailedLoginAttemptsInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutFailedLoginAttemptsInput, Prisma.MarketUncheckedUpdateWithoutFailedLoginAttemptsInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutFailedLoginAttemptsInput, Prisma.MarketUncheckedCreateWithoutFailedLoginAttemptsInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutFailedLoginAttemptsInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutFailedLoginAttemptsInput, Prisma.MarketUncheckedUpdateWithoutFailedLoginAttemptsInput>
-}
-
-export type MarketUpdateWithoutFailedLoginAttemptsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutFailedLoginAttemptsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutShareholdersInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutShareholdersInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutShareholdersInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutShareholdersInput, Prisma.MarketUncheckedCreateWithoutShareholdersInput>
-}
-
-export type MarketUpsertWithoutShareholdersInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutShareholdersInput, Prisma.MarketUncheckedUpdateWithoutShareholdersInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutShareholdersInput, Prisma.MarketUncheckedCreateWithoutShareholdersInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutShareholdersInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutShareholdersInput, Prisma.MarketUncheckedUpdateWithoutShareholdersInput>
-}
-
-export type MarketUpdateWithoutShareholdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutShareholdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutOwnershipHistoriesInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutOwnershipHistoriesInput = {
+export type MarketUncheckedCreateWithoutUserMarketsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
   shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutOwnershipHistoriesInput = {
+export type MarketCreateOrConnectWithoutUserMarketsInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedCreateWithoutOwnershipHistoriesInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutUserMarketsInput, Prisma.MarketUncheckedCreateWithoutUserMarketsInput>
 }
 
-export type MarketUpsertWithoutOwnershipHistoriesInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedUpdateWithoutOwnershipHistoriesInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedCreateWithoutOwnershipHistoriesInput>
+export type MarketUpsertWithoutUserMarketsInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutUserMarketsInput, Prisma.MarketUncheckedUpdateWithoutUserMarketsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutUserMarketsInput, Prisma.MarketUncheckedCreateWithoutUserMarketsInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutOwnershipHistoriesInput = {
+export type MarketUpdateToOneWithWhereWithoutUserMarketsInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedUpdateWithoutOwnershipHistoriesInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutUserMarketsInput, Prisma.MarketUncheckedUpdateWithoutUserMarketsInput>
 }
 
-export type MarketUpdateWithoutOwnershipHistoriesInput = {
+export type MarketUpdateWithoutUserMarketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
   shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutOwnershipHistoriesInput = {
+export type MarketUncheckedUpdateWithoutUserMarketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
   shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutAdditionalInvestmentsInput = {
+export type MarketCreateWithoutAuditLogsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
-}
-
-export type MarketUncheckedCreateWithoutAdditionalInvestmentsInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
-}
-
-export type MarketCreateOrConnectWithoutAdditionalInvestmentsInput = {
-  where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedCreateWithoutAdditionalInvestmentsInput>
-}
-
-export type MarketUpsertWithoutAdditionalInvestmentsInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedUpdateWithoutAdditionalInvestmentsInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedCreateWithoutAdditionalInvestmentsInput>
-  where?: Prisma.MarketWhereInput
-}
-
-export type MarketUpdateToOneWithWhereWithoutAdditionalInvestmentsInput = {
-  where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedUpdateWithoutAdditionalInvestmentsInput>
-}
-
-export type MarketUpdateWithoutAdditionalInvestmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateWithoutAdditionalInvestmentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
-  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
-  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
-  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
-  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
-  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
-  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
-  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketCreateWithoutWithdrawalsInput = {
-  id?: string
-  name: string
-  code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
-  address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
-  deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
-  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
-  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
-  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
-  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
   contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
-  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
-  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
-  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
-  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
-  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutWithdrawalsInput = {
+export type MarketUncheckedCreateWithoutAuditLogsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutWithdrawalsInput = {
+export type MarketCreateOrConnectWithoutAuditLogsInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutWithdrawalsInput, Prisma.MarketUncheckedCreateWithoutWithdrawalsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutAuditLogsInput, Prisma.MarketUncheckedCreateWithoutAuditLogsInput>
 }
 
-export type MarketUpsertWithoutWithdrawalsInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutWithdrawalsInput, Prisma.MarketUncheckedUpdateWithoutWithdrawalsInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutWithdrawalsInput, Prisma.MarketUncheckedCreateWithoutWithdrawalsInput>
+export type MarketUpsertWithoutAuditLogsInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutAuditLogsInput, Prisma.MarketUncheckedUpdateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutAuditLogsInput, Prisma.MarketUncheckedCreateWithoutAuditLogsInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutWithdrawalsInput = {
+export type MarketUpdateToOneWithWhereWithoutAuditLogsInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutWithdrawalsInput, Prisma.MarketUncheckedUpdateWithoutWithdrawalsInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutAuditLogsInput, Prisma.MarketUncheckedUpdateWithoutAuditLogsInput>
 }
 
-export type MarketUpdateWithoutWithdrawalsInput = {
+export type MarketUpdateWithoutAuditLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutWithdrawalsInput = {
+export type MarketUncheckedUpdateWithoutAuditLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketCreateWithoutNotificationsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
 export type MarketUncheckedCreateWithoutNotificationsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
 export type MarketCreateOrConnectWithoutNotificationsInput = {
@@ -8772,970 +4450,748 @@ export type MarketUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
 export type MarketUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutApiKeysInput = {
+export type MarketCreateWithoutShareholdersInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutApiKeysInput = {
+export type MarketUncheckedCreateWithoutShareholdersInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutApiKeysInput = {
+export type MarketCreateOrConnectWithoutShareholdersInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutApiKeysInput, Prisma.MarketUncheckedCreateWithoutApiKeysInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutShareholdersInput, Prisma.MarketUncheckedCreateWithoutShareholdersInput>
 }
 
-export type MarketUpsertWithoutApiKeysInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutApiKeysInput, Prisma.MarketUncheckedUpdateWithoutApiKeysInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutApiKeysInput, Prisma.MarketUncheckedCreateWithoutApiKeysInput>
+export type MarketUpsertWithoutShareholdersInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutShareholdersInput, Prisma.MarketUncheckedUpdateWithoutShareholdersInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutShareholdersInput, Prisma.MarketUncheckedCreateWithoutShareholdersInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutApiKeysInput = {
+export type MarketUpdateToOneWithWhereWithoutShareholdersInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutApiKeysInput, Prisma.MarketUncheckedUpdateWithoutApiKeysInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutShareholdersInput, Prisma.MarketUncheckedUpdateWithoutShareholdersInput>
 }
 
-export type MarketUpdateWithoutApiKeysInput = {
+export type MarketUpdateWithoutShareholdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutApiKeysInput = {
+export type MarketUncheckedUpdateWithoutShareholdersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutWebhooksInput = {
+export type MarketCreateWithoutOwnershipHistoriesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutWebhooksInput = {
+export type MarketUncheckedCreateWithoutOwnershipHistoriesInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutWebhooksInput = {
+export type MarketCreateOrConnectWithoutOwnershipHistoriesInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutWebhooksInput, Prisma.MarketUncheckedCreateWithoutWebhooksInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedCreateWithoutOwnershipHistoriesInput>
 }
 
-export type MarketUpsertWithoutWebhooksInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutWebhooksInput, Prisma.MarketUncheckedUpdateWithoutWebhooksInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutWebhooksInput, Prisma.MarketUncheckedCreateWithoutWebhooksInput>
+export type MarketUpsertWithoutOwnershipHistoriesInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedUpdateWithoutOwnershipHistoriesInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedCreateWithoutOwnershipHistoriesInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutWebhooksInput = {
+export type MarketUpdateToOneWithWhereWithoutOwnershipHistoriesInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutWebhooksInput, Prisma.MarketUncheckedUpdateWithoutWebhooksInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutOwnershipHistoriesInput, Prisma.MarketUncheckedUpdateWithoutOwnershipHistoriesInput>
 }
 
-export type MarketUpdateWithoutWebhooksInput = {
+export type MarketUpdateWithoutOwnershipHistoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutWebhooksInput = {
+export type MarketUncheckedUpdateWithoutOwnershipHistoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
   additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateWithoutExternalIntegrationsInput = {
+export type MarketCreateWithoutAdditionalInvestmentsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  currency?: Prisma.CurrencyCreateNestedOneWithoutMarketsInput
-  settings?: Prisma.MarketSettingCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUncheckedCreateWithoutExternalIntegrationsInput = {
+export type MarketUncheckedCreateWithoutAdditionalInvestmentsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  currencyCode?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  settings?: Prisma.MarketSettingUncheckedCreateNestedOneWithoutMarketInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedCreateNestedOneWithoutMarketInput
-  accountSequence?: Prisma.AccountSequenceUncheckedCreateNestedOneWithoutMarketInput
   floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
-  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
   tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
-  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
-  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
   marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
-  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
-  journalEntries?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutMarketInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
-  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
-  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutMarketInput
-  webhooks?: Prisma.WebhookUncheckedCreateNestedManyWithoutMarketInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutMarketInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
 }
 
-export type MarketCreateOrConnectWithoutExternalIntegrationsInput = {
+export type MarketCreateOrConnectWithoutAdditionalInvestmentsInput = {
   where: Prisma.MarketWhereUniqueInput
-  create: Prisma.XOR<Prisma.MarketCreateWithoutExternalIntegrationsInput, Prisma.MarketUncheckedCreateWithoutExternalIntegrationsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedCreateWithoutAdditionalInvestmentsInput>
 }
 
-export type MarketUpsertWithoutExternalIntegrationsInput = {
-  update: Prisma.XOR<Prisma.MarketUpdateWithoutExternalIntegrationsInput, Prisma.MarketUncheckedUpdateWithoutExternalIntegrationsInput>
-  create: Prisma.XOR<Prisma.MarketCreateWithoutExternalIntegrationsInput, Prisma.MarketUncheckedCreateWithoutExternalIntegrationsInput>
+export type MarketUpsertWithoutAdditionalInvestmentsInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedUpdateWithoutAdditionalInvestmentsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedCreateWithoutAdditionalInvestmentsInput>
   where?: Prisma.MarketWhereInput
 }
 
-export type MarketUpdateToOneWithWhereWithoutExternalIntegrationsInput = {
+export type MarketUpdateToOneWithWhereWithoutAdditionalInvestmentsInput = {
   where?: Prisma.MarketWhereInput
-  data: Prisma.XOR<Prisma.MarketUpdateWithoutExternalIntegrationsInput, Prisma.MarketUncheckedUpdateWithoutExternalIntegrationsInput>
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutAdditionalInvestmentsInput, Prisma.MarketUncheckedUpdateWithoutAdditionalInvestmentsInput>
 }
 
-export type MarketUpdateWithoutExternalIntegrationsInput = {
+export type MarketUpdateWithoutAdditionalInvestmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  currency?: Prisma.CurrencyUpdateOneWithoutMarketsNestedInput
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutExternalIntegrationsInput = {
+export type MarketUncheckedUpdateWithoutAdditionalInvestmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currencyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketCreateManyCurrencyInput = {
+export type MarketCreateWithoutWithdrawalsInput = {
   id?: string
   name: string
   code: string
-  ownerName?: string | null
-  phone?: string | null
-  email?: string | null
-  country?: string | null
-  city?: string | null
   address?: string | null
-  logo?: string | null
-  description?: string | null
-  status?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
+  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
+  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
+  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
+  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
+  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
+  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
 }
 
-export type MarketUpdateWithoutCurrencyInput = {
+export type MarketUncheckedCreateWithoutWithdrawalsInput = {
+  id?: string
+  name: string
+  code: string
+  address?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
+  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
+  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
+  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
+  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
+}
+
+export type MarketCreateOrConnectWithoutWithdrawalsInput = {
+  where: Prisma.MarketWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketCreateWithoutWithdrawalsInput, Prisma.MarketUncheckedCreateWithoutWithdrawalsInput>
+}
+
+export type MarketUpsertWithoutWithdrawalsInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutWithdrawalsInput, Prisma.MarketUncheckedUpdateWithoutWithdrawalsInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutWithdrawalsInput, Prisma.MarketUncheckedCreateWithoutWithdrawalsInput>
+  where?: Prisma.MarketWhereInput
+}
+
+export type MarketUpdateToOneWithWhereWithoutWithdrawalsInput = {
+  where?: Prisma.MarketWhereInput
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutWithdrawalsInput, Prisma.MarketUncheckedUpdateWithoutWithdrawalsInput>
+}
+
+export type MarketUpdateWithoutWithdrawalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
 }
 
-export type MarketUncheckedUpdateWithoutCurrencyInput = {
+export type MarketUncheckedUpdateWithoutWithdrawalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  settings?: Prisma.MarketSettingUncheckedUpdateOneWithoutMarketNestedInput
-  contractSequence?: Prisma.MarketContractSequenceUncheckedUpdateOneWithoutMarketNestedInput
-  accountSequence?: Prisma.AccountSequenceUncheckedUpdateOneWithoutMarketNestedInput
   floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
-  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
   tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
-  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
-  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
   marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
-  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
-  miscellaneousIncome?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntries?: Prisma.JournalEntryUncheckedUpdateManyWithoutMarketNestedInput
-  journalEntryLines?: Prisma.JournalEntryLineUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
-  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
-  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
-  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutMarketNestedInput
-  webhooks?: Prisma.WebhookUncheckedUpdateManyWithoutMarketNestedInput
-  externalIntegrations?: Prisma.ExternalIntegrationUncheckedUpdateManyWithoutMarketNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutMarketNestedInput
-  failedLoginAttempts?: Prisma.FailedLoginAttemptUncheckedUpdateManyWithoutMarketNestedInput
-}
-
-export type MarketUncheckedUpdateManyWithoutCurrencyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
 }
 
 
@@ -9745,70 +5201,58 @@ export type MarketUncheckedUpdateManyWithoutCurrencyInput = {
 
 export type MarketCountOutputType = {
   floors: number
-  shopCategories: number
   shops: number
+  shopCategories: number
   tenants: number
-  guarantors: number
   contracts: number
-  contractTerms: number
   rentPayments: number
   utilityBills: number
   expenseCategories: number
   employees: number
   marketExpenses: number
-  exitClearances: number
-  miscellaneousIncome: number
   accounts: number
+  miscellaneousIncomes: number
   accountTransactions: number
-  journalEntries: number
-  journalEntryLines: number
+  exitClearances: number
   cheques: number
   documents: number
-  users: number
-  shareholders: number
+  userMarkets: number
+  auditLogs: number
+  notifications: number
+  guarantors: number
+  contractTerms: number
   ownershipHistories: number
+  shareholders: number
   additionalInvestments: number
   withdrawals: number
-  notifications: number
-  apiKeys: number
-  webhooks: number
-  externalIntegrations: number
-  loginHistory: number
-  failedLoginAttempts: number
 }
 
 export type MarketCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   floors?: boolean | MarketCountOutputTypeCountFloorsArgs
-  shopCategories?: boolean | MarketCountOutputTypeCountShopCategoriesArgs
   shops?: boolean | MarketCountOutputTypeCountShopsArgs
+  shopCategories?: boolean | MarketCountOutputTypeCountShopCategoriesArgs
   tenants?: boolean | MarketCountOutputTypeCountTenantsArgs
-  guarantors?: boolean | MarketCountOutputTypeCountGuarantorsArgs
   contracts?: boolean | MarketCountOutputTypeCountContractsArgs
-  contractTerms?: boolean | MarketCountOutputTypeCountContractTermsArgs
   rentPayments?: boolean | MarketCountOutputTypeCountRentPaymentsArgs
   utilityBills?: boolean | MarketCountOutputTypeCountUtilityBillsArgs
   expenseCategories?: boolean | MarketCountOutputTypeCountExpenseCategoriesArgs
   employees?: boolean | MarketCountOutputTypeCountEmployeesArgs
   marketExpenses?: boolean | MarketCountOutputTypeCountMarketExpensesArgs
-  exitClearances?: boolean | MarketCountOutputTypeCountExitClearancesArgs
-  miscellaneousIncome?: boolean | MarketCountOutputTypeCountMiscellaneousIncomeArgs
   accounts?: boolean | MarketCountOutputTypeCountAccountsArgs
+  miscellaneousIncomes?: boolean | MarketCountOutputTypeCountMiscellaneousIncomesArgs
   accountTransactions?: boolean | MarketCountOutputTypeCountAccountTransactionsArgs
-  journalEntries?: boolean | MarketCountOutputTypeCountJournalEntriesArgs
-  journalEntryLines?: boolean | MarketCountOutputTypeCountJournalEntryLinesArgs
+  exitClearances?: boolean | MarketCountOutputTypeCountExitClearancesArgs
   cheques?: boolean | MarketCountOutputTypeCountChequesArgs
   documents?: boolean | MarketCountOutputTypeCountDocumentsArgs
-  users?: boolean | MarketCountOutputTypeCountUsersArgs
-  shareholders?: boolean | MarketCountOutputTypeCountShareholdersArgs
+  userMarkets?: boolean | MarketCountOutputTypeCountUserMarketsArgs
+  auditLogs?: boolean | MarketCountOutputTypeCountAuditLogsArgs
+  notifications?: boolean | MarketCountOutputTypeCountNotificationsArgs
+  guarantors?: boolean | MarketCountOutputTypeCountGuarantorsArgs
+  contractTerms?: boolean | MarketCountOutputTypeCountContractTermsArgs
   ownershipHistories?: boolean | MarketCountOutputTypeCountOwnershipHistoriesArgs
+  shareholders?: boolean | MarketCountOutputTypeCountShareholdersArgs
   additionalInvestments?: boolean | MarketCountOutputTypeCountAdditionalInvestmentsArgs
   withdrawals?: boolean | MarketCountOutputTypeCountWithdrawalsArgs
-  notifications?: boolean | MarketCountOutputTypeCountNotificationsArgs
-  apiKeys?: boolean | MarketCountOutputTypeCountApiKeysArgs
-  webhooks?: boolean | MarketCountOutputTypeCountWebhooksArgs
-  externalIntegrations?: boolean | MarketCountOutputTypeCountExternalIntegrationsArgs
-  loginHistory?: boolean | MarketCountOutputTypeCountLoginHistoryArgs
-  failedLoginAttempts?: boolean | MarketCountOutputTypeCountFailedLoginAttemptsArgs
 }
 
 /**
@@ -9831,15 +5275,15 @@ export type MarketCountOutputTypeCountFloorsArgs<ExtArgs extends runtime.Types.E
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountShopCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShopCategoryWhereInput
+export type MarketCountOutputTypeCountShopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ShopWhereInput
 }
 
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountShopsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShopWhereInput
+export type MarketCountOutputTypeCountShopCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ShopCategoryWhereInput
 }
 
 /**
@@ -9852,22 +5296,8 @@ export type MarketCountOutputTypeCountTenantsArgs<ExtArgs extends runtime.Types.
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountGuarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GuarantorWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
 export type MarketCountOutputTypeCountContractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ContractWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountContractTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContractTermWhereInput
 }
 
 /**
@@ -9908,22 +5338,15 @@ export type MarketCountOutputTypeCountMarketExpensesArgs<ExtArgs extends runtime
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExitClearanceWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountMiscellaneousIncomeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.MiscellaneousIncomeWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
 export type MarketCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AccountWhereInput
+}
+
+/**
+ * MarketCountOutputType without action
+ */
+export type MarketCountOutputTypeCountMiscellaneousIncomesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MiscellaneousIncomeWhereInput
 }
 
 /**
@@ -9936,15 +5359,8 @@ export type MarketCountOutputTypeCountAccountTransactionsArgs<ExtArgs extends ru
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountJournalEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.JournalEntryWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountJournalEntryLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.JournalEntryLineWhereInput
+export type MarketCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExitClearanceWhereInput
 }
 
 /**
@@ -9964,15 +5380,36 @@ export type MarketCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Type
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserWhereInput
+export type MarketCountOutputTypeCountUserMarketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserMarketWhereInput
 }
 
 /**
  * MarketCountOutputType without action
  */
-export type MarketCountOutputTypeCountShareholdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ShareholderWhereInput
+export type MarketCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditLogWhereInput
+}
+
+/**
+ * MarketCountOutputType without action
+ */
+export type MarketCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * MarketCountOutputType without action
+ */
+export type MarketCountOutputTypeCountGuarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuarantorWhereInput
+}
+
+/**
+ * MarketCountOutputType without action
+ */
+export type MarketCountOutputTypeCountContractTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContractTermWhereInput
 }
 
 /**
@@ -9980,6 +5417,13 @@ export type MarketCountOutputTypeCountShareholdersArgs<ExtArgs extends runtime.T
  */
 export type MarketCountOutputTypeCountOwnershipHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OwnershipHistoryWhereInput
+}
+
+/**
+ * MarketCountOutputType without action
+ */
+export type MarketCountOutputTypeCountShareholdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ShareholderWhereInput
 }
 
 /**
@@ -9996,104 +5440,44 @@ export type MarketCountOutputTypeCountWithdrawalsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.WithdrawalWhereInput
 }
 
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountApiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ApiKeyWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountWebhooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WebhookWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountExternalIntegrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExternalIntegrationWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountLoginHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LoginHistoryWhereInput
-}
-
-/**
- * MarketCountOutputType without action
- */
-export type MarketCountOutputTypeCountFailedLoginAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FailedLoginAttemptWhereInput
-}
-
 
 export type MarketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   code?: boolean
-  ownerName?: boolean
-  phone?: boolean
-  email?: boolean
-  country?: boolean
-  city?: boolean
   address?: boolean
-  logo?: boolean
-  currencyCode?: boolean
-  description?: boolean
+  phone?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
-  currency?: boolean | Prisma.Market$currencyArgs<ExtArgs>
-  settings?: boolean | Prisma.Market$settingsArgs<ExtArgs>
-  contractSequence?: boolean | Prisma.Market$contractSequenceArgs<ExtArgs>
-  accountSequence?: boolean | Prisma.Market$accountSequenceArgs<ExtArgs>
   floors?: boolean | Prisma.Market$floorsArgs<ExtArgs>
-  shopCategories?: boolean | Prisma.Market$shopCategoriesArgs<ExtArgs>
   shops?: boolean | Prisma.Market$shopsArgs<ExtArgs>
+  shopCategories?: boolean | Prisma.Market$shopCategoriesArgs<ExtArgs>
   tenants?: boolean | Prisma.Market$tenantsArgs<ExtArgs>
-  guarantors?: boolean | Prisma.Market$guarantorsArgs<ExtArgs>
   contracts?: boolean | Prisma.Market$contractsArgs<ExtArgs>
-  contractTerms?: boolean | Prisma.Market$contractTermsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Market$rentPaymentsArgs<ExtArgs>
   utilityBills?: boolean | Prisma.Market$utilityBillsArgs<ExtArgs>
   expenseCategories?: boolean | Prisma.Market$expenseCategoriesArgs<ExtArgs>
   employees?: boolean | Prisma.Market$employeesArgs<ExtArgs>
   marketExpenses?: boolean | Prisma.Market$marketExpensesArgs<ExtArgs>
-  exitClearances?: boolean | Prisma.Market$exitClearancesArgs<ExtArgs>
-  miscellaneousIncome?: boolean | Prisma.Market$miscellaneousIncomeArgs<ExtArgs>
   accounts?: boolean | Prisma.Market$accountsArgs<ExtArgs>
+  miscellaneousIncomes?: boolean | Prisma.Market$miscellaneousIncomesArgs<ExtArgs>
   accountTransactions?: boolean | Prisma.Market$accountTransactionsArgs<ExtArgs>
-  journalEntries?: boolean | Prisma.Market$journalEntriesArgs<ExtArgs>
-  journalEntryLines?: boolean | Prisma.Market$journalEntryLinesArgs<ExtArgs>
+  exitClearances?: boolean | Prisma.Market$exitClearancesArgs<ExtArgs>
   cheques?: boolean | Prisma.Market$chequesArgs<ExtArgs>
   documents?: boolean | Prisma.Market$documentsArgs<ExtArgs>
-  users?: boolean | Prisma.Market$usersArgs<ExtArgs>
-  shareholders?: boolean | Prisma.Market$shareholdersArgs<ExtArgs>
+  userMarkets?: boolean | Prisma.Market$userMarketsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Market$auditLogsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Market$notificationsArgs<ExtArgs>
+  guarantors?: boolean | Prisma.Market$guarantorsArgs<ExtArgs>
+  contractTerms?: boolean | Prisma.Market$contractTermsArgs<ExtArgs>
   ownershipHistories?: boolean | Prisma.Market$ownershipHistoriesArgs<ExtArgs>
+  shareholders?: boolean | Prisma.Market$shareholdersArgs<ExtArgs>
   additionalInvestments?: boolean | Prisma.Market$additionalInvestmentsArgs<ExtArgs>
   withdrawals?: boolean | Prisma.Market$withdrawalsArgs<ExtArgs>
-  notifications?: boolean | Prisma.Market$notificationsArgs<ExtArgs>
-  apiKeys?: boolean | Prisma.Market$apiKeysArgs<ExtArgs>
-  webhooks?: boolean | Prisma.Market$webhooksArgs<ExtArgs>
-  externalIntegrations?: boolean | Prisma.Market$externalIntegrationsArgs<ExtArgs>
-  loginHistory?: boolean | Prisma.Market$loginHistoryArgs<ExtArgs>
-  failedLoginAttempts?: boolean | Prisma.Market$failedLoginAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.MarketCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["market"]>
 
@@ -10101,174 +5485,119 @@ export type MarketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   name?: boolean
   code?: boolean
-  ownerName?: boolean
-  phone?: boolean
-  email?: boolean
-  country?: boolean
-  city?: boolean
   address?: boolean
-  logo?: boolean
-  currencyCode?: boolean
-  description?: boolean
+  phone?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
-  currency?: boolean | Prisma.Market$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["market"]>
 
 export type MarketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   code?: boolean
-  ownerName?: boolean
-  phone?: boolean
-  email?: boolean
-  country?: boolean
-  city?: boolean
   address?: boolean
-  logo?: boolean
-  currencyCode?: boolean
-  description?: boolean
+  phone?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
-  currency?: boolean | Prisma.Market$currencyArgs<ExtArgs>
 }, ExtArgs["result"]["market"]>
 
 export type MarketSelectScalar = {
   id?: boolean
   name?: boolean
   code?: boolean
-  ownerName?: boolean
-  phone?: boolean
-  email?: boolean
-  country?: boolean
-  city?: boolean
   address?: boolean
-  logo?: boolean
-  currencyCode?: boolean
-  description?: boolean
+  phone?: boolean
   status?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type MarketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "ownerName" | "phone" | "email" | "country" | "city" | "address" | "logo" | "currencyCode" | "description" | "status" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["market"]>
+export type MarketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "address" | "phone" | "status" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["market"]>
 export type MarketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  currency?: boolean | Prisma.Market$currencyArgs<ExtArgs>
-  settings?: boolean | Prisma.Market$settingsArgs<ExtArgs>
-  contractSequence?: boolean | Prisma.Market$contractSequenceArgs<ExtArgs>
-  accountSequence?: boolean | Prisma.Market$accountSequenceArgs<ExtArgs>
   floors?: boolean | Prisma.Market$floorsArgs<ExtArgs>
-  shopCategories?: boolean | Prisma.Market$shopCategoriesArgs<ExtArgs>
   shops?: boolean | Prisma.Market$shopsArgs<ExtArgs>
+  shopCategories?: boolean | Prisma.Market$shopCategoriesArgs<ExtArgs>
   tenants?: boolean | Prisma.Market$tenantsArgs<ExtArgs>
-  guarantors?: boolean | Prisma.Market$guarantorsArgs<ExtArgs>
   contracts?: boolean | Prisma.Market$contractsArgs<ExtArgs>
-  contractTerms?: boolean | Prisma.Market$contractTermsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Market$rentPaymentsArgs<ExtArgs>
   utilityBills?: boolean | Prisma.Market$utilityBillsArgs<ExtArgs>
   expenseCategories?: boolean | Prisma.Market$expenseCategoriesArgs<ExtArgs>
   employees?: boolean | Prisma.Market$employeesArgs<ExtArgs>
   marketExpenses?: boolean | Prisma.Market$marketExpensesArgs<ExtArgs>
-  exitClearances?: boolean | Prisma.Market$exitClearancesArgs<ExtArgs>
-  miscellaneousIncome?: boolean | Prisma.Market$miscellaneousIncomeArgs<ExtArgs>
   accounts?: boolean | Prisma.Market$accountsArgs<ExtArgs>
+  miscellaneousIncomes?: boolean | Prisma.Market$miscellaneousIncomesArgs<ExtArgs>
   accountTransactions?: boolean | Prisma.Market$accountTransactionsArgs<ExtArgs>
-  journalEntries?: boolean | Prisma.Market$journalEntriesArgs<ExtArgs>
-  journalEntryLines?: boolean | Prisma.Market$journalEntryLinesArgs<ExtArgs>
+  exitClearances?: boolean | Prisma.Market$exitClearancesArgs<ExtArgs>
   cheques?: boolean | Prisma.Market$chequesArgs<ExtArgs>
   documents?: boolean | Prisma.Market$documentsArgs<ExtArgs>
-  users?: boolean | Prisma.Market$usersArgs<ExtArgs>
-  shareholders?: boolean | Prisma.Market$shareholdersArgs<ExtArgs>
+  userMarkets?: boolean | Prisma.Market$userMarketsArgs<ExtArgs>
+  auditLogs?: boolean | Prisma.Market$auditLogsArgs<ExtArgs>
+  notifications?: boolean | Prisma.Market$notificationsArgs<ExtArgs>
+  guarantors?: boolean | Prisma.Market$guarantorsArgs<ExtArgs>
+  contractTerms?: boolean | Prisma.Market$contractTermsArgs<ExtArgs>
   ownershipHistories?: boolean | Prisma.Market$ownershipHistoriesArgs<ExtArgs>
+  shareholders?: boolean | Prisma.Market$shareholdersArgs<ExtArgs>
   additionalInvestments?: boolean | Prisma.Market$additionalInvestmentsArgs<ExtArgs>
   withdrawals?: boolean | Prisma.Market$withdrawalsArgs<ExtArgs>
-  notifications?: boolean | Prisma.Market$notificationsArgs<ExtArgs>
-  apiKeys?: boolean | Prisma.Market$apiKeysArgs<ExtArgs>
-  webhooks?: boolean | Prisma.Market$webhooksArgs<ExtArgs>
-  externalIntegrations?: boolean | Prisma.Market$externalIntegrationsArgs<ExtArgs>
-  loginHistory?: boolean | Prisma.Market$loginHistoryArgs<ExtArgs>
-  failedLoginAttempts?: boolean | Prisma.Market$failedLoginAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.MarketCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type MarketIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  currency?: boolean | Prisma.Market$currencyArgs<ExtArgs>
-}
-export type MarketIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  currency?: boolean | Prisma.Market$currencyArgs<ExtArgs>
-}
+export type MarketIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type MarketIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $MarketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Market"
   objects: {
-    currency: Prisma.$CurrencyPayload<ExtArgs> | null
-    settings: Prisma.$MarketSettingPayload<ExtArgs> | null
-    contractSequence: Prisma.$MarketContractSequencePayload<ExtArgs> | null
-    accountSequence: Prisma.$AccountSequencePayload<ExtArgs> | null
     floors: Prisma.$FloorPayload<ExtArgs>[]
-    shopCategories: Prisma.$ShopCategoryPayload<ExtArgs>[]
     shops: Prisma.$ShopPayload<ExtArgs>[]
+    shopCategories: Prisma.$ShopCategoryPayload<ExtArgs>[]
     tenants: Prisma.$TenantPayload<ExtArgs>[]
-    guarantors: Prisma.$GuarantorPayload<ExtArgs>[]
     contracts: Prisma.$ContractPayload<ExtArgs>[]
-    contractTerms: Prisma.$ContractTermPayload<ExtArgs>[]
     rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
     utilityBills: Prisma.$UtilityBillPayload<ExtArgs>[]
     expenseCategories: Prisma.$ExpenseCategoryPayload<ExtArgs>[]
     employees: Prisma.$EmployeePayload<ExtArgs>[]
     marketExpenses: Prisma.$MarketExpensePayload<ExtArgs>[]
-    exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
-    miscellaneousIncome: Prisma.$MiscellaneousIncomePayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
+    miscellaneousIncomes: Prisma.$MiscellaneousIncomePayload<ExtArgs>[]
     accountTransactions: Prisma.$AccountTransactionPayload<ExtArgs>[]
-    journalEntries: Prisma.$JournalEntryPayload<ExtArgs>[]
-    journalEntryLines: Prisma.$JournalEntryLinePayload<ExtArgs>[]
+    exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
     cheques: Prisma.$ChequePayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
-    users: Prisma.$UserPayload<ExtArgs>[]
-    shareholders: Prisma.$ShareholderPayload<ExtArgs>[]
+    userMarkets: Prisma.$UserMarketPayload<ExtArgs>[]
+    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    guarantors: Prisma.$GuarantorPayload<ExtArgs>[]
+    contractTerms: Prisma.$ContractTermPayload<ExtArgs>[]
     ownershipHistories: Prisma.$OwnershipHistoryPayload<ExtArgs>[]
+    shareholders: Prisma.$ShareholderPayload<ExtArgs>[]
     additionalInvestments: Prisma.$AdditionalInvestmentPayload<ExtArgs>[]
     withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
-    notifications: Prisma.$NotificationPayload<ExtArgs>[]
-    apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
-    webhooks: Prisma.$WebhookPayload<ExtArgs>[]
-    externalIntegrations: Prisma.$ExternalIntegrationPayload<ExtArgs>[]
-    loginHistory: Prisma.$LoginHistoryPayload<ExtArgs>[]
-    failedLoginAttempts: Prisma.$FailedLoginAttemptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    /**
+     * Human code, globally unique. Scope to an organization tier if added.
+     */
     code: string
-    ownerName: string | null
-    phone: string | null
-    email: string | null
-    country: string | null
-    city: string | null
     address: string | null
-    logo: string | null
-    currencyCode: string | null
-    description: string | null
-    status: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    phone: string | null
+    status: $Enums.MarketStatus
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["market"]>
   composites: {}
@@ -10664,41 +5993,31 @@ readonly fields: MarketFieldRefs;
  */
 export interface Prisma__MarketClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  currency<T extends Prisma.Market$currencyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$currencyArgs<ExtArgs>>): Prisma.Prisma__CurrencyClient<runtime.Types.Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  settings<T extends Prisma.Market$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$settingsArgs<ExtArgs>>): Prisma.Prisma__MarketSettingClient<runtime.Types.Result.GetResult<Prisma.$MarketSettingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  contractSequence<T extends Prisma.Market$contractSequenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$contractSequenceArgs<ExtArgs>>): Prisma.Prisma__MarketContractSequenceClient<runtime.Types.Result.GetResult<Prisma.$MarketContractSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  accountSequence<T extends Prisma.Market$accountSequenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$accountSequenceArgs<ExtArgs>>): Prisma.Prisma__AccountSequenceClient<runtime.Types.Result.GetResult<Prisma.$AccountSequencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   floors<T extends Prisma.Market$floorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$floorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FloorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  shopCategories<T extends Prisma.Market$shopCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$shopCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shops<T extends Prisma.Market$shopsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$shopsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  shopCategories<T extends Prisma.Market$shopCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$shopCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenants<T extends Prisma.Market$tenantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$tenantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  guarantors<T extends Prisma.Market$guarantorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$guarantorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuarantorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contracts<T extends Prisma.Market$contractsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$contractsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  contractTerms<T extends Prisma.Market$contractTermsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$contractTermsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractTermPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rentPayments<T extends Prisma.Market$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   utilityBills<T extends Prisma.Market$utilityBillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$utilityBillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UtilityBillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenseCategories<T extends Prisma.Market$expenseCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$expenseCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpenseCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.Market$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   marketExpenses<T extends Prisma.Market$marketExpensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$marketExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  exitClearances<T extends Prisma.Market$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  miscellaneousIncome<T extends Prisma.Market$miscellaneousIncomeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$miscellaneousIncomeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MiscellaneousIncomePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.Market$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  miscellaneousIncomes<T extends Prisma.Market$miscellaneousIncomesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$miscellaneousIncomesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MiscellaneousIncomePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accountTransactions<T extends Prisma.Market$accountTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$accountTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  journalEntries<T extends Prisma.Market$journalEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$journalEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  journalEntryLines<T extends Prisma.Market$journalEntryLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$journalEntryLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalEntryLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exitClearances<T extends Prisma.Market$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cheques<T extends Prisma.Market$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Market$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  users<T extends Prisma.Market$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  shareholders<T extends Prisma.Market$shareholdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$shareholdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShareholderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userMarkets<T extends Prisma.Market$userMarketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$userMarketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserMarketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditLogs<T extends Prisma.Market$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Market$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  guarantors<T extends Prisma.Market$guarantorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$guarantorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuarantorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contractTerms<T extends Prisma.Market$contractTermsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$contractTermsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractTermPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownershipHistories<T extends Prisma.Market$ownershipHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$ownershipHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OwnershipHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  shareholders<T extends Prisma.Market$shareholdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$shareholdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShareholderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   additionalInvestments<T extends Prisma.Market$additionalInvestmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$additionalInvestmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdditionalInvestmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   withdrawals<T extends Prisma.Market$withdrawalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  notifications<T extends Prisma.Market$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  apiKeys<T extends Prisma.Market$apiKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  webhooks<T extends Prisma.Market$webhooksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$webhooksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  externalIntegrations<T extends Prisma.Market$externalIntegrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$externalIntegrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExternalIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  loginHistory<T extends Prisma.Market$loginHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$loginHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  failedLoginAttempts<T extends Prisma.Market$failedLoginAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$failedLoginAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FailedLoginAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10731,21 +6050,13 @@ export interface MarketFieldRefs {
   readonly id: Prisma.FieldRef<"Market", 'String'>
   readonly name: Prisma.FieldRef<"Market", 'String'>
   readonly code: Prisma.FieldRef<"Market", 'String'>
-  readonly ownerName: Prisma.FieldRef<"Market", 'String'>
-  readonly phone: Prisma.FieldRef<"Market", 'String'>
-  readonly email: Prisma.FieldRef<"Market", 'String'>
-  readonly country: Prisma.FieldRef<"Market", 'String'>
-  readonly city: Prisma.FieldRef<"Market", 'String'>
   readonly address: Prisma.FieldRef<"Market", 'String'>
-  readonly logo: Prisma.FieldRef<"Market", 'String'>
-  readonly currencyCode: Prisma.FieldRef<"Market", 'String'>
-  readonly description: Prisma.FieldRef<"Market", 'String'>
-  readonly status: Prisma.FieldRef<"Market", 'String'>
+  readonly phone: Prisma.FieldRef<"Market", 'String'>
+  readonly status: Prisma.FieldRef<"Market", 'MarketStatus'>
+  readonly createdById: Prisma.FieldRef<"Market", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Market", 'String'>
   readonly createdAt: Prisma.FieldRef<"Market", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Market", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Market", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"Market", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"Market", 'String'>
   readonly deletedAt: Prisma.FieldRef<"Market", 'DateTime'>
 }
     
@@ -11001,10 +6312,6 @@ export type MarketCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    */
   data: Prisma.MarketCreateManyInput | Prisma.MarketCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MarketIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -11075,10 +6382,6 @@ export type MarketUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Markets to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MarketIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -11148,82 +6451,6 @@ export type MarketDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Market.currency
- */
-export type Market$currencyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Currency
-   */
-  select?: Prisma.CurrencySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Currency
-   */
-  omit?: Prisma.CurrencyOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CurrencyInclude<ExtArgs> | null
-  where?: Prisma.CurrencyWhereInput
-}
-
-/**
- * Market.settings
- */
-export type Market$settingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MarketSetting
-   */
-  select?: Prisma.MarketSettingSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MarketSetting
-   */
-  omit?: Prisma.MarketSettingOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MarketSettingInclude<ExtArgs> | null
-  where?: Prisma.MarketSettingWhereInput
-}
-
-/**
- * Market.contractSequence
- */
-export type Market$contractSequenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MarketContractSequence
-   */
-  select?: Prisma.MarketContractSequenceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MarketContractSequence
-   */
-  omit?: Prisma.MarketContractSequenceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MarketContractSequenceInclude<ExtArgs> | null
-  where?: Prisma.MarketContractSequenceWhereInput
-}
-
-/**
- * Market.accountSequence
- */
-export type Market$accountSequenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AccountSequence
-   */
-  select?: Prisma.AccountSequenceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the AccountSequence
-   */
-  omit?: Prisma.AccountSequenceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AccountSequenceInclude<ExtArgs> | null
-  where?: Prisma.AccountSequenceWhereInput
-}
-
-/**
  * Market.floors
  */
 export type Market$floorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11245,30 +6472,6 @@ export type Market$floorsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.FloorScalarFieldEnum | Prisma.FloorScalarFieldEnum[]
-}
-
-/**
- * Market.shopCategories
- */
-export type Market$shopCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ShopCategory
-   */
-  select?: Prisma.ShopCategorySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ShopCategory
-   */
-  omit?: Prisma.ShopCategoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ShopCategoryInclude<ExtArgs> | null
-  where?: Prisma.ShopCategoryWhereInput
-  orderBy?: Prisma.ShopCategoryOrderByWithRelationInput | Prisma.ShopCategoryOrderByWithRelationInput[]
-  cursor?: Prisma.ShopCategoryWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ShopCategoryScalarFieldEnum | Prisma.ShopCategoryScalarFieldEnum[]
 }
 
 /**
@@ -11296,6 +6499,30 @@ export type Market$shopsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 /**
+ * Market.shopCategories
+ */
+export type Market$shopCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ShopCategory
+   */
+  select?: Prisma.ShopCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ShopCategory
+   */
+  omit?: Prisma.ShopCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShopCategoryInclude<ExtArgs> | null
+  where?: Prisma.ShopCategoryWhereInput
+  orderBy?: Prisma.ShopCategoryOrderByWithRelationInput | Prisma.ShopCategoryOrderByWithRelationInput[]
+  cursor?: Prisma.ShopCategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ShopCategoryScalarFieldEnum | Prisma.ShopCategoryScalarFieldEnum[]
+}
+
+/**
  * Market.tenants
  */
 export type Market$tenantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11320,30 +6547,6 @@ export type Market$tenantsArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Market.guarantors
- */
-export type Market$guarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Guarantor
-   */
-  select?: Prisma.GuarantorSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Guarantor
-   */
-  omit?: Prisma.GuarantorOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.GuarantorInclude<ExtArgs> | null
-  where?: Prisma.GuarantorWhereInput
-  orderBy?: Prisma.GuarantorOrderByWithRelationInput | Prisma.GuarantorOrderByWithRelationInput[]
-  cursor?: Prisma.GuarantorWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.GuarantorScalarFieldEnum | Prisma.GuarantorScalarFieldEnum[]
-}
-
-/**
  * Market.contracts
  */
 export type Market$contractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11365,30 +6568,6 @@ export type Market$contractsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ContractScalarFieldEnum | Prisma.ContractScalarFieldEnum[]
-}
-
-/**
- * Market.contractTerms
- */
-export type Market$contractTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ContractTerm
-   */
-  select?: Prisma.ContractTermSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ContractTerm
-   */
-  omit?: Prisma.ContractTermOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ContractTermInclude<ExtArgs> | null
-  where?: Prisma.ContractTermWhereInput
-  orderBy?: Prisma.ContractTermOrderByWithRelationInput | Prisma.ContractTermOrderByWithRelationInput[]
-  cursor?: Prisma.ContractTermWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ContractTermScalarFieldEnum | Prisma.ContractTermScalarFieldEnum[]
 }
 
 /**
@@ -11512,54 +6691,6 @@ export type Market$marketExpensesArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * Market.exitClearances
- */
-export type Market$exitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExitClearance
-   */
-  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExitClearance
-   */
-  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
-  where?: Prisma.ExitClearanceWhereInput
-  orderBy?: Prisma.ExitClearanceOrderByWithRelationInput | Prisma.ExitClearanceOrderByWithRelationInput[]
-  cursor?: Prisma.ExitClearanceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
-}
-
-/**
- * Market.miscellaneousIncome
- */
-export type Market$miscellaneousIncomeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the MiscellaneousIncome
-   */
-  select?: Prisma.MiscellaneousIncomeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the MiscellaneousIncome
-   */
-  omit?: Prisma.MiscellaneousIncomeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.MiscellaneousIncomeInclude<ExtArgs> | null
-  where?: Prisma.MiscellaneousIncomeWhereInput
-  orderBy?: Prisma.MiscellaneousIncomeOrderByWithRelationInput | Prisma.MiscellaneousIncomeOrderByWithRelationInput[]
-  cursor?: Prisma.MiscellaneousIncomeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.MiscellaneousIncomeScalarFieldEnum | Prisma.MiscellaneousIncomeScalarFieldEnum[]
-}
-
-/**
  * Market.accounts
  */
 export type Market$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11581,6 +6712,30 @@ export type Market$accountsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * Market.miscellaneousIncomes
+ */
+export type Market$miscellaneousIncomesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MiscellaneousIncome
+   */
+  select?: Prisma.MiscellaneousIncomeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MiscellaneousIncome
+   */
+  omit?: Prisma.MiscellaneousIncomeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MiscellaneousIncomeInclude<ExtArgs> | null
+  where?: Prisma.MiscellaneousIncomeWhereInput
+  orderBy?: Prisma.MiscellaneousIncomeOrderByWithRelationInput | Prisma.MiscellaneousIncomeOrderByWithRelationInput[]
+  cursor?: Prisma.MiscellaneousIncomeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MiscellaneousIncomeScalarFieldEnum | Prisma.MiscellaneousIncomeScalarFieldEnum[]
 }
 
 /**
@@ -11608,51 +6763,27 @@ export type Market$accountTransactionsArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * Market.journalEntries
+ * Market.exitClearances
  */
-export type Market$journalEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Market$exitClearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the JournalEntry
+   * Select specific fields to fetch from the ExitClearance
    */
-  select?: Prisma.JournalEntrySelect<ExtArgs> | null
+  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the JournalEntry
+   * Omit specific fields from the ExitClearance
    */
-  omit?: Prisma.JournalEntryOmit<ExtArgs> | null
+  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.JournalEntryInclude<ExtArgs> | null
-  where?: Prisma.JournalEntryWhereInput
-  orderBy?: Prisma.JournalEntryOrderByWithRelationInput | Prisma.JournalEntryOrderByWithRelationInput[]
-  cursor?: Prisma.JournalEntryWhereUniqueInput
+  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
+  where?: Prisma.ExitClearanceWhereInput
+  orderBy?: Prisma.ExitClearanceOrderByWithRelationInput | Prisma.ExitClearanceOrderByWithRelationInput[]
+  cursor?: Prisma.ExitClearanceWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.JournalEntryScalarFieldEnum | Prisma.JournalEntryScalarFieldEnum[]
-}
-
-/**
- * Market.journalEntryLines
- */
-export type Market$journalEntryLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the JournalEntryLine
-   */
-  select?: Prisma.JournalEntryLineSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the JournalEntryLine
-   */
-  omit?: Prisma.JournalEntryLineOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.JournalEntryLineInclude<ExtArgs> | null
-  where?: Prisma.JournalEntryLineWhereInput
-  orderBy?: Prisma.JournalEntryLineOrderByWithRelationInput | Prisma.JournalEntryLineOrderByWithRelationInput[]
-  cursor?: Prisma.JournalEntryLineWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.JournalEntryLineScalarFieldEnum | Prisma.JournalEntryLineScalarFieldEnum[]
+  distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
 }
 
 /**
@@ -11704,51 +6835,123 @@ export type Market$documentsArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Market.users
+ * Market.userMarkets
  */
-export type Market$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Market$userMarketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the UserMarket
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.UserMarketSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the UserMarket
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.UserMarketOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
-  cursor?: Prisma.UserWhereUniqueInput
+  include?: Prisma.UserMarketInclude<ExtArgs> | null
+  where?: Prisma.UserMarketWhereInput
+  orderBy?: Prisma.UserMarketOrderByWithRelationInput | Prisma.UserMarketOrderByWithRelationInput[]
+  cursor?: Prisma.UserMarketWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+  distinct?: Prisma.UserMarketScalarFieldEnum | Prisma.UserMarketScalarFieldEnum[]
 }
 
 /**
- * Market.shareholders
+ * Market.auditLogs
  */
-export type Market$shareholdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Market$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Shareholder
+   * Select specific fields to fetch from the AuditLog
    */
-  select?: Prisma.ShareholderSelect<ExtArgs> | null
+  select?: Prisma.AuditLogSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Shareholder
+   * Omit specific fields from the AuditLog
    */
-  omit?: Prisma.ShareholderOmit<ExtArgs> | null
+  omit?: Prisma.AuditLogOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ShareholderInclude<ExtArgs> | null
-  where?: Prisma.ShareholderWhereInput
-  orderBy?: Prisma.ShareholderOrderByWithRelationInput | Prisma.ShareholderOrderByWithRelationInput[]
-  cursor?: Prisma.ShareholderWhereUniqueInput
+  include?: Prisma.AuditLogInclude<ExtArgs> | null
+  where?: Prisma.AuditLogWhereInput
+  orderBy?: Prisma.AuditLogOrderByWithRelationInput | Prisma.AuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.AuditLogWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ShareholderScalarFieldEnum | Prisma.ShareholderScalarFieldEnum[]
+  distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * Market.notifications
+ */
+export type Market$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * Market.guarantors
+ */
+export type Market$guarantorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Guarantor
+   */
+  select?: Prisma.GuarantorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Guarantor
+   */
+  omit?: Prisma.GuarantorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuarantorInclude<ExtArgs> | null
+  where?: Prisma.GuarantorWhereInput
+  orderBy?: Prisma.GuarantorOrderByWithRelationInput | Prisma.GuarantorOrderByWithRelationInput[]
+  cursor?: Prisma.GuarantorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuarantorScalarFieldEnum | Prisma.GuarantorScalarFieldEnum[]
+}
+
+/**
+ * Market.contractTerms
+ */
+export type Market$contractTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContractTerm
+   */
+  select?: Prisma.ContractTermSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContractTerm
+   */
+  omit?: Prisma.ContractTermOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractTermInclude<ExtArgs> | null
+  where?: Prisma.ContractTermWhereInput
+  orderBy?: Prisma.ContractTermOrderByWithRelationInput | Prisma.ContractTermOrderByWithRelationInput[]
+  cursor?: Prisma.ContractTermWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContractTermScalarFieldEnum | Prisma.ContractTermScalarFieldEnum[]
 }
 
 /**
@@ -11773,6 +6976,30 @@ export type Market$ownershipHistoriesArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.OwnershipHistoryScalarFieldEnum | Prisma.OwnershipHistoryScalarFieldEnum[]
+}
+
+/**
+ * Market.shareholders
+ */
+export type Market$shareholdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Shareholder
+   */
+  select?: Prisma.ShareholderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Shareholder
+   */
+  omit?: Prisma.ShareholderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShareholderInclude<ExtArgs> | null
+  where?: Prisma.ShareholderWhereInput
+  orderBy?: Prisma.ShareholderOrderByWithRelationInput | Prisma.ShareholderOrderByWithRelationInput[]
+  cursor?: Prisma.ShareholderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ShareholderScalarFieldEnum | Prisma.ShareholderScalarFieldEnum[]
 }
 
 /**
@@ -11821,150 +7048,6 @@ export type Market$withdrawalsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.WithdrawalScalarFieldEnum | Prisma.WithdrawalScalarFieldEnum[]
-}
-
-/**
- * Market.notifications
- */
-export type Market$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Notification
-   */
-  select?: Prisma.NotificationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Notification
-   */
-  omit?: Prisma.NotificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationInclude<ExtArgs> | null
-  where?: Prisma.NotificationWhereInput
-  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
-}
-
-/**
- * Market.apiKeys
- */
-export type Market$apiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ApiKey
-   */
-  select?: Prisma.ApiKeySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ApiKey
-   */
-  omit?: Prisma.ApiKeyOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ApiKeyInclude<ExtArgs> | null
-  where?: Prisma.ApiKeyWhereInput
-  orderBy?: Prisma.ApiKeyOrderByWithRelationInput | Prisma.ApiKeyOrderByWithRelationInput[]
-  cursor?: Prisma.ApiKeyWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ApiKeyScalarFieldEnum | Prisma.ApiKeyScalarFieldEnum[]
-}
-
-/**
- * Market.webhooks
- */
-export type Market$webhooksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Webhook
-   */
-  select?: Prisma.WebhookSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Webhook
-   */
-  omit?: Prisma.WebhookOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WebhookInclude<ExtArgs> | null
-  where?: Prisma.WebhookWhereInput
-  orderBy?: Prisma.WebhookOrderByWithRelationInput | Prisma.WebhookOrderByWithRelationInput[]
-  cursor?: Prisma.WebhookWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WebhookScalarFieldEnum | Prisma.WebhookScalarFieldEnum[]
-}
-
-/**
- * Market.externalIntegrations
- */
-export type Market$externalIntegrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExternalIntegration
-   */
-  select?: Prisma.ExternalIntegrationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExternalIntegration
-   */
-  omit?: Prisma.ExternalIntegrationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExternalIntegrationInclude<ExtArgs> | null
-  where?: Prisma.ExternalIntegrationWhereInput
-  orderBy?: Prisma.ExternalIntegrationOrderByWithRelationInput | Prisma.ExternalIntegrationOrderByWithRelationInput[]
-  cursor?: Prisma.ExternalIntegrationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExternalIntegrationScalarFieldEnum | Prisma.ExternalIntegrationScalarFieldEnum[]
-}
-
-/**
- * Market.loginHistory
- */
-export type Market$loginHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LoginHistory
-   */
-  select?: Prisma.LoginHistorySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the LoginHistory
-   */
-  omit?: Prisma.LoginHistoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LoginHistoryInclude<ExtArgs> | null
-  where?: Prisma.LoginHistoryWhereInput
-  orderBy?: Prisma.LoginHistoryOrderByWithRelationInput | Prisma.LoginHistoryOrderByWithRelationInput[]
-  cursor?: Prisma.LoginHistoryWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.LoginHistoryScalarFieldEnum | Prisma.LoginHistoryScalarFieldEnum[]
-}
-
-/**
- * Market.failedLoginAttempts
- */
-export type Market$failedLoginAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the FailedLoginAttempt
-   */
-  select?: Prisma.FailedLoginAttemptSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the FailedLoginAttempt
-   */
-  omit?: Prisma.FailedLoginAttemptOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.FailedLoginAttemptInclude<ExtArgs> | null
-  where?: Prisma.FailedLoginAttemptWhereInput
-  orderBy?: Prisma.FailedLoginAttemptOrderByWithRelationInput | Prisma.FailedLoginAttemptOrderByWithRelationInput[]
-  cursor?: Prisma.FailedLoginAttemptWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.FailedLoginAttemptScalarFieldEnum | Prisma.FailedLoginAttemptScalarFieldEnum[]
 }
 
 /**

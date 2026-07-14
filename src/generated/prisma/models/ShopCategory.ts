@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model ShopCategory
- * 
+ * A classification for shops (e.g. food, clothing).
  */
 export type ShopCategoryModel = runtime.Types.Result.DefaultSelection<Prisma.$ShopCategoryPayload>
 
@@ -29,11 +29,10 @@ export type ShopCategoryMinAggregateOutputType = {
   marketId: string | null
   name: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -42,11 +41,10 @@ export type ShopCategoryMaxAggregateOutputType = {
   marketId: string | null
   name: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -55,11 +53,10 @@ export type ShopCategoryCountAggregateOutputType = {
   marketId: number
   name: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
@@ -70,11 +67,10 @@ export type ShopCategoryMinAggregateInputType = {
   marketId?: true
   name?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -83,11 +79,10 @@ export type ShopCategoryMaxAggregateInputType = {
   marketId?: true
   name?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -96,11 +91,10 @@ export type ShopCategoryCountAggregateInputType = {
   marketId?: true
   name?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -182,11 +176,10 @@ export type ShopCategoryGroupByOutputType = {
   marketId: string
   name: string
   description: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: ShopCategoryCountAggregateOutputType | null
   _min: ShopCategoryMinAggregateOutputType | null
@@ -216,11 +209,10 @@ export type ShopCategoryWhereInput = {
   marketId?: Prisma.UuidFilter<"ShopCategory"> | string
   name?: Prisma.StringFilter<"ShopCategory"> | string
   description?: Prisma.StringNullableFilter<"ShopCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ShopCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ShopCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shops?: Prisma.ShopListRelationFilter
@@ -231,11 +223,10 @@ export type ShopCategoryOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shops?: Prisma.ShopOrderByRelationAggregateInput
@@ -243,33 +234,30 @@ export type ShopCategoryOrderByWithRelationInput = {
 
 export type ShopCategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.ShopCategoryMarketIdIdCompoundUniqueInput
   AND?: Prisma.ShopCategoryWhereInput | Prisma.ShopCategoryWhereInput[]
   OR?: Prisma.ShopCategoryWhereInput[]
   NOT?: Prisma.ShopCategoryWhereInput | Prisma.ShopCategoryWhereInput[]
   marketId?: Prisma.UuidFilter<"ShopCategory"> | string
   name?: Prisma.StringFilter<"ShopCategory"> | string
   description?: Prisma.StringNullableFilter<"ShopCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ShopCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ShopCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shops?: Prisma.ShopListRelationFilter
-}, "id" | "marketId_id">
+}, "id">
 
 export type ShopCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ShopCategoryCountOrderByAggregateInput
   _max?: Prisma.ShopCategoryMaxOrderByAggregateInput
@@ -284,11 +272,10 @@ export type ShopCategoryScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"ShopCategory"> | string
   name?: Prisma.StringWithAggregatesFilter<"ShopCategory"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"ShopCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ShopCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ShopCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"ShopCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"ShopCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"ShopCategory"> | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"ShopCategory"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"ShopCategory"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"ShopCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ShopCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ShopCategory"> | Date | string | null
 }
 
@@ -296,11 +283,10 @@ export type ShopCategoryCreateInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopCategoriesInput
   shops?: Prisma.ShopCreateNestedManyWithoutCategoryInput
@@ -311,11 +297,10 @@ export type ShopCategoryUncheckedCreateInput = {
   marketId: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutCategoryInput
 }
@@ -324,11 +309,10 @@ export type ShopCategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopCategoriesNestedInput
   shops?: Prisma.ShopUpdateManyWithoutCategoryNestedInput
@@ -339,11 +323,10 @@ export type ShopCategoryUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shops?: Prisma.ShopUncheckedUpdateManyWithoutCategoryNestedInput
 }
@@ -353,11 +336,10 @@ export type ShopCategoryCreateManyInput = {
   marketId: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -365,11 +347,10 @@ export type ShopCategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -378,11 +359,10 @@ export type ShopCategoryUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -396,9 +376,9 @@ export type ShopCategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ShopCategoryMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
+export type ShopCategoryNullableScalarRelationFilter = {
+  is?: Prisma.ShopCategoryWhereInput | null
+  isNot?: Prisma.ShopCategoryWhereInput | null
 }
 
 export type ShopCategoryCountOrderByAggregateInput = {
@@ -406,11 +386,10 @@ export type ShopCategoryCountOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -419,11 +398,10 @@ export type ShopCategoryMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -432,17 +410,11 @@ export type ShopCategoryMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
-}
-
-export type ShopCategoryNullableScalarRelationFilter = {
-  is?: Prisma.ShopCategoryWhereInput | null
-  isNot?: Prisma.ShopCategoryWhereInput | null
 }
 
 export type ShopCategoryCreateNestedManyWithoutMarketInput = {
@@ -507,11 +479,10 @@ export type ShopCategoryCreateWithoutMarketInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   shops?: Prisma.ShopCreateNestedManyWithoutCategoryInput
 }
@@ -520,11 +491,10 @@ export type ShopCategoryUncheckedCreateWithoutMarketInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutCategoryInput
 }
@@ -563,11 +533,10 @@ export type ShopCategoryScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"ShopCategory"> | string
   name?: Prisma.StringFilter<"ShopCategory"> | string
   description?: Prisma.StringNullableFilter<"ShopCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"ShopCategory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ShopCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ShopCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"ShopCategory"> | Date | string | null
 }
 
@@ -575,11 +544,10 @@ export type ShopCategoryCreateWithoutShopsInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutShopCategoriesInput
 }
@@ -589,11 +557,10 @@ export type ShopCategoryUncheckedCreateWithoutShopsInput = {
   marketId: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -617,11 +584,10 @@ export type ShopCategoryUpdateWithoutShopsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutShopCategoriesNestedInput
 }
@@ -631,11 +597,10 @@ export type ShopCategoryUncheckedUpdateWithoutShopsInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -643,11 +608,10 @@ export type ShopCategoryCreateManyMarketInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -655,11 +619,10 @@ export type ShopCategoryUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shops?: Prisma.ShopUpdateManyWithoutCategoryNestedInput
 }
@@ -668,11 +631,10 @@ export type ShopCategoryUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shops?: Prisma.ShopUncheckedUpdateManyWithoutCategoryNestedInput
 }
@@ -681,11 +643,10 @@ export type ShopCategoryUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -725,11 +686,10 @@ export type ShopCategorySelect<ExtArgs extends runtime.Types.Extensions.Internal
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shops?: boolean | Prisma.ShopCategory$shopsArgs<ExtArgs>
@@ -741,11 +701,10 @@ export type ShopCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shopCategory"]>
@@ -755,11 +714,10 @@ export type ShopCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shopCategory"]>
@@ -769,15 +727,14 @@ export type ShopCategorySelectScalar = {
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type ShopCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["shopCategory"]>
+export type ShopCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shopCategory"]>
 export type ShopCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shops?: boolean | Prisma.ShopCategory$shopsArgs<ExtArgs>
@@ -801,11 +758,10 @@ export type $ShopCategoryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     marketId: string
     name: string
     description: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["shopCategory"]>
   composites: {}
@@ -1236,11 +1192,10 @@ export interface ShopCategoryFieldRefs {
   readonly marketId: Prisma.FieldRef<"ShopCategory", 'String'>
   readonly name: Prisma.FieldRef<"ShopCategory", 'String'>
   readonly description: Prisma.FieldRef<"ShopCategory", 'String'>
+  readonly createdById: Prisma.FieldRef<"ShopCategory", 'String'>
+  readonly updatedById: Prisma.FieldRef<"ShopCategory", 'String'>
   readonly createdAt: Prisma.FieldRef<"ShopCategory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ShopCategory", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"ShopCategory", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"ShopCategory", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"ShopCategory", 'String'>
   readonly deletedAt: Prisma.FieldRef<"ShopCategory", 'DateTime'>
 }
     

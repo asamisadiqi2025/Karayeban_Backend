@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Withdrawal
- * 
+ * A capital withdrawal by a shareholder.
  */
 export type WithdrawalModel = runtime.Types.Result.DefaultSelection<Prisma.$WithdrawalPayload>
 
@@ -41,13 +41,12 @@ export type WithdrawalMinAggregateOutputType = {
   accountId: string | null
   amount: runtime.Decimal | null
   withdrawalDate: Date | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
   source: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
-  createdBy: string | null
+  updatedAt: Date | null
 }
 
 export type WithdrawalMaxAggregateOutputType = {
@@ -57,13 +56,12 @@ export type WithdrawalMaxAggregateOutputType = {
   accountId: string | null
   amount: runtime.Decimal | null
   withdrawalDate: Date | null
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
   source: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
-  createdBy: string | null
+  updatedAt: Date | null
 }
 
 export type WithdrawalCountAggregateOutputType = {
@@ -73,13 +71,12 @@ export type WithdrawalCountAggregateOutputType = {
   accountId: number
   amount: number
   withdrawalDate: number
-  approvalStatus: number
-  approvedBy: number
-  approvedAt: number
   source: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
-  createdBy: number
+  updatedAt: number
   _all: number
 }
 
@@ -99,13 +96,12 @@ export type WithdrawalMinAggregateInputType = {
   accountId?: true
   amount?: true
   withdrawalDate?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
   source?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
 }
 
 export type WithdrawalMaxAggregateInputType = {
@@ -115,13 +111,12 @@ export type WithdrawalMaxAggregateInputType = {
   accountId?: true
   amount?: true
   withdrawalDate?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
   source?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
 }
 
 export type WithdrawalCountAggregateInputType = {
@@ -131,13 +126,12 @@ export type WithdrawalCountAggregateInputType = {
   accountId?: true
   amount?: true
   withdrawalDate?: true
-  approvalStatus?: true
-  approvedBy?: true
-  approvedAt?: true
   source?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
-  createdBy?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -234,13 +228,12 @@ export type WithdrawalGroupByOutputType = {
   accountId: string | null
   amount: runtime.Decimal
   withdrawalDate: Date
-  approvalStatus: string | null
-  approvedBy: string | null
-  approvedAt: Date | null
   source: string | null
   description: string | null
-  createdAt: Date | null
-  createdBy: string | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   _count: WithdrawalCountAggregateOutputType | null
   _avg: WithdrawalAvgAggregateOutputType | null
   _sum: WithdrawalSumAggregateOutputType | null
@@ -273,13 +266,12 @@ export type WithdrawalWhereInput = {
   accountId?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
   amount?: Prisma.DecimalFilter<"Withdrawal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
-  approvalStatus?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
   source?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
   description?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
@@ -292,13 +284,12 @@ export type WithdrawalOrderByWithRelationInput = {
   accountId?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   withdrawalDate?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shareholder?: Prisma.ShareholderOrderByWithRelationInput
   account?: Prisma.AccountOrderByWithRelationInput
@@ -314,13 +305,12 @@ export type WithdrawalWhereUniqueInput = Prisma.AtLeast<{
   accountId?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
   amount?: Prisma.DecimalFilter<"Withdrawal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
-  approvalStatus?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
   source?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
   description?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
@@ -333,13 +323,12 @@ export type WithdrawalOrderByWithAggregationInput = {
   accountId?: Prisma.SortOrderInput | Prisma.SortOrder
   amount?: Prisma.SortOrder
   withdrawalDate?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.WithdrawalCountOrderByAggregateInput
   _avg?: Prisma.WithdrawalAvgOrderByAggregateInput
   _max?: Prisma.WithdrawalMaxOrderByAggregateInput
@@ -357,26 +346,24 @@ export type WithdrawalScalarWhereWithAggregatesInput = {
   accountId?: Prisma.UuidNullableWithAggregatesFilter<"Withdrawal"> | string | null
   amount?: Prisma.DecimalWithAggregatesFilter<"Withdrawal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
-  approvalStatus?: Prisma.StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
-  approvedBy?: Prisma.UuidNullableWithAggregatesFilter<"Withdrawal"> | string | null
-  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Withdrawal"> | Date | string | null
   source?: Prisma.StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Withdrawal"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"Withdrawal"> | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"Withdrawal"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Withdrawal"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
 }
 
 export type WithdrawalCreateInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutWithdrawalsInput
   shareholder: Prisma.ShareholderCreateNestedOneWithoutWithdrawalsInput
   account?: Prisma.AccountCreateNestedOneWithoutWithdrawalsInput
@@ -389,26 +376,24 @@ export type WithdrawalUncheckedCreateInput = {
   accountId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutWithdrawalsNestedInput
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutWithdrawalsNestedInput
   account?: Prisma.AccountUpdateOneWithoutWithdrawalsNestedInput
@@ -421,13 +406,12 @@ export type WithdrawalUncheckedUpdateInput = {
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalCreateManyInput = {
@@ -437,26 +421,24 @@ export type WithdrawalCreateManyInput = {
   accountId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalUncheckedUpdateManyInput = {
@@ -466,13 +448,12 @@ export type WithdrawalUncheckedUpdateManyInput = {
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalListRelationFilter = {
@@ -492,13 +473,12 @@ export type WithdrawalCountOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   withdrawalDate?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type WithdrawalAvgOrderByAggregateInput = {
@@ -512,13 +492,12 @@ export type WithdrawalMaxOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   withdrawalDate?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type WithdrawalMinOrderByAggregateInput = {
@@ -528,13 +507,12 @@ export type WithdrawalMinOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   withdrawalDate?: Prisma.SortOrder
-  approvalStatus?: Prisma.SortOrder
-  approvedBy?: Prisma.SortOrder
-  approvedAt?: Prisma.SortOrder
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type WithdrawalSumOrderByAggregateInput = {
@@ -671,13 +649,12 @@ export type WithdrawalCreateWithoutMarketInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   shareholder: Prisma.ShareholderCreateNestedOneWithoutWithdrawalsInput
   account?: Prisma.AccountCreateNestedOneWithoutWithdrawalsInput
 }
@@ -688,13 +665,12 @@ export type WithdrawalUncheckedCreateWithoutMarketInput = {
   accountId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalCreateOrConnectWithoutMarketInput = {
@@ -733,42 +709,40 @@ export type WithdrawalScalarWhereInput = {
   accountId?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
   amount?: Prisma.DecimalFilter<"Withdrawal"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
-  approvalStatus?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
-  approvedBy?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
-  approvedAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
   source?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
   description?: Prisma.StringNullableFilter<"Withdrawal"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"Withdrawal"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"Withdrawal"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Withdrawal"> | Date | string
 }
 
 export type WithdrawalCreateWithoutAccountInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutWithdrawalsInput
   shareholder: Prisma.ShareholderCreateNestedOneWithoutWithdrawalsInput
 }
 
 export type WithdrawalUncheckedCreateWithoutAccountInput = {
   id?: string
+  marketId: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalCreateOrConnectWithoutAccountInput = {
@@ -801,29 +775,28 @@ export type WithdrawalCreateWithoutShareholderInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   market: Prisma.MarketCreateNestedOneWithoutWithdrawalsInput
   account?: Prisma.AccountCreateNestedOneWithoutWithdrawalsInput
 }
 
 export type WithdrawalUncheckedCreateWithoutShareholderInput = {
   id?: string
+  marketId: string
   accountId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalCreateOrConnectWithoutShareholderInput = {
@@ -858,26 +831,24 @@ export type WithdrawalCreateManyMarketInput = {
   accountId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutWithdrawalsNestedInput
   account?: Prisma.AccountUpdateOneWithoutWithdrawalsNestedInput
 }
@@ -888,13 +859,12 @@ export type WithdrawalUncheckedUpdateWithoutMarketInput = {
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalUncheckedUpdateManyWithoutMarketInput = {
@@ -903,127 +873,124 @@ export type WithdrawalUncheckedUpdateManyWithoutMarketInput = {
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalCreateManyAccountInput = {
   id?: string
+  marketId: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutWithdrawalsNestedInput
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutWithdrawalsNestedInput
 }
 
 export type WithdrawalUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalCreateManyShareholderInput = {
   id?: string
+  marketId: string
   accountId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate: Date | string
-  approvalStatus?: string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
   source?: string | null
   description?: string | null
-  createdAt?: Date | string | null
-  createdBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type WithdrawalUpdateWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   market?: Prisma.MarketUpdateOneRequiredWithoutWithdrawalsNestedInput
   account?: Prisma.AccountUpdateOneWithoutWithdrawalsNestedInput
 }
 
 export type WithdrawalUncheckedUpdateWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type WithdrawalUncheckedUpdateManyWithoutShareholderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   withdrawalDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  approvalStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1035,13 +1002,12 @@ export type WithdrawalSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   accountId?: boolean
   amount?: boolean
   withdrawalDate?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   source?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
   account?: boolean | Prisma.Withdrawal$accountArgs<ExtArgs>
@@ -1054,13 +1020,12 @@ export type WithdrawalSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   accountId?: boolean
   amount?: boolean
   withdrawalDate?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   source?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
   account?: boolean | Prisma.Withdrawal$accountArgs<ExtArgs>
@@ -1073,13 +1038,12 @@ export type WithdrawalSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   accountId?: boolean
   amount?: boolean
   withdrawalDate?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   source?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
   account?: boolean | Prisma.Withdrawal$accountArgs<ExtArgs>
@@ -1092,16 +1056,15 @@ export type WithdrawalSelectScalar = {
   accountId?: boolean
   amount?: boolean
   withdrawalDate?: boolean
-  approvalStatus?: boolean
-  approvedBy?: boolean
-  approvedAt?: boolean
   source?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
-  createdBy?: boolean
+  updatedAt?: boolean
 }
 
-export type WithdrawalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "accountId" | "amount" | "withdrawalDate" | "approvalStatus" | "approvedBy" | "approvedAt" | "source" | "description" | "createdAt" | "createdBy", ExtArgs["result"]["withdrawal"]>
+export type WithdrawalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "accountId" | "amount" | "withdrawalDate" | "source" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["withdrawal"]>
 export type WithdrawalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
@@ -1132,13 +1095,12 @@ export type $WithdrawalPayload<ExtArgs extends runtime.Types.Extensions.Internal
     accountId: string | null
     amount: runtime.Decimal
     withdrawalDate: Date
-    approvalStatus: string | null
-    approvedBy: string | null
-    approvedAt: Date | null
     source: string | null
     description: string | null
-    createdAt: Date | null
-    createdBy: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["withdrawal"]>
   composites: {}
 }
@@ -1571,13 +1533,12 @@ export interface WithdrawalFieldRefs {
   readonly accountId: Prisma.FieldRef<"Withdrawal", 'String'>
   readonly amount: Prisma.FieldRef<"Withdrawal", 'Decimal'>
   readonly withdrawalDate: Prisma.FieldRef<"Withdrawal", 'DateTime'>
-  readonly approvalStatus: Prisma.FieldRef<"Withdrawal", 'String'>
-  readonly approvedBy: Prisma.FieldRef<"Withdrawal", 'String'>
-  readonly approvedAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
   readonly source: Prisma.FieldRef<"Withdrawal", 'String'>
   readonly description: Prisma.FieldRef<"Withdrawal", 'String'>
+  readonly createdById: Prisma.FieldRef<"Withdrawal", 'String'>
+  readonly updatedById: Prisma.FieldRef<"Withdrawal", 'String'>
   readonly createdAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"Withdrawal", 'String'>
+  readonly updatedAt: Prisma.FieldRef<"Withdrawal", 'DateTime'>
 }
     
 

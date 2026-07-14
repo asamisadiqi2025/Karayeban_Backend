@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model ExpenseCategory
- * 
+ * A classification for market expenses.
  */
 export type ExpenseCategoryModel = runtime.Types.Result.DefaultSelection<Prisma.$ExpenseCategoryPayload>
 
@@ -29,11 +29,10 @@ export type ExpenseCategoryMinAggregateOutputType = {
   marketId: string | null
   name: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -42,11 +41,10 @@ export type ExpenseCategoryMaxAggregateOutputType = {
   marketId: string | null
   name: string | null
   description: string | null
+  createdById: string | null
+  updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
   deletedAt: Date | null
 }
 
@@ -55,11 +53,10 @@ export type ExpenseCategoryCountAggregateOutputType = {
   marketId: number
   name: number
   description: number
+  createdById: number
+  updatedById: number
   createdAt: number
   updatedAt: number
-  createdBy: number
-  updatedBy: number
-  deletedBy: number
   deletedAt: number
   _all: number
 }
@@ -70,11 +67,10 @@ export type ExpenseCategoryMinAggregateInputType = {
   marketId?: true
   name?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -83,11 +79,10 @@ export type ExpenseCategoryMaxAggregateInputType = {
   marketId?: true
   name?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
 }
 
@@ -96,11 +91,10 @@ export type ExpenseCategoryCountAggregateInputType = {
   marketId?: true
   name?: true
   description?: true
+  createdById?: true
+  updatedById?: true
   createdAt?: true
   updatedAt?: true
-  createdBy?: true
-  updatedBy?: true
-  deletedBy?: true
   deletedAt?: true
   _all?: true
 }
@@ -182,11 +176,10 @@ export type ExpenseCategoryGroupByOutputType = {
   marketId: string
   name: string
   description: string | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  createdBy: string | null
-  updatedBy: string | null
-  deletedBy: string | null
+  createdById: string | null
+  updatedById: string | null
+  createdAt: Date
+  updatedAt: Date
   deletedAt: Date | null
   _count: ExpenseCategoryCountAggregateOutputType | null
   _min: ExpenseCategoryMinAggregateOutputType | null
@@ -216,14 +209,13 @@ export type ExpenseCategoryWhereInput = {
   marketId?: Prisma.UuidFilter<"ExpenseCategory"> | string
   name?: Prisma.StringFilter<"ExpenseCategory"> | string
   description?: Prisma.StringNullableFilter<"ExpenseCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  marketExpenses?: Prisma.MarketExpenseListRelationFilter
+  expenses?: Prisma.MarketExpenseListRelationFilter
 }
 
 export type ExpenseCategoryOrderByWithRelationInput = {
@@ -231,45 +223,41 @@ export type ExpenseCategoryOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
-  marketExpenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
+  expenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
 }
 
 export type ExpenseCategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  marketId_id?: Prisma.ExpenseCategoryMarketIdIdCompoundUniqueInput
   AND?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
   OR?: Prisma.ExpenseCategoryWhereInput[]
   NOT?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
   marketId?: Prisma.UuidFilter<"ExpenseCategory"> | string
   name?: Prisma.StringFilter<"ExpenseCategory"> | string
   description?: Prisma.StringNullableFilter<"ExpenseCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  marketExpenses?: Prisma.MarketExpenseListRelationFilter
-}, "id" | "marketId_id">
+  expenses?: Prisma.MarketExpenseListRelationFilter
+}, "id">
 
 export type ExpenseCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExpenseCategoryCountOrderByAggregateInput
   _max?: Prisma.ExpenseCategoryMaxOrderByAggregateInput
@@ -284,11 +272,10 @@ export type ExpenseCategoryScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"ExpenseCategory"> | string
   name?: Prisma.StringWithAggregatesFilter<"ExpenseCategory"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ExpenseCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ExpenseCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
+  createdById?: Prisma.UuidNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
+  updatedById?: Prisma.UuidNullableWithAggregatesFilter<"ExpenseCategory"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"ExpenseCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ExpenseCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ExpenseCategory"> | Date | string | null
 }
 
@@ -296,14 +283,13 @@ export type ExpenseCategoryCreateInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutExpenseCategoriesInput
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutCategoryInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutCategoryInput
 }
 
 export type ExpenseCategoryUncheckedCreateInput = {
@@ -311,27 +297,25 @@ export type ExpenseCategoryUncheckedCreateInput = {
   marketId: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutCategoryInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type ExpenseCategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutExpenseCategoriesNestedInput
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutCategoryNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutCategoryNestedInput
 }
 
 export type ExpenseCategoryUncheckedUpdateInput = {
@@ -339,13 +323,12 @@ export type ExpenseCategoryUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutCategoryNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type ExpenseCategoryCreateManyInput = {
@@ -353,11 +336,10 @@ export type ExpenseCategoryCreateManyInput = {
   marketId: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -365,11 +347,10 @@ export type ExpenseCategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -378,11 +359,10 @@ export type ExpenseCategoryUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -396,21 +376,15 @@ export type ExpenseCategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ExpenseCategoryMarketIdIdCompoundUniqueInput = {
-  marketId: string
-  id: string
-}
-
 export type ExpenseCategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -419,11 +393,10 @@ export type ExpenseCategoryMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
@@ -432,17 +405,16 @@ export type ExpenseCategoryMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
+  updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  createdBy?: Prisma.SortOrder
-  updatedBy?: Prisma.SortOrder
-  deletedBy?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
-export type ExpenseCategoryNullableScalarRelationFilter = {
-  is?: Prisma.ExpenseCategoryWhereInput | null
-  isNot?: Prisma.ExpenseCategoryWhereInput | null
+export type ExpenseCategoryScalarRelationFilter = {
+  is?: Prisma.ExpenseCategoryWhereInput
+  isNot?: Prisma.ExpenseCategoryWhereInput
 }
 
 export type ExpenseCategoryCreateNestedManyWithoutMarketInput = {
@@ -487,46 +459,42 @@ export type ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.ExpenseCategoryScalarWhereInput | Prisma.ExpenseCategoryScalarWhereInput[]
 }
 
-export type ExpenseCategoryCreateNestedOneWithoutMarketExpensesInput = {
-  create?: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutMarketExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutMarketExpensesInput>
-  connectOrCreate?: Prisma.ExpenseCategoryCreateOrConnectWithoutMarketExpensesInput
+export type ExpenseCategoryCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.ExpenseCategoryCreateOrConnectWithoutExpensesInput
   connect?: Prisma.ExpenseCategoryWhereUniqueInput
 }
 
-export type ExpenseCategoryUpdateOneWithoutMarketExpensesNestedInput = {
-  create?: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutMarketExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutMarketExpensesInput>
-  connectOrCreate?: Prisma.ExpenseCategoryCreateOrConnectWithoutMarketExpensesInput
-  upsert?: Prisma.ExpenseCategoryUpsertWithoutMarketExpensesInput
-  disconnect?: Prisma.ExpenseCategoryWhereInput | boolean
-  delete?: Prisma.ExpenseCategoryWhereInput | boolean
+export type ExpenseCategoryUpdateOneRequiredWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.ExpenseCategoryCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.ExpenseCategoryUpsertWithoutExpensesInput
   connect?: Prisma.ExpenseCategoryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ExpenseCategoryUpdateToOneWithWhereWithoutMarketExpensesInput, Prisma.ExpenseCategoryUpdateWithoutMarketExpensesInput>, Prisma.ExpenseCategoryUncheckedUpdateWithoutMarketExpensesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExpenseCategoryUpdateToOneWithWhereWithoutExpensesInput, Prisma.ExpenseCategoryUpdateWithoutExpensesInput>, Prisma.ExpenseCategoryUncheckedUpdateWithoutExpensesInput>
 }
 
 export type ExpenseCategoryCreateWithoutMarketInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutCategoryInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutCategoryInput
 }
 
 export type ExpenseCategoryUncheckedCreateWithoutMarketInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutCategoryInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type ExpenseCategoryCreateOrConnectWithoutMarketInput = {
@@ -563,79 +531,74 @@ export type ExpenseCategoryScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"ExpenseCategory"> | string
   name?: Prisma.StringFilter<"ExpenseCategory"> | string
   description?: Prisma.StringNullableFilter<"ExpenseCategory"> | string | null
-  createdAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
-  updatedAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
-  createdBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
-  updatedBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
-  deletedBy?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  createdById?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  updatedById?: Prisma.UuidNullableFilter<"ExpenseCategory"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"ExpenseCategory"> | Date | string | null
 }
 
-export type ExpenseCategoryCreateWithoutMarketExpensesInput = {
+export type ExpenseCategoryCreateWithoutExpensesInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutExpenseCategoriesInput
 }
 
-export type ExpenseCategoryUncheckedCreateWithoutMarketExpensesInput = {
+export type ExpenseCategoryUncheckedCreateWithoutExpensesInput = {
   id?: string
   marketId: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
-export type ExpenseCategoryCreateOrConnectWithoutMarketExpensesInput = {
+export type ExpenseCategoryCreateOrConnectWithoutExpensesInput = {
   where: Prisma.ExpenseCategoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutMarketExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutMarketExpensesInput>
+  create: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutExpensesInput>
 }
 
-export type ExpenseCategoryUpsertWithoutMarketExpensesInput = {
-  update: Prisma.XOR<Prisma.ExpenseCategoryUpdateWithoutMarketExpensesInput, Prisma.ExpenseCategoryUncheckedUpdateWithoutMarketExpensesInput>
-  create: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutMarketExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutMarketExpensesInput>
+export type ExpenseCategoryUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.ExpenseCategoryUpdateWithoutExpensesInput, Prisma.ExpenseCategoryUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.ExpenseCategoryCreateWithoutExpensesInput, Prisma.ExpenseCategoryUncheckedCreateWithoutExpensesInput>
   where?: Prisma.ExpenseCategoryWhereInput
 }
 
-export type ExpenseCategoryUpdateToOneWithWhereWithoutMarketExpensesInput = {
+export type ExpenseCategoryUpdateToOneWithWhereWithoutExpensesInput = {
   where?: Prisma.ExpenseCategoryWhereInput
-  data: Prisma.XOR<Prisma.ExpenseCategoryUpdateWithoutMarketExpensesInput, Prisma.ExpenseCategoryUncheckedUpdateWithoutMarketExpensesInput>
+  data: Prisma.XOR<Prisma.ExpenseCategoryUpdateWithoutExpensesInput, Prisma.ExpenseCategoryUncheckedUpdateWithoutExpensesInput>
 }
 
-export type ExpenseCategoryUpdateWithoutMarketExpensesInput = {
+export type ExpenseCategoryUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutExpenseCategoriesNestedInput
 }
 
-export type ExpenseCategoryUncheckedUpdateWithoutMarketExpensesInput = {
+export type ExpenseCategoryUncheckedUpdateWithoutExpensesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -643,11 +606,10 @@ export type ExpenseCategoryCreateManyMarketInput = {
   id?: string
   name: string
   description?: string | null
-  createdAt?: Date | string | null
-  updatedAt?: Date | string | null
-  createdBy?: string | null
-  updatedBy?: string | null
-  deletedBy?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   deletedAt?: Date | string | null
 }
 
@@ -655,37 +617,34 @@ export type ExpenseCategoryUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutCategoryNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutCategoryNestedInput
 }
 
 export type ExpenseCategoryUncheckedUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutCategoryNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type ExpenseCategoryUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -695,11 +654,11 @@ export type ExpenseCategoryUncheckedUpdateManyWithoutMarketInput = {
  */
 
 export type ExpenseCategoryCountOutputType = {
-  marketExpenses: number
+  expenses: number
 }
 
 export type ExpenseCategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  marketExpenses?: boolean | ExpenseCategoryCountOutputTypeCountMarketExpensesArgs
+  expenses?: boolean | ExpenseCategoryCountOutputTypeCountExpensesArgs
 }
 
 /**
@@ -715,7 +674,7 @@ export type ExpenseCategoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
 /**
  * ExpenseCategoryCountOutputType without action
  */
-export type ExpenseCategoryCountOutputTypeCountMarketExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ExpenseCategoryCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.MarketExpenseWhereInput
 }
 
@@ -725,14 +684,13 @@ export type ExpenseCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  marketExpenses?: boolean | Prisma.ExpenseCategory$marketExpensesArgs<ExtArgs>
+  expenses?: boolean | Prisma.ExpenseCategory$expensesArgs<ExtArgs>
   _count?: boolean | Prisma.ExpenseCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["expenseCategory"]>
 
@@ -741,11 +699,10 @@ export type ExpenseCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["expenseCategory"]>
@@ -755,11 +712,10 @@ export type ExpenseCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["expenseCategory"]>
@@ -769,18 +725,17 @@ export type ExpenseCategorySelectScalar = {
   marketId?: boolean
   name?: boolean
   description?: boolean
+  createdById?: boolean
+  updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  createdBy?: boolean
-  updatedBy?: boolean
-  deletedBy?: boolean
   deletedAt?: boolean
 }
 
-export type ExpenseCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "description" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "deletedBy" | "deletedAt", ExtArgs["result"]["expenseCategory"]>
+export type ExpenseCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["expenseCategory"]>
 export type ExpenseCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  marketExpenses?: boolean | Prisma.ExpenseCategory$marketExpensesArgs<ExtArgs>
+  expenses?: boolean | Prisma.ExpenseCategory$expensesArgs<ExtArgs>
   _count?: boolean | Prisma.ExpenseCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExpenseCategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -794,18 +749,17 @@ export type $ExpenseCategoryPayload<ExtArgs extends runtime.Types.Extensions.Int
   name: "ExpenseCategory"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
-    marketExpenses: Prisma.$MarketExpensePayload<ExtArgs>[]
+    expenses: Prisma.$MarketExpensePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     marketId: string
     name: string
     description: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    createdBy: string | null
-    updatedBy: string | null
-    deletedBy: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
     deletedAt: Date | null
   }, ExtArgs["result"]["expenseCategory"]>
   composites: {}
@@ -1202,7 +1156,7 @@ readonly fields: ExpenseCategoryFieldRefs;
 export interface Prisma__ExpenseCategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  marketExpenses<T extends Prisma.ExpenseCategory$marketExpensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExpenseCategory$marketExpensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  expenses<T extends Prisma.ExpenseCategory$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExpenseCategory$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1236,11 +1190,10 @@ export interface ExpenseCategoryFieldRefs {
   readonly marketId: Prisma.FieldRef<"ExpenseCategory", 'String'>
   readonly name: Prisma.FieldRef<"ExpenseCategory", 'String'>
   readonly description: Prisma.FieldRef<"ExpenseCategory", 'String'>
+  readonly createdById: Prisma.FieldRef<"ExpenseCategory", 'String'>
+  readonly updatedById: Prisma.FieldRef<"ExpenseCategory", 'String'>
   readonly createdAt: Prisma.FieldRef<"ExpenseCategory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ExpenseCategory", 'DateTime'>
-  readonly createdBy: Prisma.FieldRef<"ExpenseCategory", 'String'>
-  readonly updatedBy: Prisma.FieldRef<"ExpenseCategory", 'String'>
-  readonly deletedBy: Prisma.FieldRef<"ExpenseCategory", 'String'>
   readonly deletedAt: Prisma.FieldRef<"ExpenseCategory", 'DateTime'>
 }
     
@@ -1643,9 +1596,9 @@ export type ExpenseCategoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * ExpenseCategory.marketExpenses
+ * ExpenseCategory.expenses
  */
-export type ExpenseCategory$marketExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ExpenseCategory$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the MarketExpense
    */
