@@ -17,4 +17,243 @@ import * as Prisma from './internal/prismaNamespaceBrowser.js'
 export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
-
+/**
+ * Model Currency
+ * 
+ */
+export type Currency = Prisma.CurrencyModel
+/**
+ * Model ExchangeRate
+ * 
+ */
+export type ExchangeRate = Prisma.ExchangeRateModel
+/**
+ * Model Market
+ * 
+ */
+export type Market = Prisma.MarketModel
+/**
+ * Model MarketSetting
+ * 
+ */
+export type MarketSetting = Prisma.MarketSettingModel
+/**
+ * Model MarketContractSequence
+ * 
+ */
+export type MarketContractSequence = Prisma.MarketContractSequenceModel
+/**
+ * Model Floor
+ * 
+ */
+export type Floor = Prisma.FloorModel
+/**
+ * Model ShopCategory
+ * 
+ */
+export type ShopCategory = Prisma.ShopCategoryModel
+/**
+ * Model Shop
+ * 
+ */
+export type Shop = Prisma.ShopModel
+/**
+ * Model Tenant
+ * 
+ */
+export type Tenant = Prisma.TenantModel
+/**
+ * Model Guarantor
+ * 
+ */
+export type Guarantor = Prisma.GuarantorModel
+/**
+ * Model Contract
+ * 
+ */
+export type Contract = Prisma.ContractModel
+/**
+ * Model ContractTerm
+ * 
+ */
+export type ContractTerm = Prisma.ContractTermModel
+/**
+ * Model RentPayment
+ * 
+ */
+export type RentPayment = Prisma.RentPaymentModel
+/**
+ * Model UtilityBill
+ * 
+ */
+export type UtilityBill = Prisma.UtilityBillModel
+/**
+ * Model ExpenseCategory
+ * 
+ */
+export type ExpenseCategory = Prisma.ExpenseCategoryModel
+/**
+ * Model Employee
+ * 
+ */
+export type Employee = Prisma.EmployeeModel
+/**
+ * Model MarketExpense
+ * 
+ */
+export type MarketExpense = Prisma.MarketExpenseModel
+/**
+ * Model ExitClearance
+ * 
+ */
+export type ExitClearance = Prisma.ExitClearanceModel
+/**
+ * Model MiscellaneousIncome
+ * 
+ */
+export type MiscellaneousIncome = Prisma.MiscellaneousIncomeModel
+/**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
+ * Model AccountSequence
+ * 
+ */
+export type AccountSequence = Prisma.AccountSequenceModel
+/**
+ * Model AccountTransaction
+ * 
+ */
+export type AccountTransaction = Prisma.AccountTransactionModel
+/**
+ * Model JournalEntry
+ * 
+ */
+export type JournalEntry = Prisma.JournalEntryModel
+/**
+ * Model JournalEntryLine
+ * 
+ */
+export type JournalEntryLine = Prisma.JournalEntryLineModel
+/**
+ * Model Cheque
+ * 
+ */
+export type Cheque = Prisma.ChequeModel
+/**
+ * Model EntityType
+ * 
+ */
+export type EntityType = Prisma.EntityTypeModel
+/**
+ * Model Document
+ * 
+ */
+export type Document = Prisma.DocumentModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model UserSession
+ * 
+ */
+export type UserSession = Prisma.UserSessionModel
+/**
+ * Model RefreshToken
+ * 
+ */
+export type RefreshToken = Prisma.RefreshTokenModel
+/**
+ * Model LoginHistory
+ * 
+ */
+export type LoginHistory = Prisma.LoginHistoryModel
+/**
+ * Model FailedLoginAttempt
+ * 
+ */
+export type FailedLoginAttempt = Prisma.FailedLoginAttemptModel
+/**
+ * Model PasswordHistory
+ * 
+ */
+export type PasswordHistory = Prisma.PasswordHistoryModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
+ * Model MfaSetting
+ * 
+ */
+export type MfaSetting = Prisma.MfaSettingModel
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model UserRole
+ * 
+ */
+export type UserRole = Prisma.UserRoleModel
+/**
+ * Model Shareholder
+ * 
+ */
+export type Shareholder = Prisma.ShareholderModel
+/**
+ * Model OwnershipHistory
+ * 
+ */
+export type OwnershipHistory = Prisma.OwnershipHistoryModel
+/**
+ * Model AdditionalInvestment
+ * 
+ */
+export type AdditionalInvestment = Prisma.AdditionalInvestmentModel
+/**
+ * Model Withdrawal
+ * 
+ */
+export type Withdrawal = Prisma.WithdrawalModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model ApiKey
+ * 
+ */
+export type ApiKey = Prisma.ApiKeyModel
+/**
+ * Model Webhook
+ * 
+ */
+export type Webhook = Prisma.WebhookModel
+/**
+ * Model ExternalIntegration
+ * 
+ */
+export type ExternalIntegration = Prisma.ExternalIntegrationModel
