@@ -47,7 +47,7 @@ async function bootstrap() {
   // ==============================
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Market Management API')
+    .setTitle('Karayeban Management System API')
     .setDescription(
       'REST API documentation for Market Management SaaS Platform',
     )
