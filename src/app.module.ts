@@ -1,42 +1,30 @@
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-// import { ConfigModule } from '@nestjs/config';
-// import { PrismaModule } from './prisma/prisma.module';
-
-// @Module({
-//   imports: [
-//     ConfigModule.forRoot({
-//       isGlobal: true,
-//     }),
-//     PrismaModule,
-//   ],
-//   controllers: [AppController],
-//   providers: [AppService],
-// })
-// export class AppModule {}
-
-
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const multer = require('multer');
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
-import { RolesGuard } from './auth/guards/roles.guard';
-import { PermissionsGuard } from './auth/guards/permissions.guard';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
-// import { JwtGuard } from './auth/guards/jwt.guard';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // خواندن .env در کل برنامه
+    ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     AuthModule,
   ],
   providers: [
-    { provide: APP_GUARD, useClass: JwtAuthGuard },     // ۱) توکن
-    { provide: APP_GUARD, useClass: RolesGuard },        // ۲) نقش
-    { provide: APP_GUARD, useClass: PermissionsGuard },  // ۳) مجوز
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(multer().none())
+      .forRoutes(AuthController);
+  }
+}

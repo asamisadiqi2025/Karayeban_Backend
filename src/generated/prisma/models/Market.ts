@@ -246,6 +246,7 @@ export type MarketWhereInput = {
   exitClearances?: Prisma.ExitClearanceListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
+  users?: Prisma.UserListRelationFilter
   userMarkets?: Prisma.UserMarketListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
@@ -285,6 +286,7 @@ export type MarketOrderByWithRelationInput = {
   exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
   cheques?: Prisma.ChequeOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
+  users?: Prisma.UserOrderByRelationAggregateInput
   userMarkets?: Prisma.UserMarketOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
@@ -327,6 +329,7 @@ export type MarketWhereUniqueInput = Prisma.AtLeast<{
   exitClearances?: Prisma.ExitClearanceListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
+  users?: Prisma.UserListRelationFilter
   userMarkets?: Prisma.UserMarketListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
@@ -400,6 +403,7 @@ export type MarketCreateInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -439,6 +443,7 @@ export type MarketUncheckedCreateInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -478,6 +483,7 @@ export type MarketUpdateInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -517,6 +523,7 @@ export type MarketUncheckedUpdateInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -894,6 +901,22 @@ export type MarketUpdateOneRequiredWithoutDocumentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutDocumentsInput, Prisma.MarketUpdateWithoutDocumentsInput>, Prisma.MarketUncheckedUpdateWithoutDocumentsInput>
 }
 
+export type MarketCreateNestedOneWithoutUsersInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUsersInput
+  connect?: Prisma.MarketWhereUniqueInput
+}
+
+export type MarketUpdateOneWithoutUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
+  connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUsersInput
+  upsert?: Prisma.MarketUpsertWithoutUsersInput
+  disconnect?: Prisma.MarketWhereInput | boolean
+  delete?: Prisma.MarketWhereInput | boolean
+  connect?: Prisma.MarketWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketUpdateToOneWithWhereWithoutUsersInput, Prisma.MarketUpdateWithoutUsersInput>, Prisma.MarketUncheckedUpdateWithoutUsersInput>
+}
+
 export type MarketCreateNestedOneWithoutUserMarketsInput = {
   create?: Prisma.XOR<Prisma.MarketCreateWithoutUserMarketsInput, Prisma.MarketUncheckedCreateWithoutUserMarketsInput>
   connectOrCreate?: Prisma.MarketCreateOrConnectWithoutUserMarketsInput
@@ -1021,6 +1044,7 @@ export type MarketCreateWithoutFloorsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -1059,6 +1083,7 @@ export type MarketUncheckedCreateWithoutFloorsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -1113,6 +1138,7 @@ export type MarketUpdateWithoutFloorsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -1151,6 +1177,7 @@ export type MarketUncheckedUpdateWithoutFloorsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -1189,6 +1216,7 @@ export type MarketCreateWithoutShopsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -1227,6 +1255,7 @@ export type MarketUncheckedCreateWithoutShopsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -1281,6 +1310,7 @@ export type MarketUpdateWithoutShopsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -1319,6 +1349,7 @@ export type MarketUncheckedUpdateWithoutShopsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -1357,6 +1388,7 @@ export type MarketCreateWithoutShopCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -1395,6 +1427,7 @@ export type MarketUncheckedCreateWithoutShopCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -1449,6 +1482,7 @@ export type MarketUpdateWithoutShopCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -1487,6 +1521,7 @@ export type MarketUncheckedUpdateWithoutShopCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -1525,6 +1560,7 @@ export type MarketCreateWithoutTenantsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -1563,6 +1599,7 @@ export type MarketUncheckedCreateWithoutTenantsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -1617,6 +1654,7 @@ export type MarketUpdateWithoutTenantsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -1655,6 +1693,7 @@ export type MarketUncheckedUpdateWithoutTenantsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -1694,6 +1733,7 @@ export type MarketCreateWithoutGuarantorsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -1732,6 +1772,7 @@ export type MarketUncheckedCreateWithoutGuarantorsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -1786,6 +1827,7 @@ export type MarketUpdateWithoutGuarantorsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -1824,6 +1866,7 @@ export type MarketUncheckedUpdateWithoutGuarantorsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -1861,6 +1904,7 @@ export type MarketCreateWithoutContractsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -1899,6 +1943,7 @@ export type MarketUncheckedCreateWithoutContractsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -1953,6 +1998,7 @@ export type MarketUpdateWithoutContractsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -1991,6 +2037,7 @@ export type MarketUncheckedUpdateWithoutContractsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -2030,6 +2077,7 @@ export type MarketCreateWithoutContractTermsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -2068,6 +2116,7 @@ export type MarketUncheckedCreateWithoutContractTermsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -2122,6 +2171,7 @@ export type MarketUpdateWithoutContractTermsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -2160,6 +2210,7 @@ export type MarketUncheckedUpdateWithoutContractTermsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -2197,6 +2248,7 @@ export type MarketCreateWithoutRentPaymentsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -2235,6 +2287,7 @@ export type MarketUncheckedCreateWithoutRentPaymentsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -2289,6 +2342,7 @@ export type MarketUpdateWithoutRentPaymentsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -2327,6 +2381,7 @@ export type MarketUncheckedUpdateWithoutRentPaymentsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -2365,6 +2420,7 @@ export type MarketCreateWithoutUtilityBillsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -2403,6 +2459,7 @@ export type MarketUncheckedCreateWithoutUtilityBillsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -2457,6 +2514,7 @@ export type MarketUpdateWithoutUtilityBillsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -2495,6 +2553,7 @@ export type MarketUncheckedUpdateWithoutUtilityBillsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -2533,6 +2592,7 @@ export type MarketCreateWithoutExpenseCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -2571,6 +2631,7 @@ export type MarketUncheckedCreateWithoutExpenseCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -2625,6 +2686,7 @@ export type MarketUpdateWithoutExpenseCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -2663,6 +2725,7 @@ export type MarketUncheckedUpdateWithoutExpenseCategoriesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -2701,6 +2764,7 @@ export type MarketCreateWithoutEmployeesInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -2739,6 +2803,7 @@ export type MarketUncheckedCreateWithoutEmployeesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -2793,6 +2858,7 @@ export type MarketUpdateWithoutEmployeesInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -2831,6 +2897,7 @@ export type MarketUncheckedUpdateWithoutEmployeesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -2869,6 +2936,7 @@ export type MarketCreateWithoutMarketExpensesInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -2907,6 +2975,7 @@ export type MarketUncheckedCreateWithoutMarketExpensesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -2961,6 +3030,7 @@ export type MarketUpdateWithoutMarketExpensesInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -2999,6 +3069,7 @@ export type MarketUncheckedUpdateWithoutMarketExpensesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -3037,6 +3108,7 @@ export type MarketCreateWithoutAccountsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -3075,6 +3147,7 @@ export type MarketUncheckedCreateWithoutAccountsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -3129,6 +3202,7 @@ export type MarketUpdateWithoutAccountsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -3167,6 +3241,7 @@ export type MarketUncheckedUpdateWithoutAccountsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -3205,6 +3280,7 @@ export type MarketCreateWithoutMiscellaneousIncomesInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -3243,6 +3319,7 @@ export type MarketUncheckedCreateWithoutMiscellaneousIncomesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -3297,6 +3374,7 @@ export type MarketUpdateWithoutMiscellaneousIncomesInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -3335,6 +3413,7 @@ export type MarketUncheckedUpdateWithoutMiscellaneousIncomesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -3373,6 +3452,7 @@ export type MarketCreateWithoutAccountTransactionsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -3411,6 +3491,7 @@ export type MarketUncheckedCreateWithoutAccountTransactionsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -3465,6 +3546,7 @@ export type MarketUpdateWithoutAccountTransactionsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -3503,6 +3585,7 @@ export type MarketUncheckedUpdateWithoutAccountTransactionsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -3541,6 +3624,7 @@ export type MarketCreateWithoutExitClearancesInput = {
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -3579,6 +3663,7 @@ export type MarketUncheckedCreateWithoutExitClearancesInput = {
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -3633,6 +3718,7 @@ export type MarketUpdateWithoutExitClearancesInput = {
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -3671,6 +3757,7 @@ export type MarketUncheckedUpdateWithoutExitClearancesInput = {
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -3709,6 +3796,7 @@ export type MarketCreateWithoutChequesInput = {
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -3747,6 +3835,7 @@ export type MarketUncheckedCreateWithoutChequesInput = {
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -3801,6 +3890,7 @@ export type MarketUpdateWithoutChequesInput = {
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -3839,6 +3929,7 @@ export type MarketUncheckedUpdateWithoutChequesInput = {
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -3877,6 +3968,7 @@ export type MarketCreateWithoutDocumentsInput = {
   accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -3915,6 +4007,7 @@ export type MarketUncheckedCreateWithoutDocumentsInput = {
   accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -3969,6 +4062,7 @@ export type MarketUpdateWithoutDocumentsInput = {
   accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -4007,6 +4101,179 @@ export type MarketUncheckedUpdateWithoutDocumentsInput = {
   accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUncheckedUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUncheckedUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutMarketNestedInput
+}
+
+export type MarketCreateWithoutUsersInput = {
+  id?: string
+  name: string
+  code: string
+  address?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  floors?: Prisma.FloorCreateNestedManyWithoutMarketInput
+  shops?: Prisma.ShopCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryCreateNestedManyWithoutMarketInput
+  tenants?: Prisma.TenantCreateNestedManyWithoutMarketInput
+  contracts?: Prisma.ContractCreateNestedManyWithoutMarketInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutMarketInput
+  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutMarketInput
+  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutMarketInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutMarketInput
+  marketExpenses?: Prisma.MarketExpenseCreateNestedManyWithoutMarketInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutMarketInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutMarketInput
+}
+
+export type MarketUncheckedCreateWithoutUsersInput = {
+  id?: string
+  name: string
+  code: string
+  address?: string | null
+  phone?: string | null
+  status?: $Enums.MarketStatus
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  floors?: Prisma.FloorUncheckedCreateNestedManyWithoutMarketInput
+  shops?: Prisma.ShopUncheckedCreateNestedManyWithoutMarketInput
+  shopCategories?: Prisma.ShopCategoryUncheckedCreateNestedManyWithoutMarketInput
+  tenants?: Prisma.TenantUncheckedCreateNestedManyWithoutMarketInput
+  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutMarketInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutMarketInput
+  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutMarketInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutMarketInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutMarketInput
+  marketExpenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutMarketInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutMarketInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutMarketInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutMarketInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
+  guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
+  contractTerms?: Prisma.ContractTermUncheckedCreateNestedManyWithoutMarketInput
+  ownershipHistories?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutMarketInput
+  shareholders?: Prisma.ShareholderUncheckedCreateNestedManyWithoutMarketInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUncheckedCreateNestedManyWithoutMarketInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutMarketInput
+}
+
+export type MarketCreateOrConnectWithoutUsersInput = {
+  where: Prisma.MarketWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
+}
+
+export type MarketUpsertWithoutUsersInput = {
+  update: Prisma.XOR<Prisma.MarketUpdateWithoutUsersInput, Prisma.MarketUncheckedUpdateWithoutUsersInput>
+  create: Prisma.XOR<Prisma.MarketCreateWithoutUsersInput, Prisma.MarketUncheckedCreateWithoutUsersInput>
+  where?: Prisma.MarketWhereInput
+}
+
+export type MarketUpdateToOneWithWhereWithoutUsersInput = {
+  where?: Prisma.MarketWhereInput
+  data: Prisma.XOR<Prisma.MarketUpdateWithoutUsersInput, Prisma.MarketUncheckedUpdateWithoutUsersInput>
+}
+
+export type MarketUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  floors?: Prisma.FloorUpdateManyWithoutMarketNestedInput
+  shops?: Prisma.ShopUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUpdateManyWithoutMarketNestedInput
+  tenants?: Prisma.TenantUpdateManyWithoutMarketNestedInput
+  contracts?: Prisma.ContractUpdateManyWithoutMarketNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutMarketNestedInput
+  utilityBills?: Prisma.UtilityBillUpdateManyWithoutMarketNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutMarketNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutMarketNestedInput
+  marketExpenses?: Prisma.MarketExpenseUpdateManyWithoutMarketNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutMarketNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
+  guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
+  contractTerms?: Prisma.ContractTermUpdateManyWithoutMarketNestedInput
+  ownershipHistories?: Prisma.OwnershipHistoryUpdateManyWithoutMarketNestedInput
+  shareholders?: Prisma.ShareholderUpdateManyWithoutMarketNestedInput
+  additionalInvestments?: Prisma.AdditionalInvestmentUpdateManyWithoutMarketNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutMarketNestedInput
+}
+
+export type MarketUncheckedUpdateWithoutUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumMarketStatusFieldUpdateOperationsInput | $Enums.MarketStatus
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  floors?: Prisma.FloorUncheckedUpdateManyWithoutMarketNestedInput
+  shops?: Prisma.ShopUncheckedUpdateManyWithoutMarketNestedInput
+  shopCategories?: Prisma.ShopCategoryUncheckedUpdateManyWithoutMarketNestedInput
+  tenants?: Prisma.TenantUncheckedUpdateManyWithoutMarketNestedInput
+  contracts?: Prisma.ContractUncheckedUpdateManyWithoutMarketNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutMarketNestedInput
+  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutMarketNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutMarketNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutMarketNestedInput
+  marketExpenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutMarketNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutMarketNestedInput
+  miscellaneousIncomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutMarketNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutMarketNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -4046,6 +4313,7 @@ export type MarketCreateWithoutUserMarketsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
@@ -4084,6 +4352,7 @@ export type MarketUncheckedCreateWithoutUserMarketsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
@@ -4138,6 +4407,7 @@ export type MarketUpdateWithoutUserMarketsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
@@ -4176,6 +4446,7 @@ export type MarketUncheckedUpdateWithoutUserMarketsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
@@ -4214,6 +4485,7 @@ export type MarketCreateWithoutAuditLogsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
@@ -4252,6 +4524,7 @@ export type MarketUncheckedCreateWithoutAuditLogsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
@@ -4306,6 +4579,7 @@ export type MarketUpdateWithoutAuditLogsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
@@ -4344,6 +4618,7 @@ export type MarketUncheckedUpdateWithoutAuditLogsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
@@ -4382,6 +4657,7 @@ export type MarketCreateWithoutNotificationsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorCreateNestedManyWithoutMarketInput
@@ -4420,6 +4696,7 @@ export type MarketUncheckedCreateWithoutNotificationsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   guarantors?: Prisma.GuarantorUncheckedCreateNestedManyWithoutMarketInput
@@ -4474,6 +4751,7 @@ export type MarketUpdateWithoutNotificationsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUpdateManyWithoutMarketNestedInput
@@ -4512,6 +4790,7 @@ export type MarketUncheckedUpdateWithoutNotificationsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   guarantors?: Prisma.GuarantorUncheckedUpdateManyWithoutMarketNestedInput
@@ -4550,6 +4829,7 @@ export type MarketCreateWithoutShareholdersInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -4588,6 +4868,7 @@ export type MarketUncheckedCreateWithoutShareholdersInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -4642,6 +4923,7 @@ export type MarketUpdateWithoutShareholdersInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -4680,6 +4962,7 @@ export type MarketUncheckedUpdateWithoutShareholdersInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -4718,6 +5001,7 @@ export type MarketCreateWithoutOwnershipHistoriesInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -4756,6 +5040,7 @@ export type MarketUncheckedCreateWithoutOwnershipHistoriesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -4810,6 +5095,7 @@ export type MarketUpdateWithoutOwnershipHistoriesInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -4848,6 +5134,7 @@ export type MarketUncheckedUpdateWithoutOwnershipHistoriesInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -4886,6 +5173,7 @@ export type MarketCreateWithoutAdditionalInvestmentsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -4924,6 +5212,7 @@ export type MarketUncheckedCreateWithoutAdditionalInvestmentsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -4978,6 +5267,7 @@ export type MarketUpdateWithoutAdditionalInvestmentsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -5016,6 +5306,7 @@ export type MarketUncheckedUpdateWithoutAdditionalInvestmentsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -5054,6 +5345,7 @@ export type MarketCreateWithoutWithdrawalsInput = {
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutMarketInput
@@ -5092,6 +5384,7 @@ export type MarketUncheckedCreateWithoutWithdrawalsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutMarketInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutMarketInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutMarketInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutMarketInput
   userMarkets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutMarketInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutMarketInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutMarketInput
@@ -5146,6 +5439,7 @@ export type MarketUpdateWithoutWithdrawalsInput = {
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutMarketNestedInput
@@ -5184,6 +5478,7 @@ export type MarketUncheckedUpdateWithoutWithdrawalsInput = {
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutMarketNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutMarketNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutMarketNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutMarketNestedInput
   userMarkets?: Prisma.UserMarketUncheckedUpdateManyWithoutMarketNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutMarketNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutMarketNestedInput
@@ -5216,6 +5511,7 @@ export type MarketCountOutputType = {
   exitClearances: number
   cheques: number
   documents: number
+  users: number
   userMarkets: number
   auditLogs: number
   notifications: number
@@ -5244,6 +5540,7 @@ export type MarketCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   exitClearances?: boolean | MarketCountOutputTypeCountExitClearancesArgs
   cheques?: boolean | MarketCountOutputTypeCountChequesArgs
   documents?: boolean | MarketCountOutputTypeCountDocumentsArgs
+  users?: boolean | MarketCountOutputTypeCountUsersArgs
   userMarkets?: boolean | MarketCountOutputTypeCountUserMarketsArgs
   auditLogs?: boolean | MarketCountOutputTypeCountAuditLogsArgs
   notifications?: boolean | MarketCountOutputTypeCountNotificationsArgs
@@ -5380,6 +5677,13 @@ export type MarketCountOutputTypeCountDocumentsArgs<ExtArgs extends runtime.Type
 /**
  * MarketCountOutputType without action
  */
+export type MarketCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * MarketCountOutputType without action
+ */
 export type MarketCountOutputTypeCountUserMarketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserMarketWhereInput
 }
@@ -5469,6 +5773,7 @@ export type MarketSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   exitClearances?: boolean | Prisma.Market$exitClearancesArgs<ExtArgs>
   cheques?: boolean | Prisma.Market$chequesArgs<ExtArgs>
   documents?: boolean | Prisma.Market$documentsArgs<ExtArgs>
+  users?: boolean | Prisma.Market$usersArgs<ExtArgs>
   userMarkets?: boolean | Prisma.Market$userMarketsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Market$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.Market$notificationsArgs<ExtArgs>
@@ -5541,6 +5846,7 @@ export type MarketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   exitClearances?: boolean | Prisma.Market$exitClearancesArgs<ExtArgs>
   cheques?: boolean | Prisma.Market$chequesArgs<ExtArgs>
   documents?: boolean | Prisma.Market$documentsArgs<ExtArgs>
+  users?: boolean | Prisma.Market$usersArgs<ExtArgs>
   userMarkets?: boolean | Prisma.Market$userMarketsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Market$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.Market$notificationsArgs<ExtArgs>
@@ -5574,6 +5880,7 @@ export type $MarketPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
     cheques: Prisma.$ChequePayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
+    users: Prisma.$UserPayload<ExtArgs>[]
     userMarkets: Prisma.$UserMarketPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
@@ -6009,6 +6316,7 @@ export interface Prisma__MarketClient<T, Null = never, ExtArgs extends runtime.T
   exitClearances<T extends Prisma.Market$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cheques<T extends Prisma.Market$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Market$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  users<T extends Prisma.Market$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userMarkets<T extends Prisma.Market$userMarketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$userMarketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserMarketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Market$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Market$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Market$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6832,6 +7140,30 @@ export type Market$documentsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
+}
+
+/**
+ * Market.users
+ */
+export type Market$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
 /**

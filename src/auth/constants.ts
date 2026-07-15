@@ -1,0 +1,52 @@
+export const ROLES = {
+  MARKET_OWNER: 'MARKET_OWNER',
+  MANAGER: 'MANAGER',
+  ACCOUNTANT: 'ACCOUNTANT',
+  STAFF: 'STAFF',
+} as const;
+
+export const PERMISSIONS = {
+  MARKET_CREATE: 'market.create',
+  MARKET_UPDATE: 'market.update',
+  SHOP_CREATE: 'shop.create',
+  SHOP_UPDATE: 'shop.update',
+  SHOP_DELETE: 'shop.delete',
+  CONTRACT_CREATE: 'contract.create',
+  CONTRACT_MANAGE: 'contract.manage',
+  TENANT_CREATE: 'tenant.create',
+  TENANT_UPDATE: 'tenant.tenant',
+  FINANCE_VIEW: 'finance.view',
+  FINANCE_MANAGE: 'finance.manage',
+  USER_MANAGE: 'user.manage',
+  REPORTS_VIEW: 'reports.view',
+} as const;
+
+export const ROLE_PERMISSIONS: Record<string, string[]> = {
+  MARKET_OWNER: Object.values(PERMISSIONS),
+  MANAGER: [
+    PERMISSIONS.SHOP_CREATE,
+    PERMISSIONS.SHOP_UPDATE,
+    PERMISSIONS.CONTRACT_CREATE,
+    PERMISSIONS.CONTRACT_MANAGE,
+    PERMISSIONS.TENANT_CREATE,
+    PERMISSIONS.TENANT_UPDATE,
+    PERMISSIONS.FINANCE_VIEW,
+    PERMISSIONS.REPORTS_VIEW,
+  ],
+  ACCOUNTANT: [
+    PERMISSIONS.FINANCE_VIEW,
+    PERMISSIONS.FINANCE_MANAGE,
+    PERMISSIONS.REPORTS_VIEW,
+  ],
+  STAFF: [
+    PERMISSIONS.SHOP_CREATE,
+    PERMISSIONS.SHOP_UPDATE,
+    PERMISSIONS.TENANT_CREATE,
+    PERMISSIONS.TENANT_UPDATE,
+  ],
+};
+
+export const TOKEN_EXPIRATION = {
+  ACCESS_TOKEN: '15m',
+  REFRESH_TOKEN: '30d',
+} as const;

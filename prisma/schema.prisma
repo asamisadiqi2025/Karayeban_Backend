@@ -285,6 +285,7 @@ model Market {
   exitClearances        ExitClearance[]
   cheques               Cheque[]
   documents             Document[]
+  users                 User[]
   userMarkets           UserMarket[]
   auditLogs             AuditLog[]
   notifications         Notification[]
@@ -971,7 +972,6 @@ model Document {
 // ============================================================
 
 /// A system user. Market membership is only via UserMarket.
-
 model User {
   id String @id @default(uuid(7)) @db.Uuid
 
@@ -980,8 +980,14 @@ model User {
   email        String? @unique
   passwordHash String
 
+  /// The user's primary market (NULL until they create or join one).
+  /// This is the main tenant boundary for single-market users.
+  marketId String? @db.Uuid
+  market   Market? @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+
   status UserStatus @default(ACTIVE)
 
+  /// Additional market memberships (multi-tenant future use).
   markets UserMarket[]
   roles   UserRole[]
 
@@ -996,6 +1002,7 @@ model User {
   updatedAt DateTime  @updatedAt @db.Timestamptz(3)
   deletedAt DateTime? @db.Timestamptz(3)
 
+  @@index([marketId])
   @@index([deletedAt])
   @@map("users")
 }

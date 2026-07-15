@@ -1,14 +1,29 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class LoginDto {
-
-  @IsString()
- @IsNotEmpty({ message: 'نام کاربری الزامی است' })
+  @IsNotEmpty({
+    message: 'نام کاربری الزامی است.',
+  })
+  @IsString({
+    message: 'نام کاربری باید متن باشد.',
+  })
+  @Length(3, 30, {
+    message: 'نام کاربری باید بین ۳ تا ۳۰ کاراکتر باشد.',
+  })
   username: string;
 
-  @IsString()
-  @IsNotEmpty({ message: 'رمز عبور الزامی است' })
-  @MinLength(6, { message: 'رمز عبور حداقل ۶ کاراکتر باشد' })
+  @IsNotEmpty({
+    message: 'رمز عبور الزامی است.',
+  })
+  @IsString({
+    message: 'رمز عبور باید متن باشد.',
+  })
+  @Length(8, 100, {
+    message: 'رمز عبور باید حداقل ۸ کاراکتر باشد.',
+  })
   password: string;
-
 }

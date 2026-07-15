@@ -136,7 +136,7 @@ export type Cheque = Prisma.ChequeModel
 export type Document = Prisma.DocumentModel
 /**
  * Model User
- * 
+ * A system user. Market membership is only via UserMarket.
  */
 export type User = Prisma.UserModel
 /**
