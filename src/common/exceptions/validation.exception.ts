@@ -5,7 +5,7 @@ export class ValidationException extends BadRequestException {
     super({
       success: false,
       statusCode: 400,
-      message: 'اطلاعات وارد شده معتبر نیست.',
+      message: 'اطلاعات وارد شده معتبر نیست!',
       errors,
     });
   }

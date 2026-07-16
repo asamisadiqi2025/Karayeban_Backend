@@ -13,7 +13,7 @@ export const AppValidationPipe = new ValidationPipe({
 
     for (const error of validationErrors) {
       if (error.constraints) {
-        errors[error.property] = Object.values(error.constraints)[0];
+        errors[error.property] = Object.values(error?.constraints)[0];
       }
     }
 

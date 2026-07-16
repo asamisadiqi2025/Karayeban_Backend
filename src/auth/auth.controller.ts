@@ -84,10 +84,7 @@ export class AuthController {
 
   @Public()
   @Post('logout')
-  async logout(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const refreshToken = req.cookies?.[this.REFRESH_TOKEN_COOKIE];
 
     if (refreshToken) {
@@ -119,7 +116,11 @@ export class AuthController {
     const ipAddress = req.ip;
 
     try {
-      const result = await this.authService.refresh(refreshToken, userAgent, ipAddress);
+      const result = await this.authService.refresh(
+        refreshToken,
+        userAgent,
+        ipAddress,
+      );
 
       this.setRefreshTokenCookie(res, result.refreshToken);
 
@@ -212,11 +213,16 @@ export class AuthController {
     const unit = match[2];
 
     switch (unit) {
-      case 'd': return value * 24 * 60 * 60 * 1000;
-      case 'h': return value * 60 * 60 * 1000;
-      case 'm': return value * 60 * 1000;
-      case 's': return value * 1000;
-      default: return 30 * 24 * 60 * 60 * 1000;
+      case 'd':
+        return value * 24 * 60 * 60 * 1000;
+      case 'h':
+        return value * 60 * 60 * 1000;
+      case 'm':
+        return value * 60 * 1000;
+      case 's':
+        return value * 1000;
+      default:
+        return 30 * 24 * 60 * 60 * 1000;
     }
   }
 }
