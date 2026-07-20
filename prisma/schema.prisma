@@ -3,70 +3,49 @@
 // Prisma 7.x schema
 // ============================================================
 //
-// GLOBAL CONVENTIONS
+// VERSION: 10.0.0 - Production Ready
 //
-//  * Tenant boundary .. `marketId` is the SaaS tenant key. Every
-//                       business table carries and indexes it.
-//  * IDs .............. UUID v7 (`uuid(7)`) — time-ordered for good
-//                       index locality.
-//  * Money ............ Decimal(14, 2). Meter readings Decimal(12, 3).
-//                       Percentages Decimal(5, 2).
-//  * Dates ............ `*At`   = system timestamps (createdAt,
-//                       updatedAt, deletedAt, readAt ...).
-//                       `*Date` = user-entered business dates
-//                       (paymentDate, expenseDate, exitDate ...).
-//  * Soft delete ...... `deletedAt` on master/party/config entities.
-//                       Financial ledgers, audit logs and join tables
-//                       are immutable (hard delete only).
-//  * Referential ...... Every relation sets `onUpdate: Cascade`
-//                       (UUID PKs never change, so this is a safe
-//                       explicit default) plus an `onDelete` policy:
-//                         Cascade  -> owned children with no standalone
-//                                     meaning.
-//                         Restrict -> historical / financial records.
-//                         SetNull  -> optional references.
-//  * Actor tracking ... `createdById` / `updatedById` are UUID columns
-//                       that reference User at the APPLICATION layer.
-//                       They are deliberately NOT Prisma relations: a
-//                       hard FK on every business table would add 40+
-//                       back-relations to User and couple user deletion
-//                       to all business data. They are indexed where
-//                       they are commonly filtered.
-//  * Polymorphic refs . `Document.entityId`, `AuditLog.recordId` are
-//                       polymorphic soft-references — Prisma/Postgres
-//                       cannot enforce FK integrity; the application
-//                       must. Each is paired with a (type + id) index.
-//  * Optimistic lock .. `version Int` on high-contention aggregates
-//                       (Shop, Tenant, Contract, Account).
+// CRITICAL FIXES & IMPROVEMENTS:
+// 1. Fixed UUID generation - application-layer UUID v7
+// 2. Removed composite FK syntax - handled in migration
+// 3. Added check constraints (migration comments)
+// 4. Added partitioning support fields
+// 5. Fixed Decimal precision (18,2) for all money amounts
+// 6. Added optimistic locking (version) to all high-contention tables
+// 7. Added AccountingPeriod for financial closing
+// 8. Added SecurityDeposit for deposit management
+// 9. Added GDPR compliance fields
+// 10. Added brute force protection
+// 11. Added contract auto-renewal
+// 12. Added payment allocation
+// 13. Fixed audit log storage strategy
+// 14. Added archiving fields
+// 15. Fixed Permission model (scope removed from unique)
+// 16. Fixed UserRole/Role isolation (migration constraint)
+// 17. Added proper indexes for performance
 // ============================================================
 
-/// Prisma 7 client generator (new `prisma-client` provider).
 generator client {
   provider     = "prisma-client"
   output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
 
-/// PostgreSQL datasource.
-/// NOTE (Prisma 7): the `url` property is no longer allowed here — the
-/// connection string now lives in `prisma.config.ts` and the runtime
-/// connects via a driver adapter passed to `new PrismaClient({ adapter })`.
 datasource db {
   provider = "postgresql"
+  // connectionLimit = 50 // Set in prisma.config.ts for enterprise
 }
 
 // ============================================================
 // ENUMS
 // ============================================================
 
-/// Lifecycle state of a market (the tenant root).
 enum MarketStatus {
   ACTIVE
   INACTIVE
   CLOSED
 }
 
-/// Occupancy state of a shop unit.
 enum ShopStatus {
   EMPTY
   OCCUPIED
@@ -74,7 +53,6 @@ enum ShopStatus {
   MAINTENANCE
 }
 
-/// Lifecycle state of a tenant (the renting party).
 enum TenantStatus {
   ACTIVE
   INACTIVE
@@ -82,20 +60,17 @@ enum TenantStatus {
   BLACKLISTED
 }
 
-/// Whether a tenant currently owes money.
 enum DebtStatus {
   PAID
   DEBTOR
 }
 
-/// Gender of an individual.
 enum Gender {
   MALE
   FEMALE
   OTHER
 }
 
-/// Lifecycle state of a rental contract.
 enum ContractStatus {
   ACTIVE
   COMPLETED
@@ -103,7 +78,6 @@ enum ContractStatus {
   CANCELLED
 }
 
-/// Settlement state of a rent payment row.
 enum PaymentStatus {
   PENDING
   PARTIAL
@@ -111,7 +85,6 @@ enum PaymentStatus {
   OVERDUE
 }
 
-/// Category of a utility bill.
 enum UtilityType {
   ELECTRICITY
   WATER
@@ -120,20 +93,30 @@ enum UtilityType {
   OTHER
 }
 
-/// Settlement state of a utility bill.
 enum UtilityPaymentStatus {
   PENDING
   PARTIAL
   PAID
 }
 
-/// Employment state of a market employee.
 enum EmployeeStatus {
   ACTIVE
   INACTIVE
+  ON_LEAVE
+  TERMINATED
 }
 
-/// Kind of financial account.
+enum EmploymentType {
+  OWNER
+  MANAGER
+  ACCOUNTANT
+  SECURITY
+  CLEANER
+  CASHIER
+  MAINTENANCE
+  OTHER
+}
+
 enum AccountType {
   CASH
   BANK
@@ -141,7 +124,6 @@ enum AccountType {
   OTHER
 }
 
-/// Supported currencies.
 enum Currency {
   AFN
   USD
@@ -150,14 +132,18 @@ enum Currency {
   OTHER
 }
 
-/// Direction of an account transaction.
 enum TransactionType {
   CREDIT
   DEBIT
 }
 
-/// Business object that produced an account transaction.
-/// Replaces the previous free-text `referenceType`.
+enum TransactionStatus {
+  PENDING
+  POSTED
+  VOID
+  REVERSED
+}
+
 enum TransactionReferenceType {
   RENT_PAYMENT
   UTILITY_BILL
@@ -166,10 +152,12 @@ enum TransactionReferenceType {
   WITHDRAWAL
   ADDITIONAL_INVESTMENT
   CHEQUE
+  SECURITY_DEPOSIT
+  REVERSAL
+  JOURNAL_ENTRY
   OTHER
 }
 
-/// Lifecycle state of a post-dated cheque.
 enum ChequeStatus {
   PENDING
   RECEIVED
@@ -177,7 +165,6 @@ enum ChequeStatus {
   CLEARED
 }
 
-/// Business object a document can be attached to (polymorphic).
 enum DocumentEntityType {
   TENANT
   CONTRACT
@@ -185,16 +172,24 @@ enum DocumentEntityType {
   GUARANTOR
   CHEQUE
   MARKET
+  EMPLOYEE
+  EXPENSE
 }
 
-/// Lifecycle state of a system user.
+enum StorageProvider {
+  LOCAL
+  S3
+  SUPABASE
+  CLOUDINARY
+  AZURE
+}
+
 enum UserStatus {
   ACTIVE
   INACTIVE
   BLOCKED
 }
 
-/// Category of a notification. Replaces the previous free-text `type`.
 enum NotificationType {
   RENT_DUE
   PAYMENT_RECEIVED
@@ -205,7 +200,6 @@ enum NotificationType {
   OTHER
 }
 
-/// Delivery priority of a notification.
 enum NotificationPriority {
   LOW
   NORMAL
@@ -213,7 +207,6 @@ enum NotificationPriority {
   URGENT
 }
 
-/// Kind of additional shareholder investment.
 enum InvestmentType {
   CASH
   EQUIPMENT
@@ -221,17 +214,29 @@ enum InvestmentType {
   OTHER
 }
 
-/// Operation captured by an audit log entry.
-/// Replaces the previous free-text `action`.
 enum AuditOperation {
   CREATE
   UPDATE
   DELETE
+  RESTORE
+  APPROVE
+  REJECT
+  EXPORT
+  IMPORT
+  PASSWORD_CHANGE
+  ROLE_CHANGE
   LOGIN
   LOGOUT
 }
 
-/// Method used to settle a rent payment.
+enum AuditActionSource {
+  WEB
+  API
+  MOBILE
+  SYSTEM
+  CRON
+}
+
 enum PaymentMethod {
   CASH
   BANK_TRANSFER
@@ -240,7 +245,6 @@ enum PaymentMethod {
   OTHER
 }
 
-/// Business object a notification points to (polymorphic soft-ref).
 enum NotificationReferenceType {
   CONTRACT
   RENT_PAYMENT
@@ -251,127 +255,294 @@ enum NotificationReferenceType {
   OTHER
 }
 
+enum RoleScope {
+  GLOBAL
+  MARKET
+}
+
+enum PermissionScope {
+  GLOBAL
+  MARKET
+}
+
+enum EmployeeAttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+  ON_LEAVE
+}
+
+enum SuperAdminLevel {
+  OWNER
+  ADMIN
+  SUPPORT
+}
+
+
+
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum ApprovalEntityType {
+  CONTRACT
+  EXPENSE
+  WITHDRAWAL
+  PAYMENT
+  TENANT_DELETE
+  SHOP_DELETE
+  OTHER
+}
+
+enum JournalStatus {
+  DRAFT
+  POSTED
+  VOID
+}
+
+enum PeriodStatus {
+  OPEN
+  CLOSED
+  LOCKED
+}
+
+enum DepositStatus {
+  HELD
+  RETURNED
+  PARTIAL
+  FORFEITED
+}
+
 // ============================================================
 // CORE / STRUCTURE
 // ============================================================
 
-/// A market — the top-level tenant boundary of the SaaS.
+
+
 model Market {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid 
 
-  name String
-  /// Human code, globally unique. Scope to an organization tier if added.
-  code String
+  name String @db.VarChar(255)
+  code String @unique @db.VarChar(50)
 
-  address String?
-  phone   String?
+  address String? @db.Text
+  phone   String? @db.VarChar(20)
 
   status MarketStatus @default(ACTIVE)
-
-  // Relations
+ 
   floors                Floor[]
   shops                 Shop[]
   shopCategories        ShopCategory[]
-  tenants               Tenant[]
+  marketTenants         MarketTenant[]
   contracts             Contract[]
   rentPayments          RentPayment[]
   utilityBills          UtilityBill[]
   expenseCategories     ExpenseCategory[]
-  employees             Employee[]
+  marketEmployees       MarketEmployee[]
   marketExpenses        MarketExpense[]
   accounts              Account[]
   miscellaneousIncomes  MiscellaneousIncome[]
   accountTransactions   AccountTransaction[]
+  journalEntries        JournalEntry[]
   exitClearances        ExitClearance[]
   cheques               Cheque[]
   documents             Document[]
-  users                 User[]
   userMarkets           UserMarket[]
+  userRoles             UserRole[]
   auditLogs             AuditLog[]
+  activities            ActivityLog[]
   notifications         Notification[]
-  guarantors            Guarantor[]
   contractTerms         ContractTerm[]
   ownershipHistories    OwnershipHistory[]
   shareholders          Shareholder[]
   additionalInvestments AdditionalInvestment[]
   withdrawals           Withdrawal[]
+  roles                 Role[]
+  settings              MarketSetting?
+  exchangeRates         ExchangeRate[]
+  apiKeys               ApiKey[]
+
+  approvalRequests      ApprovalRequest[]
+  accountingPeriods     AccountingPeriod[]
+  securityDeposits      SecurityDeposit[]
+  maintenanceRequests MaintenanceRequest[]
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1) // Optimistic locking
 
   @@index([status])
   @@index([deletedAt])
   @@map("markets")
+  @@index([status, deletedAt])
+  
 }
 
-/// A physical floor/level inside a market.
-model Floor {
-  id String @id @default(uuid(7)) @db.Uuid
+
+
+
+
+model SystemSetting {
+  id String @id @db.Uuid
+
+  key   String @unique @db.VarChar(100)
+  value Json
+
+  category String? @db.VarChar(50)
+  description String? @db.Text
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("system_settings")
+}
+
+model MarketSetting {
+  id String @id @db.Uuid
+
+  marketId String @unique @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  config Json // All settings in one JSON field
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("market_settings")
+}
+
+model ExchangeRate {
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
-  name         String
-  /// Sort order of the floor within the market.
-  displayOrder Int
-  description  String?
+  fromCurrency Currency
+  toCurrency   Currency
+  rate         Decimal @db.Decimal(14, 4)
+
+  effectiveDate DateTime @default(now()) @db.Date
+  expiresAt     DateTime? @db.Date
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@unique([marketId, fromCurrency, toCurrency, effectiveDate])
+  @@index([marketId, fromCurrency, toCurrency])
+  @@map("exchange_rates")
+}
+
+// ============================================================
+// ACCOUNTING PERIODS
+// ============================================================
+
+model AccountingPeriod {
+  id String @id @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+
+  year  Int @db.SmallInt
+  month Int @db.SmallInt
+
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+
+  status PeriodStatus @default(OPEN)
+
+  closedAt DateTime? @db.Timestamptz(6)
+  lockedAt DateTime? @db.Timestamptz(6)
+
+  journalEntries JournalEntry[]
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@unique([marketId, year, month])
+  @@index([marketId, status])
+  @@map("accounting_periods")
+}
+
+// ============================================================
+// FLOORS / SHOPS / CATEGORIES
+// ============================================================
+
+model Floor {
+  id String @id @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+
+  name         String @db.VarChar(100)
+  displayOrder Int @db.SmallInt
+  description  String? @db.Text
 
   shops Shop[]
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  version Int @default(1)
+
+  @@unique([marketId, name])
   @@index([marketId])
   @@index([deletedAt])
   @@map("floors")
 }
 
-/// A rentable shop unit.
 model Shop {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   floorId    String  @db.Uuid
   categoryId String? @db.Uuid
 
-  market   Market        @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  floor    Floor         @relation(fields: [floorId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  category ShopCategory? @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  market   Market        @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  floor    Floor         @relation(fields: [floorId], references: [id], onDelete: Restrict)
+  category ShopCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
-  shopCode           String
-  shopNumber         String
-  rentAmount         Decimal @db.Decimal(14, 2)
+  shopCode           String @db.VarChar(50)
+  shopNumber         String @db.VarChar(50)
+  rentAmount         Decimal @db.Decimal(18, 2)
   areaInSquareMeters Decimal @db.Decimal(10, 2)
 
-  electricityMeterNumber String?
-  waterMeterNumber       String?
+  electricityMeterNumber String? @db.VarChar(50)
+  waterMeterNumber       String? @db.VarChar(50)
 
   status ShopStatus @default(EMPTY)
 
-  // Relations
   contracts      Contract[]
   rentPayments   RentPayment[]
   utilityBills   UtilityBill[]
   exitClearances ExitClearance[]
+  maintenance    MaintenanceRequest[]
 
-  /// Optimistic-locking token.
   version Int @default(1)
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  @@unique([marketId, shopCode])
+  @@unique([marketId, shopNumber])
   @@index([marketId, status])
   @@index([floorId])
   @@index([categoryId])
@@ -379,270 +550,418 @@ model Shop {
   @@map("shops")
 }
 
-/// A classification for shops (e.g. food, clothing).
 model ShopCategory {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
 
-  name        String
-  description String?
+  name        String @db.VarChar(100)
+  description String? @db.Text
 
   shops Shop[]
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  version Int @default(1)
+
+  @@unique([marketId, name])
   @@index([marketId])
   @@index([deletedAt])
   @@map("shop_categories")
 }
 
 // ============================================================
-// TENANTS / GUARANTORS
+// TENANTS (Global) / GUARANTORS
 // ============================================================
 
-/// A tenant — the party that rents a shop.
 model Tenant {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-
-  firstName  String
-  lastName   String
-  phone      String
-  nationalId String?
+  firstName  String @db.VarChar(100)
+  lastName   String @db.VarChar(100)
+  phone      String @db.VarChar(20)
+  nationalId String? @db.VarChar(50)
   gender     Gender?
-  address    String?
+  address    String? @db.Text
 
   status     TenantStatus @default(ACTIVE)
   debtStatus DebtStatus   @default(PAID)
 
-  // Relations
-  contracts      Contract[]
-  guarantors     Guarantor[]
-  cheques        Cheque[]
-  exitClearances ExitClearance[]
-
-  /// Optimistic-locking token.
+  marketTenants      MarketTenant[]
+  contracts         Contract[]
+  guarantorRelations TenantGuarantor[]
+  cheques            Cheque[]
+  exitClearances     ExitClearance[]
+  history            TenantHistory[]
+  maintenance        MaintenanceRequest[]
+ 
   version Int @default(1)
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
-  @@index([marketId, status])
+  // Migration: CREATE UNIQUE INDEX tenant_phone_active ON tenants(phone) WHERE deleted_at IS NULL;
+  // Migration: CREATE UNIQUE INDEX tenant_national_id_active ON tenants(national_id) WHERE deleted_at IS NULL;
+  @@index([phone])
+  @@index([nationalId])
   @@index([deletedAt])
   @@map("tenants")
 }
-
-/// A guarantor backing a tenant.
-model Guarantor {
-  id String @id @default(uuid(7)) @db.Uuid
+model MarketTenant {
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
   tenantId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  tenant   Tenant @relation(fields: [tenantId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
-  fullName    String
-  phone       String
-  address     String?
-  description String?
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  contracts Contract[]
+
+  joinedAt DateTime @default(now()) @db.Timestamptz(6)
+  leftAt   DateTime? @db.Timestamptz(6)
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@unique([marketId, tenantId])
+  @@index([marketId])
+  @@index([tenantId])
+  @@index([deletedAt])
+  @@map("market_tenants")
+}
+
+model TenantHistory {
+  id String @id @db.Uuid
+
+  tenantId String @db.Uuid
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  fieldName String @db.VarChar(50)
+  oldValue  String? @db.Text
+  newValue  String? @db.Text
+
+  changedById String? @db.Uuid
+
+  changedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([tenantId])
+  @@index([changedAt])
+  @@map("tenant_histories")
+}
+
+model Guarantor {
+  id String @id @db.Uuid
+
+  fullName    String @db.VarChar(200)
+  phone       String @db.VarChar(20)
+  address     String? @db.Text
+  description String? @db.Text
+
+  tenantRelations TenantGuarantor[]
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
-  @@index([marketId])
-  @@index([tenantId])
+  version Int @default(1)
+
+  // Migration: CREATE UNIQUE INDEX guarantor_phone_active ON guarantors(phone) WHERE deleted_at IS NULL;
+  @@index([phone])
+  @@index([deletedAt])
   @@map("guarantors")
+}
+
+model TenantGuarantor {
+  id String @id @db.Uuid
+
+  tenantId    String @db.Uuid
+  guarantorId String @db.Uuid
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  guarantor Guarantor @relation(fields: [guarantorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([tenantId, guarantorId])
+  @@index([tenantId])
+  @@index([guarantorId])
+  @@map("tenant_guarantors")
 }
 
 // ============================================================
 // CONTRACTS
 // ============================================================
 
-/// A rental contract between a tenant and a shop.
 model Contract {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
+
+
+
+  // Migration: CREATE OR REPLACE FUNCTION enforce_contract_tenant_consistency() ...
+  // Migration: CREATE TRIGGER enforce_contract_tenant_consistency BEFORE INSERT OR UPDATE ON contracts
+  // FOR EACH ROW EXECUTE FUNCTION enforce_contract_tenant_consistency();
+  // (ensures contracts.tenant_id always matches market_tenants.tenant_id for the given market_tenant_id)
+
+
 
   marketId String @db.Uuid
   shopId   String @db.Uuid
-  tenantId String @db.Uuid
+  marketTenantId String @db.Uuid
+  tenantId String @db.Uuid // FIX: Denormalized for query performance
 
-  market Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shop   Shop   @relation(fields: [shopId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  tenant Tenant @relation(fields: [tenantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market      Market      @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  shop        Shop        @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  marketTenant MarketTenant @relation(fields: [marketTenantId], references: [id], onDelete: Restrict)
+  tenant      Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
 
-  contractNumber String
+  contractNumber String @db.VarChar(50)
 
-  /// Self-relation chain to the contract this one renewed/replaced.
-  previousContractId String?    @db.Uuid
-  previousContract   Contract?  @relation("ContractHistory", fields: [previousContractId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  previousContractId String? @db.Uuid
+  previousContract   Contract? @relation("ContractHistory", fields: [previousContractId], references: [id], onDelete: SetNull)
   nextContracts      Contract[] @relation("ContractHistory")
 
-  /// Number of times this contract line has been renewed.
   renewalCount Int @default(0)
 
-  startDate DateTime  @db.Timestamptz(3)
-  endDate   DateTime? @db.Timestamptz(3)
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
 
-  monthlyRent   Decimal @db.Decimal(14, 2)
-  depositAmount Decimal @db.Decimal(14, 2)
+  monthlyRent   Decimal @db.Decimal(18, 2)
+  depositAmount Decimal @db.Decimal(18, 2)
 
   status ContractStatus @default(ACTIVE)
 
-  signedDate        DateTime? @db.Timestamptz(3)
-  approvedById      String?   @db.Uuid
-  terminatedById    String?   @db.Uuid
-  terminationReason String?
+  signedDate        DateTime? @db.Date
+  approvedById      String? @db.Uuid
+  terminatedById    String? @db.Uuid
+  terminationReason String? @db.Text
 
-  // Relations
-  terms         ContractTerm[]
+  autoRenew Boolean @default(false)
+  autoRenewNoticeDays Int @default(30)
+  lastRenewalDate DateTime? @db.Date
+  nextRenewalDate DateTime? @db.Date
+  renewalHistory Json?
+
+  terms         ContractTerm?
   rentPayments  RentPayment[]
   cheques       Cheque[]
   exitClearance ExitClearance?
+  securityDeposit SecurityDeposit?
 
-  description String?
+  description String? @db.Text
 
-  /// Optimistic-locking token.
   version Int @default(1)
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  @@unique([marketId, contractNumber])
+  // Migration: ALTER TABLE contracts ADD CONSTRAINT valid_date_range CHECK (end_date >= start_date);
+  // Migration: ALTER TABLE contracts ADD CONSTRAINT no_overlapping_contracts 
+  // EXCLUDE USING gist (shop_id WITH =, daterange(start_date, end_date, '[]') WITH &&)
+  // WHERE status IN ('ACTIVE', 'PENDING');
   @@index([marketId, status])
+  @@index([marketId, status, startDate])
   @@index([shopId])
+  @@index([marketTenantId])
   @@index([tenantId])
   @@index([previousContractId])
   @@index([deletedAt])
   @@map("contracts")
 }
 
-/// Detailed terms attached to a contract.
 model ContractTerm {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  marketId   String   @db.Uuid
-  contractId String   @db.Uuid
-  market     Market   @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  contract   Contract @relation(fields: [contractId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  marketId   String @db.Uuid
+  contractId String @db.Uuid
+  market     Market   @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
-  workingHours         String?
-  monthlyHoliday       Int?
-  terminationCondition String?
-  specialConditions    String?
+  workingHours         String? @db.Text
+  monthlyHoliday       Int? @db.SmallInt
+  terminationCondition String? @db.Text
+  specialConditions    String? @db.Text
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
+  @@unique([contractId])
   @@index([marketId])
   @@index([contractId])
   @@map("contract_terms")
 }
 
 // ============================================================
+// SECURITY DEPOSIT
+// ============================================================
+
+model SecurityDeposit {
+  id String @id @db.Uuid
+
+  contractId String @db.Uuid
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+
+  amount Decimal @db.Decimal(18, 2)
+  paidAt DateTime @db.Date
+
+  returnedAt DateTime? @db.Date
+  returnedAmount Decimal? @db.Decimal(18, 2)
+
+  deductions Json? // Array of {item, amount, date}
+
+  status DepositStatus @default(HELD)
+
+  createdById String? @db.Uuid
+  updatedById String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@unique([contractId])
+  @@index([marketId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("security_deposits")
+}
+
+// ============================================================
 // PAYMENTS / UTILITIES
 // ============================================================
 
-/// A monthly rent payment record for a contract.
 model RentPayment {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   shopId     String  @db.Uuid
   contractId String  @db.Uuid
   accountId  String? @db.Uuid
 
-  market   Market   @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shop     Shop     @relation(fields: [shopId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  contract Contract @relation(fields: [contractId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  account  Account? @relation(fields: [accountId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  market   Market   @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  shop     Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+  account  Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
 
-  amountDue       Decimal @db.Decimal(14, 2)
-  amountPaid      Decimal @default(0) @db.Decimal(14, 2)
-  remainingAmount Decimal @db.Decimal(14, 2)
+  amountDue       Decimal @db.Decimal(18, 2)
+  amountPaid      Decimal @default(0) @db.Decimal(18, 2)
+  remainingAmount Decimal @db.Decimal(18, 2)
 
-  paymentDate   DateTime?      @db.Timestamptz(3)
+  paymentDate   DateTime? @db.Date
   paymentMethod PaymentMethod?
 
   status PaymentStatus @default(PENDING)
 
-  /// Billing period.
-  year  Int
-  month Int
+  year  Int @db.SmallInt
+  month Int @db.SmallInt
 
-  lateFee  Decimal? @db.Decimal(14, 2)
-  discount Decimal? @db.Decimal(14, 2)
+  lateFee  Decimal? @db.Decimal(18, 2)
+  discount Decimal? @db.Decimal(18, 2)
 
   receivedById String? @db.Uuid
 
-  description String?
+  description String? @db.Text
+
+   sourceAllocations PaymentAllocation[] @relation("PaymentAllocationSource")
+  targetAllocations PaymentAllocation[] @relation("PaymentAllocationTarget")
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@unique([contractId, year, month])
-  @@index([marketId, year])
+  @@index([marketId, year, month])
   @@index([marketId, status])
+  @@index([marketId, paymentDate, status])
+  @@index([marketId, contractId, status])
   @@index([contractId])
   @@index([shopId])
   @@index([accountId])
   @@map("rent_payments")
 }
+// Payment Allocation for payments covering multiple months
+model PaymentAllocation {
+  id String @id @db.Uuid
 
-/// A monthly utility bill for a shop.
+  paymentId    String @db.Uuid
+  rentPaymentId String @db.Uuid
+
+  payment    RentPayment  @relation("PaymentAllocationSource", fields: [paymentId], references: [id], onDelete: Cascade)
+  rentPayment RentPayment @relation("PaymentAllocationTarget", fields: [rentPaymentId], references: [id], onDelete: Cascade)
+  amount Decimal @db.Decimal(18, 2)
+
+  allocatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([paymentId, rentPaymentId])
+  @@index([paymentId])
+  @@index([rentPaymentId])
+  @@map("payment_allocations")
+}
+
 model UtilityBill {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
   shopId   String @db.Uuid
 
-  market Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shop   Shop   @relation(fields: [shopId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Restrict)
 
   type UtilityType
 
   previousMeter Decimal? @db.Decimal(12, 3)
   currentMeter  Decimal? @db.Decimal(12, 3)
   unitsConsumed Decimal? @db.Decimal(12, 3)
-  rate          Decimal? @db.Decimal(14, 2)
-  amount        Decimal  @db.Decimal(14, 2)
+  rate          Decimal? @db.Decimal(14, 4)
+  amount        Decimal @db.Decimal(18, 2)
 
-  /// Billing period.
-  billMonth Int
-  billYear  Int
+  billMonth Int @db.SmallInt
+  billYear  Int @db.SmallInt
 
-  dueDate DateTime? @db.Timestamptz(3)
+  dueDate DateTime? @db.Date
 
   status UtilityPaymentStatus @default(PENDING)
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@unique([shopId, type, billYear, billMonth])
   @@index([marketId, billYear, billMonth])
@@ -652,91 +971,184 @@ model UtilityBill {
 }
 
 // ============================================================
-// EXPENSES / EMPLOYEES
+// EMPLOYEES (Global) / MARKET EMPLOYEE
+// ============================================================
+model Employee {
+  id String @id @db.Uuid
+
+  userId String? @unique @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  fullName String @db.VarChar(200)
+  phone    String? @db.VarChar(20)
+  position String? @db.VarChar(100)
+  employmentType EmploymentType @default(OTHER)
+  hireDate DateTime? @db.Date
+
+  baseSalary Decimal? @db.Decimal(18, 2)
+  hourlyRate Decimal? @db.Decimal(14, 4)
+
+  status EmployeeStatus @default(ACTIVE)
+
+  marketEmployees   MarketEmployee[]
+  expenses          MarketExpense[]
+
+  createdById String? @db.Uuid
+  updatedById String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  // Migration: CREATE UNIQUE INDEX employee_phone_active ON employees(phone) WHERE deleted_at IS NULL;
+  @@index([phone])
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("employees")
+}
+
+model MarketEmployee {
+  id String @id @db.Uuid
+
+  marketId   String @db.Uuid
+  employeeId String @db.Uuid
+
+  market   Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  salaryPayments MarketEmployeeSalaryPayment[]
+  attendances    MarketEmployeeAttendance[]
+
+  joinedAt DateTime @default(now()) @db.Timestamptz(6)
+  leftAt   DateTime? @db.Timestamptz(6)
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@unique([marketId, employeeId])
+  @@index([marketId])
+  @@index([employeeId])
+  @@index([deletedAt])
+  @@map("market_employees")
+}
+
+model MarketEmployeeAttendance {
+  id String @id @db.Uuid
+
+  marketEmployeeId String @db.Uuid
+  marketEmployee   MarketEmployee @relation(fields: [marketEmployeeId], references: [id], onDelete: Cascade)
+
+  date DateTime @db.Date
+  status EmployeeAttendanceStatus @default(PRESENT)
+
+  checkIn  DateTime? @db.Timestamptz(6)
+  checkOut DateTime? @db.Timestamptz(6)
+
+  overtimeHours Decimal? @db.Decimal(5, 2)
+
+  notes String? @db.Text
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  @@unique([marketEmployeeId, date])
+  @@index([marketEmployeeId, date])
+  @@map("market_employee_attendances")
+}
+
+model MarketEmployeeSalaryPayment {
+  id String @id @db.Uuid
+
+  marketEmployeeId String @db.Uuid
+  marketEmployee   MarketEmployee @relation(fields: [marketEmployeeId], references: [id], onDelete: Cascade)
+
+  accountId String? @db.Uuid
+  account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  amount     Decimal @db.Decimal(18, 2)
+  paymentDate DateTime @db.Date
+
+  year  Int @db.SmallInt
+  month Int @db.SmallInt
+
+  description String? @db.Text
+
+  createdById String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([marketEmployeeId, year, month])
+  @@index([marketEmployeeId])
+  @@index([accountId])
+  @@map("market_employee_salary_payments")
+}
+
+// ============================================================
+// EXPENSES
 // ============================================================
 
-/// A classification for market expenses.
 model ExpenseCategory {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
 
-  name        String
-  description String?
+  name        String @db.VarChar(100)
+  description String? @db.Text
 
   expenses MarketExpense[]
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  version Int @default(1)
+
+  @@unique([marketId, name])
   @@index([marketId])
   @@index([deletedAt])
   @@map("expense_categories")
 }
 
-/// A market employee.
-model Employee {
-  id String @id @default(uuid(7)) @db.Uuid
-
-  marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-
-  fullName String
-  phone    String?
-  position String?
-
-  salary Decimal? @db.Decimal(14, 2)
-
-  status EmployeeStatus @default(ACTIVE)
-
-  expenses MarketExpense[]
-
-  createdById String? @db.Uuid
-  updatedById String? @db.Uuid
-
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
-
-  @@index([marketId, status])
-  @@index([deletedAt])
-  @@map("employees")
-}
-
-/// An expense incurred by a market.
 model MarketExpense {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   categoryId String  @db.Uuid
   employeeId String? @db.Uuid
   accountId  String? @db.Uuid
 
-  market   Market          @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  category ExpenseCategory @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  employee Employee?       @relation(fields: [employeeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  account  Account?        @relation(fields: [accountId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  market   Market          @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  category ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  employee Employee?       @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  account  Account?        @relation(fields: [accountId], references: [id], onDelete: SetNull)
 
-  expenseNumber String
+  expenseNumber String @db.VarChar(50)
 
-  amount      Decimal  @db.Decimal(14, 2)
-  expenseDate DateTime @db.Timestamptz(3)
+  amount      Decimal @db.Decimal(18, 2)
+  expenseDate DateTime @db.Date
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@unique([marketId, expenseNumber])
-  @@index([marketId])
+  @@index([marketId, expenseDate])
   @@index([categoryId])
   @@index([employeeId])
   @@index([accountId])
@@ -744,350 +1156,606 @@ model MarketExpense {
 }
 
 // ============================================================
-// ACCOUNTS / FINANCE
+// MAINTENANCE REQUESTS
 // ============================================================
 
-/// A financial account (cash box, bank account, wallet).
+enum MaintenancePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MaintenanceStatus {
+  REPORTED
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model MaintenanceRequest {
+  id String @id @db.Uuid
+
+  shopId   String @db.Uuid
+  tenantId String @db.Uuid
+  marketId String @db.Uuid
+
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  issue       String @db.Text
+  priority    MaintenancePriority @default(MEDIUM)
+  status      MaintenanceStatus @default(REPORTED)
+
+  assignedTo  String? @db.Uuid
+  assignedAt  DateTime? @db.Timestamptz(6)
+
+  completedAt DateTime? @db.Timestamptz(6)
+  cost        Decimal? @db.Decimal(18, 2)
+
+  resolutionNote String? @db.Text
+
+  createdById String? @db.Uuid
+  updatedById String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@index([marketId, status])
+  @@index([shopId])
+  @@index([tenantId])
+  @@index([createdAt])
+  @@map("maintenance_requests")
+}
+
+// ============================================================
+// ACCOUNTS / FINANCE - Double Entry Accounting
+// ============================================================
+
 model Account {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
 
-  name     String
+  name     String @db.VarChar(100)
   type     AccountType
   currency Currency
 
-  description String?
+  description String? @db.Text
 
-  /// Running balance, maintained transactionally.
-  currentBalance Decimal @default(0) @db.Decimal(14, 2)
+  // FIX: Balance is cached, can be recalculated from Journal
+  currentBalance   Decimal @default(0) @db.Decimal(18, 2)
+  balanceUpdatedAt DateTime? @db.Timestamptz(6)
+  lastReconciledAt DateTime? @db.Timestamptz(6)
 
-  // Relations
-  expenses     MarketExpense[]
-  incomes      MiscellaneousIncome[]
-  transactions AccountTransaction[]
-  withdrawals  Withdrawal[]
-  rentPayments RentPayment[]
-  cheques      Cheque[]
+  journalLines    JournalLine[]
+  expenses        MarketExpense[]
+  incomes         MiscellaneousIncome[]
+  transactions    AccountTransaction[]
+  withdrawals     Withdrawal[]
+  rentPayments    RentPayment[]
+  cheques         Cheque[]
+  salaryPayments  MarketEmployeeSalaryPayment[]
 
-  /// Optimistic-locking token.
   version Int @default(1)
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  @@unique([marketId, name])
   @@index([marketId])
   @@index([deletedAt])
   @@map("accounts")
 }
 
-/// Income not tied to rent (e.g. parking, events).
+model JournalEntry {
+  id String @id @db.Uuid
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+
+  journalNumber String @db.VarChar(50)
+
+  date   DateTime @db.Date
+  description String? @db.Text
+
+  status JournalStatus @default(DRAFT)
+
+  referenceType TransactionReferenceType?
+  referenceId   String? @db.Uuid
+
+  lines JournalLine[]
+
+  // Accounting period reference
+  accountingPeriodId String? @db.Uuid
+  accountingPeriod   AccountingPeriod? @relation(fields: [accountingPeriodId], references: [id], onDelete: SetNull)
+
+  createdById String? @db.Uuid
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @db.Timestamptz(6) // Only for DRAFT -> POSTED transition
+  postedAt  DateTime? @db.Timestamptz(6)
+  voidedAt  DateTime? @db.Timestamptz(6)
+  voidedBy  String? @db.Uuid
+  voidReason String? @db.Text
+
+  version Int @default(1)
+
+  @@unique([marketId, journalNumber])
+  @@index([marketId, date])
+  @@index([referenceType, referenceId])
+  @@index([status])
+  @@index([accountingPeriodId])
+  @@map("journal_entries")
+}
+
+model JournalLine {
+  id String @id @db.Uuid
+
+  journalId String @db.Uuid
+  accountId  String @db.Uuid
+
+  journal JournalEntry @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  account Account      @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  debit  Decimal @default(0) @db.Decimal(18, 2)
+  credit Decimal @default(0) @db.Decimal(18, 2)
+
+  description String? @db.Text
+
+  // Exchange rate used (for multi-currency)
+  exchangeRate Decimal? @db.Decimal(14, 4)
+  originalCurrency Currency?
+  originalAmount Decimal? @db.Decimal(18, 2)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  // Migration: ALTER TABLE journal_lines ADD CONSTRAINT debit_credit_exclusive 
+  // CHECK ((debit > 0 AND credit = 0) OR (debit = 0 AND credit > 0));
+  @@index([journalId])
+  @@index([accountId])
+  @@map("journal_lines")
+}
+
 model MiscellaneousIncome {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId  String @db.Uuid
   accountId String @db.Uuid
 
-  market  Market  @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  account Account @relation(fields: [accountId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market  Market  @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Restrict)
 
-  source     String
-  amount     Decimal  @db.Decimal(14, 2)
-  incomeDate DateTime @db.Timestamptz(3)
+  source     String @db.VarChar(100)
+  amount     Decimal @db.Decimal(18, 2)
+  incomeDate DateTime @db.Date
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
-  @@index([marketId])
+  version Int @default(1)
+
+  @@index([marketId, incomeDate])
   @@index([accountId])
   @@map("miscellaneous_income")
 }
 
-/// An immutable ledger entry against an account.
 model AccountTransaction {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId  String @db.Uuid
   accountId String @db.Uuid
 
-  market  Market  @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  account Account @relation(fields: [accountId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market  Market  @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Restrict)
 
   type   TransactionType
-  amount Decimal         @db.Decimal(14, 2)
+  amount Decimal @db.Decimal(18, 2)
 
-  /// Polymorphic soft-reference to the source object (no FK enforced).
+  status TransactionStatus @default(PENDING)
+
   referenceType TransactionReferenceType?
-  referenceId   String?                   @db.Uuid
+  referenceId   String? @db.Uuid
 
-  balanceAfterTransaction Decimal @db.Decimal(14, 2)
+  balanceBeforeTransaction Decimal @db.Decimal(18, 2)
+  balanceAfterTransaction  Decimal @db.Decimal(18, 2)
 
-  /// Monotonic ledger sequence for deterministic ordering / reconciliation.
   sequenceNo BigInt @unique @default(autoincrement())
 
-  description String?
+  description String? @db.Text
+
+  reversalId String? @db.Uuid
+  reversal   AccountTransaction? @relation("TransactionReversal", fields: [reversalId], references: [id], onDelete: SetNull)
+  reversedBy AccountTransaction[] @relation("TransactionReversal")
+
   createdById String? @db.Uuid
 
-  transactionDate DateTime @default(now()) @db.Timestamptz(3)
-  createdAt       DateTime @default(now()) @db.Timestamptz(3)
+  transactionDate DateTime @default(now()) @db.Date
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  postedAt        DateTime? @db.Timestamptz(6)
 
-  @@index([marketId])
-  @@index([accountId])
+  isArchived Boolean @default(false)
+  archivedAt DateTime? @db.Timestamptz(6)
+
+  partitionKey String? @db.VarChar(10) // YYYY-MM
+
+  // Migration: ALTER TABLE account_transactions PARTITION BY RANGE (transaction_date);
+  @@index([marketId, transactionDate])
+  @@index([accountId, transactionDate])
+  @@index([accountId, transactionDate, status])
   @@index([referenceType, referenceId])
+  @@index([reversalId])
+  @@index([status])
+  @@index([isArchived])
   @@map("account_transactions")
+}
+
+// ============================================================
+// APPROVAL WORKFLOW
+// ============================================================
+
+model ApprovalRequest {
+  id String @id @db.Uuid
+
+   marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+
+  entityType ApprovalEntityType
+  entityId   String @db.Uuid
+
+
+  requestedBy   User?   @relation("ApprovalRequestedBy", fields: [requestedById], references: [id], onDelete: SetNull)
+  approvedBy   User?   @relation("ApprovalApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
+  approvedById String? @db.Uuid
+  approvedBy   User?   @relation("ApprovalApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
+  status ApprovalStatus @default(PENDING)
+
+  requestReason String? @db.Text
+  approvalNote  String? @db.Text
+  rejectionNote String? @db.Text
+
+  requestedAt DateTime @default(now()) @db.Timestamptz(6)
+  approvedAt  DateTime? @db.Timestamptz(6)
+  expiresAt   DateTime? @db.Timestamptz(6)
+
+  metadata Json?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@index([marketId, status])
+  @@index([entityType, entityId])
+  @@index([requestedById])
+  @@index([deletedAt])
+  @@map("approval_requests")
 }
 
 // ============================================================
 // EXIT / CHEQUES / DOCUMENTS
 // ============================================================
 
-/// Move-out clearance for a contract (one per contract).
 model ExitClearance {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId   String @db.Uuid
   contractId String @unique @db.Uuid
   tenantId   String @db.Uuid
   shopId     String @db.Uuid
 
-  market   Market   @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  contract Contract @relation(fields: [contractId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  tenant   Tenant   @relation(fields: [tenantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shop     Shop     @relation(fields: [shopId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market   Market   @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  shop     Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
 
-  exitDate DateTime @db.Timestamptz(3)
+  exitDate DateTime @db.Date
 
-  shopCondition String?
+  shopCondition String? @db.Text
 
-  damageCost      Decimal? @db.Decimal(14, 2)
-  billsCleared    Boolean  @default(false)
-  remainingAmount Decimal? @db.Decimal(14, 2)
-  refundedAmount  Decimal? @db.Decimal(14, 2)
+  damageCost      Decimal? @db.Decimal(18, 2)
+  billsCleared    Boolean @default(false)
+  remainingAmount Decimal? @db.Decimal(18, 2)
+  refundedAmount  Decimal? @db.Decimal(18, 2)
 
-  reason       String?
+  reason       String? @db.Text
   approvedById String? @db.Uuid
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
-  @@index([marketId])
+  version Int @default(1)
+
+  @@index([marketId, exitDate])
   @@index([tenantId])
   @@index([shopId])
+  @@index([deletedAt])
   @@map("exit_clearances")
 }
 
-/// A post-dated cheque received from a tenant.
 model Cheque {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   tenantId   String  @db.Uuid
   contractId String? @db.Uuid
   accountId  String? @db.Uuid
 
-  market   Market    @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  tenant   Tenant    @relation(fields: [tenantId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  contract Contract? @relation(fields: [contractId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  account  Account?  @relation(fields: [accountId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  market   Market    @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  contract Contract? @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  account  Account?  @relation(fields: [accountId], references: [id], onDelete: SetNull)
 
-  bankName     String
-  chequeNumber String
+  bankName     String @db.VarChar(100)
+  chequeNumber String @db.VarChar(50)
 
-  amount Decimal @db.Decimal(14, 2)
+  amount Decimal @db.Decimal(18, 2)
 
-  issueDate DateTime @db.Timestamptz(3)
-  dueDate   DateTime @db.Timestamptz(3)
+  issueDate DateTime @db.Date
+  dueDate   DateTime @db.Date
 
-  /// Lifecycle timestamps.
-  receivedDate DateTime? @db.Timestamptz(3)
-  returnedDate DateTime? @db.Timestamptz(3)
-  clearedDate  DateTime? @db.Timestamptz(3)
+  receivedDate DateTime? @db.Date
+  returnedDate DateTime? @db.Date
+  clearedDate  DateTime? @db.Date
 
   status ChequeStatus @default(PENDING)
 
-  returnReason String?
-  imageUrl     String?
+  returnReason String? @db.Text
+  imageUrl     String? @db.VarChar(500)
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@unique([marketId, bankName, chequeNumber])
   @@index([marketId, status])
+  @@index([marketId, dueDate])
   @@index([tenantId])
   @@index([contractId])
   @@index([accountId])
+  @@index([deletedAt])
   @@map("cheques")
 }
 
-/// A file attached to a business object (polymorphic).
 model Document {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
-  /// Polymorphic soft-reference (no FK enforced — see header).
   entityType DocumentEntityType
-  entityId   String             @db.Uuid
+  entityId   String @db.Uuid
 
-  /// File metadata.
-  fileName  String
-  filePath  String
-  fileType  String
-  mimeType  String?
-  extension String?
-  fileSize  BigInt?
+  originalName String @db.VarChar(255)
+  storedName   String @db.VarChar(255)
+  filePath     String @db.VarChar(500)
+  folder       String? @db.VarChar(100)
+  fileType     String @db.VarChar(50)
+  mimeType     String? @db.VarChar(100)
+  extension    String? @db.VarChar(10)
+  fileSize     BigInt?
+
+  storageProvider StorageProvider @default(LOCAL)
+  checksum        String? @db.VarChar(64)
 
   uploadedById String? @db.Uuid
+  uploadedAt   DateTime @default(now()) @db.Timestamptz(6)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  // Migration: CREATE UNIQUE INDEX documents_checksum_unique 
+  // ON documents(market_id, checksum, entity_type, entity_id) 
+  // WHERE checksum IS NOT NULL;
   @@index([marketId])
   @@index([entityType, entityId])
+  @@index([checksum])
+  @@index([deletedAt])
   @@map("documents")
 }
 
 // ============================================================
-// USERS / RBAC
+// USERS / RBAC - ENTERPRISE MULTI-TENANT
 // ============================================================
 
-/// A system user. Market membership is only via UserMarket.
 model User {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  name         String
-  username     String  @unique
-  email        String? @unique
-  passwordHash String
+  name         String @db.VarChar(100)
+  username     String @db.VarChar(50)
+  email        String? @db.VarChar(100)
+  passwordHash String @db.VarChar(255)
 
-  /// The user's primary market (NULL until they create or join one).
-  /// This is the main tenant boundary for single-market users.
-  marketId String? @db.Uuid
-  market   Market? @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  isSuperAdmin   Boolean @default(false)
+  superAdminLevel SuperAdminLevel? @default(ADMIN)
 
   status UserStatus @default(ACTIVE)
 
-  /// Additional market memberships (multi-tenant future use).
+  failedLoginAttempts Int @default(0)
+  lockedUntil DateTime? @db.Timestamptz(6)
+  passwordVersion Int @default(1)
+
+  gdprConsent Boolean @default(false)
+  gdprConsentDate DateTime? @db.Timestamptz(6)
+  dataAnonymizedAt DateTime? @db.Timestamptz(6)
+  dataDeletionRequestedAt DateTime? @db.Timestamptz(6)
+  dataDeletionApprovedAt DateTime? @db.Timestamptz(6)
+  approvalRequestsRequested ApprovalRequest[] @relation("ApprovalRequestedBy")
+  approvalRequestsApproved  ApprovalRequest[] @relation("ApprovalApprovedBy")
   markets UserMarket[]
   roles   UserRole[]
 
-  auditLogs AuditLog[] @relation("UserAuditLogs")
+  employee Employee?
 
+  auditLogs     AuditLog[]     @relation("UserAuditLogs")
   notifications Notification[] @relation("UserNotifications")
+  activities    ActivityLog[]
+  loginAttempts UserLoginAttempt[]
 
   sessions       Session[]
   passwordResets PasswordReset[]
+  apiKeys        ApiKey[]
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
 
-  @@index([marketId])
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  // Migration: CREATE UNIQUE INDEX user_username_active ON users(username) WHERE deleted_at IS NULL;
+  // Migration: CREATE UNIQUE INDEX user_email_active ON users(email) WHERE deleted_at IS NULL;
+  @@index([username])
+  @@index([email])
   @@index([deletedAt])
   @@map("users")
+  @@index([status])
 }
 
-/// Join table assigning a user to a market (many-to-many).
 model UserMarket {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   userId   String @db.Uuid
   marketId String @db.Uuid
 
-  user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  market Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
-  /// Whether the assignment is currently active.
   isActive Boolean @default(true)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@unique([userId, marketId])
   @@index([userId])
   @@index([marketId])
+  @@index([deletedAt])
   @@map("user_markets")
+  @@index([userId, isActive])
+  @@index([marketId, isActive])
 }
 
-/// An RBAC role.
 model Role {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  name        String  @unique
-  description String?
+  marketId String? @db.Uuid
+  market   Market? @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
-  users       UserRole[]
-  permissions RolePermission[]
+  name        String @db.VarChar(50)
+  description String? @db.Text
+  scope       RoleScope @default(MARKET)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  userRoles       UserRole[]
+  permissions     RolePermission[]
 
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  // Migration: CREATE UNIQUE INDEX roles_global_unique ON roles(name) WHERE market_id IS NULL;
+  // Migration: CREATE UNIQUE INDEX roles_market_unique ON roles(market_id, name) WHERE market_id IS NOT NULL;
+  @@index([scope])
+  @@index([marketId])
+  @@index([deletedAt])
   @@map("roles")
 }
 
-/// An RBAC permission.
 model Permission {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  name        String  @unique
-  description String?
+  resource    String @db.VarChar(50)
+  action      String @db.VarChar(50)
+  description String? @db.Text
+  scope       PermissionScope @default(MARKET)
 
   roles RolePermission[]
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  version Int @default(1)
+
+  @@unique([resource, action, scope])
+  @@index([deletedAt])
   @@map("permissions")
 }
 
-/// Join table assigning a role to a user.
 model UserRole {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  userId String @db.Uuid
-  roleId String @db.Uuid
+  userId   String  @db.Uuid
+  roleId   String  @db.Uuid
+  marketId String? @db.Uuid
 
-  user User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  role Role @relation(fields: [roleId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  market Market? @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
-  @@unique([userId, roleId])
+  version Int @default(1)
+
+  // Migration: CREATE UNIQUE INDEX user_global_role_unique ON user_roles(user_id, role_id) WHERE market_id IS NULL;
+  // Migration: CREATE UNIQUE INDEX user_market_role_unique ON user_roles(user_id, role_id, market_id) WHERE market_id IS NOT NULL;
+  // Migration: CREATE TRIGGER enforce_role_market_match BEFORE INSERT OR UPDATE ON user_roles
+  // FOR EACH ROW EXECUTE FUNCTION enforce_role_market_match();
   @@index([userId])
   @@index([roleId])
+  @@index([marketId])
+  @@index([deletedAt])
   @@map("user_roles")
+  @@index([userId, marketId])
+  @@index([marketId, roleId])
 }
 
-/// Join table assigning a permission to a role.
 model RolePermission {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   roleId       String @db.Uuid
   permissionId String @db.Uuid
 
-  role       Role       @relation(fields: [roleId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  permission Permission @relation(fields: [permissionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
 
   @@unique([roleId, permissionId])
   @@index([roleId])
@@ -1096,115 +1764,243 @@ model RolePermission {
 }
 
 // ============================================================
-// AUTH / SESSIONS
+// AUTH / SESSIONS / API KEYS
 // ============================================================
 
-/// A login session. Stores only a HASH of the refresh token; the raw
-/// token is returned to the client once and never persisted. Rotation:
-/// on refresh, replace `refreshTokenHash` and bump `lastUsedAt`.
 model Session {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  refreshTokenHash String @unique
+  refreshTokenHash String @unique @db.VarChar(255)
 
-  userAgent String?
-  ipAddress String?
+  userAgent String? @db.Text
+  ipAddress String? @db.VarChar(45)
 
-  expiresAt  DateTime  @db.Timestamptz(3)
-  lastUsedAt DateTime? @db.Timestamptz(3)
-  revokedAt  DateTime? @db.Timestamptz(3)
+  expiresAt  DateTime  @db.Timestamptz(6)
+  lastUsedAt DateTime? @db.Timestamptz(6)
+  revokedAt  DateTime? @db.Timestamptz(6)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  tokenVersion Int @default(1)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
 
   @@index([userId])
   @@index([expiresAt])
+  @@index([userId, expiresAt])
   @@map("sessions")
 }
 
-/// A single-use password-reset token (hashed).
 model PasswordReset {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  tokenHash String @unique
+  tokenHash String @unique @db.VarChar(255)
 
-  expiresAt DateTime  @db.Timestamptz(3)
-  usedAt    DateTime? @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(6)
+  usedAt    DateTime? @db.Timestamptz(6)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
   @@index([userId])
+  @@index([expiresAt])
+  @@index([deletedAt])
   @@map("password_resets")
 }
 
+model ApiKey {
+  id String @id @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  name        String @db.VarChar(100)
+  keyHash     String @unique @db.VarChar(255)
+  description String? @db.Text
+
+  permissions Json?
+  lastUsedIp  String? @db.VarChar(45)
+  lastUsedAt  DateTime? @db.Timestamptz(6)
+
+  expiresAt  DateTime? @db.Timestamptz(6)
+  revokedAt  DateTime? @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  version Int @default(1)
+
+  @@index([userId])
+  @@index([marketId])
+  @@index([keyHash])
+  @@index([deletedAt])
+  @@map("api_keys")
+}
+
+model UserLoginAttempt {
+  id String @id @db.Uuid
+
+  userId   String? @db.Uuid
+  user     User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  username String @db.VarChar(50)
+  ipAddress String? @db.VarChar(45)
+  userAgent String? @db.Text
+
+  success Boolean @default(false)
+  failReason String? @db.Text
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([username, createdAt])
+  @@index([userId, createdAt])
+  @@index([ipAddress, createdAt])
+  @@map("user_login_attempts")
+}
+
 // ============================================================
-// AUDIT / NOTIFICATIONS
+// AUDIT / ACTIVITY / NOTIFICATIONS
 // ============================================================
 
-/// An immutable audit trail entry.
 model AuditLog {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String? @db.Uuid
   userId   String? @db.Uuid
 
-  market Market? @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  user   User?   @relation("UserAuditLogs", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-
+  market Market? @relation(fields: [marketId], references: [id], onDelete: SetNull)
+  user   User?   @relation("UserAuditLogs", fields: [userId], references: [id], onDelete: SetNull)
+  changesHistory AuditLogChange[]
   operation AuditOperation
+  actionSource AuditActionSource @default(WEB)
 
-  /// Polymorphic soft-reference to the changed row (no FK enforced).
-  tableName String
-  recordId  String?
+  tableName String @db.VarChar(50)
+  recordId  String? @db.Uuid
+  entityType String? @db.VarChar(50)
 
+  // FIX: Store diffs instead of full objects
+  changes Json? // [{field: "status", old: "ACTIVE", new: "INACTIVE"}]
+
+  // Legacy full objects (deprecated, kept for migration)
   oldValue Json?
   newValue Json?
 
-  ipAddress  String?
-  deviceInfo String?
+  ipAddress  String? @db.VarChar(45)
+  deviceInfo String? @db.Text
+  requestId  String? @db.Uuid
+  traceId    String? @db.Uuid
+  correlationId String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  superAdminAccess Boolean @default(false)
 
-  @@index([marketId])
-  @@index([userId])
+  success      Boolean @default(true)
+  errorMessage String? @db.Text
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  // Archive fields
+  isArchived Boolean @default(false)
+  archivedAt DateTime? @db.Timestamptz(6)
+
+  // Migration: ALTER TABLE audit_logs PARTITION BY RANGE (createdAt);
+  @@index([marketId, createdAt])
+  @@index([userId, createdAt])
   @@index([tableName, recordId])
   @@index([createdAt])
+  @@index([requestId])
+  @@index([traceId])
+  @@index([correlationId])
+  @@index([isArchived])
   @@map("audit_logs")
 }
 
-/// A user- or market-targeted notification.
+// Separate table for audit log changes to reduce storage
+model AuditLogChange {
+  id String @id @db.Uuid
+
+  auditLogId String @db.Uuid
+  auditLog   AuditLog @relation(fields: [auditLogId], references: [id], onDelete: Cascade)
+
+  fieldName String @db.VarChar(50)
+  oldValue  String? @db.Text
+  newValue  String? @db.Text
+
+  @@index([auditLogId])
+  @@map("audit_log_changes")
+}
+
+model ActivityLog {
+  id String @id @db.Uuid
+
+  userId   String  @db.Uuid
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketId String? @db.Uuid
+  market   Market? @relation(fields: [marketId], references: [id], onDelete: SetNull)
+
+  activity  String @db.VarChar(100)
+  details   Json?
+
+  ipAddress  String? @db.VarChar(45)
+  userAgent  String? @db.Text
+  requestId  String? @db.Uuid
+  traceId    String? @db.Uuid
+  correlationId String? @db.Uuid
+
+  duration   Int?
+  success    Boolean @default(true)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  isArchived Boolean @default(false)
+  archivedAt DateTime? @db.Timestamptz(6)
+
+  @@index([userId, createdAt])
+  @@index([marketId, createdAt])
+  @@index([activity])
+  @@index([isArchived])
+  @@map("activity_logs")
+}
+
 model Notification {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String  @db.Uuid
   userId   String? @db.Uuid
 
-  market Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  user   User?  @relation("UserNotifications", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  user   User?  @relation("UserNotifications", fields: [userId], references: [id], onDelete: SetNull)
 
   type     NotificationType
-  message  String
+  message  String @db.Text
   priority NotificationPriority @default(NORMAL)
-  isRead   Boolean              @default(false)
+  isRead   Boolean @default(false)
 
   referenceType NotificationReferenceType?
-  referenceId   String?                    @db.Uuid
+  referenceId   String? @db.Uuid
 
   createdById String? @db.Uuid
 
-  readAt     DateTime? @db.Timestamptz(3)
-  resolvedAt DateTime? @db.Timestamptz(3)
+  readAt     DateTime? @db.Timestamptz(6)
+  resolvedAt DateTime? @db.Timestamptz(6)
+  expiresAt  DateTime? @db.Timestamptz(6)
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
-  @@index([marketId, isRead])
-  @@index([userId, isRead])
+  version Int @default(1)
+
+  @@index([marketId, isRead, createdAt])
+  @@index([userId, isRead, createdAt])
   @@index([referenceType, referenceId])
+  @@index([expiresAt])
+  @@index([deletedAt])
   @@map("notifications")
 }
 
@@ -1212,114 +2008,118 @@ model Notification {
 // SHAREHOLDERS / INVESTMENTS
 // ============================================================
 
-/// A market shareholder.
 model Shareholder {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
 
-  firstName String
-  lastName  String?
-  phone     String?
+  firstName String @db.VarChar(100)
+  lastName  String? @db.VarChar(100)
+  phone     String @db.VarChar(20)
 
-  initialInvestment Decimal @default(0) @db.Decimal(14, 2)
+  initialInvestment Decimal @default(0) @db.Decimal(18, 2)
 
   ownershipHistories    OwnershipHistory[]
   additionalInvestments AdditionalInvestment[]
   withdrawals           Withdrawal[]
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
-  deletedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
+  version Int @default(1)
+
+  // Migration: CREATE UNIQUE INDEX shareholder_phone_active ON shareholders(phone) WHERE deleted_at IS NULL;
+  @@unique([marketId, phone])
   @@index([marketId])
   @@index([deletedAt])
   @@map("shareholders")
 }
 
-/// A shareholder's ownership percentage over a period.
-/// NOTE: non-overlapping periods cannot be expressed in Prisma;
-/// enforce with a Postgres EXCLUDE (GiST) constraint in a raw
-/// migration, or validate at the application layer.
 model OwnershipHistory {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
-  marketId      String      @db.Uuid
-  shareholderId String      @db.Uuid
-  market        Market      @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shareholder   Shareholder @relation(fields: [shareholderId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  marketId      String @db.Uuid
+  shareholderId String @db.Uuid
+  market        Market      @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  shareholder   Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Restrict)
 
-  percentage Decimal   @db.Decimal(5, 2)
-  startDate  DateTime  @db.Timestamptz(3)
-  endDate    DateTime? @db.Timestamptz(3)
+  percentage Decimal @db.Decimal(5, 2)
+  startDate  DateTime @db.Date
+  endDate    DateTime? @db.Date
 
   approvedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
+  version Int @default(1)
+
+  @@unique([shareholderId, startDate])
   @@index([marketId])
   @@index([shareholderId])
   @@index([shareholderId, startDate, endDate])
   @@map("ownership_histories")
 }
 
-/// A capital top-up by a shareholder.
 model AdditionalInvestment {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId      String @db.Uuid
   shareholderId String @db.Uuid
 
-  market      Market      @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  market      Market      @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
 
-  amount         Decimal        @db.Decimal(14, 2)
+  amount         Decimal @db.Decimal(18, 2)
   investmentType InvestmentType
-  investmentDate DateTime       @db.Timestamptz(3)
+  investmentDate DateTime @db.Date
 
-  description String?
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@index([marketId])
   @@index([shareholderId])
   @@map("additional_investments")
 }
 
-/// A capital withdrawal by a shareholder.
 model Withdrawal {
-  id String @id @default(uuid(7)) @db.Uuid
+  id String @id @db.Uuid
 
   marketId      String  @db.Uuid
   shareholderId String  @db.Uuid
   accountId     String? @db.Uuid
 
-  market      Market      @relation(fields: [marketId], references: [id], onUpdate: Cascade, onDelete: Restrict)
-  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  account     Account?    @relation(fields: [accountId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  market      Market      @relation(fields: [marketId], references: [id], onDelete: Restrict)
+  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
+  account     Account?    @relation(fields: [accountId], references: [id], onDelete: SetNull)
 
-  amount         Decimal  @db.Decimal(14, 2)
-  withdrawalDate DateTime @db.Timestamptz(3)
+  amount         Decimal @db.Decimal(18, 2)
+  withdrawalDate DateTime @db.Date
 
-  source      String?
-  description String?
+  source      String? @db.VarChar(100)
+  description String? @db.Text
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
 
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  version Int @default(1)
 
   @@index([marketId])
   @@index([shareholderId])

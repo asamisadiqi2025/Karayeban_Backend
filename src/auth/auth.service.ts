@@ -2,13 +2,12 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { randomBytes, createHash } from 'crypto';
-
+import { ensureUserIsActive } from '../common/utils/check-user-status';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -43,7 +42,7 @@ export class AuthService {
     });
 
     if (exists) {
-      throw new ConflictException('User already exists');
+      throw new ConflictException('کاربر از قبل موجود است');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
@@ -71,14 +70,18 @@ export class AuthService {
 
   async login(dto: LoginDto, userAgent?: string, ipAddress?: string) {
     const user = await this.prisma.user.findUnique({
-      where: { username: dto.username.toLowerCase() },
+      where: {
+        username: dto.username.toLowerCase(),
+      },
       include: {
         roles: {
           include: {
             role: {
               include: {
                 permissions: {
-                  include: { permission: true },
+                  include: {
+                    permission: true,
+                  },
                 },
               },
             },
@@ -91,14 +94,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (user.status !== 'ACTIVE') {
-      throw new ForbiddenException('Account is disabled');
-    }
-
     const valid = await bcrypt.compare(dto.password, user.passwordHash);
+
     if (!valid) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    ensureUserIsActive(user.status);
 
     return this.generateAuthResponse(user, userAgent, ipAddress);
   }
@@ -129,7 +131,9 @@ export class AuthService {
     const tokenHash = this.hashToken(refreshToken);
 
     const session = await this.prisma.session.findUnique({
-      where: { refreshTokenHash: tokenHash },
+      where: {
+        refreshTokenHash: tokenHash,
+      },
       include: {
         user: {
           include: {
@@ -138,7 +142,9 @@ export class AuthService {
                 role: {
                   include: {
                     permissions: {
-                      include: { permission: true },
+                      include: {
+                        permission: true,
+                      },
                     },
                   },
                 },
@@ -157,17 +163,19 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token expired');
     }
 
-    if (session.user.status !== 'ACTIVE') {
-      throw new ForbiddenException('Account is disabled');
-    }
+    // ✅ Check account status
+    ensureUserIsActive(session.user.status);
 
-    // Rotate: revoke old session
+    // Revoke current session
     await this.prisma.session.update({
-      where: { id: session.id },
-      data: { revokedAt: new Date() },
+      where: {
+        id: session.id,
+      },
+      data: {
+        revokedAt: new Date(),
+      },
     });
 
-    // Issue new tokens
     return this.generateAuthResponse(session.user, userAgent, ipAddress);
   }
 
@@ -181,64 +189,79 @@ export class AuthService {
     userAgent?: string,
     ipAddress?: string,
   ) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        roles: {
-          include: {
-            role: {
-              include: {
-                permissions: {
-                  include: { permission: true },
+    const updatedUser = await this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.findUnique({
+        where: { id: userId },
+        include: {
+          roles: {
+            include: {
+              role: {
+                include: {
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
                 },
               },
             },
           },
         },
-      },
-    });
-
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-
-    if (user.marketId) {
-      throw new ConflictException('User already belongs to a market');
-    }
-
-    // Create market
-    const market = await this.prisma.market.create({
-      data: {
-        name: dto.name,
-        code: dto.code,
-        address: dto.address,
-        phone: dto.phone,
-      },
-    });
-
-    // Upsert MARKET_OWNER role
-    let ownerRole = await this.prisma.role.findUnique({
-      where: { name: ROLES.MARKET_OWNER },
-    });
-
-    if (!ownerRole) {
-      ownerRole = await this.prisma.role.create({
-        data: { name: ROLES.MARKET_OWNER },
       });
 
-      // Seed permissions for MARKET_OWNER
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      ensureUserIsActive(user.status);
+
+      if (user.marketId) {
+        throw new ConflictException('User already belongs to a market');
+      }
+
+      // -----------------------------
+      // Create Market
+      // -----------------------------
+
+      const market = await tx.market.create({
+        data: {
+          name: dto.name,
+          code: dto.code,
+          address: dto.address,
+          phone: dto.phone,
+        },
+      });
+
+      // -----------------------------
+      // Upsert MARKET_OWNER role
+      // -----------------------------
+
+      const ownerRole = await tx.role.upsert({
+        where: {
+          name: ROLES.MARKET_OWNER,
+        },
+        create: {
+          name: ROLES.MARKET_OWNER,
+        },
+        update: {},
+      });
+
+      // -----------------------------
+      // Seed permissions
+      // -----------------------------
+
       for (const permName of ROLE_PERMISSIONS[ROLES.MARKET_OWNER]) {
-        let permission = await this.prisma.permission.findUnique({
-          where: { name: permName },
+        const permission = await tx.permission.upsert({
+          where: {
+            name: permName,
+          },
+          create: {
+            name: permName,
+          },
+          update: {},
         });
 
-        if (!permission) {
-          permission = await this.prisma.permission.create({
-            data: { name: permName },
-          });
-        }
-
-        await this.prisma.rolePermission.upsert({
+        await tx.rolePermission.upsert({
           where: {
             roleId_permissionId: {
               roleId: ownerRole.id,
@@ -252,30 +275,43 @@ export class AuthService {
           update: {},
         });
       }
-    }
 
-    // Assign MARKET_OWNER role to user
-    await this.prisma.userRole.upsert({
-      where: {
-        userId_roleId: {
+      // -----------------------------
+      // Assign Role
+      // -----------------------------
+
+      await tx.userRole.upsert({
+        where: {
+          userId_roleId: {
+            userId: user.id,
+            roleId: ownerRole.id,
+          },
+        },
+        create: {
           userId: user.id,
           roleId: ownerRole.id,
         },
-      },
-      create: {
-        userId: user.id,
-        roleId: ownerRole.id,
-      },
-      update: {},
-    });
+        update: {},
+      });
 
-    // Attach market to user and create UserMarket membership
-    await this.prisma.$transaction([
-      this.prisma.user.update({
-        where: { id: user.id },
-        data: { marketId: market.id },
-      }),
-      this.prisma.userMarket.upsert({
+      // -----------------------------
+      // Update User
+      // -----------------------------
+
+      await tx.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          marketId: market.id,
+        },
+      });
+
+      // -----------------------------
+      // Create Membership
+      // -----------------------------
+
+      await tx.userMarket.upsert({
         where: {
           userId_marketId: {
             userId: user.id,
@@ -288,28 +324,41 @@ export class AuthService {
           isActive: true,
         },
         update: {},
-      }),
-    ]);
+      });
 
-    // Reload user with all relations
-    const updatedUser = await this.prisma.user.findUnique({
-      where: { id: user.id },
-      include: {
-        roles: {
-          include: {
-            role: {
-              include: {
-                permissions: {
-                  include: { permission: true },
+      // -----------------------------
+      // Reload User
+      // -----------------------------
+
+      const updatedUser = await tx.user.findUnique({
+        where: {
+          id: user.id,
+        },
+        include: {
+          roles: {
+            include: {
+              role: {
+                include: {
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
                 },
               },
             },
           },
         },
-      },
+      });
+
+      if (!updatedUser) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      return updatedUser;
     });
 
-    return this.generateAuthResponse(updatedUser!, userAgent, ipAddress);
+    return this.generateAuthResponse(updatedUser, userAgent, ipAddress);
   }
 
   // ───────────────────────────────
@@ -347,9 +396,11 @@ export class AuthService {
     userAgent?: string,
     ipAddress?: string,
   ) {
+    // ✅ Check account status
+    ensureUserIsActive(user.status);
+
     const { roles, permissions } = this.extractRolesAndPermissions(user);
 
-    // Build payload
     const payload: JwtPayload = {
       sub: user.id,
       username: user.username,
@@ -361,15 +412,17 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign(payload);
 
-    // Generate refresh token
     const refreshToken = this.generateSecureToken();
+
     const refreshTokenHash = this.hashToken(refreshToken);
 
-    const refreshExpiresIn = this.configService.get<string>('JWT_REFRESH_EXPIRES') || '30d';
+    const refreshExpiresIn =
+      this.configService.get<string>('JWT_REFRESH_EXPIRES') || '30d';
+
     const expiresMs = this.parseExpiry(refreshExpiresIn);
+
     const expiresAt = new Date(Date.now() + expiresMs);
 
-    // Store session
     await this.prisma.session.create({
       data: {
         userId: user.id,
@@ -409,11 +462,16 @@ export class AuthService {
     const unit = match[2];
 
     switch (unit) {
-      case 'd': return value * 24 * 60 * 60 * 1000;
-      case 'h': return value * 60 * 60 * 1000;
-      case 'm': return value * 60 * 1000;
-      case 's': return value * 1000;
-      default: return 30 * 24 * 60 * 60 * 1000;
+      case 'd':
+        return value * 24 * 60 * 60 * 1000;
+      case 'h':
+        return value * 60 * 60 * 1000;
+      case 'm':
+        return value * 60 * 1000;
+      case 's':
+        return value * 1000;
+      default:
+        return 30 * 24 * 60 * 60 * 1000;
     }
   }
 }

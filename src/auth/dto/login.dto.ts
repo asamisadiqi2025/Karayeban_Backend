@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -5,6 +6,13 @@ import {
 } from 'class-validator';
 
 export class LoginDto {
+   @ApiProperty({
+    example: 'ahmad123',
+    description: 'نام کاربری',
+    minLength: 3,
+    maxLength: 30,
+  })
+
   @IsNotEmpty({
     message: 'نام کاربری الزامی است.',
   })
@@ -16,6 +24,14 @@ export class LoginDto {
   })
   username: string;
 
+
+    @ApiProperty({
+    example: 'StrongPassword123',
+    description: 'رمز عبور',
+    minLength: 8,
+    maxLength: 100,
+  })
+  
   @IsNotEmpty({
     message: 'رمز عبور الزامی است.',
   })

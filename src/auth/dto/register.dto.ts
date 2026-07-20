@@ -5,8 +5,18 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 
 export class RegisterDto {
+  @ApiProperty({
+    example: 'احمد رحمانی',
+    description: 'نام کامل کاربر',
+    minLength: 2,
+    maxLength: 100,
+  })
   @IsNotEmpty({
     message: 'نام الزامی است.',
   })
@@ -18,6 +28,13 @@ export class RegisterDto {
   })
   name: string;
 
+
+  @ApiProperty({
+    example: 'ahmad123',
+    description: 'نام کاربری یکتا',
+    minLength: 3,
+    maxLength: 30,
+  })
   @IsNotEmpty({
     message: 'نام کاربری الزامی است.',
   })
@@ -29,6 +46,11 @@ export class RegisterDto {
   })
   username: string;
 
+
+  @ApiPropertyOptional({
+    example: 'ahmad@example.com',
+    description: 'ایمیل کاربر (اختیاری)',
+  })
   @IsOptional()
   @IsEmail(
     {},
@@ -38,6 +60,13 @@ export class RegisterDto {
   )
   email?: string;
 
+
+  @ApiProperty({
+    example: 'StrongPassword123',
+    description: 'رمز عبور کاربر',
+    minLength: 8,
+    maxLength: 100,
+  })
   @IsNotEmpty({
     message: 'رمز عبور الزامی است.',
   })
