@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ROLES, ROLE_PERMISSIONS } from '../constants';
 import { Prisma } from '../../generated/prisma/client';
+import { generateId } from '../../common/utils/uuid.util';
 
 type RoleWithPermissions = {
   role: {
@@ -48,7 +49,7 @@ export class PermissionService {
 
     if (!role) {
       role = await tx.role.create({
-        data: { name: roleName, scope },
+        data: { id: generateId(), name: roleName, scope },
       });
     }
 
@@ -70,6 +71,7 @@ export class PermissionService {
       if (!permission) {
         permission = await tx.permission.create({
           data: {
+            id: generateId(),
             name: permName,
             resource: resource ?? permName,
             action: action ?? 'manage',
@@ -85,6 +87,7 @@ export class PermissionService {
           },
         },
         create: {
+          id: generateId(),
           roleId,
           permissionId: permission.id,
         },
@@ -104,7 +107,7 @@ export class PermissionService {
 
     if (!existing) {
       await tx.userRole.create({
-        data: { userId, roleId },
+        data: { id: generateId(), userId, roleId },
       });
     }
   }

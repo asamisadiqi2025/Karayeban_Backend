@@ -454,7 +454,7 @@ export type MarketScalarWhereWithAggregatesInput = {
 }
 
 export type MarketCreateInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -505,7 +505,7 @@ export type MarketCreateInput = {
 }
 
 export type MarketUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -658,7 +658,7 @@ export type MarketUncheckedUpdateInput = {
 }
 
 export type MarketCreateManyInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1308,7 +1308,7 @@ export type MarketUpdateOneRequiredWithoutWithdrawalsNestedInput = {
 }
 
 export type MarketCreateWithoutSettingsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1358,7 +1358,7 @@ export type MarketCreateWithoutSettingsInput = {
 }
 
 export type MarketUncheckedCreateWithoutSettingsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1524,7 +1524,7 @@ export type MarketUncheckedUpdateWithoutSettingsInput = {
 }
 
 export type MarketCreateWithoutExchangeRatesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1574,7 +1574,7 @@ export type MarketCreateWithoutExchangeRatesInput = {
 }
 
 export type MarketUncheckedCreateWithoutExchangeRatesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1740,7 +1740,7 @@ export type MarketUncheckedUpdateWithoutExchangeRatesInput = {
 }
 
 export type MarketCreateWithoutAccountingPeriodsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1790,7 +1790,7 @@ export type MarketCreateWithoutAccountingPeriodsInput = {
 }
 
 export type MarketUncheckedCreateWithoutAccountingPeriodsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -1956,7 +1956,7 @@ export type MarketUncheckedUpdateWithoutAccountingPeriodsInput = {
 }
 
 export type MarketCreateWithoutFloorsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2006,7 +2006,7 @@ export type MarketCreateWithoutFloorsInput = {
 }
 
 export type MarketUncheckedCreateWithoutFloorsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2172,7 +2172,7 @@ export type MarketUncheckedUpdateWithoutFloorsInput = {
 }
 
 export type MarketCreateWithoutShopsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2222,7 +2222,7 @@ export type MarketCreateWithoutShopsInput = {
 }
 
 export type MarketUncheckedCreateWithoutShopsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2388,7 +2388,7 @@ export type MarketUncheckedUpdateWithoutShopsInput = {
 }
 
 export type MarketCreateWithoutShopCategoriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2438,7 +2438,7 @@ export type MarketCreateWithoutShopCategoriesInput = {
 }
 
 export type MarketUncheckedCreateWithoutShopCategoriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2604,7 +2604,7 @@ export type MarketUncheckedUpdateWithoutShopCategoriesInput = {
 }
 
 export type MarketCreateWithoutMarketTenantsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2654,7 +2654,7 @@ export type MarketCreateWithoutMarketTenantsInput = {
 }
 
 export type MarketUncheckedCreateWithoutMarketTenantsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2820,7 +2820,7 @@ export type MarketUncheckedUpdateWithoutMarketTenantsInput = {
 }
 
 export type MarketCreateWithoutContractsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -2870,7 +2870,7 @@ export type MarketCreateWithoutContractsInput = {
 }
 
 export type MarketUncheckedCreateWithoutContractsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3036,7 +3036,7 @@ export type MarketUncheckedUpdateWithoutContractsInput = {
 }
 
 export type MarketCreateWithoutContractTermsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3086,7 +3086,7 @@ export type MarketCreateWithoutContractTermsInput = {
 }
 
 export type MarketUncheckedCreateWithoutContractTermsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3252,7 +3252,7 @@ export type MarketUncheckedUpdateWithoutContractTermsInput = {
 }
 
 export type MarketCreateWithoutSecurityDepositsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3302,7 +3302,7 @@ export type MarketCreateWithoutSecurityDepositsInput = {
 }
 
 export type MarketUncheckedCreateWithoutSecurityDepositsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3468,7 +3468,7 @@ export type MarketUncheckedUpdateWithoutSecurityDepositsInput = {
 }
 
 export type MarketCreateWithoutRentPaymentsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3518,7 +3518,7 @@ export type MarketCreateWithoutRentPaymentsInput = {
 }
 
 export type MarketUncheckedCreateWithoutRentPaymentsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3684,7 +3684,7 @@ export type MarketUncheckedUpdateWithoutRentPaymentsInput = {
 }
 
 export type MarketCreateWithoutUtilityBillsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3734,7 +3734,7 @@ export type MarketCreateWithoutUtilityBillsInput = {
 }
 
 export type MarketUncheckedCreateWithoutUtilityBillsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3900,7 +3900,7 @@ export type MarketUncheckedUpdateWithoutUtilityBillsInput = {
 }
 
 export type MarketCreateWithoutMarketEmployeesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -3950,7 +3950,7 @@ export type MarketCreateWithoutMarketEmployeesInput = {
 }
 
 export type MarketUncheckedCreateWithoutMarketEmployeesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4116,7 +4116,7 @@ export type MarketUncheckedUpdateWithoutMarketEmployeesInput = {
 }
 
 export type MarketCreateWithoutExpenseCategoriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4166,7 +4166,7 @@ export type MarketCreateWithoutExpenseCategoriesInput = {
 }
 
 export type MarketUncheckedCreateWithoutExpenseCategoriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4332,7 +4332,7 @@ export type MarketUncheckedUpdateWithoutExpenseCategoriesInput = {
 }
 
 export type MarketCreateWithoutMarketExpensesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4382,7 +4382,7 @@ export type MarketCreateWithoutMarketExpensesInput = {
 }
 
 export type MarketUncheckedCreateWithoutMarketExpensesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4548,7 +4548,7 @@ export type MarketUncheckedUpdateWithoutMarketExpensesInput = {
 }
 
 export type MarketCreateWithoutMaintenanceRequestsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4598,7 +4598,7 @@ export type MarketCreateWithoutMaintenanceRequestsInput = {
 }
 
 export type MarketUncheckedCreateWithoutMaintenanceRequestsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4764,7 +4764,7 @@ export type MarketUncheckedUpdateWithoutMaintenanceRequestsInput = {
 }
 
 export type MarketCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4814,7 +4814,7 @@ export type MarketCreateWithoutAccountsInput = {
 }
 
 export type MarketUncheckedCreateWithoutAccountsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -4980,7 +4980,7 @@ export type MarketUncheckedUpdateWithoutAccountsInput = {
 }
 
 export type MarketCreateWithoutJournalEntriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5030,7 +5030,7 @@ export type MarketCreateWithoutJournalEntriesInput = {
 }
 
 export type MarketUncheckedCreateWithoutJournalEntriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5196,7 +5196,7 @@ export type MarketUncheckedUpdateWithoutJournalEntriesInput = {
 }
 
 export type MarketCreateWithoutMiscellaneousIncomesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5246,7 +5246,7 @@ export type MarketCreateWithoutMiscellaneousIncomesInput = {
 }
 
 export type MarketUncheckedCreateWithoutMiscellaneousIncomesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5412,7 +5412,7 @@ export type MarketUncheckedUpdateWithoutMiscellaneousIncomesInput = {
 }
 
 export type MarketCreateWithoutAccountTransactionsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5462,7 +5462,7 @@ export type MarketCreateWithoutAccountTransactionsInput = {
 }
 
 export type MarketUncheckedCreateWithoutAccountTransactionsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5628,7 +5628,7 @@ export type MarketUncheckedUpdateWithoutAccountTransactionsInput = {
 }
 
 export type MarketCreateWithoutApprovalRequestsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5678,7 +5678,7 @@ export type MarketCreateWithoutApprovalRequestsInput = {
 }
 
 export type MarketUncheckedCreateWithoutApprovalRequestsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5844,7 +5844,7 @@ export type MarketUncheckedUpdateWithoutApprovalRequestsInput = {
 }
 
 export type MarketCreateWithoutExitClearancesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -5894,7 +5894,7 @@ export type MarketCreateWithoutExitClearancesInput = {
 }
 
 export type MarketUncheckedCreateWithoutExitClearancesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6060,7 +6060,7 @@ export type MarketUncheckedUpdateWithoutExitClearancesInput = {
 }
 
 export type MarketCreateWithoutChequesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6110,7 +6110,7 @@ export type MarketCreateWithoutChequesInput = {
 }
 
 export type MarketUncheckedCreateWithoutChequesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6276,7 +6276,7 @@ export type MarketUncheckedUpdateWithoutChequesInput = {
 }
 
 export type MarketCreateWithoutDocumentsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6326,7 +6326,7 @@ export type MarketCreateWithoutDocumentsInput = {
 }
 
 export type MarketUncheckedCreateWithoutDocumentsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6492,7 +6492,7 @@ export type MarketUncheckedUpdateWithoutDocumentsInput = {
 }
 
 export type MarketCreateWithoutUsersInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6542,7 +6542,7 @@ export type MarketCreateWithoutUsersInput = {
 }
 
 export type MarketUncheckedCreateWithoutUsersInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6708,7 +6708,7 @@ export type MarketUncheckedUpdateWithoutUsersInput = {
 }
 
 export type MarketCreateWithoutUserMarketsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6758,7 +6758,7 @@ export type MarketCreateWithoutUserMarketsInput = {
 }
 
 export type MarketUncheckedCreateWithoutUserMarketsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6924,7 +6924,7 @@ export type MarketUncheckedUpdateWithoutUserMarketsInput = {
 }
 
 export type MarketCreateWithoutRolesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -6974,7 +6974,7 @@ export type MarketCreateWithoutRolesInput = {
 }
 
 export type MarketUncheckedCreateWithoutRolesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7140,7 +7140,7 @@ export type MarketUncheckedUpdateWithoutRolesInput = {
 }
 
 export type MarketCreateWithoutUserRolesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7190,7 +7190,7 @@ export type MarketCreateWithoutUserRolesInput = {
 }
 
 export type MarketUncheckedCreateWithoutUserRolesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7356,7 +7356,7 @@ export type MarketUncheckedUpdateWithoutUserRolesInput = {
 }
 
 export type MarketCreateWithoutApiKeysInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7406,7 +7406,7 @@ export type MarketCreateWithoutApiKeysInput = {
 }
 
 export type MarketUncheckedCreateWithoutApiKeysInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7572,7 +7572,7 @@ export type MarketUncheckedUpdateWithoutApiKeysInput = {
 }
 
 export type MarketCreateWithoutAuditLogsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7622,7 +7622,7 @@ export type MarketCreateWithoutAuditLogsInput = {
 }
 
 export type MarketUncheckedCreateWithoutAuditLogsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7788,7 +7788,7 @@ export type MarketUncheckedUpdateWithoutAuditLogsInput = {
 }
 
 export type MarketCreateWithoutActivitiesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -7838,7 +7838,7 @@ export type MarketCreateWithoutActivitiesInput = {
 }
 
 export type MarketUncheckedCreateWithoutActivitiesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8004,7 +8004,7 @@ export type MarketUncheckedUpdateWithoutActivitiesInput = {
 }
 
 export type MarketCreateWithoutNotificationsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8054,7 +8054,7 @@ export type MarketCreateWithoutNotificationsInput = {
 }
 
 export type MarketUncheckedCreateWithoutNotificationsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8220,7 +8220,7 @@ export type MarketUncheckedUpdateWithoutNotificationsInput = {
 }
 
 export type MarketCreateWithoutShareholdersInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8270,7 +8270,7 @@ export type MarketCreateWithoutShareholdersInput = {
 }
 
 export type MarketUncheckedCreateWithoutShareholdersInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8436,7 +8436,7 @@ export type MarketUncheckedUpdateWithoutShareholdersInput = {
 }
 
 export type MarketCreateWithoutOwnershipHistoriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8486,7 +8486,7 @@ export type MarketCreateWithoutOwnershipHistoriesInput = {
 }
 
 export type MarketUncheckedCreateWithoutOwnershipHistoriesInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8652,7 +8652,7 @@ export type MarketUncheckedUpdateWithoutOwnershipHistoriesInput = {
 }
 
 export type MarketCreateWithoutAdditionalInvestmentsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8702,7 +8702,7 @@ export type MarketCreateWithoutAdditionalInvestmentsInput = {
 }
 
 export type MarketUncheckedCreateWithoutAdditionalInvestmentsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8868,7 +8868,7 @@ export type MarketUncheckedUpdateWithoutAdditionalInvestmentsInput = {
 }
 
 export type MarketCreateWithoutWithdrawalsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null
@@ -8918,7 +8918,7 @@ export type MarketCreateWithoutWithdrawalsInput = {
 }
 
 export type MarketUncheckedCreateWithoutWithdrawalsInput = {
-  id?: string
+  id: string
   name: string
   code: string
   address?: string | null

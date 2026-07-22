@@ -307,7 +307,7 @@ export type UserRoleScalarWhereWithAggregatesInput = {
 }
 
 export type UserRoleCreateInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -318,7 +318,7 @@ export type UserRoleCreateInput = {
 }
 
 export type UserRoleUncheckedCreateInput = {
-  id?: string
+  id: string
   userId: string
   roleId: string
   marketId?: string | null
@@ -351,7 +351,7 @@ export type UserRoleUncheckedUpdateInput = {
 }
 
 export type UserRoleCreateManyInput = {
-  id?: string
+  id: string
   userId: string
   roleId: string
   marketId?: string | null
@@ -558,7 +558,7 @@ export type UserRoleUncheckedUpdateManyWithoutRoleNestedInput = {
 }
 
 export type UserRoleCreateWithoutMarketInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -568,7 +568,7 @@ export type UserRoleCreateWithoutMarketInput = {
 }
 
 export type UserRoleUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   userId: string
   roleId: string
   createdAt?: Date | string
@@ -618,7 +618,7 @@ export type UserRoleScalarWhereInput = {
 }
 
 export type UserRoleCreateWithoutUserInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -628,7 +628,7 @@ export type UserRoleCreateWithoutUserInput = {
 }
 
 export type UserRoleUncheckedCreateWithoutUserInput = {
-  id?: string
+  id: string
   roleId: string
   marketId?: string | null
   createdAt?: Date | string
@@ -664,7 +664,7 @@ export type UserRoleUpdateManyWithWhereWithoutUserInput = {
 }
 
 export type UserRoleCreateWithoutRoleInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -674,7 +674,7 @@ export type UserRoleCreateWithoutRoleInput = {
 }
 
 export type UserRoleUncheckedCreateWithoutRoleInput = {
-  id?: string
+  id: string
   userId: string
   marketId?: string | null
   createdAt?: Date | string
@@ -710,7 +710,7 @@ export type UserRoleUpdateManyWithWhereWithoutRoleInput = {
 }
 
 export type UserRoleCreateManyMarketInput = {
-  id?: string
+  id: string
   userId: string
   roleId: string
   createdAt?: Date | string
@@ -750,7 +750,7 @@ export type UserRoleUncheckedUpdateManyWithoutMarketInput = {
 }
 
 export type UserRoleCreateManyUserInput = {
-  id?: string
+  id: string
   roleId: string
   marketId?: string | null
   createdAt?: Date | string
@@ -790,7 +790,7 @@ export type UserRoleUncheckedUpdateManyWithoutUserInput = {
 }
 
 export type UserRoleCreateManyRoleInput = {
-  id?: string
+  id: string
   userId: string
   marketId?: string | null
   createdAt?: Date | string

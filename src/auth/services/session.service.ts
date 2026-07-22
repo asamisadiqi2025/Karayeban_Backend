@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { generateId } from '../../common/utils/uuid.util';
 
 @Injectable()
 export class SessionService {
@@ -12,7 +13,7 @@ export class SessionService {
     ipAddress?: string;
     expiresAt: Date;
   }) {
-    return this.prisma.session.create({ data });
+    return this.prisma.session.create({ data: { id: generateId(), ...data } });
   }
 
   async findByRefreshTokenHash(refreshTokenHash: string) {

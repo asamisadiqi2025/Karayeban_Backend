@@ -221,14 +221,14 @@ export type RolePermissionScalarWhereWithAggregatesInput = {
 }
 
 export type RolePermissionCreateInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutPermissionsInput
   permission: Prisma.PermissionCreateNestedOneWithoutRolesInput
 }
 
 export type RolePermissionUncheckedCreateInput = {
-  id?: string
+  id: string
   roleId: string
   permissionId: string
   createdAt?: Date | string
@@ -249,7 +249,7 @@ export type RolePermissionUncheckedUpdateInput = {
 }
 
 export type RolePermissionCreateManyInput = {
-  id?: string
+  id: string
   roleId: string
   permissionId: string
   createdAt?: Date | string
@@ -388,13 +388,13 @@ export type RolePermissionUncheckedUpdateManyWithoutPermissionNestedInput = {
 }
 
 export type RolePermissionCreateWithoutRoleInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   permission: Prisma.PermissionCreateNestedOneWithoutRolesInput
 }
 
 export type RolePermissionUncheckedCreateWithoutRoleInput = {
-  id?: string
+  id: string
   permissionId: string
   createdAt?: Date | string
 }
@@ -436,13 +436,13 @@ export type RolePermissionScalarWhereInput = {
 }
 
 export type RolePermissionCreateWithoutPermissionInput = {
-  id?: string
+  id: string
   createdAt?: Date | string
   role: Prisma.RoleCreateNestedOneWithoutPermissionsInput
 }
 
 export type RolePermissionUncheckedCreateWithoutPermissionInput = {
-  id?: string
+  id: string
   roleId: string
   createdAt?: Date | string
 }
@@ -474,7 +474,7 @@ export type RolePermissionUpdateManyWithWhereWithoutPermissionInput = {
 }
 
 export type RolePermissionCreateManyRoleInput = {
-  id?: string
+  id: string
   permissionId: string
   createdAt?: Date | string
 }
@@ -498,7 +498,7 @@ export type RolePermissionUncheckedUpdateManyWithoutRoleInput = {
 }
 
 export type RolePermissionCreateManyPermissionInput = {
-  id?: string
+  id: string
   roleId: string
   createdAt?: Date | string
 }

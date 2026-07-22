@@ -7,6 +7,7 @@ import {
 import { hash } from 'bcrypt';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RegisterDto } from '../dto/register.dto';
+import { generateId } from '../../common/utils/uuid.util';
 
 @Injectable()
 export class RegisterService {
@@ -43,6 +44,7 @@ export class RegisterService {
 
       const user = await this.prisma.user.create({
         data: {
+          id: generateId(),
           name: dto.name.trim(),
           username: normalizedUsername,
           email: normalizedEmail,

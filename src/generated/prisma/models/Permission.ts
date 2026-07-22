@@ -326,7 +326,7 @@ export type PermissionScalarWhereWithAggregatesInput = {
 }
 
 export type PermissionCreateInput = {
-  id?: string
+  id: string
   name: string
   resource: string
   action: string
@@ -340,7 +340,7 @@ export type PermissionCreateInput = {
 }
 
 export type PermissionUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   resource: string
   action: string
@@ -382,7 +382,7 @@ export type PermissionUncheckedUpdateInput = {
 }
 
 export type PermissionCreateManyInput = {
-  id?: string
+  id: string
   name: string
   resource: string
   action: string
@@ -497,7 +497,7 @@ export type PermissionUpdateOneRequiredWithoutRolesNestedInput = {
 }
 
 export type PermissionCreateWithoutRolesInput = {
-  id?: string
+  id: string
   name: string
   resource: string
   action: string
@@ -510,7 +510,7 @@ export type PermissionCreateWithoutRolesInput = {
 }
 
 export type PermissionUncheckedCreateWithoutRolesInput = {
-  id?: string
+  id: string
   name: string
   resource: string
   action: string

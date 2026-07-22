@@ -10,6 +10,8 @@ import { PermissionService } from './permission.service';
 import { CreateMarketDto } from '../dto/create-market.dto';
 import { ROLES, ROLE_PERMISSIONS } from '../constants';
 import { ensureUserIsActive } from '../../common/utils/check-user-status';
+import { generateId } from '../../common/utils/uuid.util';
+
 
 @Injectable()
 export class MarketOnboardingService {
@@ -57,6 +59,7 @@ export class MarketOnboardingService {
 
       const market = await tx.market.create({
         data: {
+          id: generateId(),
           name: dto.name.trim(),
           code: dto.code.trim().toUpperCase(),
           address: dto.address?.trim(),
@@ -91,6 +94,7 @@ export class MarketOnboardingService {
           },
         },
         create: {
+          id: generateId(),
           userId: user.id,
           marketId: market.id,
           isActive: true,

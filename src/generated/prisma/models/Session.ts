@@ -325,7 +325,7 @@ export type SessionScalarWhereWithAggregatesInput = {
 }
 
 export type SessionCreateInput = {
-  id?: string
+  id: string
   refreshTokenHash: string
   userAgent?: string | null
   ipAddress?: string | null
@@ -338,7 +338,7 @@ export type SessionCreateInput = {
 }
 
 export type SessionUncheckedCreateInput = {
-  id?: string
+  id: string
   userId: string
   refreshTokenHash: string
   userAgent?: string | null
@@ -377,7 +377,7 @@ export type SessionUncheckedUpdateInput = {
 }
 
 export type SessionCreateManyInput = {
-  id?: string
+  id: string
   userId: string
   refreshTokenHash: string
   userAgent?: string | null
@@ -514,7 +514,7 @@ export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type SessionCreateWithoutUserInput = {
-  id?: string
+  id: string
   refreshTokenHash: string
   userAgent?: string | null
   ipAddress?: string | null
@@ -526,7 +526,7 @@ export type SessionCreateWithoutUserInput = {
 }
 
 export type SessionUncheckedCreateWithoutUserInput = {
-  id?: string
+  id: string
   refreshTokenHash: string
   userAgent?: string | null
   ipAddress?: string | null
@@ -580,7 +580,7 @@ export type SessionScalarWhereInput = {
 }
 
 export type SessionCreateManyUserInput = {
-  id?: string
+  id: string
   refreshTokenHash: string
   userAgent?: string | null
   ipAddress?: string | null

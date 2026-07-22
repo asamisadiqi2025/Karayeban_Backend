@@ -280,8 +280,6 @@ enum SuperAdminLevel {
 }
 
 
-
-
 enum ApprovalStatus {
   PENDING
   APPROVED
@@ -325,7 +323,7 @@ enum DepositStatus {
 
 
 model Market {
-  id String @id @default(uuid()) @db.Uuid 
+   id String @id @db.Uuid
 
   name String @db.VarChar(255)
   code String @unique @db.VarChar(50)
@@ -394,7 +392,7 @@ model Market {
 
 
 model SystemSetting {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   key   String @unique @db.VarChar(100)
   value Json
@@ -409,7 +407,7 @@ model SystemSetting {
 }
 
 model MarketSetting {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @unique @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
@@ -423,7 +421,7 @@ model MarketSetting {
 }
 
 model ExchangeRate {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
@@ -448,7 +446,7 @@ model ExchangeRate {
 // ============================================================
 
 model AccountingPeriod {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -480,7 +478,7 @@ model AccountingPeriod {
 // ============================================================
 
 model Floor {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -507,7 +505,7 @@ model Floor {
 }
 
 model Shop {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   floorId    String  @db.Uuid
@@ -552,7 +550,7 @@ model Shop {
 }
 
 model ShopCategory {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -582,7 +580,7 @@ model ShopCategory {
 // ============================================================
 
 model Tenant {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   firstName  String @db.VarChar(100)
   lastName   String @db.VarChar(100)
@@ -619,7 +617,7 @@ model Tenant {
   @@map("tenants")
 }
 model MarketTenant {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   tenantId String @db.Uuid
@@ -648,7 +646,7 @@ model MarketTenant {
 }
 
 model TenantHistory {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   tenantId String @db.Uuid
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -667,7 +665,7 @@ model TenantHistory {
 }
 
 model Guarantor {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   fullName    String @db.VarChar(200)
   phone       String @db.VarChar(20)
@@ -692,7 +690,7 @@ model Guarantor {
 }
 
 model TenantGuarantor {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   tenantId    String @db.Uuid
   guarantorId String @db.Uuid
@@ -714,15 +712,6 @@ model TenantGuarantor {
 
 model Contract {
   id String @id @db.Uuid
-
-
-
-  // Migration: CREATE OR REPLACE FUNCTION enforce_contract_tenant_consistency() ...
-  // Migration: CREATE TRIGGER enforce_contract_tenant_consistency BEFORE INSERT OR UPDATE ON contracts
-  // FOR EACH ROW EXECUTE FUNCTION enforce_contract_tenant_consistency();
-  // (ensures contracts.tenant_id always matches market_tenants.tenant_id for the given market_tenant_id)
-
-
 
   marketId String @db.Uuid
   shopId   String @db.Uuid
@@ -794,7 +783,7 @@ model Contract {
 }
 
 model ContractTerm {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId   String @db.Uuid
   contractId String @db.Uuid
@@ -820,7 +809,7 @@ model ContractTerm {
 // ============================================================
 
 model SecurityDeposit {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   contractId String @db.Uuid
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
@@ -859,7 +848,7 @@ model SecurityDeposit {
 // ============================================================
 
 model RentPayment {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   shopId     String  @db.Uuid
@@ -913,7 +902,7 @@ model RentPayment {
 }
 // Payment Allocation for payments covering multiple months
 model PaymentAllocation {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   paymentId    String @db.Uuid
   rentPaymentId String @db.Uuid
@@ -931,7 +920,7 @@ model PaymentAllocation {
 }
 
 model UtilityBill {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   shopId   String @db.Uuid
@@ -975,7 +964,7 @@ model UtilityBill {
 // EMPLOYEES (Global) / MARKET EMPLOYEE
 // ============================================================
 model Employee {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   userId String? @unique @db.Uuid
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -1010,7 +999,7 @@ model Employee {
 }
 
 model MarketEmployee {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId   String @db.Uuid
   employeeId String @db.Uuid
@@ -1040,7 +1029,7 @@ model MarketEmployee {
 }
 
 model MarketEmployeeAttendance {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketEmployeeId String @db.Uuid
   marketEmployee   MarketEmployee @relation(fields: [marketEmployeeId], references: [id], onDelete: Cascade)
@@ -1064,7 +1053,7 @@ model MarketEmployeeAttendance {
 }
 
 model MarketEmployeeSalaryPayment {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketEmployeeId String @db.Uuid
   marketEmployee   MarketEmployee @relation(fields: [marketEmployeeId], references: [id], onDelete: Cascade)
@@ -1095,7 +1084,7 @@ model MarketEmployeeSalaryPayment {
 // ============================================================
 
 model ExpenseCategory {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1121,7 +1110,7 @@ model ExpenseCategory {
 }
 
 model MarketExpense {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   categoryId String  @db.Uuid
@@ -1176,7 +1165,7 @@ enum MaintenanceStatus {
 }
 
 model MaintenanceRequest {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   shopId   String @db.Uuid
   tenantId String @db.Uuid
@@ -1218,7 +1207,7 @@ model MaintenanceRequest {
 // ============================================================
 
 model Account {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1259,7 +1248,7 @@ model Account {
 }
 
 model JournalEntry {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1300,7 +1289,7 @@ model JournalEntry {
 }
 
 model JournalLine {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   journalId String @db.Uuid
   accountId  String @db.Uuid
@@ -1328,7 +1317,7 @@ model JournalLine {
 }
 
 model MiscellaneousIncome {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId  String @db.Uuid
   accountId String @db.Uuid
@@ -1356,7 +1345,7 @@ model MiscellaneousIncome {
 }
 
 model AccountTransaction {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId  String @db.Uuid
   accountId String @db.Uuid
@@ -1410,7 +1399,7 @@ model AccountTransaction {
 // ============================================================
 
 model ApprovalRequest {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
    marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1455,7 +1444,7 @@ model ApprovalRequest {
 // ============================================================
 
 model ExitClearance {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId   String @db.Uuid
   contractId String @unique @db.Uuid
@@ -1498,7 +1487,7 @@ model ExitClearance {
 }
 
 model Cheque {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId   String  @db.Uuid
   tenantId   String  @db.Uuid
@@ -1549,7 +1538,7 @@ model Cheque {
 }
 
 model Document {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
@@ -1590,7 +1579,8 @@ model Document {
 // ============================================================
 
 model User {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
+  
 
   name         String @db.VarChar(100)
   username     String @db.VarChar(50)
@@ -1648,7 +1638,8 @@ model User {
 }
 
 model UserMarket {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
+  
 
   userId   String @db.Uuid
   marketId String @db.Uuid
@@ -1674,7 +1665,8 @@ model UserMarket {
 }
 
 model Role {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
+  
 
   marketId String? @db.Uuid
   market   Market? @relation(fields: [marketId], references: [id], onDelete: Cascade)
@@ -1701,7 +1693,7 @@ model Role {
 }
 
 model Permission {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
 
   name        String @unique @db.VarChar(100)
   resource    String @db.VarChar(50)
@@ -1723,7 +1715,8 @@ model Permission {
 }
 
 model UserRole {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
+  
 
   userId   String  @db.Uuid
   roleId   String  @db.Uuid
@@ -1753,7 +1746,8 @@ model UserRole {
 }
 
 model RolePermission {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
+  
 
   roleId       String @db.Uuid
   permissionId String @db.Uuid
@@ -1774,7 +1768,7 @@ model RolePermission {
 // ============================================================
 
 model Session {
-  id String @id @default(uuid()) @db.Uuid
+    id String @id @db.Uuid
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -1799,7 +1793,7 @@ model Session {
 }
 
 model PasswordReset {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -1819,7 +1813,7 @@ model PasswordReset {
 }
 
 model ApiKey {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -1851,7 +1845,7 @@ model ApiKey {
 }
 
 model UserLoginAttempt {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   userId   String? @db.Uuid
   user     User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -1876,7 +1870,7 @@ model UserLoginAttempt {
 // ============================================================
 
 model AuditLog {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String? @db.Uuid
   userId   String? @db.Uuid
@@ -1929,7 +1923,7 @@ model AuditLog {
 
 // Separate table for audit log changes to reduce storage
 model AuditLogChange {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   auditLogId String @db.Uuid
   auditLog   AuditLog @relation(fields: [auditLogId], references: [id], onDelete: Cascade)
@@ -1943,7 +1937,7 @@ model AuditLogChange {
 }
 
 model ActivityLog {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   userId   String  @db.Uuid
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -1975,7 +1969,7 @@ model ActivityLog {
 }
 
 model Notification {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String  @db.Uuid
   userId   String? @db.Uuid
@@ -2015,7 +2009,7 @@ model Notification {
 // ============================================================
 
 model Shareholder {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId String @db.Uuid
   market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -2049,7 +2043,7 @@ model Shareholder {
 }
 
 model OwnershipHistory {
-  id String @id @db.Uuid
+   id String @id @db.Uuid
 
   marketId      String @db.Uuid
   shareholderId String @db.Uuid
@@ -2075,7 +2069,7 @@ model OwnershipHistory {
 }
 
 model AdditionalInvestment {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId      String @db.Uuid
   shareholderId String @db.Uuid
@@ -2103,7 +2097,7 @@ model AdditionalInvestment {
 }
 
 model Withdrawal {
-  id String @id @db.Uuid
+    id String @id @db.Uuid
 
   marketId      String  @db.Uuid
   shareholderId String  @db.Uuid

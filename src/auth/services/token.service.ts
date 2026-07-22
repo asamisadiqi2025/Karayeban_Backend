@@ -5,6 +5,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { ensureUserIsActive } from '../../common/utils/check-user-status';
+import { generateId } from '../../common/utils/uuid.util';
 
 type UserWithRoles = {
   id: string;
@@ -92,6 +93,7 @@ export class TokenService {
 
     await this.prisma.session.create({
       data: {
+        id: generateId(),
         userId: user.id,
         refreshTokenHash,
         userAgent,

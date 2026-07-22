@@ -319,7 +319,7 @@ export type RoleScalarWhereWithAggregatesInput = {
 }
 
 export type RoleCreateInput = {
-  id?: string
+  id: string
   name: string
   description?: string | null
   scope?: $Enums.RoleScope
@@ -333,7 +333,7 @@ export type RoleCreateInput = {
 }
 
 export type RoleUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId?: string | null
   name: string
   description?: string | null
@@ -375,7 +375,7 @@ export type RoleUncheckedUpdateInput = {
 }
 
 export type RoleCreateManyInput = {
-  id?: string
+  id: string
   marketId?: string | null
   name: string
   description?: string | null
@@ -543,7 +543,7 @@ export type RoleUpdateOneRequiredWithoutPermissionsNestedInput = {
 }
 
 export type RoleCreateWithoutMarketInput = {
-  id?: string
+  id: string
   name: string
   description?: string | null
   scope?: $Enums.RoleScope
@@ -556,7 +556,7 @@ export type RoleCreateWithoutMarketInput = {
 }
 
 export type RoleUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   name: string
   description?: string | null
   scope?: $Enums.RoleScope
@@ -610,7 +610,7 @@ export type RoleScalarWhereInput = {
 }
 
 export type RoleCreateWithoutUserRolesInput = {
-  id?: string
+  id: string
   name: string
   description?: string | null
   scope?: $Enums.RoleScope
@@ -623,7 +623,7 @@ export type RoleCreateWithoutUserRolesInput = {
 }
 
 export type RoleUncheckedCreateWithoutUserRolesInput = {
-  id?: string
+  id: string
   marketId?: string | null
   name: string
   description?: string | null
@@ -678,7 +678,7 @@ export type RoleUncheckedUpdateWithoutUserRolesInput = {
 }
 
 export type RoleCreateWithoutPermissionsInput = {
-  id?: string
+  id: string
   name: string
   description?: string | null
   scope?: $Enums.RoleScope
@@ -691,7 +691,7 @@ export type RoleCreateWithoutPermissionsInput = {
 }
 
 export type RoleUncheckedCreateWithoutPermissionsInput = {
-  id?: string
+  id: string
   marketId?: string | null
   name: string
   description?: string | null
@@ -746,7 +746,7 @@ export type RoleUncheckedUpdateWithoutPermissionsInput = {
 }
 
 export type RoleCreateManyMarketInput = {
-  id?: string
+  id: string
   name: string
   description?: string | null
   scope?: $Enums.RoleScope

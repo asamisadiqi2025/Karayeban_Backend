@@ -305,7 +305,7 @@ export type UserMarketScalarWhereWithAggregatesInput = {
 }
 
 export type UserMarketCreateInput = {
-  id?: string
+  id: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -316,7 +316,7 @@ export type UserMarketCreateInput = {
 }
 
 export type UserMarketUncheckedCreateInput = {
-  id?: string
+  id: string
   userId: string
   marketId: string
   isActive?: boolean
@@ -349,7 +349,7 @@ export type UserMarketUncheckedUpdateInput = {
 }
 
 export type UserMarketCreateManyInput = {
-  id?: string
+  id: string
   userId: string
   marketId: string
   isActive?: boolean
@@ -520,7 +520,7 @@ export type UserMarketUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type UserMarketCreateWithoutMarketInput = {
-  id?: string
+  id: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -530,7 +530,7 @@ export type UserMarketCreateWithoutMarketInput = {
 }
 
 export type UserMarketUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   userId: string
   isActive?: boolean
   createdAt?: Date | string
@@ -580,7 +580,7 @@ export type UserMarketScalarWhereInput = {
 }
 
 export type UserMarketCreateWithoutUserInput = {
-  id?: string
+  id: string
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -590,7 +590,7 @@ export type UserMarketCreateWithoutUserInput = {
 }
 
 export type UserMarketUncheckedCreateWithoutUserInput = {
-  id?: string
+  id: string
   marketId: string
   isActive?: boolean
   createdAt?: Date | string
@@ -626,7 +626,7 @@ export type UserMarketUpdateManyWithWhereWithoutUserInput = {
 }
 
 export type UserMarketCreateManyMarketInput = {
-  id?: string
+  id: string
   userId: string
   isActive?: boolean
   createdAt?: Date | string
@@ -666,7 +666,7 @@ export type UserMarketUncheckedUpdateManyWithoutMarketInput = {
 }
 
 export type UserMarketCreateManyUserInput = {
-  id?: string
+  id: string
   marketId: string
   isActive?: boolean
   createdAt?: Date | string
