@@ -29,32 +29,11 @@ export class AuthController {
   private readonly REFRESH_TOKEN_COOKIE = 'refresh_token';
   private readonly COOKIE_PATH = '/auth';
 
-  // ───────────────────────────────
-  //  REGISTER
-  // ───────────────────────────────
-
   @Public()
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
-
-  // ───────────────────────────────
-  //  DEBUG (remove after testing)
-  // ───────────────────────────────
-
-  @Public()
-  @Post('debug')
-  async debug(@Req() req: Request) {
-    return {
-      contentType: req.headers['content-type'],
-      body: req.body,
-    };
-  }
-
-  // ───────────────────────────────
-  //  LOGIN
-  // ───────────────────────────────
 
   @Public()
   @Post('login')
@@ -78,13 +57,12 @@ export class AuthController {
     };
   }
 
-  // ───────────────────────────────
-  //  LOGOUT
-  // ───────────────────────────────
-
   @Public()
   @Post('logout')
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async logout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const refreshToken = req.cookies?.[this.REFRESH_TOKEN_COOKIE];
 
     if (refreshToken) {
@@ -95,10 +73,6 @@ export class AuthController {
 
     return { message: 'Logged out successfully' };
   }
-
-  // ───────────────────────────────
-  //  REFRESH
-  // ───────────────────────────────
 
   @Public()
   @Post('refresh')
@@ -136,18 +110,10 @@ export class AuthController {
     }
   }
 
-  // ───────────────────────────────
-  //  ME (protected)
-  // ───────────────────────────────
-
   @Get('me')
   me(@CurrentUser() user: AuthUser) {
     return { user };
   }
-
-  // ───────────────────────────────
-  //  CREATE MARKET (onboarding)
-  // ───────────────────────────────
 
   @Post('create-market')
   @UseGuards(TenantGuard)
@@ -176,10 +142,6 @@ export class AuthController {
       message: 'Market created successfully',
     };
   }
-
-  // ───────────────────────────────
-  //  COOKIE HELPERS
-  // ───────────────────────────────
 
   private setRefreshTokenCookie(res: Response, token: string) {
     const maxAge = this.parseMaxAge(

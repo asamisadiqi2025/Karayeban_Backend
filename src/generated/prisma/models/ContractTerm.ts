@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model ContractTerm
- * Detailed terms attached to a contract.
+ * 
  */
 export type ContractTermModel = runtime.Types.Result.DefaultSelection<Prisma.$ContractTermPayload>
 
@@ -268,11 +268,11 @@ export type ContractTermOrderByWithRelationInput = {
 
 export type ContractTermWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  contractId?: string
   AND?: Prisma.ContractTermWhereInput | Prisma.ContractTermWhereInput[]
   OR?: Prisma.ContractTermWhereInput[]
   NOT?: Prisma.ContractTermWhereInput | Prisma.ContractTermWhereInput[]
   marketId?: Prisma.UuidFilter<"ContractTerm"> | string
-  contractId?: Prisma.UuidFilter<"ContractTerm"> | string
   workingHours?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
   monthlyHoliday?: Prisma.IntNullableFilter<"ContractTerm"> | number | null
   terminationCondition?: Prisma.StringNullableFilter<"ContractTerm"> | string | null
@@ -281,7 +281,7 @@ export type ContractTermWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"ContractTerm"> | Date | string
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
-}, "id">
+}, "id" | "contractId">
 
 export type ContractTermOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -316,7 +316,7 @@ export type ContractTermScalarWhereWithAggregatesInput = {
 }
 
 export type ContractTermCreateInput = {
-  id?: string
+  id: string
   workingHours?: string | null
   monthlyHoliday?: number | null
   terminationCondition?: string | null
@@ -328,7 +328,7 @@ export type ContractTermCreateInput = {
 }
 
 export type ContractTermUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   workingHours?: string | null
@@ -364,7 +364,7 @@ export type ContractTermUncheckedUpdateInput = {
 }
 
 export type ContractTermCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   workingHours?: string | null
@@ -405,6 +405,11 @@ export type ContractTermListRelationFilter = {
 
 export type ContractTermOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ContractTermNullableScalarRelationFilter = {
+  is?: Prisma.ContractTermWhereInput | null
+  isNot?: Prisma.ContractTermWhereInput | null
 }
 
 export type ContractTermCountOrderByAggregateInput = {
@@ -493,46 +498,36 @@ export type ContractTermUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.ContractTermScalarWhereInput | Prisma.ContractTermScalarWhereInput[]
 }
 
-export type ContractTermCreateNestedManyWithoutContractInput = {
-  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput> | Prisma.ContractTermCreateWithoutContractInput[] | Prisma.ContractTermUncheckedCreateWithoutContractInput[]
-  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput | Prisma.ContractTermCreateOrConnectWithoutContractInput[]
-  createMany?: Prisma.ContractTermCreateManyContractInputEnvelope
-  connect?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
+export type ContractTermCreateNestedOneWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput
+  connect?: Prisma.ContractTermWhereUniqueInput
 }
 
-export type ContractTermUncheckedCreateNestedManyWithoutContractInput = {
-  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput> | Prisma.ContractTermCreateWithoutContractInput[] | Prisma.ContractTermUncheckedCreateWithoutContractInput[]
-  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput | Prisma.ContractTermCreateOrConnectWithoutContractInput[]
-  createMany?: Prisma.ContractTermCreateManyContractInputEnvelope
-  connect?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
+export type ContractTermUncheckedCreateNestedOneWithoutContractInput = {
+  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput
+  connect?: Prisma.ContractTermWhereUniqueInput
 }
 
-export type ContractTermUpdateManyWithoutContractNestedInput = {
-  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput> | Prisma.ContractTermCreateWithoutContractInput[] | Prisma.ContractTermUncheckedCreateWithoutContractInput[]
-  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput | Prisma.ContractTermCreateOrConnectWithoutContractInput[]
-  upsert?: Prisma.ContractTermUpsertWithWhereUniqueWithoutContractInput | Prisma.ContractTermUpsertWithWhereUniqueWithoutContractInput[]
-  createMany?: Prisma.ContractTermCreateManyContractInputEnvelope
-  set?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  disconnect?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  delete?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  connect?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  update?: Prisma.ContractTermUpdateWithWhereUniqueWithoutContractInput | Prisma.ContractTermUpdateWithWhereUniqueWithoutContractInput[]
-  updateMany?: Prisma.ContractTermUpdateManyWithWhereWithoutContractInput | Prisma.ContractTermUpdateManyWithWhereWithoutContractInput[]
-  deleteMany?: Prisma.ContractTermScalarWhereInput | Prisma.ContractTermScalarWhereInput[]
+export type ContractTermUpdateOneWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput
+  upsert?: Prisma.ContractTermUpsertWithoutContractInput
+  disconnect?: Prisma.ContractTermWhereInput | boolean
+  delete?: Prisma.ContractTermWhereInput | boolean
+  connect?: Prisma.ContractTermWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractTermUpdateToOneWithWhereWithoutContractInput, Prisma.ContractTermUpdateWithoutContractInput>, Prisma.ContractTermUncheckedUpdateWithoutContractInput>
 }
 
-export type ContractTermUncheckedUpdateManyWithoutContractNestedInput = {
-  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput> | Prisma.ContractTermCreateWithoutContractInput[] | Prisma.ContractTermUncheckedCreateWithoutContractInput[]
-  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput | Prisma.ContractTermCreateOrConnectWithoutContractInput[]
-  upsert?: Prisma.ContractTermUpsertWithWhereUniqueWithoutContractInput | Prisma.ContractTermUpsertWithWhereUniqueWithoutContractInput[]
-  createMany?: Prisma.ContractTermCreateManyContractInputEnvelope
-  set?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  disconnect?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  delete?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  connect?: Prisma.ContractTermWhereUniqueInput | Prisma.ContractTermWhereUniqueInput[]
-  update?: Prisma.ContractTermUpdateWithWhereUniqueWithoutContractInput | Prisma.ContractTermUpdateWithWhereUniqueWithoutContractInput[]
-  updateMany?: Prisma.ContractTermUpdateManyWithWhereWithoutContractInput | Prisma.ContractTermUpdateManyWithWhereWithoutContractInput[]
-  deleteMany?: Prisma.ContractTermScalarWhereInput | Prisma.ContractTermScalarWhereInput[]
+export type ContractTermUncheckedUpdateOneWithoutContractNestedInput = {
+  create?: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput>
+  connectOrCreate?: Prisma.ContractTermCreateOrConnectWithoutContractInput
+  upsert?: Prisma.ContractTermUpsertWithoutContractInput
+  disconnect?: Prisma.ContractTermWhereInput | boolean
+  delete?: Prisma.ContractTermWhereInput | boolean
+  connect?: Prisma.ContractTermWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ContractTermUpdateToOneWithWhereWithoutContractInput, Prisma.ContractTermUpdateWithoutContractInput>, Prisma.ContractTermUncheckedUpdateWithoutContractInput>
 }
 
 export type NullableIntFieldUpdateOperationsInput = {
@@ -544,7 +539,7 @@ export type NullableIntFieldUpdateOperationsInput = {
 }
 
 export type ContractTermCreateWithoutMarketInput = {
-  id?: string
+  id: string
   workingHours?: string | null
   monthlyHoliday?: number | null
   terminationCondition?: string | null
@@ -555,7 +550,7 @@ export type ContractTermCreateWithoutMarketInput = {
 }
 
 export type ContractTermUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   contractId: string
   workingHours?: string | null
   monthlyHoliday?: number | null
@@ -607,7 +602,7 @@ export type ContractTermScalarWhereInput = {
 }
 
 export type ContractTermCreateWithoutContractInput = {
-  id?: string
+  id: string
   workingHours?: string | null
   monthlyHoliday?: number | null
   terminationCondition?: string | null
@@ -618,7 +613,7 @@ export type ContractTermCreateWithoutContractInput = {
 }
 
 export type ContractTermUncheckedCreateWithoutContractInput = {
-  id?: string
+  id: string
   marketId: string
   workingHours?: string | null
   monthlyHoliday?: number | null
@@ -633,29 +628,41 @@ export type ContractTermCreateOrConnectWithoutContractInput = {
   create: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput>
 }
 
-export type ContractTermCreateManyContractInputEnvelope = {
-  data: Prisma.ContractTermCreateManyContractInput | Prisma.ContractTermCreateManyContractInput[]
-  skipDuplicates?: boolean
-}
-
-export type ContractTermUpsertWithWhereUniqueWithoutContractInput = {
-  where: Prisma.ContractTermWhereUniqueInput
+export type ContractTermUpsertWithoutContractInput = {
   update: Prisma.XOR<Prisma.ContractTermUpdateWithoutContractInput, Prisma.ContractTermUncheckedUpdateWithoutContractInput>
   create: Prisma.XOR<Prisma.ContractTermCreateWithoutContractInput, Prisma.ContractTermUncheckedCreateWithoutContractInput>
+  where?: Prisma.ContractTermWhereInput
 }
 
-export type ContractTermUpdateWithWhereUniqueWithoutContractInput = {
-  where: Prisma.ContractTermWhereUniqueInput
+export type ContractTermUpdateToOneWithWhereWithoutContractInput = {
+  where?: Prisma.ContractTermWhereInput
   data: Prisma.XOR<Prisma.ContractTermUpdateWithoutContractInput, Prisma.ContractTermUncheckedUpdateWithoutContractInput>
 }
 
-export type ContractTermUpdateManyWithWhereWithoutContractInput = {
-  where: Prisma.ContractTermScalarWhereInput
-  data: Prisma.XOR<Prisma.ContractTermUpdateManyMutationInput, Prisma.ContractTermUncheckedUpdateManyWithoutContractInput>
+export type ContractTermUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  market?: Prisma.MarketUpdateOneRequiredWithoutContractTermsNestedInput
+}
+
+export type ContractTermUncheckedUpdateWithoutContractInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ContractTermCreateManyMarketInput = {
-  id?: string
+  id: string
   contractId: string
   workingHours?: string | null
   monthlyHoliday?: number | null
@@ -690,50 +697,6 @@ export type ContractTermUncheckedUpdateWithoutMarketInput = {
 export type ContractTermUncheckedUpdateManyWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   contractId?: Prisma.StringFieldUpdateOperationsInput | string
-  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ContractTermCreateManyContractInput = {
-  id?: string
-  marketId: string
-  workingHours?: string | null
-  monthlyHoliday?: number | null
-  terminationCondition?: string | null
-  specialConditions?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ContractTermUpdateWithoutContractInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  market?: Prisma.MarketUpdateOneRequiredWithoutContractTermsNestedInput
-}
-
-export type ContractTermUncheckedUpdateWithoutContractInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specialConditions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ContractTermUncheckedUpdateManyWithoutContractInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   workingHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   monthlyHoliday?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   terminationCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null

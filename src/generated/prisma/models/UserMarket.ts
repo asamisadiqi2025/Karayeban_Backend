@@ -14,14 +14,24 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model UserMarket
- * Join table assigning a user to a market (many-to-many).
+ * 
  */
 export type UserMarketModel = runtime.Types.Result.DefaultSelection<Prisma.$UserMarketPayload>
 
 export type AggregateUserMarket = {
   _count: UserMarketCountAggregateOutputType | null
+  _avg: UserMarketAvgAggregateOutputType | null
+  _sum: UserMarketSumAggregateOutputType | null
   _min: UserMarketMinAggregateOutputType | null
   _max: UserMarketMaxAggregateOutputType | null
+}
+
+export type UserMarketAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type UserMarketSumAggregateOutputType = {
+  version: number | null
 }
 
 export type UserMarketMinAggregateOutputType = {
@@ -30,6 +40,9 @@ export type UserMarketMinAggregateOutputType = {
   marketId: string | null
   isActive: boolean | null
   createdAt: Date | null
+  updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type UserMarketMaxAggregateOutputType = {
@@ -38,6 +51,9 @@ export type UserMarketMaxAggregateOutputType = {
   marketId: string | null
   isActive: boolean | null
   createdAt: Date | null
+  updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type UserMarketCountAggregateOutputType = {
@@ -46,9 +62,20 @@ export type UserMarketCountAggregateOutputType = {
   marketId: number
   isActive: number
   createdAt: number
+  updatedAt: number
+  deletedAt: number
+  version: number
   _all: number
 }
 
+
+export type UserMarketAvgAggregateInputType = {
+  version?: true
+}
+
+export type UserMarketSumAggregateInputType = {
+  version?: true
+}
 
 export type UserMarketMinAggregateInputType = {
   id?: true
@@ -56,6 +83,9 @@ export type UserMarketMinAggregateInputType = {
   marketId?: true
   isActive?: true
   createdAt?: true
+  updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type UserMarketMaxAggregateInputType = {
@@ -64,6 +94,9 @@ export type UserMarketMaxAggregateInputType = {
   marketId?: true
   isActive?: true
   createdAt?: true
+  updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type UserMarketCountAggregateInputType = {
@@ -72,6 +105,9 @@ export type UserMarketCountAggregateInputType = {
   marketId?: true
   isActive?: true
   createdAt?: true
+  updatedAt?: true
+  deletedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -113,6 +149,18 @@ export type UserMarketAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserMarketAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserMarketSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMarketMinAggregateInputType
@@ -143,6 +191,8 @@ export type UserMarketGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: UserMarketCountAggregateInputType | true
+  _avg?: UserMarketAvgAggregateInputType
+  _sum?: UserMarketSumAggregateInputType
   _min?: UserMarketMinAggregateInputType
   _max?: UserMarketMaxAggregateInputType
 }
@@ -153,7 +203,12 @@ export type UserMarketGroupByOutputType = {
   marketId: string
   isActive: boolean
   createdAt: Date
+  updatedAt: Date
+  deletedAt: Date | null
+  version: number
   _count: UserMarketCountAggregateOutputType | null
+  _avg: UserMarketAvgAggregateOutputType | null
+  _sum: UserMarketSumAggregateOutputType | null
   _min: UserMarketMinAggregateOutputType | null
   _max: UserMarketMaxAggregateOutputType | null
 }
@@ -182,6 +237,9 @@ export type UserMarketWhereInput = {
   marketId?: Prisma.UuidFilter<"UserMarket"> | string
   isActive?: Prisma.BoolFilter<"UserMarket"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserMarket"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UserMarket"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"UserMarket"> | Date | string | null
+  version?: Prisma.IntFilter<"UserMarket"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
 }
@@ -192,6 +250,9 @@ export type UserMarketOrderByWithRelationInput = {
   marketId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   market?: Prisma.MarketOrderByWithRelationInput
 }
@@ -206,6 +267,9 @@ export type UserMarketWhereUniqueInput = Prisma.AtLeast<{
   marketId?: Prisma.UuidFilter<"UserMarket"> | string
   isActive?: Prisma.BoolFilter<"UserMarket"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserMarket"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UserMarket"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"UserMarket"> | Date | string | null
+  version?: Prisma.IntFilter<"UserMarket"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
 }, "id" | "userId_marketId">
@@ -216,9 +280,14 @@ export type UserMarketOrderByWithAggregationInput = {
   marketId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.UserMarketCountOrderByAggregateInput
+  _avg?: Prisma.UserMarketAvgOrderByAggregateInput
   _max?: Prisma.UserMarketMaxOrderByAggregateInput
   _min?: Prisma.UserMarketMinOrderByAggregateInput
+  _sum?: Prisma.UserMarketSumOrderByAggregateInput
 }
 
 export type UserMarketScalarWhereWithAggregatesInput = {
@@ -230,12 +299,18 @@ export type UserMarketScalarWhereWithAggregatesInput = {
   marketId?: Prisma.UuidWithAggregatesFilter<"UserMarket"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"UserMarket"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserMarket"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UserMarket"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserMarket"> | Date | string | null
+  version?: Prisma.IntWithAggregatesFilter<"UserMarket"> | number
 }
 
 export type UserMarketCreateInput = {
   id?: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   user: Prisma.UserCreateNestedOneWithoutMarketsInput
   market: Prisma.MarketCreateNestedOneWithoutUserMarketsInput
 }
@@ -246,12 +321,18 @@ export type UserMarketUncheckedCreateInput = {
   marketId: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserMarketUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutMarketsNestedInput
   market?: Prisma.MarketUpdateOneRequiredWithoutUserMarketsNestedInput
 }
@@ -262,6 +343,9 @@ export type UserMarketUncheckedUpdateInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserMarketCreateManyInput = {
@@ -270,12 +354,18 @@ export type UserMarketCreateManyInput = {
   marketId: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserMarketUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserMarketUncheckedUpdateManyInput = {
@@ -284,6 +374,9 @@ export type UserMarketUncheckedUpdateManyInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserMarketListRelationFilter = {
@@ -307,6 +400,13 @@ export type UserMarketCountOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+}
+
+export type UserMarketAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type UserMarketMaxOrderByAggregateInput = {
@@ -315,6 +415,9 @@ export type UserMarketMaxOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UserMarketMinOrderByAggregateInput = {
@@ -323,6 +426,13 @@ export type UserMarketMinOrderByAggregateInput = {
   marketId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+}
+
+export type UserMarketSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type UserMarketCreateNestedManyWithoutMarketInput = {
@@ -413,6 +523,9 @@ export type UserMarketCreateWithoutMarketInput = {
   id?: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   user: Prisma.UserCreateNestedOneWithoutMarketsInput
 }
 
@@ -421,6 +534,9 @@ export type UserMarketUncheckedCreateWithoutMarketInput = {
   userId: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserMarketCreateOrConnectWithoutMarketInput = {
@@ -458,12 +574,18 @@ export type UserMarketScalarWhereInput = {
   marketId?: Prisma.UuidFilter<"UserMarket"> | string
   isActive?: Prisma.BoolFilter<"UserMarket"> | boolean
   createdAt?: Prisma.DateTimeFilter<"UserMarket"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"UserMarket"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"UserMarket"> | Date | string | null
+  version?: Prisma.IntFilter<"UserMarket"> | number
 }
 
 export type UserMarketCreateWithoutUserInput = {
   id?: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutUserMarketsInput
 }
 
@@ -472,6 +594,9 @@ export type UserMarketUncheckedCreateWithoutUserInput = {
   marketId: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserMarketCreateOrConnectWithoutUserInput = {
@@ -505,12 +630,18 @@ export type UserMarketCreateManyMarketInput = {
   userId: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserMarketUpdateWithoutMarketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutMarketsNestedInput
 }
 
@@ -519,6 +650,9 @@ export type UserMarketUncheckedUpdateWithoutMarketInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserMarketUncheckedUpdateManyWithoutMarketInput = {
@@ -526,6 +660,9 @@ export type UserMarketUncheckedUpdateManyWithoutMarketInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserMarketCreateManyUserInput = {
@@ -533,12 +670,18 @@ export type UserMarketCreateManyUserInput = {
   marketId: string
   isActive?: boolean
   createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserMarketUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutUserMarketsNestedInput
 }
 
@@ -547,6 +690,9 @@ export type UserMarketUncheckedUpdateWithoutUserInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserMarketUncheckedUpdateManyWithoutUserInput = {
@@ -554,6 +700,9 @@ export type UserMarketUncheckedUpdateManyWithoutUserInput = {
   marketId?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -564,6 +713,9 @@ export type UserMarketSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   marketId?: boolean
   isActive?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userMarket"]>
@@ -574,6 +726,9 @@ export type UserMarketSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   marketId?: boolean
   isActive?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userMarket"]>
@@ -584,6 +739,9 @@ export type UserMarketSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   marketId?: boolean
   isActive?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userMarket"]>
@@ -594,9 +752,12 @@ export type UserMarketSelectScalar = {
   marketId?: boolean
   isActive?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
 }
 
-export type UserMarketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "marketId" | "isActive" | "createdAt", ExtArgs["result"]["userMarket"]>
+export type UserMarketOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "marketId" | "isActive" | "createdAt" | "updatedAt" | "deletedAt" | "version", ExtArgs["result"]["userMarket"]>
 export type UserMarketInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
@@ -620,11 +781,11 @@ export type $UserMarketPayload<ExtArgs extends runtime.Types.Extensions.Internal
     id: string
     userId: string
     marketId: string
-    /**
-     * Whether the assignment is currently active.
-     */
     isActive: boolean
     createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    version: number
   }, ExtArgs["result"]["userMarket"]>
   composites: {}
 }
@@ -1055,6 +1216,9 @@ export interface UserMarketFieldRefs {
   readonly marketId: Prisma.FieldRef<"UserMarket", 'String'>
   readonly isActive: Prisma.FieldRef<"UserMarket", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"UserMarket", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"UserMarket", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"UserMarket", 'DateTime'>
+  readonly version: Prisma.FieldRef<"UserMarket", 'Int'>
 }
     
 

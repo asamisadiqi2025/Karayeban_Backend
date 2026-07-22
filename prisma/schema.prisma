@@ -325,7 +325,7 @@ enum DepositStatus {
 
 
 model Market {
-  id String @id @db.Uuid 
+  id String @id @default(uuid()) @db.Uuid 
 
   name String @db.VarChar(255)
   code String @unique @db.VarChar(50)
@@ -352,6 +352,7 @@ model Market {
   exitClearances        ExitClearance[]
   cheques               Cheque[]
   documents             Document[]
+  users                 User[]
   userMarkets           UserMarket[]
   userRoles             UserRole[]
   auditLogs             AuditLog[]
@@ -1418,8 +1419,8 @@ model ApprovalRequest {
   entityId   String @db.Uuid
 
 
+  requestedById String? @db.Uuid
   requestedBy   User?   @relation("ApprovalRequestedBy", fields: [requestedById], references: [id], onDelete: SetNull)
-  approvedBy   User?   @relation("ApprovalApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
 
   approvedById String? @db.Uuid
   approvedBy   User?   @relation("ApprovalApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
@@ -1589,13 +1590,17 @@ model Document {
 // ============================================================
 
 model User {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   name         String @db.VarChar(100)
   username     String @db.VarChar(50)
   email        String? @db.VarChar(100)
   passwordHash String @db.VarChar(255)
 
+  marketId String? @db.Uuid
+  market   Market? @relation(fields: [marketId], references: [id], onDelete: SetNull)
+
+  lastLoginAt DateTime?
   isSuperAdmin   Boolean @default(false)
   superAdminLevel SuperAdminLevel? @default(ADMIN)
 
@@ -1643,7 +1648,7 @@ model User {
 }
 
 model UserMarket {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   userId   String @db.Uuid
   marketId String @db.Uuid
@@ -1669,7 +1674,7 @@ model UserMarket {
 }
 
 model Role {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   marketId String? @db.Uuid
   market   Market? @relation(fields: [marketId], references: [id], onDelete: Cascade)
@@ -1696,8 +1701,9 @@ model Role {
 }
 
 model Permission {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
+  name        String @unique @db.VarChar(100)
   resource    String @db.VarChar(50)
   action      String @db.VarChar(50)
   description String? @db.Text
@@ -1717,7 +1723,7 @@ model Permission {
 }
 
 model UserRole {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   userId   String  @db.Uuid
   roleId   String  @db.Uuid
@@ -1747,7 +1753,7 @@ model UserRole {
 }
 
 model RolePermission {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   roleId       String @db.Uuid
   permissionId String @db.Uuid
@@ -1768,7 +1774,7 @@ model RolePermission {
 // ============================================================
 
 model Session {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -46,14 +46,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('Account is disabled');
     }
 
-    const roles = user.roles.map((ur) => ur.role.name);
-    const permissions: string[] = [];
+    const roles: string[] = [];
+    const permissionSet = new Set<string>();
 
     for (const ur of user.roles) {
+      roles.push(ur.role.name);
       for (const rp of ur.role.permissions) {
-        if (!permissions.includes(rp.permission.name)) {
-          permissions.push(rp.permission.name);
-        }
+        permissionSet.add(rp.permission.name);
       }
     }
 
@@ -64,7 +63,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       email: user.email,
       marketId: user.marketId,
       roles,
-      permissions,
+      permissions: [...permissionSet],
     };
   }
 }

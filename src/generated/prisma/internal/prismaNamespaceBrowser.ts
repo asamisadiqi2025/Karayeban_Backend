@@ -52,21 +52,37 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Market: 'Market',
+  SystemSetting: 'SystemSetting',
+  MarketSetting: 'MarketSetting',
+  ExchangeRate: 'ExchangeRate',
+  AccountingPeriod: 'AccountingPeriod',
   Floor: 'Floor',
   Shop: 'Shop',
   ShopCategory: 'ShopCategory',
   Tenant: 'Tenant',
+  MarketTenant: 'MarketTenant',
+  TenantHistory: 'TenantHistory',
   Guarantor: 'Guarantor',
+  TenantGuarantor: 'TenantGuarantor',
   Contract: 'Contract',
   ContractTerm: 'ContractTerm',
+  SecurityDeposit: 'SecurityDeposit',
   RentPayment: 'RentPayment',
+  PaymentAllocation: 'PaymentAllocation',
   UtilityBill: 'UtilityBill',
-  ExpenseCategory: 'ExpenseCategory',
   Employee: 'Employee',
+  MarketEmployee: 'MarketEmployee',
+  MarketEmployeeAttendance: 'MarketEmployeeAttendance',
+  MarketEmployeeSalaryPayment: 'MarketEmployeeSalaryPayment',
+  ExpenseCategory: 'ExpenseCategory',
   MarketExpense: 'MarketExpense',
+  MaintenanceRequest: 'MaintenanceRequest',
   Account: 'Account',
+  JournalEntry: 'JournalEntry',
+  JournalLine: 'JournalLine',
   MiscellaneousIncome: 'MiscellaneousIncome',
   AccountTransaction: 'AccountTransaction',
+  ApprovalRequest: 'ApprovalRequest',
   ExitClearance: 'ExitClearance',
   Cheque: 'Cheque',
   Document: 'Document',
@@ -78,7 +94,11 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   Session: 'Session',
   PasswordReset: 'PasswordReset',
+  ApiKey: 'ApiKey',
+  UserLoginAttempt: 'UserLoginAttempt',
   AuditLog: 'AuditLog',
+  AuditLogChange: 'AuditLogChange',
+  ActivityLog: 'ActivityLog',
   Notification: 'Notification',
   Shareholder: 'Shareholder',
   OwnershipHistory: 'OwnershipHistory',
@@ -113,10 +133,68 @@ export const MarketScalarFieldEnum = {
   updatedById: 'updatedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type MarketScalarFieldEnum = (typeof MarketScalarFieldEnum)[keyof typeof MarketScalarFieldEnum]
+
+
+export const SystemSettingScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  category: 'category',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SystemSettingScalarFieldEnum = (typeof SystemSettingScalarFieldEnum)[keyof typeof SystemSettingScalarFieldEnum]
+
+
+export const MarketSettingScalarFieldEnum = {
+  id: 'id',
+  marketId: 'marketId',
+  config: 'config',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketSettingScalarFieldEnum = (typeof MarketSettingScalarFieldEnum)[keyof typeof MarketSettingScalarFieldEnum]
+
+
+export const ExchangeRateScalarFieldEnum = {
+  id: 'id',
+  marketId: 'marketId',
+  fromCurrency: 'fromCurrency',
+  toCurrency: 'toCurrency',
+  rate: 'rate',
+  effectiveDate: 'effectiveDate',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExchangeRateScalarFieldEnum = (typeof ExchangeRateScalarFieldEnum)[keyof typeof ExchangeRateScalarFieldEnum]
+
+
+export const AccountingPeriodScalarFieldEnum = {
+  id: 'id',
+  marketId: 'marketId',
+  year: 'year',
+  month: 'month',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  closedAt: 'closedAt',
+  lockedAt: 'lockedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  version: 'version'
+} as const
+
+export type AccountingPeriodScalarFieldEnum = (typeof AccountingPeriodScalarFieldEnum)[keyof typeof AccountingPeriodScalarFieldEnum]
 
 
 export const FloorScalarFieldEnum = {
@@ -129,7 +207,8 @@ export const FloorScalarFieldEnum = {
   updatedById: 'updatedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type FloorScalarFieldEnum = (typeof FloorScalarFieldEnum)[keyof typeof FloorScalarFieldEnum]
@@ -167,7 +246,8 @@ export const ShopCategoryScalarFieldEnum = {
   updatedById: 'updatedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type ShopCategoryScalarFieldEnum = (typeof ShopCategoryScalarFieldEnum)[keyof typeof ShopCategoryScalarFieldEnum]
@@ -175,7 +255,6 @@ export type ShopCategoryScalarFieldEnum = (typeof ShopCategoryScalarFieldEnum)[k
 
 export const TenantScalarFieldEnum = {
   id: 'id',
-  marketId: 'marketId',
   firstName: 'firstName',
   lastName: 'lastName',
   phone: 'phone',
@@ -195,10 +274,37 @@ export const TenantScalarFieldEnum = {
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
 
 
-export const GuarantorScalarFieldEnum = {
+export const MarketTenantScalarFieldEnum = {
   id: 'id',
   marketId: 'marketId',
   tenantId: 'tenantId',
+  joinedAt: 'joinedAt',
+  leftAt: 'leftAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
+} as const
+
+export type MarketTenantScalarFieldEnum = (typeof MarketTenantScalarFieldEnum)[keyof typeof MarketTenantScalarFieldEnum]
+
+
+export const TenantHistoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fieldName: 'fieldName',
+  oldValue: 'oldValue',
+  newValue: 'newValue',
+  changedById: 'changedById',
+  changedAt: 'changedAt'
+} as const
+
+export type TenantHistoryScalarFieldEnum = (typeof TenantHistoryScalarFieldEnum)[keyof typeof TenantHistoryScalarFieldEnum]
+
+
+export const GuarantorScalarFieldEnum = {
+  id: 'id',
   fullName: 'fullName',
   phone: 'phone',
   address: 'address',
@@ -206,16 +312,29 @@ export const GuarantorScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type GuarantorScalarFieldEnum = (typeof GuarantorScalarFieldEnum)[keyof typeof GuarantorScalarFieldEnum]
+
+
+export const TenantGuarantorScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  guarantorId: 'guarantorId',
+  createdAt: 'createdAt'
+} as const
+
+export type TenantGuarantorScalarFieldEnum = (typeof TenantGuarantorScalarFieldEnum)[keyof typeof TenantGuarantorScalarFieldEnum]
 
 
 export const ContractScalarFieldEnum = {
   id: 'id',
   marketId: 'marketId',
   shopId: 'shopId',
+  marketTenantId: 'marketTenantId',
   tenantId: 'tenantId',
   contractNumber: 'contractNumber',
   previousContractId: 'previousContractId',
@@ -229,6 +348,11 @@ export const ContractScalarFieldEnum = {
   approvedById: 'approvedById',
   terminatedById: 'terminatedById',
   terminationReason: 'terminationReason',
+  autoRenew: 'autoRenew',
+  autoRenewNoticeDays: 'autoRenewNoticeDays',
+  lastRenewalDate: 'lastRenewalDate',
+  nextRenewalDate: 'nextRenewalDate',
+  renewalHistory: 'renewalHistory',
   description: 'description',
   version: 'version',
   createdById: 'createdById',
@@ -256,6 +380,27 @@ export const ContractTermScalarFieldEnum = {
 export type ContractTermScalarFieldEnum = (typeof ContractTermScalarFieldEnum)[keyof typeof ContractTermScalarFieldEnum]
 
 
+export const SecurityDepositScalarFieldEnum = {
+  id: 'id',
+  contractId: 'contractId',
+  marketId: 'marketId',
+  amount: 'amount',
+  paidAt: 'paidAt',
+  returnedAt: 'returnedAt',
+  returnedAmount: 'returnedAmount',
+  deductions: 'deductions',
+  status: 'status',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
+} as const
+
+export type SecurityDepositScalarFieldEnum = (typeof SecurityDepositScalarFieldEnum)[keyof typeof SecurityDepositScalarFieldEnum]
+
+
 export const RentPaymentScalarFieldEnum = {
   id: 'id',
   marketId: 'marketId',
@@ -277,10 +422,22 @@ export const RentPaymentScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type RentPaymentScalarFieldEnum = (typeof RentPaymentScalarFieldEnum)[keyof typeof RentPaymentScalarFieldEnum]
+
+
+export const PaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  paymentId: 'paymentId',
+  rentPaymentId: 'rentPaymentId',
+  amount: 'amount',
+  allocatedAt: 'allocatedAt'
+} as const
+
+export type PaymentAllocationScalarFieldEnum = (typeof PaymentAllocationScalarFieldEnum)[keyof typeof PaymentAllocationScalarFieldEnum]
 
 
 export const UtilityBillScalarFieldEnum = {
@@ -301,10 +458,81 @@ export const UtilityBillScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type UtilityBillScalarFieldEnum = (typeof UtilityBillScalarFieldEnum)[keyof typeof UtilityBillScalarFieldEnum]
+
+
+export const EmployeeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fullName: 'fullName',
+  phone: 'phone',
+  position: 'position',
+  employmentType: 'employmentType',
+  hireDate: 'hireDate',
+  baseSalary: 'baseSalary',
+  hourlyRate: 'hourlyRate',
+  status: 'status',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
+} as const
+
+export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const MarketEmployeeScalarFieldEnum = {
+  id: 'id',
+  marketId: 'marketId',
+  employeeId: 'employeeId',
+  joinedAt: 'joinedAt',
+  leftAt: 'leftAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
+} as const
+
+export type MarketEmployeeScalarFieldEnum = (typeof MarketEmployeeScalarFieldEnum)[keyof typeof MarketEmployeeScalarFieldEnum]
+
+
+export const MarketEmployeeAttendanceScalarFieldEnum = {
+  id: 'id',
+  marketEmployeeId: 'marketEmployeeId',
+  date: 'date',
+  status: 'status',
+  checkIn: 'checkIn',
+  checkOut: 'checkOut',
+  overtimeHours: 'overtimeHours',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketEmployeeAttendanceScalarFieldEnum = (typeof MarketEmployeeAttendanceScalarFieldEnum)[keyof typeof MarketEmployeeAttendanceScalarFieldEnum]
+
+
+export const MarketEmployeeSalaryPaymentScalarFieldEnum = {
+  id: 'id',
+  marketEmployeeId: 'marketEmployeeId',
+  accountId: 'accountId',
+  amount: 'amount',
+  paymentDate: 'paymentDate',
+  year: 'year',
+  month: 'month',
+  description: 'description',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketEmployeeSalaryPaymentScalarFieldEnum = (typeof MarketEmployeeSalaryPaymentScalarFieldEnum)[keyof typeof MarketEmployeeSalaryPaymentScalarFieldEnum]
 
 
 export const ExpenseCategoryScalarFieldEnum = {
@@ -316,28 +544,11 @@ export const ExpenseCategoryScalarFieldEnum = {
   updatedById: 'updatedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type ExpenseCategoryScalarFieldEnum = (typeof ExpenseCategoryScalarFieldEnum)[keyof typeof ExpenseCategoryScalarFieldEnum]
-
-
-export const EmployeeScalarFieldEnum = {
-  id: 'id',
-  marketId: 'marketId',
-  fullName: 'fullName',
-  phone: 'phone',
-  position: 'position',
-  salary: 'salary',
-  status: 'status',
-  createdById: 'createdById',
-  updatedById: 'updatedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
 
 
 export const MarketExpenseScalarFieldEnum = {
@@ -353,10 +564,34 @@ export const MarketExpenseScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type MarketExpenseScalarFieldEnum = (typeof MarketExpenseScalarFieldEnum)[keyof typeof MarketExpenseScalarFieldEnum]
+
+
+export const MaintenanceRequestScalarFieldEnum = {
+  id: 'id',
+  shopId: 'shopId',
+  tenantId: 'tenantId',
+  marketId: 'marketId',
+  issue: 'issue',
+  priority: 'priority',
+  status: 'status',
+  assignedTo: 'assignedTo',
+  assignedAt: 'assignedAt',
+  completedAt: 'completedAt',
+  cost: 'cost',
+  resolutionNote: 'resolutionNote',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  version: 'version'
+} as const
+
+export type MaintenanceRequestScalarFieldEnum = (typeof MaintenanceRequestScalarFieldEnum)[keyof typeof MaintenanceRequestScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {
@@ -367,6 +602,8 @@ export const AccountScalarFieldEnum = {
   currency: 'currency',
   description: 'description',
   currentBalance: 'currentBalance',
+  balanceUpdatedAt: 'balanceUpdatedAt',
+  lastReconciledAt: 'lastReconciledAt',
   version: 'version',
   createdById: 'createdById',
   updatedById: 'updatedById',
@@ -376,6 +613,45 @@ export const AccountScalarFieldEnum = {
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const JournalEntryScalarFieldEnum = {
+  id: 'id',
+  marketId: 'marketId',
+  journalNumber: 'journalNumber',
+  date: 'date',
+  description: 'description',
+  status: 'status',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  accountingPeriodId: 'accountingPeriodId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  postedAt: 'postedAt',
+  voidedAt: 'voidedAt',
+  voidedBy: 'voidedBy',
+  voidReason: 'voidReason',
+  version: 'version'
+} as const
+
+export type JournalEntryScalarFieldEnum = (typeof JournalEntryScalarFieldEnum)[keyof typeof JournalEntryScalarFieldEnum]
+
+
+export const JournalLineScalarFieldEnum = {
+  id: 'id',
+  journalId: 'journalId',
+  accountId: 'accountId',
+  debit: 'debit',
+  credit: 'credit',
+  description: 'description',
+  exchangeRate: 'exchangeRate',
+  originalCurrency: 'originalCurrency',
+  originalAmount: 'originalAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type JournalLineScalarFieldEnum = (typeof JournalLineScalarFieldEnum)[keyof typeof JournalLineScalarFieldEnum]
 
 
 export const MiscellaneousIncomeScalarFieldEnum = {
@@ -389,7 +665,8 @@ export const MiscellaneousIncomeScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type MiscellaneousIncomeScalarFieldEnum = (typeof MiscellaneousIncomeScalarFieldEnum)[keyof typeof MiscellaneousIncomeScalarFieldEnum]
@@ -401,17 +678,48 @@ export const AccountTransactionScalarFieldEnum = {
   accountId: 'accountId',
   type: 'type',
   amount: 'amount',
+  status: 'status',
   referenceType: 'referenceType',
   referenceId: 'referenceId',
+  balanceBeforeTransaction: 'balanceBeforeTransaction',
   balanceAfterTransaction: 'balanceAfterTransaction',
   sequenceNo: 'sequenceNo',
   description: 'description',
+  reversalId: 'reversalId',
   createdById: 'createdById',
   transactionDate: 'transactionDate',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  postedAt: 'postedAt',
+  isArchived: 'isArchived',
+  archivedAt: 'archivedAt',
+  partitionKey: 'partitionKey'
 } as const
 
 export type AccountTransactionScalarFieldEnum = (typeof AccountTransactionScalarFieldEnum)[keyof typeof AccountTransactionScalarFieldEnum]
+
+
+export const ApprovalRequestScalarFieldEnum = {
+  id: 'id',
+  marketId: 'marketId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  requestedById: 'requestedById',
+  approvedById: 'approvedById',
+  status: 'status',
+  requestReason: 'requestReason',
+  approvalNote: 'approvalNote',
+  rejectionNote: 'rejectionNote',
+  requestedAt: 'requestedAt',
+  approvedAt: 'approvedAt',
+  expiresAt: 'expiresAt',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
+} as const
+
+export type ApprovalRequestScalarFieldEnum = (typeof ApprovalRequestScalarFieldEnum)[keyof typeof ApprovalRequestScalarFieldEnum]
 
 
 export const ExitClearanceScalarFieldEnum = {
@@ -432,7 +740,9 @@ export const ExitClearanceScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type ExitClearanceScalarFieldEnum = (typeof ExitClearanceScalarFieldEnum)[keyof typeof ExitClearanceScalarFieldEnum]
@@ -459,7 +769,9 @@ export const ChequeScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type ChequeScalarFieldEnum = (typeof ChequeScalarFieldEnum)[keyof typeof ChequeScalarFieldEnum]
@@ -470,14 +782,20 @@ export const DocumentScalarFieldEnum = {
   marketId: 'marketId',
   entityType: 'entityType',
   entityId: 'entityId',
-  fileName: 'fileName',
+  originalName: 'originalName',
+  storedName: 'storedName',
   filePath: 'filePath',
+  folder: 'folder',
   fileType: 'fileType',
   mimeType: 'mimeType',
   extension: 'extension',
   fileSize: 'fileSize',
+  storageProvider: 'storageProvider',
+  checksum: 'checksum',
   uploadedById: 'uploadedById',
-  createdAt: 'createdAt'
+  uploadedAt: 'uploadedAt',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
@@ -490,10 +808,22 @@ export const UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   marketId: 'marketId',
+  lastLoginAt: 'lastLoginAt',
+  isSuperAdmin: 'isSuperAdmin',
+  superAdminLevel: 'superAdminLevel',
   status: 'status',
+  failedLoginAttempts: 'failedLoginAttempts',
+  lockedUntil: 'lockedUntil',
+  passwordVersion: 'passwordVersion',
+  gdprConsent: 'gdprConsent',
+  gdprConsentDate: 'gdprConsentDate',
+  dataAnonymizedAt: 'dataAnonymizedAt',
+  dataDeletionRequestedAt: 'dataDeletionRequestedAt',
+  dataDeletionApprovedAt: 'dataDeletionApprovedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -504,7 +834,10 @@ export const UserMarketScalarFieldEnum = {
   userId: 'userId',
   marketId: 'marketId',
   isActive: 'isActive',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type UserMarketScalarFieldEnum = (typeof UserMarketScalarFieldEnum)[keyof typeof UserMarketScalarFieldEnum]
@@ -512,10 +845,14 @@ export type UserMarketScalarFieldEnum = (typeof UserMarketScalarFieldEnum)[keyof
 
 export const RoleScalarFieldEnum = {
   id: 'id',
+  marketId: 'marketId',
   name: 'name',
   description: 'description',
+  scope: 'scope',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
@@ -524,9 +861,14 @@ export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof Role
 export const PermissionScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  resource: 'resource',
+  action: 'action',
   description: 'description',
+  scope: 'scope',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
@@ -536,7 +878,11 @@ export const UserRoleScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   roleId: 'roleId',
-  createdAt: 'createdAt'
+  marketId: 'marketId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
@@ -561,6 +907,7 @@ export const SessionScalarFieldEnum = {
   expiresAt: 'expiresAt',
   lastUsedAt: 'lastUsedAt',
   revokedAt: 'revokedAt',
+  tokenVersion: 'tokenVersion',
   createdAt: 'createdAt'
 } as const
 
@@ -573,10 +920,45 @@ export const PasswordResetScalarFieldEnum = {
   tokenHash: 'tokenHash',
   expiresAt: 'expiresAt',
   usedAt: 'usedAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type PasswordResetScalarFieldEnum = (typeof PasswordResetScalarFieldEnum)[keyof typeof PasswordResetScalarFieldEnum]
+
+
+export const ApiKeyScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  marketId: 'marketId',
+  name: 'name',
+  keyHash: 'keyHash',
+  description: 'description',
+  permissions: 'permissions',
+  lastUsedIp: 'lastUsedIp',
+  lastUsedAt: 'lastUsedAt',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
+} as const
+
+export type ApiKeyScalarFieldEnum = (typeof ApiKeyScalarFieldEnum)[keyof typeof ApiKeyScalarFieldEnum]
+
+
+export const UserLoginAttemptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  username: 'username',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  success: 'success',
+  failReason: 'failReason',
+  createdAt: 'createdAt'
+} as const
+
+export type UserLoginAttemptScalarFieldEnum = (typeof UserLoginAttemptScalarFieldEnum)[keyof typeof UserLoginAttemptScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {
@@ -584,16 +966,59 @@ export const AuditLogScalarFieldEnum = {
   marketId: 'marketId',
   userId: 'userId',
   operation: 'operation',
+  actionSource: 'actionSource',
   tableName: 'tableName',
   recordId: 'recordId',
+  entityType: 'entityType',
+  changes: 'changes',
   oldValue: 'oldValue',
   newValue: 'newValue',
   ipAddress: 'ipAddress',
   deviceInfo: 'deviceInfo',
-  createdAt: 'createdAt'
+  requestId: 'requestId',
+  traceId: 'traceId',
+  correlationId: 'correlationId',
+  superAdminAccess: 'superAdminAccess',
+  success: 'success',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  isArchived: 'isArchived',
+  archivedAt: 'archivedAt'
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const AuditLogChangeScalarFieldEnum = {
+  id: 'id',
+  auditLogId: 'auditLogId',
+  fieldName: 'fieldName',
+  oldValue: 'oldValue',
+  newValue: 'newValue'
+} as const
+
+export type AuditLogChangeScalarFieldEnum = (typeof AuditLogChangeScalarFieldEnum)[keyof typeof AuditLogChangeScalarFieldEnum]
+
+
+export const ActivityLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  marketId: 'marketId',
+  activity: 'activity',
+  details: 'details',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  requestId: 'requestId',
+  traceId: 'traceId',
+  correlationId: 'correlationId',
+  duration: 'duration',
+  success: 'success',
+  createdAt: 'createdAt',
+  isArchived: 'isArchived',
+  archivedAt: 'archivedAt'
+} as const
+
+export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
@@ -609,7 +1034,10 @@ export const NotificationScalarFieldEnum = {
   createdById: 'createdById',
   readAt: 'readAt',
   resolvedAt: 'resolvedAt',
-  createdAt: 'createdAt'
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
@@ -627,7 +1055,8 @@ export const ShareholderScalarFieldEnum = {
   updatedById: 'updatedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  deletedAt: 'deletedAt',
+  version: 'version'
 } as const
 
 export type ShareholderScalarFieldEnum = (typeof ShareholderScalarFieldEnum)[keyof typeof ShareholderScalarFieldEnum]
@@ -642,7 +1071,8 @@ export const OwnershipHistoryScalarFieldEnum = {
   endDate: 'endDate',
   approvedById: 'approvedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type OwnershipHistoryScalarFieldEnum = (typeof OwnershipHistoryScalarFieldEnum)[keyof typeof OwnershipHistoryScalarFieldEnum]
@@ -659,7 +1089,8 @@ export const AdditionalInvestmentScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type AdditionalInvestmentScalarFieldEnum = (typeof AdditionalInvestmentScalarFieldEnum)[keyof typeof AdditionalInvestmentScalarFieldEnum]
@@ -677,7 +1108,8 @@ export const WithdrawalScalarFieldEnum = {
   createdById: 'createdById',
   updatedById: 'updatedById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  version: 'version'
 } as const
 
 export type WithdrawalScalarFieldEnum = (typeof WithdrawalScalarFieldEnum)[keyof typeof WithdrawalScalarFieldEnum]
@@ -689,6 +1121,13 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {

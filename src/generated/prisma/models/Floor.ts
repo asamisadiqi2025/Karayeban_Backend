@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Floor
- * A physical floor/level inside a market.
+ * 
  */
 export type FloorModel = runtime.Types.Result.DefaultSelection<Prisma.$FloorPayload>
 
@@ -28,10 +28,12 @@ export type AggregateFloor = {
 
 export type FloorAvgAggregateOutputType = {
   displayOrder: number | null
+  version: number | null
 }
 
 export type FloorSumAggregateOutputType = {
   displayOrder: number | null
+  version: number | null
 }
 
 export type FloorMinAggregateOutputType = {
@@ -45,6 +47,7 @@ export type FloorMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
+  version: number | null
 }
 
 export type FloorMaxAggregateOutputType = {
@@ -58,6 +61,7 @@ export type FloorMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
+  version: number | null
 }
 
 export type FloorCountAggregateOutputType = {
@@ -71,16 +75,19 @@ export type FloorCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   deletedAt: number
+  version: number
   _all: number
 }
 
 
 export type FloorAvgAggregateInputType = {
   displayOrder?: true
+  version?: true
 }
 
 export type FloorSumAggregateInputType = {
   displayOrder?: true
+  version?: true
 }
 
 export type FloorMinAggregateInputType = {
@@ -94,6 +101,7 @@ export type FloorMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
+  version?: true
 }
 
 export type FloorMaxAggregateInputType = {
@@ -107,6 +115,7 @@ export type FloorMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
+  version?: true
 }
 
 export type FloorCountAggregateInputType = {
@@ -120,6 +129,7 @@ export type FloorCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -220,6 +230,7 @@ export type FloorGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
+  version: number
   _count: FloorCountAggregateOutputType | null
   _avg: FloorAvgAggregateOutputType | null
   _sum: FloorSumAggregateOutputType | null
@@ -256,6 +267,7 @@ export type FloorWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Floor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Floor"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Floor"> | Date | string | null
+  version?: Prisma.IntFilter<"Floor"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shops?: Prisma.ShopListRelationFilter
 }
@@ -271,12 +283,14 @@ export type FloorOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shops?: Prisma.ShopOrderByRelationAggregateInput
 }
 
 export type FloorWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  marketId_name?: Prisma.FloorMarketIdNameCompoundUniqueInput
   AND?: Prisma.FloorWhereInput | Prisma.FloorWhereInput[]
   OR?: Prisma.FloorWhereInput[]
   NOT?: Prisma.FloorWhereInput | Prisma.FloorWhereInput[]
@@ -289,9 +303,10 @@ export type FloorWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Floor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Floor"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Floor"> | Date | string | null
+  version?: Prisma.IntFilter<"Floor"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shops?: Prisma.ShopListRelationFilter
-}, "id">
+}, "id" | "marketId_name">
 
 export type FloorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -304,6 +319,7 @@ export type FloorOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.FloorCountOrderByAggregateInput
   _avg?: Prisma.FloorAvgOrderByAggregateInput
   _max?: Prisma.FloorMaxOrderByAggregateInput
@@ -325,10 +341,11 @@ export type FloorScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Floor"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Floor"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Floor"> | Date | string | null
+  version?: Prisma.IntWithAggregatesFilter<"Floor"> | number
 }
 
 export type FloorCreateInput = {
-  id?: string
+  id: string
   name: string
   displayOrder: number
   description?: string | null
@@ -337,12 +354,13 @@ export type FloorCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutFloorsInput
   shops?: Prisma.ShopCreateNestedManyWithoutFloorInput
 }
 
 export type FloorUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   displayOrder: number
@@ -352,6 +370,7 @@ export type FloorUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutFloorInput
 }
 
@@ -365,6 +384,7 @@ export type FloorUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutFloorsNestedInput
   shops?: Prisma.ShopUpdateManyWithoutFloorNestedInput
 }
@@ -380,11 +400,12 @@ export type FloorUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   shops?: Prisma.ShopUncheckedUpdateManyWithoutFloorNestedInput
 }
 
 export type FloorCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   displayOrder: number
@@ -394,6 +415,7 @@ export type FloorCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
 }
 
 export type FloorUpdateManyMutationInput = {
@@ -406,6 +428,7 @@ export type FloorUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type FloorUncheckedUpdateManyInput = {
@@ -419,6 +442,7 @@ export type FloorUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type FloorListRelationFilter = {
@@ -429,6 +453,11 @@ export type FloorListRelationFilter = {
 
 export type FloorOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type FloorMarketIdNameCompoundUniqueInput = {
+  marketId: string
+  name: string
 }
 
 export type FloorCountOrderByAggregateInput = {
@@ -442,10 +471,12 @@ export type FloorCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FloorAvgOrderByAggregateInput = {
   displayOrder?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FloorMaxOrderByAggregateInput = {
@@ -459,6 +490,7 @@ export type FloorMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FloorMinOrderByAggregateInput = {
@@ -472,10 +504,12 @@ export type FloorMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FloorSumOrderByAggregateInput = {
   displayOrder?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FloorScalarRelationFilter = {
@@ -525,14 +559,6 @@ export type FloorUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.FloorScalarWhereInput | Prisma.FloorScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type FloorCreateNestedOneWithoutShopsInput = {
   create?: Prisma.XOR<Prisma.FloorCreateWithoutShopsInput, Prisma.FloorUncheckedCreateWithoutShopsInput>
   connectOrCreate?: Prisma.FloorCreateOrConnectWithoutShopsInput
@@ -548,7 +574,7 @@ export type FloorUpdateOneRequiredWithoutShopsNestedInput = {
 }
 
 export type FloorCreateWithoutMarketInput = {
-  id?: string
+  id: string
   name: string
   displayOrder: number
   description?: string | null
@@ -557,11 +583,12 @@ export type FloorCreateWithoutMarketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   shops?: Prisma.ShopCreateNestedManyWithoutFloorInput
 }
 
 export type FloorUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   name: string
   displayOrder: number
   description?: string | null
@@ -570,6 +597,7 @@ export type FloorUncheckedCreateWithoutMarketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   shops?: Prisma.ShopUncheckedCreateNestedManyWithoutFloorInput
 }
 
@@ -613,10 +641,11 @@ export type FloorScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Floor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Floor"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Floor"> | Date | string | null
+  version?: Prisma.IntFilter<"Floor"> | number
 }
 
 export type FloorCreateWithoutShopsInput = {
-  id?: string
+  id: string
   name: string
   displayOrder: number
   description?: string | null
@@ -625,11 +654,12 @@ export type FloorCreateWithoutShopsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutFloorsInput
 }
 
 export type FloorUncheckedCreateWithoutShopsInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   displayOrder: number
@@ -639,6 +669,7 @@ export type FloorUncheckedCreateWithoutShopsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
 }
 
 export type FloorCreateOrConnectWithoutShopsInput = {
@@ -667,6 +698,7 @@ export type FloorUpdateWithoutShopsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutFloorsNestedInput
 }
 
@@ -681,10 +713,11 @@ export type FloorUncheckedUpdateWithoutShopsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type FloorCreateManyMarketInput = {
-  id?: string
+  id: string
   name: string
   displayOrder: number
   description?: string | null
@@ -693,6 +726,7 @@ export type FloorCreateManyMarketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
 }
 
 export type FloorUpdateWithoutMarketInput = {
@@ -705,6 +739,7 @@ export type FloorUpdateWithoutMarketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   shops?: Prisma.ShopUpdateManyWithoutFloorNestedInput
 }
 
@@ -718,6 +753,7 @@ export type FloorUncheckedUpdateWithoutMarketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   shops?: Prisma.ShopUncheckedUpdateManyWithoutFloorNestedInput
 }
 
@@ -731,6 +767,7 @@ export type FloorUncheckedUpdateManyWithoutMarketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -775,6 +812,7 @@ export type FloorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shops?: boolean | Prisma.Floor$shopsArgs<ExtArgs>
   _count?: boolean | Prisma.FloorCountOutputTypeDefaultArgs<ExtArgs>
@@ -791,6 +829,7 @@ export type FloorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["floor"]>
 
@@ -805,6 +844,7 @@ export type FloorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["floor"]>
 
@@ -819,9 +859,10 @@ export type FloorSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
 }
 
-export type FloorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "displayOrder" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["floor"]>
+export type FloorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "displayOrder" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt" | "version", ExtArgs["result"]["floor"]>
 export type FloorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shops?: boolean | Prisma.Floor$shopsArgs<ExtArgs>
@@ -844,9 +885,6 @@ export type $FloorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     marketId: string
     name: string
-    /**
-     * Sort order of the floor within the market.
-     */
     displayOrder: number
     description: string | null
     createdById: string | null
@@ -854,6 +892,7 @@ export type $FloorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
+    version: number
   }, ExtArgs["result"]["floor"]>
   composites: {}
 }
@@ -1289,6 +1328,7 @@ export interface FloorFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Floor", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Floor", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Floor", 'DateTime'>
+  readonly version: Prisma.FieldRef<"Floor", 'Int'>
 }
     
 

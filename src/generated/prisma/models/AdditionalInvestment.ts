@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model AdditionalInvestment
- * A capital top-up by a shareholder.
+ * 
  */
 export type AdditionalInvestmentModel = runtime.Types.Result.DefaultSelection<Prisma.$AdditionalInvestmentPayload>
 
@@ -28,10 +28,12 @@ export type AggregateAdditionalInvestment = {
 
 export type AdditionalInvestmentAvgAggregateOutputType = {
   amount: runtime.Decimal | null
+  version: number | null
 }
 
 export type AdditionalInvestmentSumAggregateOutputType = {
   amount: runtime.Decimal | null
+  version: number | null
 }
 
 export type AdditionalInvestmentMinAggregateOutputType = {
@@ -46,6 +48,7 @@ export type AdditionalInvestmentMinAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  version: number | null
 }
 
 export type AdditionalInvestmentMaxAggregateOutputType = {
@@ -60,6 +63,7 @@ export type AdditionalInvestmentMaxAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  version: number | null
 }
 
 export type AdditionalInvestmentCountAggregateOutputType = {
@@ -74,16 +78,19 @@ export type AdditionalInvestmentCountAggregateOutputType = {
   updatedById: number
   createdAt: number
   updatedAt: number
+  version: number
   _all: number
 }
 
 
 export type AdditionalInvestmentAvgAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type AdditionalInvestmentSumAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type AdditionalInvestmentMinAggregateInputType = {
@@ -98,6 +105,7 @@ export type AdditionalInvestmentMinAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
 }
 
 export type AdditionalInvestmentMaxAggregateInputType = {
@@ -112,6 +120,7 @@ export type AdditionalInvestmentMaxAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
 }
 
 export type AdditionalInvestmentCountAggregateInputType = {
@@ -126,6 +135,7 @@ export type AdditionalInvestmentCountAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -227,6 +237,7 @@ export type AdditionalInvestmentGroupByOutputType = {
   updatedById: string | null
   createdAt: Date
   updatedAt: Date
+  version: number
   _count: AdditionalInvestmentCountAggregateOutputType | null
   _avg: AdditionalInvestmentAvgAggregateOutputType | null
   _sum: AdditionalInvestmentSumAggregateOutputType | null
@@ -264,6 +275,7 @@ export type AdditionalInvestmentWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
+  version?: Prisma.IntFilter<"AdditionalInvestment"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
 }
@@ -280,6 +292,7 @@ export type AdditionalInvestmentOrderByWithRelationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shareholder?: Prisma.ShareholderOrderByWithRelationInput
 }
@@ -299,6 +312,7 @@ export type AdditionalInvestmentWhereUniqueInput = Prisma.AtLeast<{
   updatedById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
+  version?: Prisma.IntFilter<"AdditionalInvestment"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
 }, "id">
@@ -315,6 +329,7 @@ export type AdditionalInvestmentOrderByWithAggregationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.AdditionalInvestmentCountOrderByAggregateInput
   _avg?: Prisma.AdditionalInvestmentAvgOrderByAggregateInput
   _max?: Prisma.AdditionalInvestmentMaxOrderByAggregateInput
@@ -337,10 +352,11 @@ export type AdditionalInvestmentScalarWhereWithAggregatesInput = {
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"AdditionalInvestment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AdditionalInvestment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AdditionalInvestment"> | Date | string
+  version?: Prisma.IntWithAggregatesFilter<"AdditionalInvestment"> | number
 }
 
 export type AdditionalInvestmentCreateInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
   investmentDate: Date | string
@@ -349,12 +365,13 @@ export type AdditionalInvestmentCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutAdditionalInvestmentsInput
   shareholder: Prisma.ShareholderCreateNestedOneWithoutAdditionalInvestmentsInput
 }
 
 export type AdditionalInvestmentUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -365,6 +382,7 @@ export type AdditionalInvestmentUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type AdditionalInvestmentUpdateInput = {
@@ -377,6 +395,7 @@ export type AdditionalInvestmentUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
 }
@@ -393,10 +412,11 @@ export type AdditionalInvestmentUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AdditionalInvestmentCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -407,6 +427,7 @@ export type AdditionalInvestmentCreateManyInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type AdditionalInvestmentUpdateManyMutationInput = {
@@ -419,6 +440,7 @@ export type AdditionalInvestmentUpdateManyMutationInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AdditionalInvestmentUncheckedUpdateManyInput = {
@@ -433,6 +455,7 @@ export type AdditionalInvestmentUncheckedUpdateManyInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AdditionalInvestmentListRelationFilter = {
@@ -457,10 +480,12 @@ export type AdditionalInvestmentCountOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentMaxOrderByAggregateInput = {
@@ -475,6 +500,7 @@ export type AdditionalInvestmentMaxOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentMinOrderByAggregateInput = {
@@ -489,10 +515,12 @@ export type AdditionalInvestmentMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AdditionalInvestmentCreateNestedManyWithoutMarketInput = {
@@ -584,7 +612,7 @@ export type EnumInvestmentTypeFieldUpdateOperationsInput = {
 }
 
 export type AdditionalInvestmentCreateWithoutMarketInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
   investmentDate: Date | string
@@ -593,11 +621,12 @@ export type AdditionalInvestmentCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   shareholder: Prisma.ShareholderCreateNestedOneWithoutAdditionalInvestmentsInput
 }
 
 export type AdditionalInvestmentUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
@@ -607,6 +636,7 @@ export type AdditionalInvestmentUncheckedCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type AdditionalInvestmentCreateOrConnectWithoutMarketInput = {
@@ -650,10 +680,11 @@ export type AdditionalInvestmentScalarWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"AdditionalInvestment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdditionalInvestment"> | Date | string
+  version?: Prisma.IntFilter<"AdditionalInvestment"> | number
 }
 
 export type AdditionalInvestmentCreateWithoutShareholderInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
   investmentDate: Date | string
@@ -662,11 +693,12 @@ export type AdditionalInvestmentCreateWithoutShareholderInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutAdditionalInvestmentsInput
 }
 
 export type AdditionalInvestmentUncheckedCreateWithoutShareholderInput = {
-  id?: string
+  id: string
   marketId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
@@ -676,6 +708,7 @@ export type AdditionalInvestmentUncheckedCreateWithoutShareholderInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type AdditionalInvestmentCreateOrConnectWithoutShareholderInput = {
@@ -705,7 +738,7 @@ export type AdditionalInvestmentUpdateManyWithWhereWithoutShareholderInput = {
 }
 
 export type AdditionalInvestmentCreateManyMarketInput = {
-  id?: string
+  id: string
   shareholderId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
@@ -715,6 +748,7 @@ export type AdditionalInvestmentCreateManyMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type AdditionalInvestmentUpdateWithoutMarketInput = {
@@ -727,6 +761,7 @@ export type AdditionalInvestmentUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
 }
 
@@ -741,6 +776,7 @@ export type AdditionalInvestmentUncheckedUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AdditionalInvestmentUncheckedUpdateManyWithoutMarketInput = {
@@ -754,10 +790,11 @@ export type AdditionalInvestmentUncheckedUpdateManyWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AdditionalInvestmentCreateManyShareholderInput = {
-  id?: string
+  id: string
   marketId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   investmentType: $Enums.InvestmentType
@@ -767,6 +804,7 @@ export type AdditionalInvestmentCreateManyShareholderInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type AdditionalInvestmentUpdateWithoutShareholderInput = {
@@ -779,6 +817,7 @@ export type AdditionalInvestmentUpdateWithoutShareholderInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutAdditionalInvestmentsNestedInput
 }
 
@@ -793,6 +832,7 @@ export type AdditionalInvestmentUncheckedUpdateWithoutShareholderInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AdditionalInvestmentUncheckedUpdateManyWithoutShareholderInput = {
@@ -806,6 +846,7 @@ export type AdditionalInvestmentUncheckedUpdateManyWithoutShareholderInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -822,6 +863,7 @@ export type AdditionalInvestmentSelect<ExtArgs extends runtime.Types.Extensions.
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["additionalInvestment"]>
@@ -838,6 +880,7 @@ export type AdditionalInvestmentSelectCreateManyAndReturn<ExtArgs extends runtim
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["additionalInvestment"]>
@@ -854,6 +897,7 @@ export type AdditionalInvestmentSelectUpdateManyAndReturn<ExtArgs extends runtim
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["additionalInvestment"]>
@@ -870,9 +914,10 @@ export type AdditionalInvestmentSelectScalar = {
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
 }
 
-export type AdditionalInvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "amount" | "investmentType" | "investmentDate" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["additionalInvestment"]>
+export type AdditionalInvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shareholderId" | "amount" | "investmentType" | "investmentDate" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "version", ExtArgs["result"]["additionalInvestment"]>
 export type AdditionalInvestmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
@@ -904,6 +949,7 @@ export type $AdditionalInvestmentPayload<ExtArgs extends runtime.Types.Extension
     updatedById: string | null
     createdAt: Date
     updatedAt: Date
+    version: number
   }, ExtArgs["result"]["additionalInvestment"]>
   composites: {}
 }
@@ -1340,6 +1386,7 @@ export interface AdditionalInvestmentFieldRefs {
   readonly updatedById: Prisma.FieldRef<"AdditionalInvestment", 'String'>
   readonly createdAt: Prisma.FieldRef<"AdditionalInvestment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AdditionalInvestment", 'DateTime'>
+  readonly version: Prisma.FieldRef<"AdditionalInvestment", 'Int'>
 }
     
 

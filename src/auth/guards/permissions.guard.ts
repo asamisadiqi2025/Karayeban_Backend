@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
-import { AuthUser } from '../types/jwt-payload.type';
+import type { AuthUser } from '../types/jwt-payload.type';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -20,15 +20,21 @@ export class PermissionsGuard implements CanActivate {
 
     if (!requiredPermissions || requiredPermissions.length === 0) return true;
 
-    const { user } = context.switchToHttp().getRequest<{ user: AuthUser }>();
+    const request = context.switchToHttp().getRequest();
+    const user: AuthUser | undefined = request.user;
 
-    // اینجا «همه» مجوزهای لازم باید موجود باشد (AND). اگر OR می‌خواهی some بگذار
-    const hasAll = requiredPermissions.every((p) =>
-      user?.permissions?.includes(p),
-    );
-    if (!hasAll) {
-      throw new ForbiddenException('مجوز لازم برای این عملیات را ندارید');
+    if (!user) {
+      throw new ForbiddenException('Authentication required');
     }
+
+    const hasAll = requiredPermissions.every((p) =>
+      user.permissions.includes(p),
+    );
+
+    if (!hasAll) {
+      throw new ForbiddenException('Insufficient permissions');
+    }
+
     return true;
   }
 }

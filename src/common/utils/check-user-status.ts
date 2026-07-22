@@ -1,24 +1,22 @@
 import { ForbiddenException } from '@nestjs/common';
-import { UserStatus } from 'src/generated/prisma/enums';
+import { UserStatus } from '../../generated/prisma/enums';
 
-export function ensureUserIsActive(status: UserStatus): void {
-  switch (status) {
-    case UserStatus.ACTIVE:
-      return;
-
-    case UserStatus.INACTIVE:
-      throw new ForbiddenException(
-        'حساب کاربری غیرفعال است. لطفاً با پشتیبانی تماس بگیرید.',
-      );
-
-    case UserStatus.BLOCKED:
-      throw new ForbiddenException(
-        'حساب کاربری مسدود شده است. لطفاً با پشتیبانی تماس بگیرید.',
-      );
-
-    default:
-      throw new ForbiddenException(
-        'وضعیت حساب کاربری نامعتبر است.',
-      );
+export function ensureUserIsActive(status: UserStatus | string): void {
+  if (status === UserStatus.ACTIVE) {
+    return;
   }
+
+  if (status === UserStatus.INACTIVE) {
+    throw new ForbiddenException(
+      'Account is inactive. Please contact support.',
+    );
+  }
+
+  if (status === UserStatus.BLOCKED) {
+    throw new ForbiddenException(
+      'Account is blocked. Please contact support.',
+    );
+  }
+
+  throw new ForbiddenException('Invalid account status.');
 }

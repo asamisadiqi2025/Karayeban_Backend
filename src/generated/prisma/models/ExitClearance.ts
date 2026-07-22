@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model ExitClearance
- * Move-out clearance for a contract (one per contract).
+ * 
  */
 export type ExitClearanceModel = runtime.Types.Result.DefaultSelection<Prisma.$ExitClearancePayload>
 
@@ -30,12 +30,14 @@ export type ExitClearanceAvgAggregateOutputType = {
   damageCost: runtime.Decimal | null
   remainingAmount: runtime.Decimal | null
   refundedAmount: runtime.Decimal | null
+  version: number | null
 }
 
 export type ExitClearanceSumAggregateOutputType = {
   damageCost: runtime.Decimal | null
   remainingAmount: runtime.Decimal | null
   refundedAmount: runtime.Decimal | null
+  version: number | null
 }
 
 export type ExitClearanceMinAggregateOutputType = {
@@ -57,6 +59,8 @@ export type ExitClearanceMinAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type ExitClearanceMaxAggregateOutputType = {
@@ -78,6 +82,8 @@ export type ExitClearanceMaxAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type ExitClearanceCountAggregateOutputType = {
@@ -99,6 +105,8 @@ export type ExitClearanceCountAggregateOutputType = {
   updatedById: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
+  version: number
   _all: number
 }
 
@@ -107,12 +115,14 @@ export type ExitClearanceAvgAggregateInputType = {
   damageCost?: true
   remainingAmount?: true
   refundedAmount?: true
+  version?: true
 }
 
 export type ExitClearanceSumAggregateInputType = {
   damageCost?: true
   remainingAmount?: true
   refundedAmount?: true
+  version?: true
 }
 
 export type ExitClearanceMinAggregateInputType = {
@@ -134,6 +144,8 @@ export type ExitClearanceMinAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type ExitClearanceMaxAggregateInputType = {
@@ -155,6 +167,8 @@ export type ExitClearanceMaxAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type ExitClearanceCountAggregateInputType = {
@@ -176,6 +190,8 @@ export type ExitClearanceCountAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -284,6 +300,8 @@ export type ExitClearanceGroupByOutputType = {
   updatedById: string | null
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
+  version: number
   _count: ExitClearanceCountAggregateOutputType | null
   _avg: ExitClearanceAvgAggregateOutputType | null
   _sum: ExitClearanceSumAggregateOutputType | null
@@ -328,6 +346,8 @@ export type ExitClearanceWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"ExitClearance"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ExitClearance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ExitClearance"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ExitClearance"> | Date | string | null
+  version?: Prisma.IntFilter<"ExitClearance"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -353,6 +373,8 @@ export type ExitClearanceOrderByWithRelationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   contract?: Prisma.ContractOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -381,6 +403,8 @@ export type ExitClearanceWhereUniqueInput = Prisma.AtLeast<{
   updatedById?: Prisma.UuidNullableFilter<"ExitClearance"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ExitClearance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ExitClearance"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ExitClearance"> | Date | string | null
+  version?: Prisma.IntFilter<"ExitClearance"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -406,6 +430,8 @@ export type ExitClearanceOrderByWithAggregationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.ExitClearanceCountOrderByAggregateInput
   _avg?: Prisma.ExitClearanceAvgOrderByAggregateInput
   _max?: Prisma.ExitClearanceMaxOrderByAggregateInput
@@ -435,10 +461,12 @@ export type ExitClearanceScalarWhereWithAggregatesInput = {
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"ExitClearance"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ExitClearance"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ExitClearance"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ExitClearance"> | Date | string | null
+  version?: Prisma.IntWithAggregatesFilter<"ExitClearance"> | number
 }
 
 export type ExitClearanceCreateInput = {
-  id?: string
+  id: string
   exitDate: Date | string
   shopCondition?: string | null
   damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -452,6 +480,8 @@ export type ExitClearanceCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
@@ -459,7 +489,7 @@ export type ExitClearanceCreateInput = {
 }
 
 export type ExitClearanceUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   tenantId: string
@@ -477,6 +507,8 @@ export type ExitClearanceUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceUpdateInput = {
@@ -494,6 +526,8 @@ export type ExitClearanceUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
@@ -519,10 +553,12 @@ export type ExitClearanceUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   tenantId: string
@@ -540,6 +576,8 @@ export type ExitClearanceCreateManyInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceUpdateManyMutationInput = {
@@ -557,6 +595,8 @@ export type ExitClearanceUpdateManyMutationInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceUncheckedUpdateManyInput = {
@@ -578,6 +618,8 @@ export type ExitClearanceUncheckedUpdateManyInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceListRelationFilter = {
@@ -614,12 +656,15 @@ export type ExitClearanceCountOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ExitClearanceAvgOrderByAggregateInput = {
   damageCost?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   refundedAmount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ExitClearanceMaxOrderByAggregateInput = {
@@ -641,6 +686,8 @@ export type ExitClearanceMaxOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ExitClearanceMinOrderByAggregateInput = {
@@ -662,12 +709,15 @@ export type ExitClearanceMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ExitClearanceSumOrderByAggregateInput = {
   damageCost?: Prisma.SortOrder
   remainingAmount?: Prisma.SortOrder
   refundedAmount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ExitClearanceCreateNestedManyWithoutMarketInput = {
@@ -828,12 +878,8 @@ export type ExitClearanceUncheckedUpdateOneWithoutContractNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExitClearanceUpdateToOneWithWhereWithoutContractInput, Prisma.ExitClearanceUpdateWithoutContractInput>, Prisma.ExitClearanceUncheckedUpdateWithoutContractInput>
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type ExitClearanceCreateWithoutMarketInput = {
-  id?: string
+  id: string
   exitDate: Date | string
   shopCondition?: string | null
   damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -847,13 +893,15 @@ export type ExitClearanceCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   contractId: string
   tenantId: string
   shopId: string
@@ -870,6 +918,8 @@ export type ExitClearanceUncheckedCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceCreateOrConnectWithoutMarketInput = {
@@ -920,10 +970,12 @@ export type ExitClearanceScalarWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"ExitClearance"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ExitClearance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ExitClearance"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"ExitClearance"> | Date | string | null
+  version?: Prisma.IntFilter<"ExitClearance"> | number
 }
 
 export type ExitClearanceCreateWithoutShopInput = {
-  id?: string
+  id: string
   exitDate: Date | string
   shopCondition?: string | null
   damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -937,13 +989,15 @@ export type ExitClearanceCreateWithoutShopInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutShopInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   tenantId: string
@@ -960,6 +1014,8 @@ export type ExitClearanceUncheckedCreateWithoutShopInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceCreateOrConnectWithoutShopInput = {
@@ -989,7 +1045,7 @@ export type ExitClearanceUpdateManyWithWhereWithoutShopInput = {
 }
 
 export type ExitClearanceCreateWithoutTenantInput = {
-  id?: string
+  id: string
   exitDate: Date | string
   shopCondition?: string | null
   damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1003,13 +1059,15 @@ export type ExitClearanceCreateWithoutTenantInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   shopId: string
@@ -1026,6 +1084,8 @@ export type ExitClearanceUncheckedCreateWithoutTenantInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceCreateOrConnectWithoutTenantInput = {
@@ -1055,7 +1115,7 @@ export type ExitClearanceUpdateManyWithWhereWithoutTenantInput = {
 }
 
 export type ExitClearanceCreateWithoutContractInput = {
-  id?: string
+  id: string
   exitDate: Date | string
   shopCondition?: string | null
   damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1069,13 +1129,15 @@ export type ExitClearanceCreateWithoutContractInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutContractInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   shopId: string
@@ -1092,6 +1154,8 @@ export type ExitClearanceUncheckedCreateWithoutContractInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceCreateOrConnectWithoutContractInput = {
@@ -1125,6 +1189,8 @@ export type ExitClearanceUpdateWithoutContractInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
@@ -1148,10 +1214,12 @@ export type ExitClearanceUncheckedUpdateWithoutContractInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceCreateManyMarketInput = {
-  id?: string
+  id: string
   contractId: string
   tenantId: string
   shopId: string
@@ -1168,6 +1236,8 @@ export type ExitClearanceCreateManyMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceUpdateWithoutMarketInput = {
@@ -1185,6 +1255,8 @@ export type ExitClearanceUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
@@ -1208,6 +1280,8 @@ export type ExitClearanceUncheckedUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceUncheckedUpdateManyWithoutMarketInput = {
@@ -1228,10 +1302,12 @@ export type ExitClearanceUncheckedUpdateManyWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceCreateManyShopInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   tenantId: string
@@ -1248,6 +1324,8 @@ export type ExitClearanceCreateManyShopInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceUpdateWithoutShopInput = {
@@ -1265,6 +1343,8 @@ export type ExitClearanceUpdateWithoutShopInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
@@ -1288,6 +1368,8 @@ export type ExitClearanceUncheckedUpdateWithoutShopInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceUncheckedUpdateManyWithoutShopInput = {
@@ -1308,10 +1390,12 @@ export type ExitClearanceUncheckedUpdateManyWithoutShopInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceCreateManyTenantInput = {
-  id?: string
+  id: string
   marketId: string
   contractId: string
   shopId: string
@@ -1328,6 +1412,8 @@ export type ExitClearanceCreateManyTenantInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ExitClearanceUpdateWithoutTenantInput = {
@@ -1345,6 +1431,8 @@ export type ExitClearanceUpdateWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
@@ -1368,6 +1456,8 @@ export type ExitClearanceUncheckedUpdateWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ExitClearanceUncheckedUpdateManyWithoutTenantInput = {
@@ -1388,6 +1478,8 @@ export type ExitClearanceUncheckedUpdateManyWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -1411,6 +1503,8 @@ export type ExitClearanceSelect<ExtArgs extends runtime.Types.Extensions.Interna
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1436,6 +1530,8 @@ export type ExitClearanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1461,6 +1557,8 @@ export type ExitClearanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1486,9 +1584,11 @@ export type ExitClearanceSelectScalar = {
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
 }
 
-export type ExitClearanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "contractId" | "tenantId" | "shopId" | "exitDate" | "shopCondition" | "damageCost" | "billsCleared" | "remainingAmount" | "refundedAmount" | "reason" | "approvedById" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["exitClearance"]>
+export type ExitClearanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "contractId" | "tenantId" | "shopId" | "exitDate" | "shopCondition" | "damageCost" | "billsCleared" | "remainingAmount" | "refundedAmount" | "reason" | "approvedById" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt" | "version", ExtArgs["result"]["exitClearance"]>
 export type ExitClearanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
@@ -1535,6 +1635,8 @@ export type $ExitClearancePayload<ExtArgs extends runtime.Types.Extensions.Inter
     updatedById: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    version: number
   }, ExtArgs["result"]["exitClearance"]>
   composites: {}
 }
@@ -1980,6 +2082,8 @@ export interface ExitClearanceFieldRefs {
   readonly updatedById: Prisma.FieldRef<"ExitClearance", 'String'>
   readonly createdAt: Prisma.FieldRef<"ExitClearance", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ExitClearance", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"ExitClearance", 'DateTime'>
+  readonly version: Prisma.FieldRef<"ExitClearance", 'Int'>
 }
     
 

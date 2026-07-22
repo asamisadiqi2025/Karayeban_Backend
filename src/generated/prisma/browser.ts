@@ -19,171 +19,266 @@ export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
  * Model Market
- * A market — the top-level tenant boundary of the SaaS.
+ * 
  */
 export type Market = Prisma.MarketModel
 /**
+ * Model SystemSetting
+ * 
+ */
+export type SystemSetting = Prisma.SystemSettingModel
+/**
+ * Model MarketSetting
+ * 
+ */
+export type MarketSetting = Prisma.MarketSettingModel
+/**
+ * Model ExchangeRate
+ * 
+ */
+export type ExchangeRate = Prisma.ExchangeRateModel
+/**
+ * Model AccountingPeriod
+ * 
+ */
+export type AccountingPeriod = Prisma.AccountingPeriodModel
+/**
  * Model Floor
- * A physical floor/level inside a market.
+ * 
  */
 export type Floor = Prisma.FloorModel
 /**
  * Model Shop
- * A rentable shop unit.
+ * 
  */
 export type Shop = Prisma.ShopModel
 /**
  * Model ShopCategory
- * A classification for shops (e.g. food, clothing).
+ * 
  */
 export type ShopCategory = Prisma.ShopCategoryModel
 /**
  * Model Tenant
- * A tenant — the party that rents a shop.
+ * 
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model MarketTenant
+ * 
+ */
+export type MarketTenant = Prisma.MarketTenantModel
+/**
+ * Model TenantHistory
+ * 
+ */
+export type TenantHistory = Prisma.TenantHistoryModel
+/**
  * Model Guarantor
- * A guarantor backing a tenant.
+ * 
  */
 export type Guarantor = Prisma.GuarantorModel
 /**
+ * Model TenantGuarantor
+ * 
+ */
+export type TenantGuarantor = Prisma.TenantGuarantorModel
+/**
  * Model Contract
- * A rental contract between a tenant and a shop.
+ * 
  */
 export type Contract = Prisma.ContractModel
 /**
  * Model ContractTerm
- * Detailed terms attached to a contract.
+ * 
  */
 export type ContractTerm = Prisma.ContractTermModel
 /**
+ * Model SecurityDeposit
+ * 
+ */
+export type SecurityDeposit = Prisma.SecurityDepositModel
+/**
  * Model RentPayment
- * A monthly rent payment record for a contract.
+ * 
  */
 export type RentPayment = Prisma.RentPaymentModel
 /**
+ * Model PaymentAllocation
+ * 
+ */
+export type PaymentAllocation = Prisma.PaymentAllocationModel
+/**
  * Model UtilityBill
- * A monthly utility bill for a shop.
+ * 
  */
 export type UtilityBill = Prisma.UtilityBillModel
 /**
- * Model ExpenseCategory
- * A classification for market expenses.
- */
-export type ExpenseCategory = Prisma.ExpenseCategoryModel
-/**
  * Model Employee
- * A market employee.
+ * 
  */
 export type Employee = Prisma.EmployeeModel
 /**
+ * Model MarketEmployee
+ * 
+ */
+export type MarketEmployee = Prisma.MarketEmployeeModel
+/**
+ * Model MarketEmployeeAttendance
+ * 
+ */
+export type MarketEmployeeAttendance = Prisma.MarketEmployeeAttendanceModel
+/**
+ * Model MarketEmployeeSalaryPayment
+ * 
+ */
+export type MarketEmployeeSalaryPayment = Prisma.MarketEmployeeSalaryPaymentModel
+/**
+ * Model ExpenseCategory
+ * 
+ */
+export type ExpenseCategory = Prisma.ExpenseCategoryModel
+/**
  * Model MarketExpense
- * An expense incurred by a market.
+ * 
  */
 export type MarketExpense = Prisma.MarketExpenseModel
 /**
+ * Model MaintenanceRequest
+ * 
+ */
+export type MaintenanceRequest = Prisma.MaintenanceRequestModel
+/**
  * Model Account
- * A financial account (cash box, bank account, wallet).
+ * 
  */
 export type Account = Prisma.AccountModel
 /**
+ * Model JournalEntry
+ * 
+ */
+export type JournalEntry = Prisma.JournalEntryModel
+/**
+ * Model JournalLine
+ * 
+ */
+export type JournalLine = Prisma.JournalLineModel
+/**
  * Model MiscellaneousIncome
- * Income not tied to rent (e.g. parking, events).
+ * 
  */
 export type MiscellaneousIncome = Prisma.MiscellaneousIncomeModel
 /**
  * Model AccountTransaction
- * An immutable ledger entry against an account.
+ * 
  */
 export type AccountTransaction = Prisma.AccountTransactionModel
 /**
+ * Model ApprovalRequest
+ * 
+ */
+export type ApprovalRequest = Prisma.ApprovalRequestModel
+/**
  * Model ExitClearance
- * Move-out clearance for a contract (one per contract).
+ * 
  */
 export type ExitClearance = Prisma.ExitClearanceModel
 /**
  * Model Cheque
- * A post-dated cheque received from a tenant.
+ * 
  */
 export type Cheque = Prisma.ChequeModel
 /**
  * Model Document
- * A file attached to a business object (polymorphic).
+ * 
  */
 export type Document = Prisma.DocumentModel
 /**
  * Model User
- * A system user. Market membership is only via UserMarket.
+ * 
  */
 export type User = Prisma.UserModel
 /**
  * Model UserMarket
- * Join table assigning a user to a market (many-to-many).
+ * 
  */
 export type UserMarket = Prisma.UserMarketModel
 /**
  * Model Role
- * An RBAC role.
+ * 
  */
 export type Role = Prisma.RoleModel
 /**
  * Model Permission
- * An RBAC permission.
+ * 
  */
 export type Permission = Prisma.PermissionModel
 /**
  * Model UserRole
- * Join table assigning a role to a user.
+ * 
  */
 export type UserRole = Prisma.UserRoleModel
 /**
  * Model RolePermission
- * Join table assigning a permission to a role.
+ * 
  */
 export type RolePermission = Prisma.RolePermissionModel
 /**
  * Model Session
- * A login session. Stores only a HASH of the refresh token; the raw
- * token is returned to the client once and never persisted. Rotation:
- * on refresh, replace `refreshTokenHash` and bump `lastUsedAt`.
+ * 
  */
 export type Session = Prisma.SessionModel
 /**
  * Model PasswordReset
- * A single-use password-reset token (hashed).
+ * 
  */
 export type PasswordReset = Prisma.PasswordResetModel
 /**
+ * Model ApiKey
+ * 
+ */
+export type ApiKey = Prisma.ApiKeyModel
+/**
+ * Model UserLoginAttempt
+ * 
+ */
+export type UserLoginAttempt = Prisma.UserLoginAttemptModel
+/**
  * Model AuditLog
- * An immutable audit trail entry.
+ * 
  */
 export type AuditLog = Prisma.AuditLogModel
 /**
+ * Model AuditLogChange
+ * 
+ */
+export type AuditLogChange = Prisma.AuditLogChangeModel
+/**
+ * Model ActivityLog
+ * 
+ */
+export type ActivityLog = Prisma.ActivityLogModel
+/**
  * Model Notification
- * A user- or market-targeted notification.
+ * 
  */
 export type Notification = Prisma.NotificationModel
 /**
  * Model Shareholder
- * A market shareholder.
+ * 
  */
 export type Shareholder = Prisma.ShareholderModel
 /**
  * Model OwnershipHistory
- * A shareholder's ownership percentage over a period.
- * NOTE: non-overlapping periods cannot be expressed in Prisma;
- * enforce with a Postgres EXCLUDE (GiST) constraint in a raw
- * migration, or validate at the application layer.
+ * 
  */
 export type OwnershipHistory = Prisma.OwnershipHistoryModel
 /**
  * Model AdditionalInvestment
- * A capital top-up by a shareholder.
+ * 
  */
 export type AdditionalInvestment = Prisma.AdditionalInvestmentModel
 /**
  * Model Withdrawal
- * A capital withdrawal by a shareholder.
+ * 
  */
 export type Withdrawal = Prisma.WithdrawalModel

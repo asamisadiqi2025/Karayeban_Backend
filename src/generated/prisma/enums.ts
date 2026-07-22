@@ -97,10 +97,26 @@ export type UtilityPaymentStatus = (typeof UtilityPaymentStatus)[keyof typeof Ut
 
 export const EmployeeStatus = {
   ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE'
+  INACTIVE: 'INACTIVE',
+  ON_LEAVE: 'ON_LEAVE',
+  TERMINATED: 'TERMINATED'
 } as const
 
 export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus]
+
+
+export const EmploymentType = {
+  OWNER: 'OWNER',
+  MANAGER: 'MANAGER',
+  ACCOUNTANT: 'ACCOUNTANT',
+  SECURITY: 'SECURITY',
+  CLEANER: 'CLEANER',
+  CASHIER: 'CASHIER',
+  MAINTENANCE: 'MAINTENANCE',
+  OTHER: 'OTHER'
+} as const
+
+export type EmploymentType = (typeof EmploymentType)[keyof typeof EmploymentType]
 
 
 export const AccountType = {
@@ -132,6 +148,16 @@ export const TransactionType = {
 export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
 
 
+export const TransactionStatus = {
+  PENDING: 'PENDING',
+  POSTED: 'POSTED',
+  VOID: 'VOID',
+  REVERSED: 'REVERSED'
+} as const
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
 export const TransactionReferenceType = {
   RENT_PAYMENT: 'RENT_PAYMENT',
   UTILITY_BILL: 'UTILITY_BILL',
@@ -140,6 +166,9 @@ export const TransactionReferenceType = {
   WITHDRAWAL: 'WITHDRAWAL',
   ADDITIONAL_INVESTMENT: 'ADDITIONAL_INVESTMENT',
   CHEQUE: 'CHEQUE',
+  SECURITY_DEPOSIT: 'SECURITY_DEPOSIT',
+  REVERSAL: 'REVERSAL',
+  JOURNAL_ENTRY: 'JOURNAL_ENTRY',
   OTHER: 'OTHER'
 } as const
 
@@ -162,10 +191,23 @@ export const DocumentEntityType = {
   SHOP: 'SHOP',
   GUARANTOR: 'GUARANTOR',
   CHEQUE: 'CHEQUE',
-  MARKET: 'MARKET'
+  MARKET: 'MARKET',
+  EMPLOYEE: 'EMPLOYEE',
+  EXPENSE: 'EXPENSE'
 } as const
 
 export type DocumentEntityType = (typeof DocumentEntityType)[keyof typeof DocumentEntityType]
+
+
+export const StorageProvider = {
+  LOCAL: 'LOCAL',
+  S3: 'S3',
+  SUPABASE: 'SUPABASE',
+  CLOUDINARY: 'CLOUDINARY',
+  AZURE: 'AZURE'
+} as const
+
+export type StorageProvider = (typeof StorageProvider)[keyof typeof StorageProvider]
 
 
 export const UserStatus = {
@@ -214,11 +256,29 @@ export const AuditOperation = {
   CREATE: 'CREATE',
   UPDATE: 'UPDATE',
   DELETE: 'DELETE',
+  RESTORE: 'RESTORE',
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT',
+  EXPORT: 'EXPORT',
+  IMPORT: 'IMPORT',
+  PASSWORD_CHANGE: 'PASSWORD_CHANGE',
+  ROLE_CHANGE: 'ROLE_CHANGE',
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT'
 } as const
 
 export type AuditOperation = (typeof AuditOperation)[keyof typeof AuditOperation]
+
+
+export const AuditActionSource = {
+  WEB: 'WEB',
+  API: 'API',
+  MOBILE: 'MOBILE',
+  SYSTEM: 'SYSTEM',
+  CRON: 'CRON'
+} as const
+
+export type AuditActionSource = (typeof AuditActionSource)[keyof typeof AuditActionSource]
 
 
 export const PaymentMethod = {
@@ -243,3 +303,111 @@ export const NotificationReferenceType = {
 } as const
 
 export type NotificationReferenceType = (typeof NotificationReferenceType)[keyof typeof NotificationReferenceType]
+
+
+export const RoleScope = {
+  GLOBAL: 'GLOBAL',
+  MARKET: 'MARKET'
+} as const
+
+export type RoleScope = (typeof RoleScope)[keyof typeof RoleScope]
+
+
+export const PermissionScope = {
+  GLOBAL: 'GLOBAL',
+  MARKET: 'MARKET'
+} as const
+
+export type PermissionScope = (typeof PermissionScope)[keyof typeof PermissionScope]
+
+
+export const EmployeeAttendanceStatus = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  HALF_DAY: 'HALF_DAY',
+  ON_LEAVE: 'ON_LEAVE'
+} as const
+
+export type EmployeeAttendanceStatus = (typeof EmployeeAttendanceStatus)[keyof typeof EmployeeAttendanceStatus]
+
+
+export const SuperAdminLevel = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  SUPPORT: 'SUPPORT'
+} as const
+
+export type SuperAdminLevel = (typeof SuperAdminLevel)[keyof typeof SuperAdminLevel]
+
+
+export const ApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ApprovalStatus = (typeof ApprovalStatus)[keyof typeof ApprovalStatus]
+
+
+export const ApprovalEntityType = {
+  CONTRACT: 'CONTRACT',
+  EXPENSE: 'EXPENSE',
+  WITHDRAWAL: 'WITHDRAWAL',
+  PAYMENT: 'PAYMENT',
+  TENANT_DELETE: 'TENANT_DELETE',
+  SHOP_DELETE: 'SHOP_DELETE',
+  OTHER: 'OTHER'
+} as const
+
+export type ApprovalEntityType = (typeof ApprovalEntityType)[keyof typeof ApprovalEntityType]
+
+
+export const JournalStatus = {
+  DRAFT: 'DRAFT',
+  POSTED: 'POSTED',
+  VOID: 'VOID'
+} as const
+
+export type JournalStatus = (typeof JournalStatus)[keyof typeof JournalStatus]
+
+
+export const PeriodStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  LOCKED: 'LOCKED'
+} as const
+
+export type PeriodStatus = (typeof PeriodStatus)[keyof typeof PeriodStatus]
+
+
+export const DepositStatus = {
+  HELD: 'HELD',
+  RETURNED: 'RETURNED',
+  PARTIAL: 'PARTIAL',
+  FORFEITED: 'FORFEITED'
+} as const
+
+export type DepositStatus = (typeof DepositStatus)[keyof typeof DepositStatus]
+
+
+export const MaintenancePriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type MaintenancePriority = (typeof MaintenancePriority)[keyof typeof MaintenancePriority]
+
+
+export const MaintenanceStatus = {
+  REPORTED: 'REPORTED',
+  ASSIGNED: 'ASSIGNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type MaintenanceStatus = (typeof MaintenanceStatus)[keyof typeof MaintenanceStatus]

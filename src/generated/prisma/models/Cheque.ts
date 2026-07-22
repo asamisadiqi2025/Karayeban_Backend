@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Cheque
- * A post-dated cheque received from a tenant.
+ * 
  */
 export type ChequeModel = runtime.Types.Result.DefaultSelection<Prisma.$ChequePayload>
 
@@ -28,10 +28,12 @@ export type AggregateCheque = {
 
 export type ChequeAvgAggregateOutputType = {
   amount: runtime.Decimal | null
+  version: number | null
 }
 
 export type ChequeSumAggregateOutputType = {
   amount: runtime.Decimal | null
+  version: number | null
 }
 
 export type ChequeMinAggregateOutputType = {
@@ -56,6 +58,8 @@ export type ChequeMinAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type ChequeMaxAggregateOutputType = {
@@ -80,6 +84,8 @@ export type ChequeMaxAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type ChequeCountAggregateOutputType = {
@@ -104,16 +110,20 @@ export type ChequeCountAggregateOutputType = {
   updatedById: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
+  version: number
   _all: number
 }
 
 
 export type ChequeAvgAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type ChequeSumAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type ChequeMinAggregateInputType = {
@@ -138,6 +148,8 @@ export type ChequeMinAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type ChequeMaxAggregateInputType = {
@@ -162,6 +174,8 @@ export type ChequeMaxAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type ChequeCountAggregateInputType = {
@@ -186,6 +200,8 @@ export type ChequeCountAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -297,6 +313,8 @@ export type ChequeGroupByOutputType = {
   updatedById: string | null
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
+  version: number
   _count: ChequeCountAggregateOutputType | null
   _avg: ChequeAvgAggregateOutputType | null
   _sum: ChequeSumAggregateOutputType | null
@@ -344,6 +362,8 @@ export type ChequeWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  version?: Prisma.IntFilter<"Cheque"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
@@ -372,6 +392,8 @@ export type ChequeOrderByWithRelationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   contract?: Prisma.ContractOrderByWithRelationInput
@@ -404,6 +426,8 @@ export type ChequeWhereUniqueInput = Prisma.AtLeast<{
   updatedById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  version?: Prisma.IntFilter<"Cheque"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   contract?: Prisma.XOR<Prisma.ContractNullableScalarRelationFilter, Prisma.ContractWhereInput> | null
@@ -432,6 +456,8 @@ export type ChequeOrderByWithAggregationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.ChequeCountOrderByAggregateInput
   _avg?: Prisma.ChequeAvgOrderByAggregateInput
   _max?: Prisma.ChequeMaxOrderByAggregateInput
@@ -464,10 +490,12 @@ export type ChequeScalarWhereWithAggregatesInput = {
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Cheque"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Cheque"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Cheque"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Cheque"> | Date | string | null
+  version?: Prisma.IntWithAggregatesFilter<"Cheque"> | number
 }
 
 export type ChequeCreateInput = {
-  id?: string
+  id: string
   bankName: string
   chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -484,6 +512,8 @@ export type ChequeCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
   tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
@@ -491,7 +521,7 @@ export type ChequeCreateInput = {
 }
 
 export type ChequeUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   contractId?: string | null
@@ -512,6 +542,8 @@ export type ChequeUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeUpdateInput = {
@@ -532,6 +564,8 @@ export type ChequeUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
@@ -560,10 +594,12 @@ export type ChequeUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   contractId?: string | null
@@ -584,6 +620,8 @@ export type ChequeCreateManyInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeUpdateManyMutationInput = {
@@ -604,6 +642,8 @@ export type ChequeUpdateManyMutationInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeUncheckedUpdateManyInput = {
@@ -628,6 +668,8 @@ export type ChequeUncheckedUpdateManyInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeListRelationFilter = {
@@ -668,10 +710,13 @@ export type ChequeCountOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ChequeAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ChequeMaxOrderByAggregateInput = {
@@ -696,6 +741,8 @@ export type ChequeMaxOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ChequeMinOrderByAggregateInput = {
@@ -720,10 +767,13 @@ export type ChequeMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ChequeSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type ChequeCreateNestedManyWithoutMarketInput = {
@@ -899,7 +949,7 @@ export type EnumChequeStatusFieldUpdateOperationsInput = {
 }
 
 export type ChequeCreateWithoutMarketInput = {
-  id?: string
+  id: string
   bankName: string
   chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -916,13 +966,15 @@ export type ChequeCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   tenantId: string
   contractId?: string | null
   accountId?: string | null
@@ -942,6 +994,8 @@ export type ChequeUncheckedCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeCreateOrConnectWithoutMarketInput = {
@@ -995,10 +1049,12 @@ export type ChequeScalarWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"Cheque"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Cheque"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Cheque"> | Date | string | null
+  version?: Prisma.IntFilter<"Cheque"> | number
 }
 
 export type ChequeCreateWithoutTenantInput = {
-  id?: string
+  id: string
   bankName: string
   chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1015,13 +1071,15 @@ export type ChequeCreateWithoutTenantInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   marketId: string
   contractId?: string | null
   accountId?: string | null
@@ -1041,6 +1099,8 @@ export type ChequeUncheckedCreateWithoutTenantInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeCreateOrConnectWithoutTenantInput = {
@@ -1070,7 +1130,7 @@ export type ChequeUpdateManyWithWhereWithoutTenantInput = {
 }
 
 export type ChequeCreateWithoutContractInput = {
-  id?: string
+  id: string
   bankName: string
   chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1087,13 +1147,15 @@ export type ChequeCreateWithoutContractInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
   tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   account?: Prisma.AccountCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutContractInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   accountId?: string | null
@@ -1113,6 +1175,8 @@ export type ChequeUncheckedCreateWithoutContractInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeCreateOrConnectWithoutContractInput = {
@@ -1142,7 +1206,7 @@ export type ChequeUpdateManyWithWhereWithoutContractInput = {
 }
 
 export type ChequeCreateWithoutAccountInput = {
-  id?: string
+  id: string
   bankName: string
   chequeNumber: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1159,13 +1223,15 @@ export type ChequeCreateWithoutAccountInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutChequesInput
   tenant: Prisma.TenantCreateNestedOneWithoutChequesInput
   contract?: Prisma.ContractCreateNestedOneWithoutChequesInput
 }
 
 export type ChequeUncheckedCreateWithoutAccountInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   contractId?: string | null
@@ -1185,6 +1251,8 @@ export type ChequeUncheckedCreateWithoutAccountInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeCreateOrConnectWithoutAccountInput = {
@@ -1214,7 +1282,7 @@ export type ChequeUpdateManyWithWhereWithoutAccountInput = {
 }
 
 export type ChequeCreateManyMarketInput = {
-  id?: string
+  id: string
   tenantId: string
   contractId?: string | null
   accountId?: string | null
@@ -1234,6 +1302,8 @@ export type ChequeCreateManyMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeUpdateWithoutMarketInput = {
@@ -1254,6 +1324,8 @@ export type ChequeUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
@@ -1280,6 +1352,8 @@ export type ChequeUncheckedUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeUncheckedUpdateManyWithoutMarketInput = {
@@ -1303,10 +1377,12 @@ export type ChequeUncheckedUpdateManyWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeCreateManyTenantInput = {
-  id?: string
+  id: string
   marketId: string
   contractId?: string | null
   accountId?: string | null
@@ -1326,6 +1402,8 @@ export type ChequeCreateManyTenantInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeUpdateWithoutTenantInput = {
@@ -1346,6 +1424,8 @@ export type ChequeUpdateWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
@@ -1372,6 +1452,8 @@ export type ChequeUncheckedUpdateWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeUncheckedUpdateManyWithoutTenantInput = {
@@ -1395,10 +1477,12 @@ export type ChequeUncheckedUpdateManyWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeCreateManyContractInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   accountId?: string | null
@@ -1418,6 +1502,8 @@ export type ChequeCreateManyContractInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeUpdateWithoutContractInput = {
@@ -1438,6 +1524,8 @@ export type ChequeUpdateWithoutContractInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   account?: Prisma.AccountUpdateOneWithoutChequesNestedInput
@@ -1464,6 +1552,8 @@ export type ChequeUncheckedUpdateWithoutContractInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeUncheckedUpdateManyWithoutContractInput = {
@@ -1487,10 +1577,12 @@ export type ChequeUncheckedUpdateManyWithoutContractInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeCreateManyAccountInput = {
-  id?: string
+  id: string
   marketId: string
   tenantId: string
   contractId?: string | null
@@ -1510,6 +1602,8 @@ export type ChequeCreateManyAccountInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type ChequeUpdateWithoutAccountInput = {
@@ -1530,6 +1624,8 @@ export type ChequeUpdateWithoutAccountInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutChequesNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutChequesNestedInput
   contract?: Prisma.ContractUpdateOneWithoutChequesNestedInput
@@ -1556,6 +1652,8 @@ export type ChequeUncheckedUpdateWithoutAccountInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ChequeUncheckedUpdateManyWithoutAccountInput = {
@@ -1579,6 +1677,8 @@ export type ChequeUncheckedUpdateManyWithoutAccountInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -1605,6 +1705,8 @@ export type ChequeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
@@ -1633,6 +1735,8 @@ export type ChequeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
@@ -1661,6 +1765,8 @@ export type ChequeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.Cheque$contractArgs<ExtArgs>
@@ -1689,9 +1795,11 @@ export type ChequeSelectScalar = {
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
 }
 
-export type ChequeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "tenantId" | "contractId" | "accountId" | "bankName" | "chequeNumber" | "amount" | "issueDate" | "dueDate" | "receivedDate" | "returnedDate" | "clearedDate" | "status" | "returnReason" | "imageUrl" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["cheque"]>
+export type ChequeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "tenantId" | "contractId" | "accountId" | "bankName" | "chequeNumber" | "amount" | "issueDate" | "dueDate" | "receivedDate" | "returnedDate" | "clearedDate" | "status" | "returnReason" | "imageUrl" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt" | "version", ExtArgs["result"]["cheque"]>
 export type ChequeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1730,9 +1838,6 @@ export type $ChequePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     amount: runtime.Decimal
     issueDate: Date
     dueDate: Date
-    /**
-     * Lifecycle timestamps.
-     */
     receivedDate: Date | null
     returnedDate: Date | null
     clearedDate: Date | null
@@ -1744,6 +1849,8 @@ export type $ChequePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     updatedById: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    version: number
   }, ExtArgs["result"]["cheque"]>
   composites: {}
 }
@@ -2192,6 +2299,8 @@ export interface ChequeFieldRefs {
   readonly updatedById: Prisma.FieldRef<"Cheque", 'String'>
   readonly createdAt: Prisma.FieldRef<"Cheque", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Cheque", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Cheque", 'DateTime'>
+  readonly version: Prisma.FieldRef<"Cheque", 'Int'>
 }
     
 

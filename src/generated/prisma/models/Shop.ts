@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Shop
- * A rentable shop unit.
+ * 
  */
 export type ShopModel = runtime.Types.Result.DefaultSelection<Prisma.$ShopPayload>
 
@@ -327,6 +327,7 @@ export type ShopWhereInput = {
   rentPayments?: Prisma.RentPaymentListRelationFilter
   utilityBills?: Prisma.UtilityBillListRelationFilter
   exitClearances?: Prisma.ExitClearanceListRelationFilter
+  maintenance?: Prisma.MaintenanceRequestListRelationFilter
 }
 
 export type ShopOrderByWithRelationInput = {
@@ -354,10 +355,13 @@ export type ShopOrderByWithRelationInput = {
   rentPayments?: Prisma.RentPaymentOrderByRelationAggregateInput
   utilityBills?: Prisma.UtilityBillOrderByRelationAggregateInput
   exitClearances?: Prisma.ExitClearanceOrderByRelationAggregateInput
+  maintenance?: Prisma.MaintenanceRequestOrderByRelationAggregateInput
 }
 
 export type ShopWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  marketId_shopCode?: Prisma.ShopMarketIdShopCodeCompoundUniqueInput
+  marketId_shopNumber?: Prisma.ShopMarketIdShopNumberCompoundUniqueInput
   AND?: Prisma.ShopWhereInput | Prisma.ShopWhereInput[]
   OR?: Prisma.ShopWhereInput[]
   NOT?: Prisma.ShopWhereInput | Prisma.ShopWhereInput[]
@@ -384,7 +388,8 @@ export type ShopWhereUniqueInput = Prisma.AtLeast<{
   rentPayments?: Prisma.RentPaymentListRelationFilter
   utilityBills?: Prisma.UtilityBillListRelationFilter
   exitClearances?: Prisma.ExitClearanceListRelationFilter
-}, "id">
+  maintenance?: Prisma.MaintenanceRequestListRelationFilter
+}, "id" | "marketId_shopCode" | "marketId_shopNumber">
 
 export type ShopOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -435,7 +440,7 @@ export type ShopScalarWhereWithAggregatesInput = {
 }
 
 export type ShopCreateInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -456,10 +461,11 @@ export type ShopCreateInput = {
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   categoryId?: string | null
@@ -480,6 +486,7 @@ export type ShopUncheckedCreateInput = {
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopUpdateInput = {
@@ -504,6 +511,7 @@ export type ShopUpdateInput = {
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateInput = {
@@ -528,10 +536,11 @@ export type ShopUncheckedUpdateInput = {
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   categoryId?: string | null
@@ -595,6 +604,16 @@ export type ShopListRelationFilter = {
 
 export type ShopOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ShopMarketIdShopCodeCompoundUniqueInput = {
+  marketId: string
+  shopCode: string
+}
+
+export type ShopMarketIdShopNumberCompoundUniqueInput = {
+  marketId: string
+  shopNumber: string
 }
 
 export type ShopCountOrderByAggregateInput = {
@@ -758,14 +777,6 @@ export type ShopUncheckedUpdateManyWithoutFloorNestedInput = {
   deleteMany?: Prisma.ShopScalarWhereInput | Prisma.ShopScalarWhereInput[]
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type EnumShopStatusFieldUpdateOperationsInput = {
   set?: $Enums.ShopStatus
 }
@@ -854,6 +865,20 @@ export type ShopUpdateOneRequiredWithoutUtilityBillsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ShopUpdateToOneWithWhereWithoutUtilityBillsInput, Prisma.ShopUpdateWithoutUtilityBillsInput>, Prisma.ShopUncheckedUpdateWithoutUtilityBillsInput>
 }
 
+export type ShopCreateNestedOneWithoutMaintenanceInput = {
+  create?: Prisma.XOR<Prisma.ShopCreateWithoutMaintenanceInput, Prisma.ShopUncheckedCreateWithoutMaintenanceInput>
+  connectOrCreate?: Prisma.ShopCreateOrConnectWithoutMaintenanceInput
+  connect?: Prisma.ShopWhereUniqueInput
+}
+
+export type ShopUpdateOneRequiredWithoutMaintenanceNestedInput = {
+  create?: Prisma.XOR<Prisma.ShopCreateWithoutMaintenanceInput, Prisma.ShopUncheckedCreateWithoutMaintenanceInput>
+  connectOrCreate?: Prisma.ShopCreateOrConnectWithoutMaintenanceInput
+  upsert?: Prisma.ShopUpsertWithoutMaintenanceInput
+  connect?: Prisma.ShopWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ShopUpdateToOneWithWhereWithoutMaintenanceInput, Prisma.ShopUpdateWithoutMaintenanceInput>, Prisma.ShopUncheckedUpdateWithoutMaintenanceInput>
+}
+
 export type ShopCreateNestedOneWithoutExitClearancesInput = {
   create?: Prisma.XOR<Prisma.ShopCreateWithoutExitClearancesInput, Prisma.ShopUncheckedCreateWithoutExitClearancesInput>
   connectOrCreate?: Prisma.ShopCreateOrConnectWithoutExitClearancesInput
@@ -869,7 +894,7 @@ export type ShopUpdateOneRequiredWithoutExitClearancesNestedInput = {
 }
 
 export type ShopCreateWithoutMarketInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -889,10 +914,11 @@ export type ShopCreateWithoutMarketInput = {
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   floorId: string
   categoryId?: string | null
   shopCode: string
@@ -912,6 +938,7 @@ export type ShopUncheckedCreateWithoutMarketInput = {
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutMarketInput = {
@@ -964,7 +991,7 @@ export type ShopScalarWhereInput = {
 }
 
 export type ShopCreateWithoutFloorInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -984,10 +1011,11 @@ export type ShopCreateWithoutFloorInput = {
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateWithoutFloorInput = {
-  id?: string
+  id: string
   marketId: string
   categoryId?: string | null
   shopCode: string
@@ -1007,6 +1035,7 @@ export type ShopUncheckedCreateWithoutFloorInput = {
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutFloorInput = {
@@ -1036,7 +1065,7 @@ export type ShopUpdateManyWithWhereWithoutFloorInput = {
 }
 
 export type ShopCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1056,10 +1085,11 @@ export type ShopCreateWithoutCategoryInput = {
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   shopCode: string
@@ -1079,6 +1109,7 @@ export type ShopUncheckedCreateWithoutCategoryInput = {
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutCategoryInput = {
@@ -1108,7 +1139,7 @@ export type ShopUpdateManyWithWhereWithoutCategoryInput = {
 }
 
 export type ShopCreateWithoutContractsInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1128,10 +1159,11 @@ export type ShopCreateWithoutContractsInput = {
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateWithoutContractsInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   categoryId?: string | null
@@ -1151,6 +1183,7 @@ export type ShopUncheckedCreateWithoutContractsInput = {
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutContractsInput = {
@@ -1190,6 +1223,7 @@ export type ShopUpdateWithoutContractsInput = {
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutContractsInput = {
@@ -1213,10 +1247,11 @@ export type ShopUncheckedUpdateWithoutContractsInput = {
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopCreateWithoutRentPaymentsInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1236,10 +1271,11 @@ export type ShopCreateWithoutRentPaymentsInput = {
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateWithoutRentPaymentsInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   categoryId?: string | null
@@ -1259,6 +1295,7 @@ export type ShopUncheckedCreateWithoutRentPaymentsInput = {
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutRentPaymentsInput = {
@@ -1298,6 +1335,7 @@ export type ShopUpdateWithoutRentPaymentsInput = {
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutRentPaymentsInput = {
@@ -1321,10 +1359,11 @@ export type ShopUncheckedUpdateWithoutRentPaymentsInput = {
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopCreateWithoutUtilityBillsInput = {
-  id?: string
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1344,10 +1383,11 @@ export type ShopCreateWithoutUtilityBillsInput = {
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
 }
 
 export type ShopUncheckedCreateWithoutUtilityBillsInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   categoryId?: string | null
@@ -1367,6 +1407,7 @@ export type ShopUncheckedCreateWithoutUtilityBillsInput = {
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutUtilityBillsInput = {
@@ -1406,6 +1447,7 @@ export type ShopUpdateWithoutUtilityBillsInput = {
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutUtilityBillsInput = {
@@ -1429,10 +1471,11 @@ export type ShopUncheckedUpdateWithoutUtilityBillsInput = {
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
-export type ShopCreateWithoutExitClearancesInput = {
-  id?: string
+export type ShopCreateWithoutMaintenanceInput = {
+  id: string
   shopCode: string
   shopNumber: string
   rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1452,10 +1495,11 @@ export type ShopCreateWithoutExitClearancesInput = {
   contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
+  exitClearances?: Prisma.ExitClearanceCreateNestedManyWithoutShopInput
 }
 
-export type ShopUncheckedCreateWithoutExitClearancesInput = {
-  id?: string
+export type ShopUncheckedCreateWithoutMaintenanceInput = {
+  id: string
   marketId: string
   floorId: string
   categoryId?: string | null
@@ -1475,6 +1519,119 @@ export type ShopUncheckedCreateWithoutExitClearancesInput = {
   contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
   utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
+  exitClearances?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutShopInput
+}
+
+export type ShopCreateOrConnectWithoutMaintenanceInput = {
+  where: Prisma.ShopWhereUniqueInput
+  create: Prisma.XOR<Prisma.ShopCreateWithoutMaintenanceInput, Prisma.ShopUncheckedCreateWithoutMaintenanceInput>
+}
+
+export type ShopUpsertWithoutMaintenanceInput = {
+  update: Prisma.XOR<Prisma.ShopUpdateWithoutMaintenanceInput, Prisma.ShopUncheckedUpdateWithoutMaintenanceInput>
+  create: Prisma.XOR<Prisma.ShopCreateWithoutMaintenanceInput, Prisma.ShopUncheckedCreateWithoutMaintenanceInput>
+  where?: Prisma.ShopWhereInput
+}
+
+export type ShopUpdateToOneWithWhereWithoutMaintenanceInput = {
+  where?: Prisma.ShopWhereInput
+  data: Prisma.XOR<Prisma.ShopUpdateWithoutMaintenanceInput, Prisma.ShopUncheckedUpdateWithoutMaintenanceInput>
+}
+
+export type ShopUpdateWithoutMaintenanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  market?: Prisma.MarketUpdateOneRequiredWithoutShopsNestedInput
+  floor?: Prisma.FloorUpdateOneRequiredWithoutShopsNestedInput
+  category?: Prisma.ShopCategoryUpdateOneWithoutShopsNestedInput
+  contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
+  utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
+  exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+}
+
+export type ShopUncheckedUpdateWithoutMaintenanceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  floorId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shopCode?: Prisma.StringFieldUpdateOperationsInput | string
+  shopNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  rentAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  electricityMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  waterMeterNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumShopStatusFieldUpdateOperationsInput | $Enums.ShopStatus
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
+  utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
+  exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+}
+
+export type ShopCreateWithoutExitClearancesInput = {
+  id: string
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  electricityMeterNumber?: string | null
+  waterMeterNumber?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  market: Prisma.MarketCreateNestedOneWithoutShopsInput
+  floor: Prisma.FloorCreateNestedOneWithoutShopsInput
+  category?: Prisma.ShopCategoryCreateNestedOneWithoutShopsInput
+  contracts?: Prisma.ContractCreateNestedManyWithoutShopInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutShopInput
+  utilityBills?: Prisma.UtilityBillCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestCreateNestedManyWithoutShopInput
+}
+
+export type ShopUncheckedCreateWithoutExitClearancesInput = {
+  id: string
+  marketId: string
+  floorId: string
+  categoryId?: string | null
+  shopCode: string
+  shopNumber: string
+  rentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  areaInSquareMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  electricityMeterNumber?: string | null
+  waterMeterNumber?: string | null
+  status?: $Enums.ShopStatus
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  contracts?: Prisma.ContractUncheckedCreateNestedManyWithoutShopInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutShopInput
+  utilityBills?: Prisma.UtilityBillUncheckedCreateNestedManyWithoutShopInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutShopInput
 }
 
 export type ShopCreateOrConnectWithoutExitClearancesInput = {
@@ -1514,6 +1671,7 @@ export type ShopUpdateWithoutExitClearancesInput = {
   contracts?: Prisma.ContractUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutExitClearancesInput = {
@@ -1537,10 +1695,11 @@ export type ShopUncheckedUpdateWithoutExitClearancesInput = {
   contracts?: Prisma.ContractUncheckedUpdateManyWithoutShopNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopCreateManyMarketInput = {
-  id?: string
+  id: string
   floorId: string
   categoryId?: string | null
   shopCode: string
@@ -1579,6 +1738,7 @@ export type ShopUpdateWithoutMarketInput = {
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutMarketInput = {
@@ -1602,6 +1762,7 @@ export type ShopUncheckedUpdateWithoutMarketInput = {
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateManyWithoutMarketInput = {
@@ -1624,7 +1785,7 @@ export type ShopUncheckedUpdateManyWithoutMarketInput = {
 }
 
 export type ShopCreateManyFloorInput = {
-  id?: string
+  id: string
   marketId: string
   categoryId?: string | null
   shopCode: string
@@ -1663,6 +1824,7 @@ export type ShopUpdateWithoutFloorInput = {
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutFloorInput = {
@@ -1686,6 +1848,7 @@ export type ShopUncheckedUpdateWithoutFloorInput = {
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateManyWithoutFloorInput = {
@@ -1708,7 +1871,7 @@ export type ShopUncheckedUpdateManyWithoutFloorInput = {
 }
 
 export type ShopCreateManyCategoryInput = {
-  id?: string
+  id: string
   marketId: string
   floorId: string
   shopCode: string
@@ -1747,6 +1910,7 @@ export type ShopUpdateWithoutCategoryInput = {
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateWithoutCategoryInput = {
@@ -1770,6 +1934,7 @@ export type ShopUncheckedUpdateWithoutCategoryInput = {
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutShopNestedInput
   utilityBills?: Prisma.UtilityBillUncheckedUpdateManyWithoutShopNestedInput
   exitClearances?: Prisma.ExitClearanceUncheckedUpdateManyWithoutShopNestedInput
+  maintenance?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutShopNestedInput
 }
 
 export type ShopUncheckedUpdateManyWithoutCategoryInput = {
@@ -1801,6 +1966,7 @@ export type ShopCountOutputType = {
   rentPayments: number
   utilityBills: number
   exitClearances: number
+  maintenance: number
 }
 
 export type ShopCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1808,6 +1974,7 @@ export type ShopCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   rentPayments?: boolean | ShopCountOutputTypeCountRentPaymentsArgs
   utilityBills?: boolean | ShopCountOutputTypeCountUtilityBillsArgs
   exitClearances?: boolean | ShopCountOutputTypeCountExitClearancesArgs
+  maintenance?: boolean | ShopCountOutputTypeCountMaintenanceArgs
 }
 
 /**
@@ -1848,6 +2015,13 @@ export type ShopCountOutputTypeCountExitClearancesArgs<ExtArgs extends runtime.T
   where?: Prisma.ExitClearanceWhereInput
 }
 
+/**
+ * ShopCountOutputType without action
+ */
+export type ShopCountOutputTypeCountMaintenanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MaintenanceRequestWhereInput
+}
+
 
 export type ShopSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1874,6 +2048,7 @@ export type ShopSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   rentPayments?: boolean | Prisma.Shop$rentPaymentsArgs<ExtArgs>
   utilityBills?: boolean | Prisma.Shop$utilityBillsArgs<ExtArgs>
   exitClearances?: boolean | Prisma.Shop$exitClearancesArgs<ExtArgs>
+  maintenance?: boolean | Prisma.Shop$maintenanceArgs<ExtArgs>
   _count?: boolean | Prisma.ShopCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shop"]>
 
@@ -1952,6 +2127,7 @@ export type ShopInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   rentPayments?: boolean | Prisma.Shop$rentPaymentsArgs<ExtArgs>
   utilityBills?: boolean | Prisma.Shop$utilityBillsArgs<ExtArgs>
   exitClearances?: boolean | Prisma.Shop$exitClearancesArgs<ExtArgs>
+  maintenance?: boolean | Prisma.Shop$maintenanceArgs<ExtArgs>
   _count?: boolean | Prisma.ShopCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ShopIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1975,6 +2151,7 @@ export type $ShopPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
     utilityBills: Prisma.$UtilityBillPayload<ExtArgs>[]
     exitClearances: Prisma.$ExitClearancePayload<ExtArgs>[]
+    maintenance: Prisma.$MaintenanceRequestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1988,9 +2165,6 @@ export type $ShopPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     electricityMeterNumber: string | null
     waterMeterNumber: string | null
     status: $Enums.ShopStatus
-    /**
-     * Optimistic-locking token.
-     */
     version: number
     createdById: string | null
     updatedById: string | null
@@ -2398,6 +2572,7 @@ export interface Prisma__ShopClient<T, Null = never, ExtArgs extends runtime.Typ
   rentPayments<T extends Prisma.Shop$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   utilityBills<T extends Prisma.Shop$utilityBillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$utilityBillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UtilityBillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   exitClearances<T extends Prisma.Shop$exitClearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$exitClearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  maintenance<T extends Prisma.Shop$maintenanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shop$maintenanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenanceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2957,6 +3132,30 @@ export type Shop$exitClearancesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
+}
+
+/**
+ * Shop.maintenance
+ */
+export type Shop$maintenanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MaintenanceRequest
+   */
+  select?: Prisma.MaintenanceRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MaintenanceRequest
+   */
+  omit?: Prisma.MaintenanceRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MaintenanceRequestInclude<ExtArgs> | null
+  where?: Prisma.MaintenanceRequestWhereInput
+  orderBy?: Prisma.MaintenanceRequestOrderByWithRelationInput | Prisma.MaintenanceRequestOrderByWithRelationInput[]
+  cursor?: Prisma.MaintenanceRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MaintenanceRequestScalarFieldEnum | Prisma.MaintenanceRequestScalarFieldEnum[]
 }
 
 /**

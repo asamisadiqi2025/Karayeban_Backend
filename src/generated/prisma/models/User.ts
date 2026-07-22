@@ -14,14 +14,28 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model User
- * A system user. Market membership is only via UserMarket.
+ * 
  */
 export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayload>
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  failedLoginAttempts: number | null
+  passwordVersion: number | null
+  version: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  failedLoginAttempts: number | null
+  passwordVersion: number | null
+  version: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -31,10 +45,22 @@ export type UserMinAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   marketId: string | null
+  lastLoginAt: Date | null
+  isSuperAdmin: boolean | null
+  superAdminLevel: $Enums.SuperAdminLevel | null
   status: $Enums.UserStatus | null
+  failedLoginAttempts: number | null
+  lockedUntil: Date | null
+  passwordVersion: number | null
+  gdprConsent: boolean | null
+  gdprConsentDate: Date | null
+  dataAnonymizedAt: Date | null
+  dataDeletionRequestedAt: Date | null
+  dataDeletionApprovedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
+  version: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -44,10 +70,22 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   passwordHash: string | null
   marketId: string | null
+  lastLoginAt: Date | null
+  isSuperAdmin: boolean | null
+  superAdminLevel: $Enums.SuperAdminLevel | null
   status: $Enums.UserStatus | null
+  failedLoginAttempts: number | null
+  lockedUntil: Date | null
+  passwordVersion: number | null
+  gdprConsent: boolean | null
+  gdprConsentDate: Date | null
+  dataAnonymizedAt: Date | null
+  dataDeletionRequestedAt: Date | null
+  dataDeletionApprovedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
+  version: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -57,13 +95,37 @@ export type UserCountAggregateOutputType = {
   email: number
   passwordHash: number
   marketId: number
+  lastLoginAt: number
+  isSuperAdmin: number
+  superAdminLevel: number
   status: number
+  failedLoginAttempts: number
+  lockedUntil: number
+  passwordVersion: number
+  gdprConsent: number
+  gdprConsentDate: number
+  dataAnonymizedAt: number
+  dataDeletionRequestedAt: number
+  dataDeletionApprovedAt: number
   createdAt: number
   updatedAt: number
   deletedAt: number
+  version: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  failedLoginAttempts?: true
+  passwordVersion?: true
+  version?: true
+}
+
+export type UserSumAggregateInputType = {
+  failedLoginAttempts?: true
+  passwordVersion?: true
+  version?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -72,10 +134,22 @@ export type UserMinAggregateInputType = {
   email?: true
   passwordHash?: true
   marketId?: true
+  lastLoginAt?: true
+  isSuperAdmin?: true
+  superAdminLevel?: true
   status?: true
+  failedLoginAttempts?: true
+  lockedUntil?: true
+  passwordVersion?: true
+  gdprConsent?: true
+  gdprConsentDate?: true
+  dataAnonymizedAt?: true
+  dataDeletionRequestedAt?: true
+  dataDeletionApprovedAt?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
+  version?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -85,10 +159,22 @@ export type UserMaxAggregateInputType = {
   email?: true
   passwordHash?: true
   marketId?: true
+  lastLoginAt?: true
+  isSuperAdmin?: true
+  superAdminLevel?: true
   status?: true
+  failedLoginAttempts?: true
+  lockedUntil?: true
+  passwordVersion?: true
+  gdprConsent?: true
+  gdprConsentDate?: true
+  dataAnonymizedAt?: true
+  dataDeletionRequestedAt?: true
+  dataDeletionApprovedAt?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
+  version?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -98,10 +184,22 @@ export type UserCountAggregateInputType = {
   email?: true
   passwordHash?: true
   marketId?: true
+  lastLoginAt?: true
+  isSuperAdmin?: true
+  superAdminLevel?: true
   status?: true
+  failedLoginAttempts?: true
+  lockedUntil?: true
+  passwordVersion?: true
+  gdprConsent?: true
+  gdprConsentDate?: true
+  dataAnonymizedAt?: true
+  dataDeletionRequestedAt?: true
+  dataDeletionApprovedAt?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -143,6 +241,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -173,6 +283,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -184,11 +296,25 @@ export type UserGroupByOutputType = {
   email: string | null
   passwordHash: string
   marketId: string | null
+  lastLoginAt: Date | null
+  isSuperAdmin: boolean
+  superAdminLevel: $Enums.SuperAdminLevel | null
   status: $Enums.UserStatus
+  failedLoginAttempts: number
+  lockedUntil: Date | null
+  passwordVersion: number
+  gdprConsent: boolean
+  gdprConsentDate: Date | null
+  dataAnonymizedAt: Date | null
+  dataDeletionRequestedAt: Date | null
+  dataDeletionApprovedAt: Date | null
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
+  version: number
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -218,17 +344,35 @@ export type UserWhereInput = {
   email?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   marketId?: Prisma.UuidNullableFilter<"User"> | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
+  superAdminLevel?: Prisma.EnumSuperAdminLevelNullableFilter<"User"> | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  passwordVersion?: Prisma.IntFilter<"User"> | number
+  gdprConsent?: Prisma.BoolFilter<"User"> | boolean
+  gdprConsentDate?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataAnonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataDeletionRequestedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataDeletionApprovedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  version?: Prisma.IntFilter<"User"> | number
   market?: Prisma.XOR<Prisma.MarketNullableScalarRelationFilter, Prisma.MarketWhereInput> | null
+  approvalRequestsRequested?: Prisma.ApprovalRequestListRelationFilter
+  approvalRequestsApproved?: Prisma.ApprovalRequestListRelationFilter
   markets?: Prisma.UserMarketListRelationFilter
   roles?: Prisma.UserRoleListRelationFilter
+  employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  activities?: Prisma.ActivityLogListRelationFilter
+  loginAttempts?: Prisma.UserLoginAttemptListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   passwordResets?: Prisma.PasswordResetListRelationFilter
+  apiKeys?: Prisma.ApiKeyListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -238,41 +382,77 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   marketId?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
+  superAdminLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  failedLoginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  gdprConsent?: Prisma.SortOrder
+  gdprConsentDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataAnonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataDeletionRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataDeletionApprovedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestOrderByRelationAggregateInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestOrderByRelationAggregateInput
   markets?: Prisma.UserMarketOrderByRelationAggregateInput
   roles?: Prisma.UserRoleOrderByRelationAggregateInput
+  employee?: Prisma.EmployeeOrderByWithRelationInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  activities?: Prisma.ActivityLogOrderByRelationAggregateInput
+  loginAttempts?: Prisma.UserLoginAttemptOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   passwordResets?: Prisma.PasswordResetOrderByRelationAggregateInput
+  apiKeys?: Prisma.ApiKeyOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  username?: string
-  email?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
+  username?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   marketId?: Prisma.UuidNullableFilter<"User"> | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
+  superAdminLevel?: Prisma.EnumSuperAdminLevelNullableFilter<"User"> | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  passwordVersion?: Prisma.IntFilter<"User"> | number
+  gdprConsent?: Prisma.BoolFilter<"User"> | boolean
+  gdprConsentDate?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataAnonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataDeletionRequestedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataDeletionApprovedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  version?: Prisma.IntFilter<"User"> | number
   market?: Prisma.XOR<Prisma.MarketNullableScalarRelationFilter, Prisma.MarketWhereInput> | null
+  approvalRequestsRequested?: Prisma.ApprovalRequestListRelationFilter
+  approvalRequestsApproved?: Prisma.ApprovalRequestListRelationFilter
   markets?: Prisma.UserMarketListRelationFilter
   roles?: Prisma.UserRoleListRelationFilter
+  employee?: Prisma.XOR<Prisma.EmployeeNullableScalarRelationFilter, Prisma.EmployeeWhereInput> | null
   auditLogs?: Prisma.AuditLogListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  activities?: Prisma.ActivityLogListRelationFilter
+  loginAttempts?: Prisma.UserLoginAttemptListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   passwordResets?: Prisma.PasswordResetListRelationFilter
-}, "id" | "username" | "email">
+  apiKeys?: Prisma.ApiKeyListRelationFilter
+}, "id">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -281,13 +461,27 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   marketId?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
+  superAdminLevel?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  failedLoginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  gdprConsent?: Prisma.SortOrder
+  gdprConsentDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataAnonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataDeletionRequestedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  dataDeletionApprovedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -300,10 +494,22 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
   marketId?: Prisma.UuidNullableWithAggregatesFilter<"User"> | string | null
+  lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  isSuperAdmin?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  superAdminLevel?: Prisma.EnumSuperAdminLevelNullableWithAggregatesFilter<"User"> | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  passwordVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
+  gdprConsent?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  gdprConsentDate?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  dataAnonymizedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  dataDeletionRequestedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  dataDeletionApprovedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  version?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
@@ -312,17 +518,35 @@ export type UserCreateInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -332,16 +556,34 @@ export type UserUncheckedCreateInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -350,17 +592,35 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -370,16 +630,34 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -389,10 +667,22 @@ export type UserCreateManyInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserUpdateManyMutationInput = {
@@ -401,10 +691,22 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -414,10 +716,22 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserListRelationFilter = {
@@ -430,6 +744,11 @@ export type UserOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -437,10 +756,28 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
+  superAdminLevel?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  failedLoginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  gdprConsent?: Prisma.SortOrder
+  gdprConsentDate?: Prisma.SortOrder
+  dataAnonymizedAt?: Prisma.SortOrder
+  dataDeletionRequestedAt?: Prisma.SortOrder
+  dataDeletionApprovedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  failedLoginAttempts?: Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -450,10 +787,22 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
+  superAdminLevel?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  failedLoginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  gdprConsent?: Prisma.SortOrder
+  gdprConsentDate?: Prisma.SortOrder
+  dataAnonymizedAt?: Prisma.SortOrder
+  dataDeletionRequestedAt?: Prisma.SortOrder
+  dataDeletionApprovedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -463,20 +812,33 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
+  superAdminLevel?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  failedLoginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  gdprConsent?: Prisma.SortOrder
+  gdprConsentDate?: Prisma.SortOrder
+  dataAnonymizedAt?: Prisma.SortOrder
+  dataDeletionRequestedAt?: Prisma.SortOrder
+  dataDeletionApprovedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  failedLoginAttempts?: Prisma.SortOrder
+  passwordVersion?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
-}
-
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserCreateNestedManyWithoutMarketInput = {
@@ -519,6 +881,58 @@ export type UserUncheckedUpdateManyWithoutMarketNestedInput = {
   update?: Prisma.UserUpdateWithWhereUniqueWithoutMarketInput | Prisma.UserUpdateWithWhereUniqueWithoutMarketInput[]
   updateMany?: Prisma.UserUpdateManyWithWhereWithoutMarketInput | Prisma.UserUpdateManyWithWhereWithoutMarketInput[]
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedOneWithoutEmployeeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeeInput, Prisma.UserUncheckedCreateWithoutEmployeeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeeInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutEmployeeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeeInput, Prisma.UserUncheckedCreateWithoutEmployeeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeeInput
+  upsert?: Prisma.UserUpsertWithoutEmployeeInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployeeInput, Prisma.UserUpdateWithoutEmployeeInput>, Prisma.UserUncheckedUpdateWithoutEmployeeInput>
+}
+
+export type UserCreateNestedOneWithoutApprovalRequestsRequestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsRequestedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsRequestedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutApprovalRequestsApprovedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsApprovedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsApprovedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutApprovalRequestsRequestedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsRequestedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsRequestedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsRequestedInput
+  upsert?: Prisma.UserUpsertWithoutApprovalRequestsRequestedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovalRequestsRequestedInput, Prisma.UserUpdateWithoutApprovalRequestsRequestedInput>, Prisma.UserUncheckedUpdateWithoutApprovalRequestsRequestedInput>
+}
+
+export type UserUpdateOneWithoutApprovalRequestsApprovedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsApprovedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovalRequestsApprovedInput
+  upsert?: Prisma.UserUpsertWithoutApprovalRequestsApprovedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovalRequestsApprovedInput, Prisma.UserUpdateWithoutApprovalRequestsApprovedInput>, Prisma.UserUncheckedUpdateWithoutApprovalRequestsApprovedInput>
+}
+
+export type NullableEnumSuperAdminLevelFieldUpdateOperationsInput = {
+  set?: $Enums.SuperAdminLevel | null
 }
 
 export type EnumUserStatusFieldUpdateOperationsInput = {
@@ -581,6 +995,36 @@ export type UserUpdateOneRequiredWithoutPasswordResetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetsInput, Prisma.UserUpdateWithoutPasswordResetsInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetsInput>
 }
 
+export type UserCreateNestedOneWithoutApiKeysInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApiKeysInput, Prisma.UserUncheckedCreateWithoutApiKeysInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApiKeysInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutApiKeysNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApiKeysInput, Prisma.UserUncheckedCreateWithoutApiKeysInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApiKeysInput
+  upsert?: Prisma.UserUpsertWithoutApiKeysInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApiKeysInput, Prisma.UserUpdateWithoutApiKeysInput>, Prisma.UserUncheckedUpdateWithoutApiKeysInput>
+}
+
+export type UserCreateNestedOneWithoutLoginAttemptsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginAttemptsInput, Prisma.UserUncheckedCreateWithoutLoginAttemptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginAttemptsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutLoginAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginAttemptsInput, Prisma.UserUncheckedCreateWithoutLoginAttemptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginAttemptsInput
+  upsert?: Prisma.UserUpsertWithoutLoginAttemptsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLoginAttemptsInput, Prisma.UserUpdateWithoutLoginAttemptsInput>, Prisma.UserUncheckedUpdateWithoutLoginAttemptsInput>
+}
+
 export type UserCreateNestedOneWithoutAuditLogsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
@@ -595,6 +1039,20 @@ export type UserUpdateOneWithoutAuditLogsNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+}
+
+export type UserCreateNestedOneWithoutActivitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActivitiesInput
+  upsert?: Prisma.UserUpsertWithoutActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActivitiesInput, Prisma.UserUpdateWithoutActivitiesInput>, Prisma.UserUncheckedUpdateWithoutActivitiesInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -619,16 +1077,34 @@ export type UserCreateWithoutMarketInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMarketInput = {
@@ -637,16 +1113,34 @@ export type UserUncheckedCreateWithoutMarketInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMarketInput = {
@@ -685,10 +1179,502 @@ export type UserScalarWhereInput = {
   email?: Prisma.StringNullableFilter<"User"> | string | null
   passwordHash?: Prisma.StringFilter<"User"> | string
   marketId?: Prisma.UuidNullableFilter<"User"> | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
+  superAdminLevel?: Prisma.EnumSuperAdminLevelNullableFilter<"User"> | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  passwordVersion?: Prisma.IntFilter<"User"> | number
+  gdprConsent?: Prisma.BoolFilter<"User"> | boolean
+  gdprConsentDate?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataAnonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataDeletionRequestedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  dataDeletionApprovedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  version?: Prisma.IntFilter<"User"> | number
+}
+
+export type UserCreateWithoutEmployeeInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEmployeeInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEmployeeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmployeeInput, Prisma.UserUncheckedCreateWithoutEmployeeInput>
+}
+
+export type UserUpsertWithoutEmployeeInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmployeeInput, Prisma.UserUncheckedUpdateWithoutEmployeeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmployeeInput, Prisma.UserUncheckedCreateWithoutEmployeeInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmployeeInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmployeeInput, Prisma.UserUncheckedUpdateWithoutEmployeeInput>
+}
+
+export type UserUpdateWithoutEmployeeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmployeeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutApprovalRequestsRequestedInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovalRequestsRequestedInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovalRequestsRequestedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsRequestedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsRequestedInput>
+}
+
+export type UserCreateWithoutApprovalRequestsApprovedInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovalRequestsApprovedInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovalRequestsApprovedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsApprovedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsApprovedInput>
+}
+
+export type UserUpsertWithoutApprovalRequestsRequestedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsRequestedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsRequestedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsRequestedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsRequestedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovalRequestsRequestedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsRequestedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsRequestedInput>
+}
+
+export type UserUpdateWithoutApprovalRequestsRequestedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovalRequestsRequestedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutApprovalRequestsApprovedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsApprovedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsApprovedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovalRequestsApprovedInput, Prisma.UserUncheckedCreateWithoutApprovalRequestsApprovedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovalRequestsApprovedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovalRequestsApprovedInput, Prisma.UserUncheckedUpdateWithoutApprovalRequestsApprovedInput>
+}
+
+export type UserUpdateWithoutApprovalRequestsApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovalRequestsApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMarketsInput = {
@@ -697,16 +1683,34 @@ export type UserCreateWithoutMarketsInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMarketsInput = {
@@ -716,15 +1720,33 @@ export type UserUncheckedCreateWithoutMarketsInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMarketsInput = {
@@ -749,16 +1771,34 @@ export type UserUpdateWithoutMarketsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMarketsInput = {
@@ -768,15 +1808,33 @@ export type UserUncheckedUpdateWithoutMarketsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRolesInput = {
@@ -785,16 +1843,34 @@ export type UserCreateWithoutRolesInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -804,15 +1880,33 @@ export type UserUncheckedCreateWithoutRolesInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -837,16 +1931,34 @@ export type UserUpdateWithoutRolesInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -856,15 +1968,33 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -873,16 +2003,34 @@ export type UserCreateWithoutSessionsInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -892,15 +2040,33 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -925,16 +2091,34 @@ export type UserUpdateWithoutSessionsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -944,15 +2128,33 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPasswordResetsInput = {
@@ -961,16 +2163,34 @@ export type UserCreateWithoutPasswordResetsInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetsInput = {
@@ -980,15 +2200,33 @@ export type UserUncheckedCreateWithoutPasswordResetsInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetsInput = {
@@ -1013,16 +2251,34 @@ export type UserUpdateWithoutPasswordResetsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetsInput = {
@@ -1032,15 +2288,353 @@ export type UserUncheckedUpdateWithoutPasswordResetsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutApiKeysInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApiKeysInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApiKeysInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApiKeysInput, Prisma.UserUncheckedCreateWithoutApiKeysInput>
+}
+
+export type UserUpsertWithoutApiKeysInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApiKeysInput, Prisma.UserUncheckedUpdateWithoutApiKeysInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApiKeysInput, Prisma.UserUncheckedCreateWithoutApiKeysInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApiKeysInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApiKeysInput, Prisma.UserUncheckedUpdateWithoutApiKeysInput>
+}
+
+export type UserUpdateWithoutApiKeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApiKeysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutLoginAttemptsInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutLoginAttemptsInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutLoginAttemptsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoginAttemptsInput, Prisma.UserUncheckedCreateWithoutLoginAttemptsInput>
+}
+
+export type UserUpsertWithoutLoginAttemptsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLoginAttemptsInput, Prisma.UserUncheckedUpdateWithoutLoginAttemptsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoginAttemptsInput, Prisma.UserUncheckedCreateWithoutLoginAttemptsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLoginAttemptsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLoginAttemptsInput, Prisma.UserUncheckedUpdateWithoutLoginAttemptsInput>
+}
+
+export type UserUpdateWithoutLoginAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLoginAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1049,16 +2643,34 @@ export type UserCreateWithoutAuditLogsInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1068,15 +2680,33 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1101,16 +2731,34 @@ export type UserUpdateWithoutAuditLogsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1120,15 +2768,193 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutActivitiesInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutActivitiesInput = {
+  id?: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutActivitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
+}
+
+export type UserUpsertWithoutActivitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutActivitiesInput, Prisma.UserUncheckedUpdateWithoutActivitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutActivitiesInput, Prisma.UserUncheckedCreateWithoutActivitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutActivitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutActivitiesInput, Prisma.UserUncheckedUpdateWithoutActivitiesInput>
+}
+
+export type UserUpdateWithoutActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1137,16 +2963,34 @@ export type UserCreateWithoutNotificationsInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
   market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1156,15 +3000,33 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   email?: string | null
   passwordHash: string
   marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
   markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
   roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1189,16 +3051,34 @@ export type UserUpdateWithoutNotificationsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1208,15 +3088,33 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyMarketInput = {
@@ -1225,10 +3123,22 @@ export type UserCreateManyMarketInput = {
   username: string
   email?: string | null
   passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
   status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  version?: number
 }
 
 export type UserUpdateWithoutMarketInput = {
@@ -1237,16 +3147,34 @@ export type UserUpdateWithoutMarketInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMarketInput = {
@@ -1255,16 +3183,34 @@ export type UserUncheckedUpdateWithoutMarketInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
   roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutMarketInput = {
@@ -1273,10 +3219,22 @@ export type UserUncheckedUpdateManyWithoutMarketInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -1285,21 +3243,31 @@ export type UserUncheckedUpdateManyWithoutMarketInput = {
  */
 
 export type UserCountOutputType = {
+  approvalRequestsRequested: number
+  approvalRequestsApproved: number
   markets: number
   roles: number
   auditLogs: number
   notifications: number
+  activities: number
+  loginAttempts: number
   sessions: number
   passwordResets: number
+  apiKeys: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  approvalRequestsRequested?: boolean | UserCountOutputTypeCountApprovalRequestsRequestedArgs
+  approvalRequestsApproved?: boolean | UserCountOutputTypeCountApprovalRequestsApprovedArgs
   markets?: boolean | UserCountOutputTypeCountMarketsArgs
   roles?: boolean | UserCountOutputTypeCountRolesArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  activities?: boolean | UserCountOutputTypeCountActivitiesArgs
+  loginAttempts?: boolean | UserCountOutputTypeCountLoginAttemptsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   passwordResets?: boolean | UserCountOutputTypeCountPasswordResetsArgs
+  apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
 }
 
 /**
@@ -1310,6 +3278,20 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovalRequestsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApprovalRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovalRequestsApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApprovalRequestWhereInput
 }
 
 /**
@@ -1343,6 +3325,20 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActivityLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLoginAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserLoginAttemptWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SessionWhereInput
 }
@@ -1354,6 +3350,13 @@ export type UserCountOutputTypeCountPasswordResetsArgs<ExtArgs extends runtime.T
   where?: Prisma.PasswordResetWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApiKeyWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1362,17 +3365,35 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   passwordHash?: boolean
   marketId?: boolean
+  lastLoginAt?: boolean
+  isSuperAdmin?: boolean
+  superAdminLevel?: boolean
   status?: boolean
+  failedLoginAttempts?: boolean
+  lockedUntil?: boolean
+  passwordVersion?: boolean
+  gdprConsent?: boolean
+  gdprConsentDate?: boolean
+  dataAnonymizedAt?: boolean
+  dataDeletionRequestedAt?: boolean
+  dataDeletionApprovedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.User$marketArgs<ExtArgs>
+  approvalRequestsRequested?: boolean | Prisma.User$approvalRequestsRequestedArgs<ExtArgs>
+  approvalRequestsApproved?: boolean | Prisma.User$approvalRequestsApprovedArgs<ExtArgs>
   markets?: boolean | Prisma.User$marketsArgs<ExtArgs>
   roles?: boolean | Prisma.User$rolesArgs<ExtArgs>
+  employee?: boolean | Prisma.User$employeeArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
+  loginAttempts?: boolean | Prisma.User$loginAttemptsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   passwordResets?: boolean | Prisma.User$passwordResetsArgs<ExtArgs>
+  apiKeys?: boolean | Prisma.User$apiKeysArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1383,10 +3404,22 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   marketId?: boolean
+  lastLoginAt?: boolean
+  isSuperAdmin?: boolean
+  superAdminLevel?: boolean
   status?: boolean
+  failedLoginAttempts?: boolean
+  lockedUntil?: boolean
+  passwordVersion?: boolean
+  gdprConsent?: boolean
+  gdprConsentDate?: boolean
+  dataAnonymizedAt?: boolean
+  dataDeletionRequestedAt?: boolean
+  dataDeletionApprovedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.User$marketArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1397,10 +3430,22 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   passwordHash?: boolean
   marketId?: boolean
+  lastLoginAt?: boolean
+  isSuperAdmin?: boolean
+  superAdminLevel?: boolean
   status?: boolean
+  failedLoginAttempts?: boolean
+  lockedUntil?: boolean
+  passwordVersion?: boolean
+  gdprConsent?: boolean
+  gdprConsentDate?: boolean
+  dataAnonymizedAt?: boolean
+  dataDeletionRequestedAt?: boolean
+  dataDeletionApprovedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.User$marketArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1411,21 +3456,39 @@ export type UserSelectScalar = {
   email?: boolean
   passwordHash?: boolean
   marketId?: boolean
+  lastLoginAt?: boolean
+  isSuperAdmin?: boolean
+  superAdminLevel?: boolean
   status?: boolean
+  failedLoginAttempts?: boolean
+  lockedUntil?: boolean
+  passwordVersion?: boolean
+  gdprConsent?: boolean
+  gdprConsentDate?: boolean
+  dataAnonymizedAt?: boolean
+  dataDeletionRequestedAt?: boolean
+  dataDeletionApprovedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
+  version?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "passwordHash" | "marketId" | "status" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "passwordHash" | "marketId" | "lastLoginAt" | "isSuperAdmin" | "superAdminLevel" | "status" | "failedLoginAttempts" | "lockedUntil" | "passwordVersion" | "gdprConsent" | "gdprConsentDate" | "dataAnonymizedAt" | "dataDeletionRequestedAt" | "dataDeletionApprovedAt" | "createdAt" | "updatedAt" | "deletedAt" | "version", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.User$marketArgs<ExtArgs>
+  approvalRequestsRequested?: boolean | Prisma.User$approvalRequestsRequestedArgs<ExtArgs>
+  approvalRequestsApproved?: boolean | Prisma.User$approvalRequestsApprovedArgs<ExtArgs>
   markets?: boolean | Prisma.User$marketsArgs<ExtArgs>
   roles?: boolean | Prisma.User$rolesArgs<ExtArgs>
+  employee?: boolean | Prisma.User$employeeArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
+  loginAttempts?: boolean | Prisma.User$loginAttemptsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   passwordResets?: boolean | Prisma.User$passwordResetsArgs<ExtArgs>
+  apiKeys?: boolean | Prisma.User$apiKeysArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1439,15 +3502,18 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs> | null
-    /**
-     * Additional market memberships (multi-tenant future use).
-     */
+    approvalRequestsRequested: Prisma.$ApprovalRequestPayload<ExtArgs>[]
+    approvalRequestsApproved: Prisma.$ApprovalRequestPayload<ExtArgs>[]
     markets: Prisma.$UserMarketPayload<ExtArgs>[]
     roles: Prisma.$UserRolePayload<ExtArgs>[]
+    employee: Prisma.$EmployeePayload<ExtArgs> | null
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    activities: Prisma.$ActivityLogPayload<ExtArgs>[]
+    loginAttempts: Prisma.$UserLoginAttemptPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     passwordResets: Prisma.$PasswordResetPayload<ExtArgs>[]
+    apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1455,15 +3521,23 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     username: string
     email: string | null
     passwordHash: string
-    /**
-     * The user's primary market (NULL until they create or join one).
-     * This is the main tenant boundary for single-market users.
-     */
     marketId: string | null
+    lastLoginAt: Date | null
+    isSuperAdmin: boolean
+    superAdminLevel: $Enums.SuperAdminLevel | null
     status: $Enums.UserStatus
+    failedLoginAttempts: number
+    lockedUntil: Date | null
+    passwordVersion: number
+    gdprConsent: boolean
+    gdprConsentDate: Date | null
+    dataAnonymizedAt: Date | null
+    dataDeletionRequestedAt: Date | null
+    dataDeletionApprovedAt: Date | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
+    version: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1859,12 +3933,18 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.User$marketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$marketArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  approvalRequestsRequested<T extends Prisma.User$approvalRequestsRequestedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvalRequestsRequestedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApprovalRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvalRequestsApproved<T extends Prisma.User$approvalRequestsApprovedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvalRequestsApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApprovalRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   markets<T extends Prisma.User$marketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$marketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserMarketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roles<T extends Prisma.User$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  employee<T extends Prisma.User$employeeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employeeArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  activities<T extends Prisma.User$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  loginAttempts<T extends Prisma.User$loginAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loginAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserLoginAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResets<T extends Prisma.User$passwordResetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  apiKeys<T extends Prisma.User$apiKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1900,10 +3980,22 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly marketId: Prisma.FieldRef<"User", 'String'>
+  readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly isSuperAdmin: Prisma.FieldRef<"User", 'Boolean'>
+  readonly superAdminLevel: Prisma.FieldRef<"User", 'SuperAdminLevel'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
+  readonly failedLoginAttempts: Prisma.FieldRef<"User", 'Int'>
+  readonly lockedUntil: Prisma.FieldRef<"User", 'DateTime'>
+  readonly passwordVersion: Prisma.FieldRef<"User", 'Int'>
+  readonly gdprConsent: Prisma.FieldRef<"User", 'Boolean'>
+  readonly gdprConsentDate: Prisma.FieldRef<"User", 'DateTime'>
+  readonly dataAnonymizedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly dataDeletionRequestedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly dataDeletionApprovedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly version: Prisma.FieldRef<"User", 'Int'>
 }
     
 
@@ -2324,6 +4416,54 @@ export type User$marketArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 /**
+ * User.approvalRequestsRequested
+ */
+export type User$approvalRequestsRequestedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApprovalRequest
+   */
+  select?: Prisma.ApprovalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApprovalRequest
+   */
+  omit?: Prisma.ApprovalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApprovalRequestInclude<ExtArgs> | null
+  where?: Prisma.ApprovalRequestWhereInput
+  orderBy?: Prisma.ApprovalRequestOrderByWithRelationInput | Prisma.ApprovalRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ApprovalRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApprovalRequestScalarFieldEnum | Prisma.ApprovalRequestScalarFieldEnum[]
+}
+
+/**
+ * User.approvalRequestsApproved
+ */
+export type User$approvalRequestsApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApprovalRequest
+   */
+  select?: Prisma.ApprovalRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApprovalRequest
+   */
+  omit?: Prisma.ApprovalRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApprovalRequestInclude<ExtArgs> | null
+  where?: Prisma.ApprovalRequestWhereInput
+  orderBy?: Prisma.ApprovalRequestOrderByWithRelationInput | Prisma.ApprovalRequestOrderByWithRelationInput[]
+  cursor?: Prisma.ApprovalRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApprovalRequestScalarFieldEnum | Prisma.ApprovalRequestScalarFieldEnum[]
+}
+
+/**
  * User.markets
  */
 export type User$marketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2369,6 +4509,25 @@ export type User$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.UserRoleScalarFieldEnum | Prisma.UserRoleScalarFieldEnum[]
+}
+
+/**
+ * User.employee
+ */
+export type User$employeeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Employee
+   */
+  select?: Prisma.EmployeeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Employee
+   */
+  omit?: Prisma.EmployeeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmployeeInclude<ExtArgs> | null
+  where?: Prisma.EmployeeWhereInput
 }
 
 /**
@@ -2420,6 +4579,54 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * User.activities
+ */
+export type User$activitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActivityLog
+   */
+  select?: Prisma.ActivityLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ActivityLog
+   */
+  omit?: Prisma.ActivityLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityLogInclude<ExtArgs> | null
+  where?: Prisma.ActivityLogWhereInput
+  orderBy?: Prisma.ActivityLogOrderByWithRelationInput | Prisma.ActivityLogOrderByWithRelationInput[]
+  cursor?: Prisma.ActivityLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActivityLogScalarFieldEnum | Prisma.ActivityLogScalarFieldEnum[]
+}
+
+/**
+ * User.loginAttempts
+ */
+export type User$loginAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserLoginAttempt
+   */
+  select?: Prisma.UserLoginAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserLoginAttempt
+   */
+  omit?: Prisma.UserLoginAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserLoginAttemptInclude<ExtArgs> | null
+  where?: Prisma.UserLoginAttemptWhereInput
+  orderBy?: Prisma.UserLoginAttemptOrderByWithRelationInput | Prisma.UserLoginAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.UserLoginAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserLoginAttemptScalarFieldEnum | Prisma.UserLoginAttemptScalarFieldEnum[]
+}
+
+/**
  * User.sessions
  */
 export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2465,6 +4672,30 @@ export type User$passwordResetsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetScalarFieldEnum | Prisma.PasswordResetScalarFieldEnum[]
+}
+
+/**
+ * User.apiKeys
+ */
+export type User$apiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ApiKey
+   */
+  select?: Prisma.ApiKeySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ApiKey
+   */
+  omit?: Prisma.ApiKeyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApiKeyInclude<ExtArgs> | null
+  where?: Prisma.ApiKeyWhereInput
+  orderBy?: Prisma.ApiKeyOrderByWithRelationInput | Prisma.ApiKeyOrderByWithRelationInput[]
+  cursor?: Prisma.ApiKeyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApiKeyScalarFieldEnum | Prisma.ApiKeyScalarFieldEnum[]
 }
 
 /**

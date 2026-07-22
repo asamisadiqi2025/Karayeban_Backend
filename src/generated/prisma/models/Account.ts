@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Account
- * A financial account (cash box, bank account, wallet).
+ * 
  */
 export type AccountModel = runtime.Types.Result.DefaultSelection<Prisma.$AccountPayload>
 
@@ -44,6 +44,8 @@ export type AccountMinAggregateOutputType = {
   currency: $Enums.Currency | null
   description: string | null
   currentBalance: runtime.Decimal | null
+  balanceUpdatedAt: Date | null
+  lastReconciledAt: Date | null
   version: number | null
   createdById: string | null
   updatedById: string | null
@@ -60,6 +62,8 @@ export type AccountMaxAggregateOutputType = {
   currency: $Enums.Currency | null
   description: string | null
   currentBalance: runtime.Decimal | null
+  balanceUpdatedAt: Date | null
+  lastReconciledAt: Date | null
   version: number | null
   createdById: string | null
   updatedById: string | null
@@ -76,6 +80,8 @@ export type AccountCountAggregateOutputType = {
   currency: number
   description: number
   currentBalance: number
+  balanceUpdatedAt: number
+  lastReconciledAt: number
   version: number
   createdById: number
   updatedById: number
@@ -104,6 +110,8 @@ export type AccountMinAggregateInputType = {
   currency?: true
   description?: true
   currentBalance?: true
+  balanceUpdatedAt?: true
+  lastReconciledAt?: true
   version?: true
   createdById?: true
   updatedById?: true
@@ -120,6 +128,8 @@ export type AccountMaxAggregateInputType = {
   currency?: true
   description?: true
   currentBalance?: true
+  balanceUpdatedAt?: true
+  lastReconciledAt?: true
   version?: true
   createdById?: true
   updatedById?: true
@@ -136,6 +146,8 @@ export type AccountCountAggregateInputType = {
   currency?: true
   description?: true
   currentBalance?: true
+  balanceUpdatedAt?: true
+  lastReconciledAt?: true
   version?: true
   createdById?: true
   updatedById?: true
@@ -239,6 +251,8 @@ export type AccountGroupByOutputType = {
   currency: $Enums.Currency
   description: string | null
   currentBalance: runtime.Decimal
+  balanceUpdatedAt: Date | null
+  lastReconciledAt: Date | null
   version: number
   createdById: string | null
   updatedById: string | null
@@ -278,6 +292,8 @@ export type AccountWhereInput = {
   currency?: Prisma.EnumCurrencyFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableFilter<"Account"> | string | null
   currentBalance?: Prisma.DecimalFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  lastReconciledAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   version?: Prisma.IntFilter<"Account"> | number
   createdById?: Prisma.UuidNullableFilter<"Account"> | string | null
   updatedById?: Prisma.UuidNullableFilter<"Account"> | string | null
@@ -285,12 +301,14 @@ export type AccountWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  journalLines?: Prisma.JournalLineListRelationFilter
   expenses?: Prisma.MarketExpenseListRelationFilter
   incomes?: Prisma.MiscellaneousIncomeListRelationFilter
   transactions?: Prisma.AccountTransactionListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -301,6 +319,8 @@ export type AccountOrderByWithRelationInput = {
   currency?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   currentBalance?: Prisma.SortOrder
+  balanceUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastReconciledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -308,16 +328,19 @@ export type AccountOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
+  journalLines?: Prisma.JournalLineOrderByRelationAggregateInput
   expenses?: Prisma.MarketExpenseOrderByRelationAggregateInput
   incomes?: Prisma.MiscellaneousIncomeOrderByRelationAggregateInput
   transactions?: Prisma.AccountTransactionOrderByRelationAggregateInput
   withdrawals?: Prisma.WithdrawalOrderByRelationAggregateInput
   rentPayments?: Prisma.RentPaymentOrderByRelationAggregateInput
   cheques?: Prisma.ChequeOrderByRelationAggregateInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  marketId_name?: Prisma.AccountMarketIdNameCompoundUniqueInput
   AND?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
   OR?: Prisma.AccountWhereInput[]
   NOT?: Prisma.AccountWhereInput | Prisma.AccountWhereInput[]
@@ -327,6 +350,8 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   currency?: Prisma.EnumCurrencyFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableFilter<"Account"> | string | null
   currentBalance?: Prisma.DecimalFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  lastReconciledAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   version?: Prisma.IntFilter<"Account"> | number
   createdById?: Prisma.UuidNullableFilter<"Account"> | string | null
   updatedById?: Prisma.UuidNullableFilter<"Account"> | string | null
@@ -334,13 +359,15 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  journalLines?: Prisma.JournalLineListRelationFilter
   expenses?: Prisma.MarketExpenseListRelationFilter
   incomes?: Prisma.MiscellaneousIncomeListRelationFilter
   transactions?: Prisma.AccountTransactionListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
   rentPayments?: Prisma.RentPaymentListRelationFilter
   cheques?: Prisma.ChequeListRelationFilter
-}, "id">
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentListRelationFilter
+}, "id" | "marketId_name">
 
 export type AccountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -350,6 +377,8 @@ export type AccountOrderByWithAggregationInput = {
   currency?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   currentBalance?: Prisma.SortOrder
+  balanceUpdatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastReconciledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -374,6 +403,8 @@ export type AccountScalarWhereWithAggregatesInput = {
   currency?: Prisma.EnumCurrencyWithAggregatesFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   currentBalance?: Prisma.DecimalWithAggregatesFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  lastReconciledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
   version?: Prisma.IntWithAggregatesFilter<"Account"> | number
   createdById?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Account"> | string | null
@@ -383,12 +414,14 @@ export type AccountScalarWhereWithAggregatesInput = {
 }
 
 export type AccountCreateInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -396,34 +429,40 @@ export type AccountCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
@@ -433,6 +472,8 @@ export type AccountUpdateInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -440,12 +481,14 @@ export type AccountUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
@@ -456,28 +499,34 @@ export type AccountUncheckedUpdateInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -493,6 +542,8 @@ export type AccountUpdateManyMutationInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -509,6 +560,8 @@ export type AccountUncheckedUpdateManyInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -532,6 +585,11 @@ export type AccountNullableScalarRelationFilter = {
   isNot?: Prisma.AccountWhereInput | null
 }
 
+export type AccountMarketIdNameCompoundUniqueInput = {
+  marketId: string
+  name: string
+}
+
 export type AccountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   marketId?: Prisma.SortOrder
@@ -540,6 +598,8 @@ export type AccountCountOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   description?: Prisma.SortOrder
   currentBalance?: Prisma.SortOrder
+  balanceUpdatedAt?: Prisma.SortOrder
+  lastReconciledAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
@@ -561,6 +621,8 @@ export type AccountMaxOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   description?: Prisma.SortOrder
   currentBalance?: Prisma.SortOrder
+  balanceUpdatedAt?: Prisma.SortOrder
+  lastReconciledAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
@@ -577,6 +639,8 @@ export type AccountMinOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   description?: Prisma.SortOrder
   currentBalance?: Prisma.SortOrder
+  balanceUpdatedAt?: Prisma.SortOrder
+  lastReconciledAt?: Prisma.SortOrder
   version?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   updatedById?: Prisma.SortOrder
@@ -653,6 +717,22 @@ export type AccountUpdateOneWithoutRentPaymentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutRentPaymentsInput, Prisma.AccountUpdateWithoutRentPaymentsInput>, Prisma.AccountUncheckedUpdateWithoutRentPaymentsInput>
 }
 
+export type AccountCreateNestedOneWithoutSalaryPaymentsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutSalaryPaymentsInput, Prisma.AccountUncheckedCreateWithoutSalaryPaymentsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSalaryPaymentsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneWithoutSalaryPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutSalaryPaymentsInput, Prisma.AccountUncheckedCreateWithoutSalaryPaymentsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSalaryPaymentsInput
+  upsert?: Prisma.AccountUpsertWithoutSalaryPaymentsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutSalaryPaymentsInput, Prisma.AccountUpdateWithoutSalaryPaymentsInput>, Prisma.AccountUncheckedUpdateWithoutSalaryPaymentsInput>
+}
+
 export type AccountCreateNestedOneWithoutExpensesInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutExpensesInput, Prisma.AccountUncheckedCreateWithoutExpensesInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutExpensesInput
@@ -673,8 +753,18 @@ export type EnumAccountTypeFieldUpdateOperationsInput = {
   set?: $Enums.AccountType
 }
 
-export type EnumCurrencyFieldUpdateOperationsInput = {
-  set?: $Enums.Currency
+export type AccountCreateNestedOneWithoutJournalLinesInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutJournalLinesInput, Prisma.AccountUncheckedCreateWithoutJournalLinesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutJournalLinesInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutJournalLinesNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutJournalLinesInput, Prisma.AccountUncheckedCreateWithoutJournalLinesInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutJournalLinesInput
+  upsert?: Prisma.AccountUpsertWithoutJournalLinesInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutJournalLinesInput, Prisma.AccountUpdateWithoutJournalLinesInput>, Prisma.AccountUncheckedUpdateWithoutJournalLinesInput>
 }
 
 export type AccountCreateNestedOneWithoutIncomesInput = {
@@ -738,45 +828,53 @@ export type AccountUpdateOneWithoutWithdrawalsNestedInput = {
 }
 
 export type AccountCreateWithoutMarketInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutMarketInput = {
@@ -816,6 +914,8 @@ export type AccountScalarWhereInput = {
   currency?: Prisma.EnumCurrencyFilter<"Account"> | $Enums.Currency
   description?: Prisma.StringNullableFilter<"Account"> | string | null
   currentBalance?: Prisma.DecimalFilter<"Account"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  lastReconciledAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
   version?: Prisma.IntFilter<"Account"> | number
   createdById?: Prisma.UuidNullableFilter<"Account"> | string | null
   updatedById?: Prisma.UuidNullableFilter<"Account"> | string | null
@@ -825,12 +925,14 @@ export type AccountScalarWhereInput = {
 }
 
 export type AccountCreateWithoutRentPaymentsInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -838,32 +940,38 @@ export type AccountCreateWithoutRentPaymentsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutRentPaymentsInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutRentPaymentsInput = {
@@ -889,6 +997,8 @@ export type AccountUpdateWithoutRentPaymentsInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -896,11 +1006,13 @@ export type AccountUpdateWithoutRentPaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutRentPaymentsInput = {
@@ -911,26 +1023,32 @@ export type AccountUncheckedUpdateWithoutRentPaymentsInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountCreateWithoutExpensesInput = {
-  id?: string
+export type AccountCreateWithoutSalaryPaymentsInput = {
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -938,6 +1056,8 @@ export type AccountCreateWithoutExpensesInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
@@ -945,25 +1065,145 @@ export type AccountCreateWithoutExpensesInput = {
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
 }
 
-export type AccountUncheckedCreateWithoutExpensesInput = {
-  id?: string
+export type AccountUncheckedCreateWithoutSalaryPaymentsInput = {
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutSalaryPaymentsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutSalaryPaymentsInput, Prisma.AccountUncheckedCreateWithoutSalaryPaymentsInput>
+}
+
+export type AccountUpsertWithoutSalaryPaymentsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutSalaryPaymentsInput, Prisma.AccountUncheckedUpdateWithoutSalaryPaymentsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutSalaryPaymentsInput, Prisma.AccountUncheckedCreateWithoutSalaryPaymentsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutSalaryPaymentsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutSalaryPaymentsInput, Prisma.AccountUncheckedUpdateWithoutSalaryPaymentsInput>
+}
+
+export type AccountUpdateWithoutSalaryPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutSalaryPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutExpensesInput = {
+  id: string
+  name: string
+  type: $Enums.AccountType
+  currency: $Enums.Currency
+  description?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutExpensesInput = {
+  id: string
+  marketId: string
+  name: string
+  type: $Enums.AccountType
+  currency: $Enums.Currency
+  description?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutExpensesInput = {
@@ -989,6 +1229,8 @@ export type AccountUpdateWithoutExpensesInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -996,11 +1238,13 @@ export type AccountUpdateWithoutExpensesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutExpensesInput = {
@@ -1011,26 +1255,32 @@ export type AccountUncheckedUpdateWithoutExpensesInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
-export type AccountCreateWithoutIncomesInput = {
-  id?: string
+export type AccountCreateWithoutJournalLinesInput = {
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -1039,20 +1289,24 @@ export type AccountCreateWithoutIncomesInput = {
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
-export type AccountUncheckedCreateWithoutIncomesInput = {
-  id?: string
+export type AccountUncheckedCreateWithoutJournalLinesInput = {
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -1060,10 +1314,128 @@ export type AccountUncheckedCreateWithoutIncomesInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutJournalLinesInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutJournalLinesInput, Prisma.AccountUncheckedCreateWithoutJournalLinesInput>
+}
+
+export type AccountUpsertWithoutJournalLinesInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutJournalLinesInput, Prisma.AccountUncheckedUpdateWithoutJournalLinesInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutJournalLinesInput, Prisma.AccountUncheckedCreateWithoutJournalLinesInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutJournalLinesInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutJournalLinesInput, Prisma.AccountUncheckedUpdateWithoutJournalLinesInput>
+}
+
+export type AccountUpdateWithoutJournalLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
+  withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutJournalLinesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAccountTypeFieldUpdateOperationsInput | $Enums.AccountType
+  currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
+  incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
+  transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
+  rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutIncomesInput = {
+  id: string
+  name: string
+  type: $Enums.AccountType
+  currency: $Enums.Currency
+  description?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
+  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutIncomesInput = {
+  id: string
+  marketId: string
+  name: string
+  type: $Enums.AccountType
+  currency: $Enums.Currency
+  description?: string | null
+  currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
+  version?: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
+  expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
+  transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
+  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
+  rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutIncomesInput = {
@@ -1089,6 +1461,8 @@ export type AccountUpdateWithoutIncomesInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1096,11 +1470,13 @@ export type AccountUpdateWithoutIncomesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutIncomesInput = {
@@ -1111,26 +1487,32 @@ export type AccountUncheckedUpdateWithoutIncomesInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutTransactionsInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -1138,32 +1520,38 @@ export type AccountCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutTransactionsInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutTransactionsInput = {
@@ -1189,6 +1577,8 @@ export type AccountUpdateWithoutTransactionsInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1196,11 +1586,13 @@ export type AccountUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutTransactionsInput = {
@@ -1211,26 +1603,32 @@ export type AccountUncheckedUpdateWithoutTransactionsInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutChequesInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -1238,32 +1636,38 @@ export type AccountCreateWithoutChequesInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutChequesInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutChequesInput = {
@@ -1289,6 +1693,8 @@ export type AccountUpdateWithoutChequesInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1296,11 +1702,13 @@ export type AccountUpdateWithoutChequesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutChequesInput = {
@@ -1311,26 +1719,32 @@ export type AccountUncheckedUpdateWithoutChequesInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutWithdrawalsInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -1338,32 +1752,38 @@ export type AccountCreateWithoutWithdrawalsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   market: Prisma.MarketCreateNestedOneWithoutAccountsInput
+  journalLines?: Prisma.JournalLineCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutWithdrawalsInput = {
-  id?: string
+  id: string
   marketId: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutAccountInput
   expenses?: Prisma.MarketExpenseUncheckedCreateNestedManyWithoutAccountInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedCreateNestedManyWithoutAccountInput
   transactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutAccountInput
   rentPayments?: Prisma.RentPaymentUncheckedCreateNestedManyWithoutAccountInput
   cheques?: Prisma.ChequeUncheckedCreateNestedManyWithoutAccountInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutWithdrawalsInput = {
@@ -1389,6 +1809,8 @@ export type AccountUpdateWithoutWithdrawalsInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1396,11 +1818,13 @@ export type AccountUpdateWithoutWithdrawalsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountsNestedInput
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutWithdrawalsInput = {
@@ -1411,26 +1835,32 @@ export type AccountUncheckedUpdateWithoutWithdrawalsInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyMarketInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.AccountType
   currency: $Enums.Currency
   description?: string | null
   currentBalance?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Date | string | null
+  lastReconciledAt?: Date | string | null
   version?: number
   createdById?: string | null
   updatedById?: string | null
@@ -1446,18 +1876,22 @@ export type AccountUpdateWithoutMarketInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutMarketInput = {
@@ -1467,18 +1901,22 @@ export type AccountUncheckedUpdateWithoutMarketInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  journalLines?: Prisma.JournalLineUncheckedUpdateManyWithoutAccountNestedInput
   expenses?: Prisma.MarketExpenseUncheckedUpdateManyWithoutAccountNestedInput
   incomes?: Prisma.MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput
   transactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutAccountNestedInput
   rentPayments?: Prisma.RentPaymentUncheckedUpdateManyWithoutAccountNestedInput
   cheques?: Prisma.ChequeUncheckedUpdateManyWithoutAccountNestedInput
+  salaryPayments?: Prisma.MarketEmployeeSalaryPaymentUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateManyWithoutMarketInput = {
@@ -1488,6 +1926,8 @@ export type AccountUncheckedUpdateManyWithoutMarketInput = {
   currency?: Prisma.EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currentBalance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceUpdatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReconciledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1502,21 +1942,25 @@ export type AccountUncheckedUpdateManyWithoutMarketInput = {
  */
 
 export type AccountCountOutputType = {
+  journalLines: number
   expenses: number
   incomes: number
   transactions: number
   withdrawals: number
   rentPayments: number
   cheques: number
+  salaryPayments: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  journalLines?: boolean | AccountCountOutputTypeCountJournalLinesArgs
   expenses?: boolean | AccountCountOutputTypeCountExpensesArgs
   incomes?: boolean | AccountCountOutputTypeCountIncomesArgs
   transactions?: boolean | AccountCountOutputTypeCountTransactionsArgs
   withdrawals?: boolean | AccountCountOutputTypeCountWithdrawalsArgs
   rentPayments?: boolean | AccountCountOutputTypeCountRentPaymentsArgs
   cheques?: boolean | AccountCountOutputTypeCountChequesArgs
+  salaryPayments?: boolean | AccountCountOutputTypeCountSalaryPaymentsArgs
 }
 
 /**
@@ -1527,6 +1971,13 @@ export type AccountCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
    * Select specific fields to fetch from the AccountCountOutputType
    */
   select?: Prisma.AccountCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountJournalLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JournalLineWhereInput
 }
 
 /**
@@ -1571,6 +2022,13 @@ export type AccountCountOutputTypeCountChequesArgs<ExtArgs extends runtime.Types
   where?: Prisma.ChequeWhereInput
 }
 
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountSalaryPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketEmployeeSalaryPaymentWhereInput
+}
+
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1580,6 +2038,8 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   currency?: boolean
   description?: boolean
   currentBalance?: boolean
+  balanceUpdatedAt?: boolean
+  lastReconciledAt?: boolean
   version?: boolean
   createdById?: boolean
   updatedById?: boolean
@@ -1587,12 +2047,14 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   deletedAt?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  journalLines?: boolean | Prisma.Account$journalLinesArgs<ExtArgs>
   expenses?: boolean | Prisma.Account$expensesArgs<ExtArgs>
   incomes?: boolean | Prisma.Account$incomesArgs<ExtArgs>
   transactions?: boolean | Prisma.Account$transactionsArgs<ExtArgs>
   withdrawals?: boolean | Prisma.Account$withdrawalsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Account$rentPaymentsArgs<ExtArgs>
   cheques?: boolean | Prisma.Account$chequesArgs<ExtArgs>
+  salaryPayments?: boolean | Prisma.Account$salaryPaymentsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -1604,6 +2066,8 @@ export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   currency?: boolean
   description?: boolean
   currentBalance?: boolean
+  balanceUpdatedAt?: boolean
+  lastReconciledAt?: boolean
   version?: boolean
   createdById?: boolean
   updatedById?: boolean
@@ -1621,6 +2085,8 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   currency?: boolean
   description?: boolean
   currentBalance?: boolean
+  balanceUpdatedAt?: boolean
+  lastReconciledAt?: boolean
   version?: boolean
   createdById?: boolean
   updatedById?: boolean
@@ -1638,6 +2104,8 @@ export type AccountSelectScalar = {
   currency?: boolean
   description?: boolean
   currentBalance?: boolean
+  balanceUpdatedAt?: boolean
+  lastReconciledAt?: boolean
   version?: boolean
   createdById?: boolean
   updatedById?: boolean
@@ -1646,15 +2114,17 @@ export type AccountSelectScalar = {
   deletedAt?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "type" | "currency" | "description" | "currentBalance" | "version" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "name" | "type" | "currency" | "description" | "currentBalance" | "balanceUpdatedAt" | "lastReconciledAt" | "version" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  journalLines?: boolean | Prisma.Account$journalLinesArgs<ExtArgs>
   expenses?: boolean | Prisma.Account$expensesArgs<ExtArgs>
   incomes?: boolean | Prisma.Account$incomesArgs<ExtArgs>
   transactions?: boolean | Prisma.Account$transactionsArgs<ExtArgs>
   withdrawals?: boolean | Prisma.Account$withdrawalsArgs<ExtArgs>
   rentPayments?: boolean | Prisma.Account$rentPaymentsArgs<ExtArgs>
   cheques?: boolean | Prisma.Account$chequesArgs<ExtArgs>
+  salaryPayments?: boolean | Prisma.Account$salaryPaymentsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1668,12 +2138,14 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Account"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
+    journalLines: Prisma.$JournalLinePayload<ExtArgs>[]
     expenses: Prisma.$MarketExpensePayload<ExtArgs>[]
     incomes: Prisma.$MiscellaneousIncomePayload<ExtArgs>[]
     transactions: Prisma.$AccountTransactionPayload<ExtArgs>[]
     withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
     rentPayments: Prisma.$RentPaymentPayload<ExtArgs>[]
     cheques: Prisma.$ChequePayload<ExtArgs>[]
+    salaryPayments: Prisma.$MarketEmployeeSalaryPaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1682,13 +2154,9 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     type: $Enums.AccountType
     currency: $Enums.Currency
     description: string | null
-    /**
-     * Running balance, maintained transactionally.
-     */
     currentBalance: runtime.Decimal
-    /**
-     * Optimistic-locking token.
-     */
+    balanceUpdatedAt: Date | null
+    lastReconciledAt: Date | null
     version: number
     createdById: string | null
     updatedById: string | null
@@ -2090,12 +2558,14 @@ readonly fields: AccountFieldRefs;
 export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  journalLines<T extends Prisma.Account$journalLinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$journalLinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.Account$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   incomes<T extends Prisma.Account$incomesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$incomesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MiscellaneousIncomePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.Account$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   withdrawals<T extends Prisma.Account$withdrawalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rentPayments<T extends Prisma.Account$rentPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$rentPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RentPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cheques<T extends Prisma.Account$chequesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$chequesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChequePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  salaryPayments<T extends Prisma.Account$salaryPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$salaryPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketEmployeeSalaryPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2132,6 +2602,8 @@ export interface AccountFieldRefs {
   readonly currency: Prisma.FieldRef<"Account", 'Currency'>
   readonly description: Prisma.FieldRef<"Account", 'String'>
   readonly currentBalance: Prisma.FieldRef<"Account", 'Decimal'>
+  readonly balanceUpdatedAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly lastReconciledAt: Prisma.FieldRef<"Account", 'DateTime'>
   readonly version: Prisma.FieldRef<"Account", 'Int'>
   readonly createdById: Prisma.FieldRef<"Account", 'String'>
   readonly updatedById: Prisma.FieldRef<"Account", 'String'>
@@ -2539,6 +3011,30 @@ export type AccountDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Account.journalLines
+ */
+export type Account$journalLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JournalLine
+   */
+  select?: Prisma.JournalLineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JournalLine
+   */
+  omit?: Prisma.JournalLineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JournalLineInclude<ExtArgs> | null
+  where?: Prisma.JournalLineWhereInput
+  orderBy?: Prisma.JournalLineOrderByWithRelationInput | Prisma.JournalLineOrderByWithRelationInput[]
+  cursor?: Prisma.JournalLineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JournalLineScalarFieldEnum | Prisma.JournalLineScalarFieldEnum[]
+}
+
+/**
  * Account.expenses
  */
 export type Account$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2680,6 +3176,30 @@ export type Account$chequesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ChequeScalarFieldEnum | Prisma.ChequeScalarFieldEnum[]
+}
+
+/**
+ * Account.salaryPayments
+ */
+export type Account$salaryPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketEmployeeSalaryPayment
+   */
+  select?: Prisma.MarketEmployeeSalaryPaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketEmployeeSalaryPayment
+   */
+  omit?: Prisma.MarketEmployeeSalaryPaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketEmployeeSalaryPaymentInclude<ExtArgs> | null
+  where?: Prisma.MarketEmployeeSalaryPaymentWhereInput
+  orderBy?: Prisma.MarketEmployeeSalaryPaymentOrderByWithRelationInput | Prisma.MarketEmployeeSalaryPaymentOrderByWithRelationInput[]
+  cursor?: Prisma.MarketEmployeeSalaryPaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketEmployeeSalaryPaymentScalarFieldEnum | Prisma.MarketEmployeeSalaryPaymentScalarFieldEnum[]
 }
 
 /**

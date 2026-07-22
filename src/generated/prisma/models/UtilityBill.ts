@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model UtilityBill
- * A monthly utility bill for a shop.
+ * 
  */
 export type UtilityBillModel = runtime.Types.Result.DefaultSelection<Prisma.$UtilityBillPayload>
 
@@ -34,6 +34,7 @@ export type UtilityBillAvgAggregateOutputType = {
   amount: runtime.Decimal | null
   billMonth: number | null
   billYear: number | null
+  version: number | null
 }
 
 export type UtilityBillSumAggregateOutputType = {
@@ -44,6 +45,7 @@ export type UtilityBillSumAggregateOutputType = {
   amount: runtime.Decimal | null
   billMonth: number | null
   billYear: number | null
+  version: number | null
 }
 
 export type UtilityBillMinAggregateOutputType = {
@@ -65,6 +67,7 @@ export type UtilityBillMinAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  version: number | null
 }
 
 export type UtilityBillMaxAggregateOutputType = {
@@ -86,6 +89,7 @@ export type UtilityBillMaxAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  version: number | null
 }
 
 export type UtilityBillCountAggregateOutputType = {
@@ -107,6 +111,7 @@ export type UtilityBillCountAggregateOutputType = {
   updatedById: number
   createdAt: number
   updatedAt: number
+  version: number
   _all: number
 }
 
@@ -119,6 +124,7 @@ export type UtilityBillAvgAggregateInputType = {
   amount?: true
   billMonth?: true
   billYear?: true
+  version?: true
 }
 
 export type UtilityBillSumAggregateInputType = {
@@ -129,6 +135,7 @@ export type UtilityBillSumAggregateInputType = {
   amount?: true
   billMonth?: true
   billYear?: true
+  version?: true
 }
 
 export type UtilityBillMinAggregateInputType = {
@@ -150,6 +157,7 @@ export type UtilityBillMinAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
 }
 
 export type UtilityBillMaxAggregateInputType = {
@@ -171,6 +179,7 @@ export type UtilityBillMaxAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
 }
 
 export type UtilityBillCountAggregateInputType = {
@@ -192,6 +201,7 @@ export type UtilityBillCountAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -300,6 +310,7 @@ export type UtilityBillGroupByOutputType = {
   updatedById: string | null
   createdAt: Date
   updatedAt: Date
+  version: number
   _count: UtilityBillCountAggregateOutputType | null
   _avg: UtilityBillAvgAggregateOutputType | null
   _sum: UtilityBillSumAggregateOutputType | null
@@ -344,6 +355,7 @@ export type UtilityBillWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
+  version?: Prisma.IntFilter<"UtilityBill"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
 }
@@ -367,6 +379,7 @@ export type UtilityBillOrderByWithRelationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shop?: Prisma.ShopOrderByWithRelationInput
 }
@@ -394,6 +407,7 @@ export type UtilityBillWhereUniqueInput = Prisma.AtLeast<{
   updatedById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
+  version?: Prisma.IntFilter<"UtilityBill"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
 }, "id" | "shopId_type_billYear_billMonth">
@@ -417,6 +431,7 @@ export type UtilityBillOrderByWithAggregationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.UtilityBillCountOrderByAggregateInput
   _avg?: Prisma.UtilityBillAvgOrderByAggregateInput
   _max?: Prisma.UtilityBillMaxOrderByAggregateInput
@@ -446,10 +461,11 @@ export type UtilityBillScalarWhereWithAggregatesInput = {
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"UtilityBill"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UtilityBill"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UtilityBill"> | Date | string
+  version?: Prisma.IntWithAggregatesFilter<"UtilityBill"> | number
 }
 
 export type UtilityBillCreateInput = {
-  id?: string
+  id: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -465,12 +481,13 @@ export type UtilityBillCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutUtilityBillsInput
   shop: Prisma.ShopCreateNestedOneWithoutUtilityBillsInput
 }
 
 export type UtilityBillUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   shopId: string
   type: $Enums.UtilityType
@@ -488,6 +505,7 @@ export type UtilityBillUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type UtilityBillUpdateInput = {
@@ -507,6 +525,7 @@ export type UtilityBillUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutUtilityBillsNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutUtilityBillsNestedInput
 }
@@ -530,10 +549,11 @@ export type UtilityBillUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UtilityBillCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   shopId: string
   type: $Enums.UtilityType
@@ -551,6 +571,7 @@ export type UtilityBillCreateManyInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type UtilityBillUpdateManyMutationInput = {
@@ -570,6 +591,7 @@ export type UtilityBillUpdateManyMutationInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UtilityBillUncheckedUpdateManyInput = {
@@ -591,6 +613,7 @@ export type UtilityBillUncheckedUpdateManyInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UtilityBillListRelationFilter = {
@@ -629,6 +652,7 @@ export type UtilityBillCountOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UtilityBillAvgOrderByAggregateInput = {
@@ -639,6 +663,7 @@ export type UtilityBillAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
   billYear?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UtilityBillMaxOrderByAggregateInput = {
@@ -660,6 +685,7 @@ export type UtilityBillMaxOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UtilityBillMinOrderByAggregateInput = {
@@ -681,6 +707,7 @@ export type UtilityBillMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UtilityBillSumOrderByAggregateInput = {
@@ -691,6 +718,7 @@ export type UtilityBillSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   billMonth?: Prisma.SortOrder
   billYear?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type UtilityBillCreateNestedManyWithoutMarketInput = {
@@ -786,7 +814,7 @@ export type EnumUtilityPaymentStatusFieldUpdateOperationsInput = {
 }
 
 export type UtilityBillCreateWithoutMarketInput = {
-  id?: string
+  id: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -802,11 +830,12 @@ export type UtilityBillCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   shop: Prisma.ShopCreateNestedOneWithoutUtilityBillsInput
 }
 
 export type UtilityBillUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   shopId: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -823,6 +852,7 @@ export type UtilityBillUncheckedCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type UtilityBillCreateOrConnectWithoutMarketInput = {
@@ -873,10 +903,11 @@ export type UtilityBillScalarWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"UtilityBill"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UtilityBill"> | Date | string
+  version?: Prisma.IntFilter<"UtilityBill"> | number
 }
 
 export type UtilityBillCreateWithoutShopInput = {
-  id?: string
+  id: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -892,11 +923,12 @@ export type UtilityBillCreateWithoutShopInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutUtilityBillsInput
 }
 
 export type UtilityBillUncheckedCreateWithoutShopInput = {
-  id?: string
+  id: string
   marketId: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -913,6 +945,7 @@ export type UtilityBillUncheckedCreateWithoutShopInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type UtilityBillCreateOrConnectWithoutShopInput = {
@@ -942,7 +975,7 @@ export type UtilityBillUpdateManyWithWhereWithoutShopInput = {
 }
 
 export type UtilityBillCreateManyMarketInput = {
-  id?: string
+  id: string
   shopId: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -959,6 +992,7 @@ export type UtilityBillCreateManyMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type UtilityBillUpdateWithoutMarketInput = {
@@ -978,6 +1012,7 @@ export type UtilityBillUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   shop?: Prisma.ShopUpdateOneRequiredWithoutUtilityBillsNestedInput
 }
 
@@ -999,6 +1034,7 @@ export type UtilityBillUncheckedUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UtilityBillUncheckedUpdateManyWithoutMarketInput = {
@@ -1019,10 +1055,11 @@ export type UtilityBillUncheckedUpdateManyWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UtilityBillCreateManyShopInput = {
-  id?: string
+  id: string
   marketId: string
   type: $Enums.UtilityType
   previousMeter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1039,6 +1076,7 @@ export type UtilityBillCreateManyShopInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type UtilityBillUpdateWithoutShopInput = {
@@ -1058,6 +1096,7 @@ export type UtilityBillUpdateWithoutShopInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutUtilityBillsNestedInput
 }
 
@@ -1079,6 +1118,7 @@ export type UtilityBillUncheckedUpdateWithoutShopInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UtilityBillUncheckedUpdateManyWithoutShopInput = {
@@ -1099,6 +1139,7 @@ export type UtilityBillUncheckedUpdateManyWithoutShopInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -1122,6 +1163,7 @@ export type UtilityBillSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["utilityBill"]>
@@ -1145,6 +1187,7 @@ export type UtilityBillSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["utilityBill"]>
@@ -1168,6 +1211,7 @@ export type UtilityBillSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["utilityBill"]>
@@ -1191,9 +1235,10 @@ export type UtilityBillSelectScalar = {
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
 }
 
-export type UtilityBillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "type" | "previousMeter" | "currentMeter" | "unitsConsumed" | "rate" | "amount" | "billMonth" | "billYear" | "dueDate" | "status" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["utilityBill"]>
+export type UtilityBillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "shopId" | "type" | "previousMeter" | "currentMeter" | "unitsConsumed" | "rate" | "amount" | "billMonth" | "billYear" | "dueDate" | "status" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "version", ExtArgs["result"]["utilityBill"]>
 export type UtilityBillInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
@@ -1223,9 +1268,6 @@ export type $UtilityBillPayload<ExtArgs extends runtime.Types.Extensions.Interna
     unitsConsumed: runtime.Decimal | null
     rate: runtime.Decimal | null
     amount: runtime.Decimal
-    /**
-     * Billing period.
-     */
     billMonth: number
     billYear: number
     dueDate: Date | null
@@ -1235,6 +1277,7 @@ export type $UtilityBillPayload<ExtArgs extends runtime.Types.Extensions.Interna
     updatedById: string | null
     createdAt: Date
     updatedAt: Date
+    version: number
   }, ExtArgs["result"]["utilityBill"]>
   composites: {}
 }
@@ -1678,6 +1721,7 @@ export interface UtilityBillFieldRefs {
   readonly updatedById: Prisma.FieldRef<"UtilityBill", 'String'>
   readonly createdAt: Prisma.FieldRef<"UtilityBill", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UtilityBill", 'DateTime'>
+  readonly version: Prisma.FieldRef<"UtilityBill", 'Int'>
 }
     
 

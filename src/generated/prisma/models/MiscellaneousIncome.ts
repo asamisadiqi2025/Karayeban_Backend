@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model MiscellaneousIncome
- * Income not tied to rent (e.g. parking, events).
+ * 
  */
 export type MiscellaneousIncomeModel = runtime.Types.Result.DefaultSelection<Prisma.$MiscellaneousIncomePayload>
 
@@ -28,10 +28,12 @@ export type AggregateMiscellaneousIncome = {
 
 export type MiscellaneousIncomeAvgAggregateOutputType = {
   amount: runtime.Decimal | null
+  version: number | null
 }
 
 export type MiscellaneousIncomeSumAggregateOutputType = {
   amount: runtime.Decimal | null
+  version: number | null
 }
 
 export type MiscellaneousIncomeMinAggregateOutputType = {
@@ -46,6 +48,7 @@ export type MiscellaneousIncomeMinAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  version: number | null
 }
 
 export type MiscellaneousIncomeMaxAggregateOutputType = {
@@ -60,6 +63,7 @@ export type MiscellaneousIncomeMaxAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  version: number | null
 }
 
 export type MiscellaneousIncomeCountAggregateOutputType = {
@@ -74,16 +78,19 @@ export type MiscellaneousIncomeCountAggregateOutputType = {
   updatedById: number
   createdAt: number
   updatedAt: number
+  version: number
   _all: number
 }
 
 
 export type MiscellaneousIncomeAvgAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type MiscellaneousIncomeSumAggregateInputType = {
   amount?: true
+  version?: true
 }
 
 export type MiscellaneousIncomeMinAggregateInputType = {
@@ -98,6 +105,7 @@ export type MiscellaneousIncomeMinAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
 }
 
 export type MiscellaneousIncomeMaxAggregateInputType = {
@@ -112,6 +120,7 @@ export type MiscellaneousIncomeMaxAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
 }
 
 export type MiscellaneousIncomeCountAggregateInputType = {
@@ -126,6 +135,7 @@ export type MiscellaneousIncomeCountAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -227,6 +237,7 @@ export type MiscellaneousIncomeGroupByOutputType = {
   updatedById: string | null
   createdAt: Date
   updatedAt: Date
+  version: number
   _count: MiscellaneousIncomeCountAggregateOutputType | null
   _avg: MiscellaneousIncomeAvgAggregateOutputType | null
   _sum: MiscellaneousIncomeSumAggregateOutputType | null
@@ -264,6 +275,7 @@ export type MiscellaneousIncomeWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"MiscellaneousIncome"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MiscellaneousIncome"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MiscellaneousIncome"> | Date | string
+  version?: Prisma.IntFilter<"MiscellaneousIncome"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
 }
@@ -280,6 +292,7 @@ export type MiscellaneousIncomeOrderByWithRelationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   account?: Prisma.AccountOrderByWithRelationInput
 }
@@ -299,6 +312,7 @@ export type MiscellaneousIncomeWhereUniqueInput = Prisma.AtLeast<{
   updatedById?: Prisma.UuidNullableFilter<"MiscellaneousIncome"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MiscellaneousIncome"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MiscellaneousIncome"> | Date | string
+  version?: Prisma.IntFilter<"MiscellaneousIncome"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
 }, "id">
@@ -315,6 +329,7 @@ export type MiscellaneousIncomeOrderByWithAggregationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.MiscellaneousIncomeCountOrderByAggregateInput
   _avg?: Prisma.MiscellaneousIncomeAvgOrderByAggregateInput
   _max?: Prisma.MiscellaneousIncomeMaxOrderByAggregateInput
@@ -337,10 +352,11 @@ export type MiscellaneousIncomeScalarWhereWithAggregatesInput = {
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"MiscellaneousIncome"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MiscellaneousIncome"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"MiscellaneousIncome"> | Date | string
+  version?: Prisma.IntWithAggregatesFilter<"MiscellaneousIncome"> | number
 }
 
 export type MiscellaneousIncomeCreateInput = {
-  id?: string
+  id: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   incomeDate: Date | string
@@ -349,12 +365,13 @@ export type MiscellaneousIncomeCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutMiscellaneousIncomesInput
   account: Prisma.AccountCreateNestedOneWithoutIncomesInput
 }
 
 export type MiscellaneousIncomeUncheckedCreateInput = {
-  id?: string
+  id: string
   marketId: string
   accountId: string
   source: string
@@ -365,6 +382,7 @@ export type MiscellaneousIncomeUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type MiscellaneousIncomeUpdateInput = {
@@ -377,6 +395,7 @@ export type MiscellaneousIncomeUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutMiscellaneousIncomesNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutIncomesNestedInput
 }
@@ -393,10 +412,11 @@ export type MiscellaneousIncomeUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type MiscellaneousIncomeCreateManyInput = {
-  id?: string
+  id: string
   marketId: string
   accountId: string
   source: string
@@ -407,6 +427,7 @@ export type MiscellaneousIncomeCreateManyInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type MiscellaneousIncomeUpdateManyMutationInput = {
@@ -419,6 +440,7 @@ export type MiscellaneousIncomeUpdateManyMutationInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type MiscellaneousIncomeUncheckedUpdateManyInput = {
@@ -433,6 +455,7 @@ export type MiscellaneousIncomeUncheckedUpdateManyInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type MiscellaneousIncomeListRelationFilter = {
@@ -457,10 +480,12 @@ export type MiscellaneousIncomeCountOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type MiscellaneousIncomeAvgOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type MiscellaneousIncomeMaxOrderByAggregateInput = {
@@ -475,6 +500,7 @@ export type MiscellaneousIncomeMaxOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type MiscellaneousIncomeMinOrderByAggregateInput = {
@@ -489,10 +515,12 @@ export type MiscellaneousIncomeMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type MiscellaneousIncomeSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type MiscellaneousIncomeCreateNestedManyWithoutMarketInput = {
@@ -580,7 +608,7 @@ export type MiscellaneousIncomeUncheckedUpdateManyWithoutAccountNestedInput = {
 }
 
 export type MiscellaneousIncomeCreateWithoutMarketInput = {
-  id?: string
+  id: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   incomeDate: Date | string
@@ -589,11 +617,12 @@ export type MiscellaneousIncomeCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   account: Prisma.AccountCreateNestedOneWithoutIncomesInput
 }
 
 export type MiscellaneousIncomeUncheckedCreateWithoutMarketInput = {
-  id?: string
+  id: string
   accountId: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -603,6 +632,7 @@ export type MiscellaneousIncomeUncheckedCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type MiscellaneousIncomeCreateOrConnectWithoutMarketInput = {
@@ -646,10 +676,11 @@ export type MiscellaneousIncomeScalarWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"MiscellaneousIncome"> | string | null
   createdAt?: Prisma.DateTimeFilter<"MiscellaneousIncome"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MiscellaneousIncome"> | Date | string
+  version?: Prisma.IntFilter<"MiscellaneousIncome"> | number
 }
 
 export type MiscellaneousIncomeCreateWithoutAccountInput = {
-  id?: string
+  id: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   incomeDate: Date | string
@@ -658,11 +689,12 @@ export type MiscellaneousIncomeCreateWithoutAccountInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
   market: Prisma.MarketCreateNestedOneWithoutMiscellaneousIncomesInput
 }
 
 export type MiscellaneousIncomeUncheckedCreateWithoutAccountInput = {
-  id?: string
+  id: string
   marketId: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -672,6 +704,7 @@ export type MiscellaneousIncomeUncheckedCreateWithoutAccountInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type MiscellaneousIncomeCreateOrConnectWithoutAccountInput = {
@@ -701,7 +734,7 @@ export type MiscellaneousIncomeUpdateManyWithWhereWithoutAccountInput = {
 }
 
 export type MiscellaneousIncomeCreateManyMarketInput = {
-  id?: string
+  id: string
   accountId: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -711,6 +744,7 @@ export type MiscellaneousIncomeCreateManyMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type MiscellaneousIncomeUpdateWithoutMarketInput = {
@@ -723,6 +757,7 @@ export type MiscellaneousIncomeUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   account?: Prisma.AccountUpdateOneRequiredWithoutIncomesNestedInput
 }
 
@@ -737,6 +772,7 @@ export type MiscellaneousIncomeUncheckedUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type MiscellaneousIncomeUncheckedUpdateManyWithoutMarketInput = {
@@ -750,10 +786,11 @@ export type MiscellaneousIncomeUncheckedUpdateManyWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type MiscellaneousIncomeCreateManyAccountInput = {
-  id?: string
+  id: string
   marketId: string
   source: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -763,6 +800,7 @@ export type MiscellaneousIncomeCreateManyAccountInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  version?: number
 }
 
 export type MiscellaneousIncomeUpdateWithoutAccountInput = {
@@ -775,6 +813,7 @@ export type MiscellaneousIncomeUpdateWithoutAccountInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutMiscellaneousIncomesNestedInput
 }
 
@@ -789,6 +828,7 @@ export type MiscellaneousIncomeUncheckedUpdateWithoutAccountInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type MiscellaneousIncomeUncheckedUpdateManyWithoutAccountInput = {
@@ -802,6 +842,7 @@ export type MiscellaneousIncomeUncheckedUpdateManyWithoutAccountInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -818,6 +859,7 @@ export type MiscellaneousIncomeSelect<ExtArgs extends runtime.Types.Extensions.I
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["miscellaneousIncome"]>
@@ -834,6 +876,7 @@ export type MiscellaneousIncomeSelectCreateManyAndReturn<ExtArgs extends runtime
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["miscellaneousIncome"]>
@@ -850,6 +893,7 @@ export type MiscellaneousIncomeSelectUpdateManyAndReturn<ExtArgs extends runtime
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["miscellaneousIncome"]>
@@ -866,9 +910,10 @@ export type MiscellaneousIncomeSelectScalar = {
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  version?: boolean
 }
 
-export type MiscellaneousIncomeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "accountId" | "source" | "amount" | "incomeDate" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["miscellaneousIncome"]>
+export type MiscellaneousIncomeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "accountId" | "source" | "amount" | "incomeDate" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "version", ExtArgs["result"]["miscellaneousIncome"]>
 export type MiscellaneousIncomeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
@@ -900,6 +945,7 @@ export type $MiscellaneousIncomePayload<ExtArgs extends runtime.Types.Extensions
     updatedById: string | null
     createdAt: Date
     updatedAt: Date
+    version: number
   }, ExtArgs["result"]["miscellaneousIncome"]>
   composites: {}
 }
@@ -1336,6 +1382,7 @@ export interface MiscellaneousIncomeFieldRefs {
   readonly updatedById: Prisma.FieldRef<"MiscellaneousIncome", 'String'>
   readonly createdAt: Prisma.FieldRef<"MiscellaneousIncome", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"MiscellaneousIncome", 'DateTime'>
+  readonly version: Prisma.FieldRef<"MiscellaneousIncome", 'Int'>
 }
     
 

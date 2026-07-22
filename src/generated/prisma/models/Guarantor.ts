@@ -14,20 +14,28 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Guarantor
- * A guarantor backing a tenant.
+ * 
  */
 export type GuarantorModel = runtime.Types.Result.DefaultSelection<Prisma.$GuarantorPayload>
 
 export type AggregateGuarantor = {
   _count: GuarantorCountAggregateOutputType | null
+  _avg: GuarantorAvgAggregateOutputType | null
+  _sum: GuarantorSumAggregateOutputType | null
   _min: GuarantorMinAggregateOutputType | null
   _max: GuarantorMaxAggregateOutputType | null
 }
 
+export type GuarantorAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type GuarantorSumAggregateOutputType = {
+  version: number | null
+}
+
 export type GuarantorMinAggregateOutputType = {
   id: string | null
-  marketId: string | null
-  tenantId: string | null
   fullName: string | null
   phone: string | null
   address: string | null
@@ -36,12 +44,12 @@ export type GuarantorMinAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type GuarantorMaxAggregateOutputType = {
   id: string | null
-  marketId: string | null
-  tenantId: string | null
   fullName: string | null
   phone: string | null
   address: string | null
@@ -50,12 +58,12 @@ export type GuarantorMaxAggregateOutputType = {
   updatedById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
+  version: number | null
 }
 
 export type GuarantorCountAggregateOutputType = {
   id: number
-  marketId: number
-  tenantId: number
   fullName: number
   phone: number
   address: number
@@ -64,14 +72,22 @@ export type GuarantorCountAggregateOutputType = {
   updatedById: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
+  version: number
   _all: number
 }
 
 
+export type GuarantorAvgAggregateInputType = {
+  version?: true
+}
+
+export type GuarantorSumAggregateInputType = {
+  version?: true
+}
+
 export type GuarantorMinAggregateInputType = {
   id?: true
-  marketId?: true
-  tenantId?: true
   fullName?: true
   phone?: true
   address?: true
@@ -80,12 +96,12 @@ export type GuarantorMinAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type GuarantorMaxAggregateInputType = {
   id?: true
-  marketId?: true
-  tenantId?: true
   fullName?: true
   phone?: true
   address?: true
@@ -94,12 +110,12 @@ export type GuarantorMaxAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
 }
 
 export type GuarantorCountAggregateInputType = {
   id?: true
-  marketId?: true
-  tenantId?: true
   fullName?: true
   phone?: true
   address?: true
@@ -108,6 +124,8 @@ export type GuarantorCountAggregateInputType = {
   updatedById?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
+  version?: true
   _all?: true
 }
 
@@ -149,6 +167,18 @@ export type GuarantorAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: GuarantorAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: GuarantorSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: GuarantorMinAggregateInputType
@@ -179,14 +209,14 @@ export type GuarantorGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: GuarantorCountAggregateInputType | true
+  _avg?: GuarantorAvgAggregateInputType
+  _sum?: GuarantorSumAggregateInputType
   _min?: GuarantorMinAggregateInputType
   _max?: GuarantorMaxAggregateInputType
 }
 
 export type GuarantorGroupByOutputType = {
   id: string
-  marketId: string
-  tenantId: string
   fullName: string
   phone: string
   address: string | null
@@ -195,7 +225,11 @@ export type GuarantorGroupByOutputType = {
   updatedById: string | null
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
+  version: number
   _count: GuarantorCountAggregateOutputType | null
+  _avg: GuarantorAvgAggregateOutputType | null
+  _sum: GuarantorSumAggregateOutputType | null
   _min: GuarantorMinAggregateOutputType | null
   _max: GuarantorMaxAggregateOutputType | null
 }
@@ -220,8 +254,6 @@ export type GuarantorWhereInput = {
   OR?: Prisma.GuarantorWhereInput[]
   NOT?: Prisma.GuarantorWhereInput | Prisma.GuarantorWhereInput[]
   id?: Prisma.UuidFilter<"Guarantor"> | string
-  marketId?: Prisma.UuidFilter<"Guarantor"> | string
-  tenantId?: Prisma.UuidFilter<"Guarantor"> | string
   fullName?: Prisma.StringFilter<"Guarantor"> | string
   phone?: Prisma.StringFilter<"Guarantor"> | string
   address?: Prisma.StringNullableFilter<"Guarantor"> | string | null
@@ -230,14 +262,13 @@ export type GuarantorWhereInput = {
   updatedById?: Prisma.UuidNullableFilter<"Guarantor"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Guarantor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guarantor"> | Date | string
-  market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  deletedAt?: Prisma.DateTimeNullableFilter<"Guarantor"> | Date | string | null
+  version?: Prisma.IntFilter<"Guarantor"> | number
+  tenantRelations?: Prisma.TenantGuarantorListRelationFilter
 }
 
 export type GuarantorOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -246,8 +277,9 @@ export type GuarantorOrderByWithRelationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  market?: Prisma.MarketOrderByWithRelationInput
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
+  tenantRelations?: Prisma.TenantGuarantorOrderByRelationAggregateInput
 }
 
 export type GuarantorWhereUniqueInput = Prisma.AtLeast<{
@@ -255,8 +287,6 @@ export type GuarantorWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.GuarantorWhereInput | Prisma.GuarantorWhereInput[]
   OR?: Prisma.GuarantorWhereInput[]
   NOT?: Prisma.GuarantorWhereInput | Prisma.GuarantorWhereInput[]
-  marketId?: Prisma.UuidFilter<"Guarantor"> | string
-  tenantId?: Prisma.UuidFilter<"Guarantor"> | string
   fullName?: Prisma.StringFilter<"Guarantor"> | string
   phone?: Prisma.StringFilter<"Guarantor"> | string
   address?: Prisma.StringNullableFilter<"Guarantor"> | string | null
@@ -265,14 +295,13 @@ export type GuarantorWhereUniqueInput = Prisma.AtLeast<{
   updatedById?: Prisma.UuidNullableFilter<"Guarantor"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Guarantor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guarantor"> | Date | string
-  market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  deletedAt?: Prisma.DateTimeNullableFilter<"Guarantor"> | Date | string | null
+  version?: Prisma.IntFilter<"Guarantor"> | number
+  tenantRelations?: Prisma.TenantGuarantorListRelationFilter
 }, "id">
 
 export type GuarantorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -281,9 +310,13 @@ export type GuarantorOrderByWithAggregationInput = {
   updatedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.GuarantorCountOrderByAggregateInput
+  _avg?: Prisma.GuarantorAvgOrderByAggregateInput
   _max?: Prisma.GuarantorMaxOrderByAggregateInput
   _min?: Prisma.GuarantorMinOrderByAggregateInput
+  _sum?: Prisma.GuarantorSumOrderByAggregateInput
 }
 
 export type GuarantorScalarWhereWithAggregatesInput = {
@@ -291,8 +324,6 @@ export type GuarantorScalarWhereWithAggregatesInput = {
   OR?: Prisma.GuarantorScalarWhereWithAggregatesInput[]
   NOT?: Prisma.GuarantorScalarWhereWithAggregatesInput | Prisma.GuarantorScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Guarantor"> | string
-  marketId?: Prisma.UuidWithAggregatesFilter<"Guarantor"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"Guarantor"> | string
   fullName?: Prisma.StringWithAggregatesFilter<"Guarantor"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Guarantor"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"Guarantor"> | string | null
@@ -301,10 +332,12 @@ export type GuarantorScalarWhereWithAggregatesInput = {
   updatedById?: Prisma.UuidNullableWithAggregatesFilter<"Guarantor"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Guarantor"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Guarantor"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Guarantor"> | Date | string | null
+  version?: Prisma.IntWithAggregatesFilter<"Guarantor"> | number
 }
 
 export type GuarantorCreateInput = {
-  id?: string
+  id: string
   fullName: string
   phone: string
   address?: string | null
@@ -313,14 +346,13 @@ export type GuarantorCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  market: Prisma.MarketCreateNestedOneWithoutGuarantorsInput
-  tenant: Prisma.TenantCreateNestedOneWithoutGuarantorsInput
+  deletedAt?: Date | string | null
+  version?: number
+  tenantRelations?: Prisma.TenantGuarantorCreateNestedManyWithoutGuarantorInput
 }
 
 export type GuarantorUncheckedCreateInput = {
-  id?: string
-  marketId: string
-  tenantId: string
+  id: string
   fullName: string
   phone: string
   address?: string | null
@@ -329,6 +361,9 @@ export type GuarantorUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  tenantRelations?: Prisma.TenantGuarantorUncheckedCreateNestedManyWithoutGuarantorInput
 }
 
 export type GuarantorUpdateInput = {
@@ -341,14 +376,13 @@ export type GuarantorUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  market?: Prisma.MarketUpdateOneRequiredWithoutGuarantorsNestedInput
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGuarantorsNestedInput
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantRelations?: Prisma.TenantGuarantorUpdateManyWithoutGuarantorNestedInput
 }
 
 export type GuarantorUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -357,12 +391,13 @@ export type GuarantorUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantRelations?: Prisma.TenantGuarantorUncheckedUpdateManyWithoutGuarantorNestedInput
 }
 
 export type GuarantorCreateManyInput = {
-  id?: string
-  marketId: string
-  tenantId: string
+  id: string
   fullName: string
   phone: string
   address?: string | null
@@ -371,6 +406,8 @@ export type GuarantorCreateManyInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
 export type GuarantorUpdateManyMutationInput = {
@@ -383,12 +420,12 @@ export type GuarantorUpdateManyMutationInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GuarantorUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -397,22 +434,12 @@ export type GuarantorUncheckedUpdateManyInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type GuarantorListRelationFilter = {
-  every?: Prisma.GuarantorWhereInput
-  some?: Prisma.GuarantorWhereInput
-  none?: Prisma.GuarantorWhereInput
-}
-
-export type GuarantorOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GuarantorCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
@@ -421,12 +448,16 @@ export type GuarantorCountOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+}
+
+export type GuarantorAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type GuarantorMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
@@ -435,12 +466,12 @@ export type GuarantorMaxOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type GuarantorMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  marketId?: Prisma.SortOrder
-  tenantId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
@@ -449,94 +480,35 @@ export type GuarantorMinOrderByAggregateInput = {
   updatedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
-export type GuarantorCreateNestedManyWithoutMarketInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutMarketInput, Prisma.GuarantorUncheckedCreateWithoutMarketInput> | Prisma.GuarantorCreateWithoutMarketInput[] | Prisma.GuarantorUncheckedCreateWithoutMarketInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutMarketInput | Prisma.GuarantorCreateOrConnectWithoutMarketInput[]
-  createMany?: Prisma.GuarantorCreateManyMarketInputEnvelope
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
+export type GuarantorSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
-export type GuarantorUncheckedCreateNestedManyWithoutMarketInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutMarketInput, Prisma.GuarantorUncheckedCreateWithoutMarketInput> | Prisma.GuarantorCreateWithoutMarketInput[] | Prisma.GuarantorUncheckedCreateWithoutMarketInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutMarketInput | Prisma.GuarantorCreateOrConnectWithoutMarketInput[]
-  createMany?: Prisma.GuarantorCreateManyMarketInputEnvelope
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
+export type GuarantorScalarRelationFilter = {
+  is?: Prisma.GuarantorWhereInput
+  isNot?: Prisma.GuarantorWhereInput
 }
 
-export type GuarantorUpdateManyWithoutMarketNestedInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutMarketInput, Prisma.GuarantorUncheckedCreateWithoutMarketInput> | Prisma.GuarantorCreateWithoutMarketInput[] | Prisma.GuarantorUncheckedCreateWithoutMarketInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutMarketInput | Prisma.GuarantorCreateOrConnectWithoutMarketInput[]
-  upsert?: Prisma.GuarantorUpsertWithWhereUniqueWithoutMarketInput | Prisma.GuarantorUpsertWithWhereUniqueWithoutMarketInput[]
-  createMany?: Prisma.GuarantorCreateManyMarketInputEnvelope
-  set?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  disconnect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  delete?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  update?: Prisma.GuarantorUpdateWithWhereUniqueWithoutMarketInput | Prisma.GuarantorUpdateWithWhereUniqueWithoutMarketInput[]
-  updateMany?: Prisma.GuarantorUpdateManyWithWhereWithoutMarketInput | Prisma.GuarantorUpdateManyWithWhereWithoutMarketInput[]
-  deleteMany?: Prisma.GuarantorScalarWhereInput | Prisma.GuarantorScalarWhereInput[]
+export type GuarantorCreateNestedOneWithoutTenantRelationsInput = {
+  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantRelationsInput, Prisma.GuarantorUncheckedCreateWithoutTenantRelationsInput>
+  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutTenantRelationsInput
+  connect?: Prisma.GuarantorWhereUniqueInput
 }
 
-export type GuarantorUncheckedUpdateManyWithoutMarketNestedInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutMarketInput, Prisma.GuarantorUncheckedCreateWithoutMarketInput> | Prisma.GuarantorCreateWithoutMarketInput[] | Prisma.GuarantorUncheckedCreateWithoutMarketInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutMarketInput | Prisma.GuarantorCreateOrConnectWithoutMarketInput[]
-  upsert?: Prisma.GuarantorUpsertWithWhereUniqueWithoutMarketInput | Prisma.GuarantorUpsertWithWhereUniqueWithoutMarketInput[]
-  createMany?: Prisma.GuarantorCreateManyMarketInputEnvelope
-  set?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  disconnect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  delete?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  update?: Prisma.GuarantorUpdateWithWhereUniqueWithoutMarketInput | Prisma.GuarantorUpdateWithWhereUniqueWithoutMarketInput[]
-  updateMany?: Prisma.GuarantorUpdateManyWithWhereWithoutMarketInput | Prisma.GuarantorUpdateManyWithWhereWithoutMarketInput[]
-  deleteMany?: Prisma.GuarantorScalarWhereInput | Prisma.GuarantorScalarWhereInput[]
+export type GuarantorUpdateOneRequiredWithoutTenantRelationsNestedInput = {
+  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantRelationsInput, Prisma.GuarantorUncheckedCreateWithoutTenantRelationsInput>
+  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutTenantRelationsInput
+  upsert?: Prisma.GuarantorUpsertWithoutTenantRelationsInput
+  connect?: Prisma.GuarantorWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GuarantorUpdateToOneWithWhereWithoutTenantRelationsInput, Prisma.GuarantorUpdateWithoutTenantRelationsInput>, Prisma.GuarantorUncheckedUpdateWithoutTenantRelationsInput>
 }
 
-export type GuarantorCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantInput, Prisma.GuarantorUncheckedCreateWithoutTenantInput> | Prisma.GuarantorCreateWithoutTenantInput[] | Prisma.GuarantorUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutTenantInput | Prisma.GuarantorCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.GuarantorCreateManyTenantInputEnvelope
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-}
-
-export type GuarantorUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantInput, Prisma.GuarantorUncheckedCreateWithoutTenantInput> | Prisma.GuarantorCreateWithoutTenantInput[] | Prisma.GuarantorUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutTenantInput | Prisma.GuarantorCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.GuarantorCreateManyTenantInputEnvelope
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-}
-
-export type GuarantorUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantInput, Prisma.GuarantorUncheckedCreateWithoutTenantInput> | Prisma.GuarantorCreateWithoutTenantInput[] | Prisma.GuarantorUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutTenantInput | Prisma.GuarantorCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.GuarantorUpsertWithWhereUniqueWithoutTenantInput | Prisma.GuarantorUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.GuarantorCreateManyTenantInputEnvelope
-  set?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  disconnect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  delete?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  update?: Prisma.GuarantorUpdateWithWhereUniqueWithoutTenantInput | Prisma.GuarantorUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.GuarantorUpdateManyWithWhereWithoutTenantInput | Prisma.GuarantorUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.GuarantorScalarWhereInput | Prisma.GuarantorScalarWhereInput[]
-}
-
-export type GuarantorUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantInput, Prisma.GuarantorUncheckedCreateWithoutTenantInput> | Prisma.GuarantorCreateWithoutTenantInput[] | Prisma.GuarantorUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.GuarantorCreateOrConnectWithoutTenantInput | Prisma.GuarantorCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.GuarantorUpsertWithWhereUniqueWithoutTenantInput | Prisma.GuarantorUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.GuarantorCreateManyTenantInputEnvelope
-  set?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  disconnect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  delete?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  connect?: Prisma.GuarantorWhereUniqueInput | Prisma.GuarantorWhereUniqueInput[]
-  update?: Prisma.GuarantorUpdateWithWhereUniqueWithoutTenantInput | Prisma.GuarantorUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.GuarantorUpdateManyWithWhereWithoutTenantInput | Prisma.GuarantorUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.GuarantorScalarWhereInput | Prisma.GuarantorScalarWhereInput[]
-}
-
-export type GuarantorCreateWithoutMarketInput = {
-  id?: string
+export type GuarantorCreateWithoutTenantRelationsInput = {
+  id: string
   fullName: string
   phone: string
   address?: string | null
@@ -545,12 +517,12 @@ export type GuarantorCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutGuarantorsInput
+  deletedAt?: Date | string | null
+  version?: number
 }
 
-export type GuarantorUncheckedCreateWithoutMarketInput = {
-  id?: string
-  tenantId: string
+export type GuarantorUncheckedCreateWithoutTenantRelationsInput = {
+  id: string
   fullName: string
   phone: string
   address?: string | null
@@ -559,117 +531,27 @@ export type GuarantorUncheckedCreateWithoutMarketInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
 }
 
-export type GuarantorCreateOrConnectWithoutMarketInput = {
+export type GuarantorCreateOrConnectWithoutTenantRelationsInput = {
   where: Prisma.GuarantorWhereUniqueInput
-  create: Prisma.XOR<Prisma.GuarantorCreateWithoutMarketInput, Prisma.GuarantorUncheckedCreateWithoutMarketInput>
+  create: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantRelationsInput, Prisma.GuarantorUncheckedCreateWithoutTenantRelationsInput>
 }
 
-export type GuarantorCreateManyMarketInputEnvelope = {
-  data: Prisma.GuarantorCreateManyMarketInput | Prisma.GuarantorCreateManyMarketInput[]
-  skipDuplicates?: boolean
+export type GuarantorUpsertWithoutTenantRelationsInput = {
+  update: Prisma.XOR<Prisma.GuarantorUpdateWithoutTenantRelationsInput, Prisma.GuarantorUncheckedUpdateWithoutTenantRelationsInput>
+  create: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantRelationsInput, Prisma.GuarantorUncheckedCreateWithoutTenantRelationsInput>
+  where?: Prisma.GuarantorWhereInput
 }
 
-export type GuarantorUpsertWithWhereUniqueWithoutMarketInput = {
-  where: Prisma.GuarantorWhereUniqueInput
-  update: Prisma.XOR<Prisma.GuarantorUpdateWithoutMarketInput, Prisma.GuarantorUncheckedUpdateWithoutMarketInput>
-  create: Prisma.XOR<Prisma.GuarantorCreateWithoutMarketInput, Prisma.GuarantorUncheckedCreateWithoutMarketInput>
+export type GuarantorUpdateToOneWithWhereWithoutTenantRelationsInput = {
+  where?: Prisma.GuarantorWhereInput
+  data: Prisma.XOR<Prisma.GuarantorUpdateWithoutTenantRelationsInput, Prisma.GuarantorUncheckedUpdateWithoutTenantRelationsInput>
 }
 
-export type GuarantorUpdateWithWhereUniqueWithoutMarketInput = {
-  where: Prisma.GuarantorWhereUniqueInput
-  data: Prisma.XOR<Prisma.GuarantorUpdateWithoutMarketInput, Prisma.GuarantorUncheckedUpdateWithoutMarketInput>
-}
-
-export type GuarantorUpdateManyWithWhereWithoutMarketInput = {
-  where: Prisma.GuarantorScalarWhereInput
-  data: Prisma.XOR<Prisma.GuarantorUpdateManyMutationInput, Prisma.GuarantorUncheckedUpdateManyWithoutMarketInput>
-}
-
-export type GuarantorScalarWhereInput = {
-  AND?: Prisma.GuarantorScalarWhereInput | Prisma.GuarantorScalarWhereInput[]
-  OR?: Prisma.GuarantorScalarWhereInput[]
-  NOT?: Prisma.GuarantorScalarWhereInput | Prisma.GuarantorScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Guarantor"> | string
-  marketId?: Prisma.UuidFilter<"Guarantor"> | string
-  tenantId?: Prisma.UuidFilter<"Guarantor"> | string
-  fullName?: Prisma.StringFilter<"Guarantor"> | string
-  phone?: Prisma.StringFilter<"Guarantor"> | string
-  address?: Prisma.StringNullableFilter<"Guarantor"> | string | null
-  description?: Prisma.StringNullableFilter<"Guarantor"> | string | null
-  createdById?: Prisma.UuidNullableFilter<"Guarantor"> | string | null
-  updatedById?: Prisma.UuidNullableFilter<"Guarantor"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Guarantor"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Guarantor"> | Date | string
-}
-
-export type GuarantorCreateWithoutTenantInput = {
-  id?: string
-  fullName: string
-  phone: string
-  address?: string | null
-  description?: string | null
-  createdById?: string | null
-  updatedById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  market: Prisma.MarketCreateNestedOneWithoutGuarantorsInput
-}
-
-export type GuarantorUncheckedCreateWithoutTenantInput = {
-  id?: string
-  marketId: string
-  fullName: string
-  phone: string
-  address?: string | null
-  description?: string | null
-  createdById?: string | null
-  updatedById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type GuarantorCreateOrConnectWithoutTenantInput = {
-  where: Prisma.GuarantorWhereUniqueInput
-  create: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantInput, Prisma.GuarantorUncheckedCreateWithoutTenantInput>
-}
-
-export type GuarantorCreateManyTenantInputEnvelope = {
-  data: Prisma.GuarantorCreateManyTenantInput | Prisma.GuarantorCreateManyTenantInput[]
-  skipDuplicates?: boolean
-}
-
-export type GuarantorUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.GuarantorWhereUniqueInput
-  update: Prisma.XOR<Prisma.GuarantorUpdateWithoutTenantInput, Prisma.GuarantorUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.GuarantorCreateWithoutTenantInput, Prisma.GuarantorUncheckedCreateWithoutTenantInput>
-}
-
-export type GuarantorUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.GuarantorWhereUniqueInput
-  data: Prisma.XOR<Prisma.GuarantorUpdateWithoutTenantInput, Prisma.GuarantorUncheckedUpdateWithoutTenantInput>
-}
-
-export type GuarantorUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.GuarantorScalarWhereInput
-  data: Prisma.XOR<Prisma.GuarantorUpdateManyMutationInput, Prisma.GuarantorUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type GuarantorCreateManyMarketInput = {
-  id?: string
-  tenantId: string
-  fullName: string
-  phone: string
-  address?: string | null
-  description?: string | null
-  createdById?: string | null
-  updatedById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type GuarantorUpdateWithoutMarketInput = {
+export type GuarantorUpdateWithoutTenantRelationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -679,49 +561,11 @@ export type GuarantorUpdateWithoutMarketInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutGuarantorsNestedInput
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type GuarantorUncheckedUpdateWithoutMarketInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type GuarantorUncheckedUpdateManyWithoutMarketInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type GuarantorCreateManyTenantInput = {
-  id?: string
-  marketId: string
-  fullName: string
-  phone: string
-  address?: string | null
-  description?: string | null
-  createdById?: string | null
-  updatedById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type GuarantorUpdateWithoutTenantInput = {
+export type GuarantorUncheckedUpdateWithoutTenantRelationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -731,41 +575,43 @@ export type GuarantorUpdateWithoutTenantInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  market?: Prisma.MarketUpdateOneRequiredWithoutGuarantorsNestedInput
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
-export type GuarantorUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+
+/**
+ * Count Type GuarantorCountOutputType
+ */
+
+export type GuarantorCountOutputType = {
+  tenantRelations: number
 }
 
-export type GuarantorUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  marketId?: Prisma.StringFieldUpdateOperationsInput | string
-  fullName?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type GuarantorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tenantRelations?: boolean | GuarantorCountOutputTypeCountTenantRelationsArgs
 }
 
+/**
+ * GuarantorCountOutputType without action
+ */
+export type GuarantorCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuarantorCountOutputType
+   */
+  select?: Prisma.GuarantorCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * GuarantorCountOutputType without action
+ */
+export type GuarantorCountOutputTypeCountTenantRelationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TenantGuarantorWhereInput
+}
 
 
 export type GuarantorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  marketId?: boolean
-  tenantId?: boolean
   fullName?: boolean
   phone?: boolean
   address?: boolean
@@ -774,14 +620,14 @@ export type GuarantorSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  deletedAt?: boolean
+  version?: boolean
+  tenantRelations?: boolean | Prisma.Guarantor$tenantRelationsArgs<ExtArgs>
+  _count?: boolean | Prisma.GuarantorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guarantor"]>
 
 export type GuarantorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  marketId?: boolean
-  tenantId?: boolean
   fullName?: boolean
   phone?: boolean
   address?: boolean
@@ -790,14 +636,12 @@ export type GuarantorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  deletedAt?: boolean
+  version?: boolean
 }, ExtArgs["result"]["guarantor"]>
 
 export type GuarantorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  marketId?: boolean
-  tenantId?: boolean
   fullName?: boolean
   phone?: boolean
   address?: boolean
@@ -806,14 +650,12 @@ export type GuarantorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  deletedAt?: boolean
+  version?: boolean
 }, ExtArgs["result"]["guarantor"]>
 
 export type GuarantorSelectScalar = {
   id?: boolean
-  marketId?: boolean
-  tenantId?: boolean
   fullName?: boolean
   phone?: boolean
   address?: boolean
@@ -822,32 +664,25 @@ export type GuarantorSelectScalar = {
   updatedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
+  version?: boolean
 }
 
-export type GuarantorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "tenantId" | "fullName" | "phone" | "address" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["guarantor"]>
+export type GuarantorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "phone" | "address" | "description" | "createdById" | "updatedById" | "createdAt" | "updatedAt" | "deletedAt" | "version", ExtArgs["result"]["guarantor"]>
 export type GuarantorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  tenantRelations?: boolean | Prisma.Guarantor$tenantRelationsArgs<ExtArgs>
+  _count?: boolean | Prisma.GuarantorCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type GuarantorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-}
-export type GuarantorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-}
+export type GuarantorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type GuarantorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $GuarantorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Guarantor"
   objects: {
-    market: Prisma.$MarketPayload<ExtArgs>
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    tenantRelations: Prisma.$TenantGuarantorPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    marketId: string
-    tenantId: string
     fullName: string
     phone: string
     address: string | null
@@ -856,6 +691,8 @@ export type $GuarantorPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     updatedById: string | null
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
+    version: number
   }, ExtArgs["result"]["guarantor"]>
   composites: {}
 }
@@ -1250,8 +1087,7 @@ readonly fields: GuarantorFieldRefs;
  */
 export interface Prisma__GuarantorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenantRelations<T extends Prisma.Guarantor$tenantRelationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guarantor$tenantRelationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantGuarantorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1282,8 +1118,6 @@ export interface Prisma__GuarantorClient<T, Null = never, ExtArgs extends runtim
  */
 export interface GuarantorFieldRefs {
   readonly id: Prisma.FieldRef<"Guarantor", 'String'>
-  readonly marketId: Prisma.FieldRef<"Guarantor", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Guarantor", 'String'>
   readonly fullName: Prisma.FieldRef<"Guarantor", 'String'>
   readonly phone: Prisma.FieldRef<"Guarantor", 'String'>
   readonly address: Prisma.FieldRef<"Guarantor", 'String'>
@@ -1292,6 +1126,8 @@ export interface GuarantorFieldRefs {
   readonly updatedById: Prisma.FieldRef<"Guarantor", 'String'>
   readonly createdAt: Prisma.FieldRef<"Guarantor", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Guarantor", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Guarantor", 'DateTime'>
+  readonly version: Prisma.FieldRef<"Guarantor", 'Int'>
 }
     
 
@@ -1546,10 +1382,6 @@ export type GuarantorCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    */
   data: Prisma.GuarantorCreateManyInput | Prisma.GuarantorCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.GuarantorIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1620,10 +1452,6 @@ export type GuarantorUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many Guarantors to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.GuarantorIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1690,6 +1518,30 @@ export type GuarantorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Guarantors to delete.
    */
   limit?: number
+}
+
+/**
+ * Guarantor.tenantRelations
+ */
+export type Guarantor$tenantRelationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TenantGuarantor
+   */
+  select?: Prisma.TenantGuarantorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TenantGuarantor
+   */
+  omit?: Prisma.TenantGuarantorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantGuarantorInclude<ExtArgs> | null
+  where?: Prisma.TenantGuarantorWhereInput
+  orderBy?: Prisma.TenantGuarantorOrderByWithRelationInput | Prisma.TenantGuarantorOrderByWithRelationInput[]
+  cursor?: Prisma.TenantGuarantorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TenantGuarantorScalarFieldEnum | Prisma.TenantGuarantorScalarFieldEnum[]
 }
 
 /**

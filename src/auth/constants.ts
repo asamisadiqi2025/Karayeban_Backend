@@ -14,16 +14,16 @@ export const PERMISSIONS = {
   CONTRACT_CREATE: 'contract.create',
   CONTRACT_MANAGE: 'contract.manage',
   TENANT_CREATE: 'tenant.create',
-  TENANT_UPDATE: 'tenant.tenant',
+  TENANT_UPDATE: 'tenant.update',
   FINANCE_VIEW: 'finance.view',
   FINANCE_MANAGE: 'finance.manage',
   USER_MANAGE: 'user.manage',
   REPORTS_VIEW: 'reports.view',
 } as const;
 
-export const ROLE_PERMISSIONS: Record<string, string[]> = {
-  MARKET_OWNER: Object.values(PERMISSIONS),
-  MANAGER: [
+export const ROLE_PERMISSIONS: Record<string, readonly string[]> = {
+  [ROLES.MARKET_OWNER]: Object.values(PERMISSIONS),
+  [ROLES.MANAGER]: [
     PERMISSIONS.SHOP_CREATE,
     PERMISSIONS.SHOP_UPDATE,
     PERMISSIONS.CONTRACT_CREATE,
@@ -33,12 +33,12 @@ export const ROLE_PERMISSIONS: Record<string, string[]> = {
     PERMISSIONS.FINANCE_VIEW,
     PERMISSIONS.REPORTS_VIEW,
   ],
-  ACCOUNTANT: [
+  [ROLES.ACCOUNTANT]: [
     PERMISSIONS.FINANCE_VIEW,
     PERMISSIONS.FINANCE_MANAGE,
     PERMISSIONS.REPORTS_VIEW,
   ],
-  STAFF: [
+  [ROLES.STAFF]: [
     PERMISSIONS.SHOP_CREATE,
     PERMISSIONS.SHOP_UPDATE,
     PERMISSIONS.TENANT_CREATE,
