@@ -43,6 +43,7 @@ export type JournalEntryMinAggregateOutputType = {
   status: $Enums.JournalStatus | null
   referenceType: $Enums.TransactionReferenceType | null
   referenceId: string | null
+  reversalOfJournalId: string | null
   accountingPeriodId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -63,6 +64,7 @@ export type JournalEntryMaxAggregateOutputType = {
   status: $Enums.JournalStatus | null
   referenceType: $Enums.TransactionReferenceType | null
   referenceId: string | null
+  reversalOfJournalId: string | null
   accountingPeriodId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -83,6 +85,7 @@ export type JournalEntryCountAggregateOutputType = {
   status: number
   referenceType: number
   referenceId: number
+  reversalOfJournalId: number
   accountingPeriodId: number
   createdById: number
   createdAt: number
@@ -113,6 +116,7 @@ export type JournalEntryMinAggregateInputType = {
   status?: true
   referenceType?: true
   referenceId?: true
+  reversalOfJournalId?: true
   accountingPeriodId?: true
   createdById?: true
   createdAt?: true
@@ -133,6 +137,7 @@ export type JournalEntryMaxAggregateInputType = {
   status?: true
   referenceType?: true
   referenceId?: true
+  reversalOfJournalId?: true
   accountingPeriodId?: true
   createdById?: true
   createdAt?: true
@@ -153,6 +158,7 @@ export type JournalEntryCountAggregateInputType = {
   status?: true
   referenceType?: true
   referenceId?: true
+  reversalOfJournalId?: true
   accountingPeriodId?: true
   createdById?: true
   createdAt?: true
@@ -260,10 +266,11 @@ export type JournalEntryGroupByOutputType = {
   status: $Enums.JournalStatus
   referenceType: $Enums.TransactionReferenceType | null
   referenceId: string | null
+  reversalOfJournalId: string | null
   accountingPeriodId: string | null
   createdById: string | null
   createdAt: Date
-  updatedAt: Date | null
+  updatedAt: Date
   postedAt: Date | null
   voidedAt: Date | null
   voidedBy: string | null
@@ -303,18 +310,23 @@ export type JournalEntryWhereInput = {
   status?: Prisma.EnumJournalStatusFilter<"JournalEntry"> | $Enums.JournalStatus
   referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"JournalEntry"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
+  reversalOfJournalId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   accountingPeriodId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   createdById?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   createdAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
   postedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
   voidedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
   voidedBy?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   voidReason?: Prisma.StringNullableFilter<"JournalEntry"> | string | null
   version?: Prisma.IntFilter<"JournalEntry"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  reversalOfJournal?: Prisma.XOR<Prisma.JournalEntryNullableScalarRelationFilter, Prisma.JournalEntryWhereInput> | null
+  reversalJournal?: Prisma.JournalEntryListRelationFilter
   lines?: Prisma.JournalLineListRelationFilter
   accountingPeriod?: Prisma.XOR<Prisma.AccountingPeriodNullableScalarRelationFilter, Prisma.AccountingPeriodWhereInput> | null
+  voidedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  accountTransactions?: Prisma.AccountTransactionListRelationFilter
 }
 
 export type JournalEntryOrderByWithRelationInput = {
@@ -326,18 +338,23 @@ export type JournalEntryOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   referenceType?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  reversalOfJournalId?: Prisma.SortOrderInput | Prisma.SortOrder
   accountingPeriodId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   postedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   voidedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   voidedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   voidReason?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
+  reversalOfJournal?: Prisma.JournalEntryOrderByWithRelationInput
+  reversalJournal?: Prisma.JournalEntryOrderByRelationAggregateInput
   lines?: Prisma.JournalLineOrderByRelationAggregateInput
   accountingPeriod?: Prisma.AccountingPeriodOrderByWithRelationInput
+  voidedByUser?: Prisma.UserOrderByWithRelationInput
+  accountTransactions?: Prisma.AccountTransactionOrderByRelationAggregateInput
 }
 
 export type JournalEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -353,18 +370,23 @@ export type JournalEntryWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumJournalStatusFilter<"JournalEntry"> | $Enums.JournalStatus
   referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"JournalEntry"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
+  reversalOfJournalId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   accountingPeriodId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   createdById?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   createdAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
   postedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
   voidedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
   voidedBy?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   voidReason?: Prisma.StringNullableFilter<"JournalEntry"> | string | null
   version?: Prisma.IntFilter<"JournalEntry"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  reversalOfJournal?: Prisma.XOR<Prisma.JournalEntryNullableScalarRelationFilter, Prisma.JournalEntryWhereInput> | null
+  reversalJournal?: Prisma.JournalEntryListRelationFilter
   lines?: Prisma.JournalLineListRelationFilter
   accountingPeriod?: Prisma.XOR<Prisma.AccountingPeriodNullableScalarRelationFilter, Prisma.AccountingPeriodWhereInput> | null
+  voidedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  accountTransactions?: Prisma.AccountTransactionListRelationFilter
 }, "id" | "marketId_journalNumber">
 
 export type JournalEntryOrderByWithAggregationInput = {
@@ -376,10 +398,11 @@ export type JournalEntryOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   referenceType?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  reversalOfJournalId?: Prisma.SortOrderInput | Prisma.SortOrder
   accountingPeriodId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   postedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   voidedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   voidedBy?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -404,10 +427,11 @@ export type JournalEntryScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumJournalStatusWithAggregatesFilter<"JournalEntry"> | $Enums.JournalStatus
   referenceType?: Prisma.EnumTransactionReferenceTypeNullableWithAggregatesFilter<"JournalEntry"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableWithAggregatesFilter<"JournalEntry"> | string | null
+  reversalOfJournalId?: Prisma.UuidNullableWithAggregatesFilter<"JournalEntry"> | string | null
   accountingPeriodId?: Prisma.UuidNullableWithAggregatesFilter<"JournalEntry"> | string | null
   createdById?: Prisma.UuidNullableWithAggregatesFilter<"JournalEntry"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"JournalEntry"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"JournalEntry"> | Date | string | null
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"JournalEntry"> | Date | string
   postedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"JournalEntry"> | Date | string | null
   voidedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"JournalEntry"> | Date | string | null
   voidedBy?: Prisma.UuidNullableWithAggregatesFilter<"JournalEntry"> | string | null
@@ -425,15 +449,18 @@ export type JournalEntryCreateInput = {
   referenceId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
-  voidedBy?: string | null
   voidReason?: string | null
   version?: number
   market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
   lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
   accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryUncheckedCreateInput = {
@@ -445,16 +472,19 @@ export type JournalEntryUncheckedCreateInput = {
   status?: $Enums.JournalStatus
   referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  reversalOfJournalId?: string | null
   accountingPeriodId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
   voidReason?: string | null
   version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
   lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryUpdateInput = {
@@ -467,15 +497,18 @@ export type JournalEntryUpdateInput = {
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
   lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
   accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryUncheckedUpdateInput = {
@@ -487,16 +520,19 @@ export type JournalEntryUncheckedUpdateInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
   lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryCreateManyInput = {
@@ -508,10 +544,11 @@ export type JournalEntryCreateManyInput = {
   status?: $Enums.JournalStatus
   referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  reversalOfJournalId?: string | null
   accountingPeriodId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
@@ -529,10 +566,9 @@ export type JournalEntryUpdateManyMutationInput = {
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -546,10 +582,11 @@ export type JournalEntryUncheckedUpdateManyInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -567,6 +604,11 @@ export type JournalEntryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type JournalEntryNullableScalarRelationFilter = {
+  is?: Prisma.JournalEntryWhereInput | null
+  isNot?: Prisma.JournalEntryWhereInput | null
+}
+
 export type JournalEntryMarketIdJournalNumberCompoundUniqueInput = {
   marketId: string
   journalNumber: string
@@ -581,6 +623,7 @@ export type JournalEntryCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   referenceType?: Prisma.SortOrder
   referenceId?: Prisma.SortOrder
+  reversalOfJournalId?: Prisma.SortOrder
   accountingPeriodId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -605,6 +648,7 @@ export type JournalEntryMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   referenceType?: Prisma.SortOrder
   referenceId?: Prisma.SortOrder
+  reversalOfJournalId?: Prisma.SortOrder
   accountingPeriodId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -625,6 +669,7 @@ export type JournalEntryMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   referenceType?: Prisma.SortOrder
   referenceId?: Prisma.SortOrder
+  reversalOfJournalId?: Prisma.SortOrder
   accountingPeriodId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -729,12 +774,70 @@ export type JournalEntryUncheckedUpdateManyWithoutAccountingPeriodNestedInput = 
   deleteMany?: Prisma.JournalEntryScalarWhereInput | Prisma.JournalEntryScalarWhereInput[]
 }
 
+export type JournalEntryCreateNestedOneWithoutReversalJournalInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalJournalInput>
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutReversalJournalInput
+  connect?: Prisma.JournalEntryWhereUniqueInput
+}
+
+export type JournalEntryCreateNestedManyWithoutReversalOfJournalInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput> | Prisma.JournalEntryCreateWithoutReversalOfJournalInput[] | Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput | Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput[]
+  createMany?: Prisma.JournalEntryCreateManyReversalOfJournalInputEnvelope
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+}
+
+export type JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput> | Prisma.JournalEntryCreateWithoutReversalOfJournalInput[] | Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput | Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput[]
+  createMany?: Prisma.JournalEntryCreateManyReversalOfJournalInputEnvelope
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+}
+
 export type EnumJournalStatusFieldUpdateOperationsInput = {
   set?: $Enums.JournalStatus
 }
 
 export type NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput = {
   set?: $Enums.TransactionReferenceType | null
+}
+
+export type JournalEntryUpdateOneWithoutReversalJournalNestedInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalJournalInput>
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutReversalJournalInput
+  upsert?: Prisma.JournalEntryUpsertWithoutReversalJournalInput
+  disconnect?: Prisma.JournalEntryWhereInput | boolean
+  delete?: Prisma.JournalEntryWhereInput | boolean
+  connect?: Prisma.JournalEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JournalEntryUpdateToOneWithWhereWithoutReversalJournalInput, Prisma.JournalEntryUpdateWithoutReversalJournalInput>, Prisma.JournalEntryUncheckedUpdateWithoutReversalJournalInput>
+}
+
+export type JournalEntryUpdateManyWithoutReversalOfJournalNestedInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput> | Prisma.JournalEntryCreateWithoutReversalOfJournalInput[] | Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput | Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput[]
+  upsert?: Prisma.JournalEntryUpsertWithWhereUniqueWithoutReversalOfJournalInput | Prisma.JournalEntryUpsertWithWhereUniqueWithoutReversalOfJournalInput[]
+  createMany?: Prisma.JournalEntryCreateManyReversalOfJournalInputEnvelope
+  set?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  disconnect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  delete?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  update?: Prisma.JournalEntryUpdateWithWhereUniqueWithoutReversalOfJournalInput | Prisma.JournalEntryUpdateWithWhereUniqueWithoutReversalOfJournalInput[]
+  updateMany?: Prisma.JournalEntryUpdateManyWithWhereWithoutReversalOfJournalInput | Prisma.JournalEntryUpdateManyWithWhereWithoutReversalOfJournalInput[]
+  deleteMany?: Prisma.JournalEntryScalarWhereInput | Prisma.JournalEntryScalarWhereInput[]
+}
+
+export type JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput> | Prisma.JournalEntryCreateWithoutReversalOfJournalInput[] | Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput | Prisma.JournalEntryCreateOrConnectWithoutReversalOfJournalInput[]
+  upsert?: Prisma.JournalEntryUpsertWithWhereUniqueWithoutReversalOfJournalInput | Prisma.JournalEntryUpsertWithWhereUniqueWithoutReversalOfJournalInput[]
+  createMany?: Prisma.JournalEntryCreateManyReversalOfJournalInputEnvelope
+  set?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  disconnect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  delete?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  update?: Prisma.JournalEntryUpdateWithWhereUniqueWithoutReversalOfJournalInput | Prisma.JournalEntryUpdateWithWhereUniqueWithoutReversalOfJournalInput[]
+  updateMany?: Prisma.JournalEntryUpdateManyWithWhereWithoutReversalOfJournalInput | Prisma.JournalEntryUpdateManyWithWhereWithoutReversalOfJournalInput[]
+  deleteMany?: Prisma.JournalEntryScalarWhereInput | Prisma.JournalEntryScalarWhereInput[]
 }
 
 export type JournalEntryCreateNestedOneWithoutLinesInput = {
@@ -751,6 +854,64 @@ export type JournalEntryUpdateOneRequiredWithoutLinesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.JournalEntryUpdateToOneWithWhereWithoutLinesInput, Prisma.JournalEntryUpdateWithoutLinesInput>, Prisma.JournalEntryUncheckedUpdateWithoutLinesInput>
 }
 
+export type JournalEntryCreateNestedOneWithoutAccountTransactionsInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutAccountTransactionsInput, Prisma.JournalEntryUncheckedCreateWithoutAccountTransactionsInput>
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutAccountTransactionsInput
+  connect?: Prisma.JournalEntryWhereUniqueInput
+}
+
+export type JournalEntryUpdateOneWithoutAccountTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutAccountTransactionsInput, Prisma.JournalEntryUncheckedCreateWithoutAccountTransactionsInput>
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutAccountTransactionsInput
+  upsert?: Prisma.JournalEntryUpsertWithoutAccountTransactionsInput
+  disconnect?: Prisma.JournalEntryWhereInput | boolean
+  delete?: Prisma.JournalEntryWhereInput | boolean
+  connect?: Prisma.JournalEntryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.JournalEntryUpdateToOneWithWhereWithoutAccountTransactionsInput, Prisma.JournalEntryUpdateWithoutAccountTransactionsInput>, Prisma.JournalEntryUncheckedUpdateWithoutAccountTransactionsInput>
+}
+
+export type JournalEntryCreateNestedManyWithoutVoidedByUserInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput> | Prisma.JournalEntryCreateWithoutVoidedByUserInput[] | Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput | Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput[]
+  createMany?: Prisma.JournalEntryCreateManyVoidedByUserInputEnvelope
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+}
+
+export type JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput> | Prisma.JournalEntryCreateWithoutVoidedByUserInput[] | Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput | Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput[]
+  createMany?: Prisma.JournalEntryCreateManyVoidedByUserInputEnvelope
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+}
+
+export type JournalEntryUpdateManyWithoutVoidedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput> | Prisma.JournalEntryCreateWithoutVoidedByUserInput[] | Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput | Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput[]
+  upsert?: Prisma.JournalEntryUpsertWithWhereUniqueWithoutVoidedByUserInput | Prisma.JournalEntryUpsertWithWhereUniqueWithoutVoidedByUserInput[]
+  createMany?: Prisma.JournalEntryCreateManyVoidedByUserInputEnvelope
+  set?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  disconnect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  delete?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  update?: Prisma.JournalEntryUpdateWithWhereUniqueWithoutVoidedByUserInput | Prisma.JournalEntryUpdateWithWhereUniqueWithoutVoidedByUserInput[]
+  updateMany?: Prisma.JournalEntryUpdateManyWithWhereWithoutVoidedByUserInput | Prisma.JournalEntryUpdateManyWithWhereWithoutVoidedByUserInput[]
+  deleteMany?: Prisma.JournalEntryScalarWhereInput | Prisma.JournalEntryScalarWhereInput[]
+}
+
+export type JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.JournalEntryCreateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput> | Prisma.JournalEntryCreateWithoutVoidedByUserInput[] | Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput[]
+  connectOrCreate?: Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput | Prisma.JournalEntryCreateOrConnectWithoutVoidedByUserInput[]
+  upsert?: Prisma.JournalEntryUpsertWithWhereUniqueWithoutVoidedByUserInput | Prisma.JournalEntryUpsertWithWhereUniqueWithoutVoidedByUserInput[]
+  createMany?: Prisma.JournalEntryCreateManyVoidedByUserInputEnvelope
+  set?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  disconnect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  delete?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  connect?: Prisma.JournalEntryWhereUniqueInput | Prisma.JournalEntryWhereUniqueInput[]
+  update?: Prisma.JournalEntryUpdateWithWhereUniqueWithoutVoidedByUserInput | Prisma.JournalEntryUpdateWithWhereUniqueWithoutVoidedByUserInput[]
+  updateMany?: Prisma.JournalEntryUpdateManyWithWhereWithoutVoidedByUserInput | Prisma.JournalEntryUpdateManyWithWhereWithoutVoidedByUserInput[]
+  deleteMany?: Prisma.JournalEntryScalarWhereInput | Prisma.JournalEntryScalarWhereInput[]
+}
+
 export type JournalEntryCreateWithoutMarketInput = {
   id: string
   journalNumber: string
@@ -761,14 +922,17 @@ export type JournalEntryCreateWithoutMarketInput = {
   referenceId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
-  voidedBy?: string | null
   voidReason?: string | null
   version?: number
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
   lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
   accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryUncheckedCreateWithoutMarketInput = {
@@ -779,16 +943,19 @@ export type JournalEntryUncheckedCreateWithoutMarketInput = {
   status?: $Enums.JournalStatus
   referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  reversalOfJournalId?: string | null
   accountingPeriodId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
   voidReason?: string | null
   version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
   lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryCreateOrConnectWithoutMarketInput = {
@@ -829,10 +996,11 @@ export type JournalEntryScalarWhereInput = {
   status?: Prisma.EnumJournalStatusFilter<"JournalEntry"> | $Enums.JournalStatus
   referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"JournalEntry"> | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
+  reversalOfJournalId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   accountingPeriodId?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   createdById?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
   createdAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"JournalEntry"> | Date | string
   postedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
   voidedAt?: Prisma.DateTimeNullableFilter<"JournalEntry"> | Date | string | null
   voidedBy?: Prisma.UuidNullableFilter<"JournalEntry"> | string | null
@@ -850,14 +1018,17 @@ export type JournalEntryCreateWithoutAccountingPeriodInput = {
   referenceId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
-  voidedBy?: string | null
   voidReason?: string | null
   version?: number
   market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
   lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryUncheckedCreateWithoutAccountingPeriodInput = {
@@ -869,15 +1040,18 @@ export type JournalEntryUncheckedCreateWithoutAccountingPeriodInput = {
   status?: $Enums.JournalStatus
   referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  reversalOfJournalId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
   voidReason?: string | null
   version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
   lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryCreateOrConnectWithoutAccountingPeriodInput = {
@@ -906,7 +1080,7 @@ export type JournalEntryUpdateManyWithWhereWithoutAccountingPeriodInput = {
   data: Prisma.XOR<Prisma.JournalEntryUpdateManyMutationInput, Prisma.JournalEntryUncheckedUpdateManyWithoutAccountingPeriodInput>
 }
 
-export type JournalEntryCreateWithoutLinesInput = {
+export type JournalEntryCreateWithoutReversalJournalInput = {
   id: string
   journalNumber: string
   date: Date | string
@@ -916,17 +1090,71 @@ export type JournalEntryCreateWithoutLinesInput = {
   referenceId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
+  accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
+}
+
+export type JournalEntryUncheckedCreateWithoutReversalJournalInput = {
+  id: string
+  marketId: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  reversalOfJournalId?: string | null
+  accountingPeriodId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
   voidReason?: string | null
   version?: number
-  market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
-  accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
 }
 
-export type JournalEntryUncheckedCreateWithoutLinesInput = {
+export type JournalEntryCreateOrConnectWithoutReversalJournalInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalJournalInput>
+}
+
+export type JournalEntryCreateWithoutReversalOfJournalInput = {
+  id: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
+  lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
+  accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
+}
+
+export type JournalEntryUncheckedCreateWithoutReversalOfJournalInput = {
   id: string
   marketId: string
   journalNumber: string
@@ -938,12 +1166,144 @@ export type JournalEntryUncheckedCreateWithoutLinesInput = {
   accountingPeriodId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
   voidReason?: string | null
   version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
+  lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
+}
+
+export type JournalEntryCreateOrConnectWithoutReversalOfJournalInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput>
+}
+
+export type JournalEntryCreateManyReversalOfJournalInputEnvelope = {
+  data: Prisma.JournalEntryCreateManyReversalOfJournalInput | Prisma.JournalEntryCreateManyReversalOfJournalInput[]
+  skipDuplicates?: boolean
+}
+
+export type JournalEntryUpsertWithoutReversalJournalInput = {
+  update: Prisma.XOR<Prisma.JournalEntryUpdateWithoutReversalJournalInput, Prisma.JournalEntryUncheckedUpdateWithoutReversalJournalInput>
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalJournalInput>
+  where?: Prisma.JournalEntryWhereInput
+}
+
+export type JournalEntryUpdateToOneWithWhereWithoutReversalJournalInput = {
+  where?: Prisma.JournalEntryWhereInput
+  data: Prisma.XOR<Prisma.JournalEntryUpdateWithoutReversalJournalInput, Prisma.JournalEntryUncheckedUpdateWithoutReversalJournalInput>
+}
+
+export type JournalEntryUpdateWithoutReversalJournalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
+  accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryUncheckedUpdateWithoutReversalJournalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryUpsertWithWhereUniqueWithoutReversalOfJournalInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.JournalEntryUpdateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedUpdateWithoutReversalOfJournalInput>
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedCreateWithoutReversalOfJournalInput>
+}
+
+export type JournalEntryUpdateWithWhereUniqueWithoutReversalOfJournalInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.JournalEntryUpdateWithoutReversalOfJournalInput, Prisma.JournalEntryUncheckedUpdateWithoutReversalOfJournalInput>
+}
+
+export type JournalEntryUpdateManyWithWhereWithoutReversalOfJournalInput = {
+  where: Prisma.JournalEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.JournalEntryUpdateManyMutationInput, Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalInput>
+}
+
+export type JournalEntryCreateWithoutLinesInput = {
+  id: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
+  accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
+}
+
+export type JournalEntryUncheckedCreateWithoutLinesInput = {
+  id: string
+  marketId: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  reversalOfJournalId?: string | null
+  accountingPeriodId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidedBy?: string | null
+  voidReason?: string | null
+  version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
 }
 
 export type JournalEntryCreateOrConnectWithoutLinesInput = {
@@ -972,14 +1332,17 @@ export type JournalEntryUpdateWithoutLinesInput = {
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
   accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryUncheckedUpdateWithoutLinesInput = {
@@ -991,15 +1354,198 @@ export type JournalEntryUncheckedUpdateWithoutLinesInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryCreateWithoutAccountTransactionsInput = {
+  id: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
+  lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
+  accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  voidedByUser?: Prisma.UserCreateNestedOneWithoutJournalEntryVoidedInput
+}
+
+export type JournalEntryUncheckedCreateWithoutAccountTransactionsInput = {
+  id: string
+  marketId: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  reversalOfJournalId?: string | null
+  accountingPeriodId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidedBy?: string | null
+  voidReason?: string | null
+  version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
+  lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+}
+
+export type JournalEntryCreateOrConnectWithoutAccountTransactionsInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutAccountTransactionsInput, Prisma.JournalEntryUncheckedCreateWithoutAccountTransactionsInput>
+}
+
+export type JournalEntryUpsertWithoutAccountTransactionsInput = {
+  update: Prisma.XOR<Prisma.JournalEntryUpdateWithoutAccountTransactionsInput, Prisma.JournalEntryUncheckedUpdateWithoutAccountTransactionsInput>
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutAccountTransactionsInput, Prisma.JournalEntryUncheckedCreateWithoutAccountTransactionsInput>
+  where?: Prisma.JournalEntryWhereInput
+}
+
+export type JournalEntryUpdateToOneWithWhereWithoutAccountTransactionsInput = {
+  where?: Prisma.JournalEntryWhereInput
+  data: Prisma.XOR<Prisma.JournalEntryUpdateWithoutAccountTransactionsInput, Prisma.JournalEntryUncheckedUpdateWithoutAccountTransactionsInput>
+}
+
+export type JournalEntryUpdateWithoutAccountTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
+  lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
+  accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+}
+
+export type JournalEntryUncheckedUpdateWithoutAccountTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
+  lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+}
+
+export type JournalEntryCreateWithoutVoidedByUserInput = {
+  id: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutJournalEntriesInput
+  reversalOfJournal?: Prisma.JournalEntryCreateNestedOneWithoutReversalJournalInput
+  reversalJournal?: Prisma.JournalEntryCreateNestedManyWithoutReversalOfJournalInput
+  lines?: Prisma.JournalLineCreateNestedManyWithoutJournalInput
+  accountingPeriod?: Prisma.AccountingPeriodCreateNestedOneWithoutJournalEntriesInput
+  accountTransactions?: Prisma.AccountTransactionCreateNestedManyWithoutJournalEntryInput
+}
+
+export type JournalEntryUncheckedCreateWithoutVoidedByUserInput = {
+  id: string
+  marketId: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  reversalOfJournalId?: string | null
+  accountingPeriodId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+  reversalJournal?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutReversalOfJournalInput
+  lines?: Prisma.JournalLineUncheckedCreateNestedManyWithoutJournalInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput
+}
+
+export type JournalEntryCreateOrConnectWithoutVoidedByUserInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput>
+}
+
+export type JournalEntryCreateManyVoidedByUserInputEnvelope = {
+  data: Prisma.JournalEntryCreateManyVoidedByUserInput | Prisma.JournalEntryCreateManyVoidedByUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type JournalEntryUpsertWithWhereUniqueWithoutVoidedByUserInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.JournalEntryUpdateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedUpdateWithoutVoidedByUserInput>
+  create: Prisma.XOR<Prisma.JournalEntryCreateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedCreateWithoutVoidedByUserInput>
+}
+
+export type JournalEntryUpdateWithWhereUniqueWithoutVoidedByUserInput = {
+  where: Prisma.JournalEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.JournalEntryUpdateWithoutVoidedByUserInput, Prisma.JournalEntryUncheckedUpdateWithoutVoidedByUserInput>
+}
+
+export type JournalEntryUpdateManyWithWhereWithoutVoidedByUserInput = {
+  where: Prisma.JournalEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.JournalEntryUpdateManyMutationInput, Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserInput>
 }
 
 export type JournalEntryCreateManyMarketInput = {
@@ -1010,10 +1556,11 @@ export type JournalEntryCreateManyMarketInput = {
   status?: $Enums.JournalStatus
   referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  reversalOfJournalId?: string | null
   accountingPeriodId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
@@ -1031,14 +1578,17 @@ export type JournalEntryUpdateWithoutMarketInput = {
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
   lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
   accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryUncheckedUpdateWithoutMarketInput = {
@@ -1049,16 +1599,19 @@ export type JournalEntryUncheckedUpdateWithoutMarketInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
   lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryUncheckedUpdateManyWithoutMarketInput = {
@@ -1069,10 +1622,11 @@ export type JournalEntryUncheckedUpdateManyWithoutMarketInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1089,9 +1643,10 @@ export type JournalEntryCreateManyAccountingPeriodInput = {
   status?: $Enums.JournalStatus
   referenceType?: $Enums.TransactionReferenceType | null
   referenceId?: string | null
+  reversalOfJournalId?: string | null
   createdById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string | null
+  updatedAt?: Date | string
   postedAt?: Date | string | null
   voidedAt?: Date | string | null
   voidedBy?: string | null
@@ -1109,14 +1664,17 @@ export type JournalEntryUpdateWithoutAccountingPeriodInput = {
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
   lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryUncheckedUpdateWithoutAccountingPeriodInput = {
@@ -1128,15 +1686,18 @@ export type JournalEntryUncheckedUpdateWithoutAccountingPeriodInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
   lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
 }
 
 export type JournalEntryUncheckedUpdateManyWithoutAccountingPeriodInput = {
@@ -1148,12 +1709,185 @@ export type JournalEntryUncheckedUpdateManyWithoutAccountingPeriodInput = {
   status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
   referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
   referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type JournalEntryCreateManyReversalOfJournalInput = {
+  id: string
+  marketId: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  accountingPeriodId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidedBy?: string | null
+  voidReason?: string | null
+  version?: number
+}
+
+export type JournalEntryUpdateWithoutReversalOfJournalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
+  lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
+  accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  voidedByUser?: Prisma.UserUpdateOneWithoutJournalEntryVoidedNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryUncheckedUpdateWithoutReversalOfJournalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
+  lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryUncheckedUpdateManyWithoutReversalOfJournalInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type JournalEntryCreateManyVoidedByUserInput = {
+  id: string
+  marketId: string
+  journalNumber: string
+  date: Date | string
+  description?: string | null
+  status?: $Enums.JournalStatus
+  referenceType?: $Enums.TransactionReferenceType | null
+  referenceId?: string | null
+  reversalOfJournalId?: string | null
+  accountingPeriodId?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  postedAt?: Date | string | null
+  voidedAt?: Date | string | null
+  voidReason?: string | null
+  version?: number
+}
+
+export type JournalEntryUpdateWithoutVoidedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneRequiredWithoutJournalEntriesNestedInput
+  reversalOfJournal?: Prisma.JournalEntryUpdateOneWithoutReversalJournalNestedInput
+  reversalJournal?: Prisma.JournalEntryUpdateManyWithoutReversalOfJournalNestedInput
+  lines?: Prisma.JournalLineUpdateManyWithoutJournalNestedInput
+  accountingPeriod?: Prisma.AccountingPeriodUpdateOneWithoutJournalEntriesNestedInput
+  accountTransactions?: Prisma.AccountTransactionUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryUncheckedUpdateWithoutVoidedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  reversalJournal?: Prisma.JournalEntryUncheckedUpdateManyWithoutReversalOfJournalNestedInput
+  lines?: Prisma.JournalLineUncheckedUpdateManyWithoutJournalNestedInput
+  accountTransactions?: Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput
+}
+
+export type JournalEntryUncheckedUpdateManyWithoutVoidedByUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  journalNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumJournalStatusFieldUpdateOperationsInput | $Enums.JournalStatus
+  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
+  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalOfJournalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountingPeriodId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  voidedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   voidReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -1164,11 +1898,15 @@ export type JournalEntryUncheckedUpdateManyWithoutAccountingPeriodInput = {
  */
 
 export type JournalEntryCountOutputType = {
+  reversalJournal: number
   lines: number
+  accountTransactions: number
 }
 
 export type JournalEntryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  reversalJournal?: boolean | JournalEntryCountOutputTypeCountReversalJournalArgs
   lines?: boolean | JournalEntryCountOutputTypeCountLinesArgs
+  accountTransactions?: boolean | JournalEntryCountOutputTypeCountAccountTransactionsArgs
 }
 
 /**
@@ -1184,8 +1922,22 @@ export type JournalEntryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
 /**
  * JournalEntryCountOutputType without action
  */
+export type JournalEntryCountOutputTypeCountReversalJournalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JournalEntryWhereInput
+}
+
+/**
+ * JournalEntryCountOutputType without action
+ */
 export type JournalEntryCountOutputTypeCountLinesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.JournalLineWhereInput
+}
+
+/**
+ * JournalEntryCountOutputType without action
+ */
+export type JournalEntryCountOutputTypeCountAccountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountTransactionWhereInput
 }
 
 
@@ -1198,6 +1950,7 @@ export type JournalEntrySelect<ExtArgs extends runtime.Types.Extensions.Internal
   status?: boolean
   referenceType?: boolean
   referenceId?: boolean
+  reversalOfJournalId?: boolean
   accountingPeriodId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1208,8 +1961,12 @@ export type JournalEntrySelect<ExtArgs extends runtime.Types.Extensions.Internal
   voidReason?: boolean
   version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  reversalOfJournal?: boolean | Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>
+  reversalJournal?: boolean | Prisma.JournalEntry$reversalJournalArgs<ExtArgs>
   lines?: boolean | Prisma.JournalEntry$linesArgs<ExtArgs>
   accountingPeriod?: boolean | Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>
+  voidedByUser?: boolean | Prisma.JournalEntry$voidedByUserArgs<ExtArgs>
+  accountTransactions?: boolean | Prisma.JournalEntry$accountTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.JournalEntryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["journalEntry"]>
 
@@ -1222,6 +1979,7 @@ export type JournalEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   referenceType?: boolean
   referenceId?: boolean
+  reversalOfJournalId?: boolean
   accountingPeriodId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1232,7 +1990,9 @@ export type JournalEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   voidReason?: boolean
   version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  reversalOfJournal?: boolean | Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>
   accountingPeriod?: boolean | Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>
+  voidedByUser?: boolean | Prisma.JournalEntry$voidedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["journalEntry"]>
 
 export type JournalEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1244,6 +2004,7 @@ export type JournalEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   status?: boolean
   referenceType?: boolean
   referenceId?: boolean
+  reversalOfJournalId?: boolean
   accountingPeriodId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1254,7 +2015,9 @@ export type JournalEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   voidReason?: boolean
   version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  reversalOfJournal?: boolean | Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>
   accountingPeriod?: boolean | Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>
+  voidedByUser?: boolean | Prisma.JournalEntry$voidedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["journalEntry"]>
 
 export type JournalEntrySelectScalar = {
@@ -1266,6 +2029,7 @@ export type JournalEntrySelectScalar = {
   status?: boolean
   referenceType?: boolean
   referenceId?: boolean
+  reversalOfJournalId?: boolean
   accountingPeriodId?: boolean
   createdById?: boolean
   createdAt?: boolean
@@ -1277,28 +2041,40 @@ export type JournalEntrySelectScalar = {
   version?: boolean
 }
 
-export type JournalEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "journalNumber" | "date" | "description" | "status" | "referenceType" | "referenceId" | "accountingPeriodId" | "createdById" | "createdAt" | "updatedAt" | "postedAt" | "voidedAt" | "voidedBy" | "voidReason" | "version", ExtArgs["result"]["journalEntry"]>
+export type JournalEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "journalNumber" | "date" | "description" | "status" | "referenceType" | "referenceId" | "reversalOfJournalId" | "accountingPeriodId" | "createdById" | "createdAt" | "updatedAt" | "postedAt" | "voidedAt" | "voidedBy" | "voidReason" | "version", ExtArgs["result"]["journalEntry"]>
 export type JournalEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  reversalOfJournal?: boolean | Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>
+  reversalJournal?: boolean | Prisma.JournalEntry$reversalJournalArgs<ExtArgs>
   lines?: boolean | Prisma.JournalEntry$linesArgs<ExtArgs>
   accountingPeriod?: boolean | Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>
+  voidedByUser?: boolean | Prisma.JournalEntry$voidedByUserArgs<ExtArgs>
+  accountTransactions?: boolean | Prisma.JournalEntry$accountTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.JournalEntryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type JournalEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  reversalOfJournal?: boolean | Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>
   accountingPeriod?: boolean | Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>
+  voidedByUser?: boolean | Prisma.JournalEntry$voidedByUserArgs<ExtArgs>
 }
 export type JournalEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  reversalOfJournal?: boolean | Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>
   accountingPeriod?: boolean | Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>
+  voidedByUser?: boolean | Prisma.JournalEntry$voidedByUserArgs<ExtArgs>
 }
 
 export type $JournalEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "JournalEntry"
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
+    reversalOfJournal: Prisma.$JournalEntryPayload<ExtArgs> | null
+    reversalJournal: Prisma.$JournalEntryPayload<ExtArgs>[]
     lines: Prisma.$JournalLinePayload<ExtArgs>[]
     accountingPeriod: Prisma.$AccountingPeriodPayload<ExtArgs> | null
+    voidedByUser: Prisma.$UserPayload<ExtArgs> | null
+    accountTransactions: Prisma.$AccountTransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1309,10 +2085,11 @@ export type $JournalEntryPayload<ExtArgs extends runtime.Types.Extensions.Intern
     status: $Enums.JournalStatus
     referenceType: $Enums.TransactionReferenceType | null
     referenceId: string | null
+    reversalOfJournalId: string | null
     accountingPeriodId: string | null
     createdById: string | null
     createdAt: Date
-    updatedAt: Date | null
+    updatedAt: Date
     postedAt: Date | null
     voidedAt: Date | null
     voidedBy: string | null
@@ -1713,8 +2490,12 @@ readonly fields: JournalEntryFieldRefs;
 export interface Prisma__JournalEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  reversalOfJournal<T extends Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JournalEntry$reversalOfJournalArgs<ExtArgs>>): Prisma.Prisma__JournalEntryClient<runtime.Types.Result.GetResult<Prisma.$JournalEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  reversalJournal<T extends Prisma.JournalEntry$reversalJournalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JournalEntry$reversalJournalArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lines<T extends Prisma.JournalEntry$linesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JournalEntry$linesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accountingPeriod<T extends Prisma.JournalEntry$accountingPeriodArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JournalEntry$accountingPeriodArgs<ExtArgs>>): Prisma.Prisma__AccountingPeriodClient<runtime.Types.Result.GetResult<Prisma.$AccountingPeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  voidedByUser<T extends Prisma.JournalEntry$voidedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JournalEntry$voidedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  accountTransactions<T extends Prisma.JournalEntry$accountTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.JournalEntry$accountTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1752,6 +2533,7 @@ export interface JournalEntryFieldRefs {
   readonly status: Prisma.FieldRef<"JournalEntry", 'JournalStatus'>
   readonly referenceType: Prisma.FieldRef<"JournalEntry", 'TransactionReferenceType'>
   readonly referenceId: Prisma.FieldRef<"JournalEntry", 'String'>
+  readonly reversalOfJournalId: Prisma.FieldRef<"JournalEntry", 'String'>
   readonly accountingPeriodId: Prisma.FieldRef<"JournalEntry", 'String'>
   readonly createdById: Prisma.FieldRef<"JournalEntry", 'String'>
   readonly createdAt: Prisma.FieldRef<"JournalEntry", 'DateTime'>
@@ -2162,6 +2944,49 @@ export type JournalEntryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
+ * JournalEntry.reversalOfJournal
+ */
+export type JournalEntry$reversalOfJournalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JournalEntry
+   */
+  select?: Prisma.JournalEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JournalEntry
+   */
+  omit?: Prisma.JournalEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JournalEntryInclude<ExtArgs> | null
+  where?: Prisma.JournalEntryWhereInput
+}
+
+/**
+ * JournalEntry.reversalJournal
+ */
+export type JournalEntry$reversalJournalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JournalEntry
+   */
+  select?: Prisma.JournalEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JournalEntry
+   */
+  omit?: Prisma.JournalEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JournalEntryInclude<ExtArgs> | null
+  where?: Prisma.JournalEntryWhereInput
+  orderBy?: Prisma.JournalEntryOrderByWithRelationInput | Prisma.JournalEntryOrderByWithRelationInput[]
+  cursor?: Prisma.JournalEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JournalEntryScalarFieldEnum | Prisma.JournalEntryScalarFieldEnum[]
+}
+
+/**
  * JournalEntry.lines
  */
 export type JournalEntry$linesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2202,6 +3027,49 @@ export type JournalEntry$accountingPeriodArgs<ExtArgs extends runtime.Types.Exte
    */
   include?: Prisma.AccountingPeriodInclude<ExtArgs> | null
   where?: Prisma.AccountingPeriodWhereInput
+}
+
+/**
+ * JournalEntry.voidedByUser
+ */
+export type JournalEntry$voidedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * JournalEntry.accountTransactions
+ */
+export type JournalEntry$accountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountTransaction
+   */
+  select?: Prisma.AccountTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AccountTransaction
+   */
+  omit?: Prisma.AccountTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountTransactionInclude<ExtArgs> | null
+  where?: Prisma.AccountTransactionWhereInput
+  orderBy?: Prisma.AccountTransactionOrderByWithRelationInput | Prisma.AccountTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.AccountTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountTransactionScalarFieldEnum | Prisma.AccountTransactionScalarFieldEnum[]
 }
 
 /**

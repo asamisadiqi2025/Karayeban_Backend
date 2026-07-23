@@ -373,6 +373,17 @@ export const JournalStatus = {
 export type JournalStatus = (typeof JournalStatus)[keyof typeof JournalStatus]
 
 
+export const AccountClassification = {
+  ASSET: 'ASSET',
+  LIABILITY: 'LIABILITY',
+  EQUITY: 'EQUITY',
+  REVENUE: 'REVENUE',
+  EXPENSE: 'EXPENSE'
+} as const
+
+export type AccountClassification = (typeof AccountClassification)[keyof typeof AccountClassification]
+
+
 export const PeriodStatus = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',

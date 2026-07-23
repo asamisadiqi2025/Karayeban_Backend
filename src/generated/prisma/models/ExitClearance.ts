@@ -352,6 +352,7 @@ export type ExitClearanceWhereInput = {
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type ExitClearanceOrderByWithRelationInput = {
@@ -379,6 +380,7 @@ export type ExitClearanceOrderByWithRelationInput = {
   contract?: Prisma.ContractOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   shop?: Prisma.ShopOrderByWithRelationInput
+  approvedBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ExitClearanceWhereUniqueInput = Prisma.AtLeast<{
@@ -409,6 +411,7 @@ export type ExitClearanceWhereUniqueInput = Prisma.AtLeast<{
   contract?: Prisma.XOR<Prisma.ContractScalarRelationFilter, Prisma.ContractWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "contractId">
 
 export type ExitClearanceOrderByWithAggregationInput = {
@@ -474,7 +477,6 @@ export type ExitClearanceCreateInput = {
   remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: string | null
-  approvedById?: string | null
   description?: string | null
   createdById?: string | null
   updatedById?: string | null
@@ -486,6 +488,7 @@ export type ExitClearanceCreateInput = {
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutExitClearanceApprovedInput
 }
 
 export type ExitClearanceUncheckedCreateInput = {
@@ -520,7 +523,6 @@ export type ExitClearanceUpdateInput = {
   remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -532,6 +534,7 @@ export type ExitClearanceUpdateInput = {
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutExitClearanceApprovedNestedInput
 }
 
 export type ExitClearanceUncheckedUpdateInput = {
@@ -589,7 +592,6 @@ export type ExitClearanceUpdateManyMutationInput = {
   remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -878,6 +880,48 @@ export type ExitClearanceUncheckedUpdateOneWithoutContractNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExitClearanceUpdateToOneWithWhereWithoutContractInput, Prisma.ExitClearanceUpdateWithoutContractInput>, Prisma.ExitClearanceUncheckedUpdateWithoutContractInput>
 }
 
+export type ExitClearanceCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.ExitClearanceCreateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput> | Prisma.ExitClearanceCreateWithoutApprovedByInput[] | Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput | Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.ExitClearanceCreateManyApprovedByInputEnvelope
+  connect?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+}
+
+export type ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.ExitClearanceCreateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput> | Prisma.ExitClearanceCreateWithoutApprovedByInput[] | Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput | Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.ExitClearanceCreateManyApprovedByInputEnvelope
+  connect?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+}
+
+export type ExitClearanceUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.ExitClearanceCreateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput> | Prisma.ExitClearanceCreateWithoutApprovedByInput[] | Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput | Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.ExitClearanceUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.ExitClearanceUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.ExitClearanceCreateManyApprovedByInputEnvelope
+  set?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  disconnect?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  delete?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  connect?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  update?: Prisma.ExitClearanceUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.ExitClearanceUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.ExitClearanceUpdateManyWithWhereWithoutApprovedByInput | Prisma.ExitClearanceUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.ExitClearanceScalarWhereInput | Prisma.ExitClearanceScalarWhereInput[]
+}
+
+export type ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.ExitClearanceCreateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput> | Prisma.ExitClearanceCreateWithoutApprovedByInput[] | Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput | Prisma.ExitClearanceCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.ExitClearanceUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.ExitClearanceUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.ExitClearanceCreateManyApprovedByInputEnvelope
+  set?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  disconnect?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  delete?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  connect?: Prisma.ExitClearanceWhereUniqueInput | Prisma.ExitClearanceWhereUniqueInput[]
+  update?: Prisma.ExitClearanceUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.ExitClearanceUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.ExitClearanceUpdateManyWithWhereWithoutApprovedByInput | Prisma.ExitClearanceUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.ExitClearanceScalarWhereInput | Prisma.ExitClearanceScalarWhereInput[]
+}
+
 export type ExitClearanceCreateWithoutMarketInput = {
   id: string
   exitDate: Date | string
@@ -887,7 +931,6 @@ export type ExitClearanceCreateWithoutMarketInput = {
   remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: string | null
-  approvedById?: string | null
   description?: string | null
   createdById?: string | null
   updatedById?: string | null
@@ -898,6 +941,7 @@ export type ExitClearanceCreateWithoutMarketInput = {
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutExitClearanceApprovedInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutMarketInput = {
@@ -983,7 +1027,6 @@ export type ExitClearanceCreateWithoutShopInput = {
   remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: string | null
-  approvedById?: string | null
   description?: string | null
   createdById?: string | null
   updatedById?: string | null
@@ -994,6 +1037,7 @@ export type ExitClearanceCreateWithoutShopInput = {
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutExitClearanceApprovedInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutShopInput = {
@@ -1053,7 +1097,6 @@ export type ExitClearanceCreateWithoutTenantInput = {
   remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: string | null
-  approvedById?: string | null
   description?: string | null
   createdById?: string | null
   updatedById?: string | null
@@ -1064,6 +1107,7 @@ export type ExitClearanceCreateWithoutTenantInput = {
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutExitClearanceApprovedInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutTenantInput = {
@@ -1123,7 +1167,6 @@ export type ExitClearanceCreateWithoutContractInput = {
   remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: string | null
-  approvedById?: string | null
   description?: string | null
   createdById?: string | null
   updatedById?: string | null
@@ -1134,6 +1177,7 @@ export type ExitClearanceCreateWithoutContractInput = {
   market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
   tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
   shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutExitClearanceApprovedInput
 }
 
 export type ExitClearanceUncheckedCreateWithoutContractInput = {
@@ -1183,7 +1227,6 @@ export type ExitClearanceUpdateWithoutContractInput = {
   remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1194,6 +1237,7 @@ export type ExitClearanceUpdateWithoutContractInput = {
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutExitClearanceApprovedNestedInput
 }
 
 export type ExitClearanceUncheckedUpdateWithoutContractInput = {
@@ -1216,6 +1260,76 @@ export type ExitClearanceUncheckedUpdateWithoutContractInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type ExitClearanceCreateWithoutApprovedByInput = {
+  id: string
+  exitDate: Date | string
+  shopCondition?: string | null
+  damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  billsCleared?: boolean
+  remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  reason?: string | null
+  description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutExitClearancesInput
+  contract: Prisma.ContractCreateNestedOneWithoutExitClearanceInput
+  tenant: Prisma.TenantCreateNestedOneWithoutExitClearancesInput
+  shop: Prisma.ShopCreateNestedOneWithoutExitClearancesInput
+}
+
+export type ExitClearanceUncheckedCreateWithoutApprovedByInput = {
+  id: string
+  marketId: string
+  contractId: string
+  tenantId: string
+  shopId: string
+  exitDate: Date | string
+  shopCondition?: string | null
+  damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  billsCleared?: boolean
+  remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  reason?: string | null
+  description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+}
+
+export type ExitClearanceCreateOrConnectWithoutApprovedByInput = {
+  where: Prisma.ExitClearanceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExitClearanceCreateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput>
+}
+
+export type ExitClearanceCreateManyApprovedByInputEnvelope = {
+  data: Prisma.ExitClearanceCreateManyApprovedByInput | Prisma.ExitClearanceCreateManyApprovedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type ExitClearanceUpsertWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.ExitClearanceWhereUniqueInput
+  update: Prisma.XOR<Prisma.ExitClearanceUpdateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedUpdateWithoutApprovedByInput>
+  create: Prisma.XOR<Prisma.ExitClearanceCreateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedCreateWithoutApprovedByInput>
+}
+
+export type ExitClearanceUpdateWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.ExitClearanceWhereUniqueInput
+  data: Prisma.XOR<Prisma.ExitClearanceUpdateWithoutApprovedByInput, Prisma.ExitClearanceUncheckedUpdateWithoutApprovedByInput>
+}
+
+export type ExitClearanceUpdateManyWithWhereWithoutApprovedByInput = {
+  where: Prisma.ExitClearanceScalarWhereInput
+  data: Prisma.XOR<Prisma.ExitClearanceUpdateManyMutationInput, Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByInput>
 }
 
 export type ExitClearanceCreateManyMarketInput = {
@@ -1249,7 +1363,6 @@ export type ExitClearanceUpdateWithoutMarketInput = {
   remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1260,6 +1373,7 @@ export type ExitClearanceUpdateWithoutMarketInput = {
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutExitClearanceApprovedNestedInput
 }
 
 export type ExitClearanceUncheckedUpdateWithoutMarketInput = {
@@ -1337,7 +1451,6 @@ export type ExitClearanceUpdateWithoutShopInput = {
   remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1348,6 +1461,7 @@ export type ExitClearanceUpdateWithoutShopInput = {
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutExitClearanceApprovedNestedInput
 }
 
 export type ExitClearanceUncheckedUpdateWithoutShopInput = {
@@ -1425,7 +1539,6 @@ export type ExitClearanceUpdateWithoutTenantInput = {
   remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1436,6 +1549,7 @@ export type ExitClearanceUpdateWithoutTenantInput = {
   market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
   contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
   shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutExitClearanceApprovedNestedInput
 }
 
 export type ExitClearanceUncheckedUpdateWithoutTenantInput = {
@@ -1482,6 +1596,94 @@ export type ExitClearanceUncheckedUpdateManyWithoutTenantInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
+export type ExitClearanceCreateManyApprovedByInput = {
+  id: string
+  marketId: string
+  contractId: string
+  tenantId: string
+  shopId: string
+  exitDate: Date | string
+  shopCondition?: string | null
+  damageCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  billsCleared?: boolean
+  remainingAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refundedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  reason?: string | null
+  description?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+}
+
+export type ExitClearanceUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  exitDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shopCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  billsCleared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneRequiredWithoutExitClearancesNestedInput
+  contract?: Prisma.ContractUpdateOneRequiredWithoutExitClearanceNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutExitClearancesNestedInput
+  shop?: Prisma.ShopUpdateOneRequiredWithoutExitClearancesNestedInput
+}
+
+export type ExitClearanceUncheckedUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  exitDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shopCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  billsCleared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type ExitClearanceUncheckedUpdateManyWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  contractId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  exitDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shopCondition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damageCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  billsCleared?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  remainingAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  refundedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 
 
 export type ExitClearanceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1509,6 +1711,7 @@ export type ExitClearanceSelect<ExtArgs extends runtime.Types.Extensions.Interna
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.ExitClearance$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["exitClearance"]>
 
 export type ExitClearanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1536,6 +1739,7 @@ export type ExitClearanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.ExitClearance$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["exitClearance"]>
 
 export type ExitClearanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1563,6 +1767,7 @@ export type ExitClearanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.ExitClearance$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["exitClearance"]>
 
 export type ExitClearanceSelectScalar = {
@@ -1594,18 +1799,21 @@ export type ExitClearanceInclude<ExtArgs extends runtime.Types.Extensions.Intern
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.ExitClearance$approvedByArgs<ExtArgs>
 }
 export type ExitClearanceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.ExitClearance$approvedByArgs<ExtArgs>
 }
 export type ExitClearanceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   contract?: boolean | Prisma.ContractDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.ExitClearance$approvedByArgs<ExtArgs>
 }
 
 export type $ExitClearancePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1615,6 +1823,7 @@ export type $ExitClearancePayload<ExtArgs extends runtime.Types.Extensions.Inter
     contract: Prisma.$ContractPayload<ExtArgs>
     tenant: Prisma.$TenantPayload<ExtArgs>
     shop: Prisma.$ShopPayload<ExtArgs>
+    approvedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2035,6 +2244,7 @@ export interface Prisma__ExitClearanceClient<T, Null = never, ExtArgs extends ru
   contract<T extends Prisma.ContractDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContractDefaultArgs<ExtArgs>>): Prisma.Prisma__ContractClient<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   shop<T extends Prisma.ShopDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopDefaultArgs<ExtArgs>>): Prisma.Prisma__ShopClient<runtime.Types.Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  approvedBy<T extends Prisma.ExitClearance$approvedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExitClearance$approvedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2482,6 +2692,25 @@ export type ExitClearanceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many ExitClearances to delete.
    */
   limit?: number
+}
+
+/**
+ * ExitClearance.approvedBy
+ */
+export type ExitClearance$approvedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

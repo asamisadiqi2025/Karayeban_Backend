@@ -3,7 +3,7 @@
 // Prisma 7.x schema
 // ============================================================
 //
-// VERSION: 10.0.0 - Production Ready
+// VERSION: 13.0.0 - Accounting Architecture Audit
 //
 // CRITICAL FIXES & IMPROVEMENTS:
 // 1. Fixed UUID generation - application-layer UUID v7
@@ -23,6 +23,25 @@
 // 15. Fixed Permission model (scope removed from unique)
 // 16. Fixed UserRole/Role isolation (migration constraint)
 // 17. Added proper indexes for performance
+// 18. Added marketId to Guarantor for multi-tenant isolation
+// 19. Added marketId to TenantHistory for tenant history isolation
+// 20. Fixed all orphaned FK fields with proper Prisma relations
+// 21. Added Session.marketId for audit context
+// 22. Added AccountTransaction.journalEntryId as sole journal linkage path
+// 23. Added PasswordReset security tracking fields
+// 24. Added missing composite indexes for performance
+// 25. Removed referenceType/referenceId from AccountTransaction (single-path accounting)
+// 26. Added journal entry immutability trigger (POSTED/VOID enforcement)
+// 27. Added AccountClassification enum for proper Chart of Accounts (ACT-01)
+// 28. Added Account.parentAccountId for account hierarchy (ACT-09)
+// 29. Added JournalLine.lineNumber for deterministic ordering (ACT-08)
+// 30. Added JournalEntry.reversalOfJournalId for reversal audit trail (ACT-05)
+// 31. Expanded immutability trigger to protect all content fields (ACT-04)
+// 32. Added journal balance enforcement trigger (ACT-02)
+// 33. Added JournalLine immutability trigger for POSTED entries (ACT-03)
+// 34. Added RentPayment.remainingAmount consistency constraint (ACT-06)
+// 35. Added AccountTransaction.postedAt consistency constraint (ACT-07)
+// 36. Added PaymentAllocation.amount positivity constraint (ACT-10)
 // ============================================================
 
 generator client {
@@ -303,6 +322,17 @@ enum JournalStatus {
   VOID
 }
 
+// FIXED: Added AccountClassification for proper Chart of Accounts
+// REASON: AccountType describes payment form (CASH/BANK), not accounting classification
+// Required for Balance Sheet, Income Statement, and period closing
+enum AccountClassification {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
 enum PeriodStatus {
   OPEN
   CLOSED
@@ -366,10 +396,18 @@ model Market {
   exchangeRates         ExchangeRate[]
   apiKeys               ApiKey[]
 
+  // FIXED: Added guarantors reverse relation for multi-tenant isolation
+  guarantors Guarantor[]
+  // FIXED: Added tenantHistories reverse relation for market-scoped history
+  tenantHistories TenantHistory[]
+
   approvalRequests      ApprovalRequest[]
   accountingPeriods     AccountingPeriod[]
   securityDeposits      SecurityDeposit[]
   maintenanceRequests MaintenanceRequest[]
+
+  // FIXED: Added sessions reverse relation for market-scoped session audit
+  sessions Session[]
 
   createdById String? @db.Uuid
   updatedById String? @db.Uuid
@@ -543,6 +581,9 @@ model Shop {
   @@unique([marketId, shopCode])
   @@unique([marketId, shopNumber])
   @@index([marketId, status])
+  // FIXED: Added composite index for floor-level shop lookups
+  // REASON: Frequently queried to list shops within a specific floor
+  @@index([marketId, floorId])
   @@index([floorId])
   @@index([categoryId])
   @@index([deletedAt])
@@ -648,6 +689,11 @@ model MarketTenant {
 model TenantHistory {
    id String @id @db.Uuid
 
+  // FIXED: Added marketId for tenant history isolation
+  // REASON: Market admins must not see tenant history from other markets
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
+
   tenantId String @db.Uuid
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
@@ -659,6 +705,7 @@ model TenantHistory {
 
   changedAt DateTime @default(now()) @db.Timestamptz(6)
 
+  @@index([marketId])
   @@index([tenantId])
   @@index([changedAt])
   @@map("tenant_histories")
@@ -666,6 +713,11 @@ model TenantHistory {
 
 model Guarantor {
     id String @id @db.Uuid
+
+  // FIXED: Added marketId for multi-tenant isolation
+  // REASON: Without marketId, guarantors created by Market A leak to Market B
+  marketId String @db.Uuid
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
 
   fullName    String @db.VarChar(200)
   phone       String @db.VarChar(20)
@@ -684,6 +736,7 @@ model Guarantor {
   version Int @default(1)
 
   // Migration: CREATE UNIQUE INDEX guarantor_phone_active ON guarantors(phone) WHERE deleted_at IS NULL;
+  @@index([marketId])
   @@index([phone])
   @@index([deletedAt])
   @@map("guarantors")
@@ -744,6 +797,11 @@ model Contract {
   terminatedById    String? @db.Uuid
   terminationReason String? @db.Text
 
+  // FIXED: Added Prisma relations for orphaned FK fields
+  // REASON: Dangling UUIDs without FK constraints risk data integrity
+  approvedBy   User? @relation("ContractApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+  terminatedBy User? @relation("ContractTerminatedBy", fields: [terminatedById], references: [id], onDelete: SetNull)
+
   autoRenew Boolean @default(false)
   autoRenewNoticeDays Int @default(30)
   lastRenewalDate DateTime? @db.Date
@@ -771,9 +829,12 @@ model Contract {
   // Migration: ALTER TABLE contracts ADD CONSTRAINT valid_date_range CHECK (end_date >= start_date);
   // Migration: ALTER TABLE contracts ADD CONSTRAINT no_overlapping_contracts 
   // EXCLUDE USING gist (shop_id WITH =, daterange(start_date, end_date, '[]') WITH &&)
-  // WHERE status IN ('ACTIVE', 'PENDING');
+  // WHERE status IN ('ACTIVE');
   @@index([marketId, status])
   @@index([marketId, status, startDate])
+  // FIXED: Added composite index for shop-level contract lookups
+  // REASON: Frequently queried to find active contracts per shop
+  @@index([marketId, shopId])
   @@index([shopId])
   @@index([marketTenantId])
   @@index([tenantId])
@@ -853,6 +914,7 @@ model RentPayment {
   marketId   String  @db.Uuid
   shopId     String  @db.Uuid
   contractId String  @db.Uuid
+  // DENORMALIZED: for reporting/query only. Source of truth for balance is AccountTransaction + JournalEntry via journalEntryId. Application layer MUST create a matching AccountTransaction/JournalEntry in the same DB transaction whenever this record is created/updated.
   accountId  String? @db.Uuid
 
   market   Market   @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -862,6 +924,7 @@ model RentPayment {
 
   amountDue       Decimal @db.Decimal(18, 2)
   amountPaid      Decimal @default(0) @db.Decimal(18, 2)
+  // remainingAmount = amountDue - amountPaid, where amountDue already reflects lateFee added and discount subtracted at creation/update time. Must stay consistent with chk_rent_payment_remaining_amount DB constraint.
   remainingAmount Decimal @db.Decimal(18, 2)
 
   paymentDate   DateTime? @db.Date
@@ -904,18 +967,18 @@ model RentPayment {
 model PaymentAllocation {
     id String @id @db.Uuid
 
-  paymentId    String @db.Uuid
-  rentPaymentId String @db.Uuid
+  sourcePaymentId  String @db.Uuid
+  targetPaymentId String @db.Uuid
 
-  payment    RentPayment  @relation("PaymentAllocationSource", fields: [paymentId], references: [id], onDelete: Cascade)
-  rentPayment RentPayment @relation("PaymentAllocationTarget", fields: [rentPaymentId], references: [id], onDelete: Cascade)
+  payment    RentPayment  @relation("PaymentAllocationSource", fields: [sourcePaymentId], references: [id], onDelete: Cascade)
+  rentPayment RentPayment @relation("PaymentAllocationTarget", fields: [targetPaymentId], references: [id], onDelete: Cascade)
   amount Decimal @db.Decimal(18, 2)
 
   allocatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-  @@unique([paymentId, rentPaymentId])
-  @@index([paymentId])
-  @@index([rentPaymentId])
+  @@unique([sourcePaymentId, targetPaymentId])
+  @@index([sourcePaymentId])
+  @@index([targetPaymentId])
   @@map("payment_allocations")
 }
 
@@ -1058,6 +1121,7 @@ model MarketEmployeeSalaryPayment {
   marketEmployeeId String @db.Uuid
   marketEmployee   MarketEmployee @relation(fields: [marketEmployeeId], references: [id], onDelete: Cascade)
 
+  // DENORMALIZED: for reporting/query only. Source of truth for balance is AccountTransaction + JournalEntry via journalEntryId. Application layer MUST create a matching AccountTransaction/JournalEntry in the same DB transaction whenever this record is created/updated.
   accountId String? @db.Uuid
   account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
 
@@ -1115,6 +1179,7 @@ model MarketExpense {
   marketId   String  @db.Uuid
   categoryId String  @db.Uuid
   employeeId String? @db.Uuid
+  // DENORMALIZED: for reporting/query only. Source of truth for balance is AccountTransaction + JournalEntry via journalEntryId. Application layer MUST create a matching AccountTransaction/JournalEntry in the same DB transaction whenever this record is created/updated.
   accountId  String? @db.Uuid
 
   market   Market          @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1182,6 +1247,10 @@ model MaintenanceRequest {
   assignedTo  String? @db.Uuid
   assignedAt  DateTime? @db.Timestamptz(6)
 
+  // FIXED: Added Prisma relation for assignedTo
+  // REASON: Orphaned UUID with no FK constraint risks dangling references
+  assignedToUser User? @relation("MaintenanceAssignedTo", fields: [assignedTo], references: [id], onDelete: SetNull)
+
   completedAt DateTime? @db.Timestamptz(6)
   cost        Decimal? @db.Decimal(18, 2)
 
@@ -1216,6 +1285,18 @@ model Account {
   type     AccountType
   currency Currency
 
+  // FIXED: Added classification for Chart of Accounts (ACT-01)
+  // REASON: AccountType describes payment form, not accounting classification
+  // Required for Balance Sheet (ASSET/LIABILITY/EQUITY) and Income Statement (REVENUE/EXPENSE)
+  classification AccountClassification
+
+  // FIXED: Added parentAccountId for account hierarchy (ACT-09)
+  // REASON: Enterprise chart of accounts requires parent/child grouping
+  // e.g., Bank -> [Bank of Afghanistan, Azizi Bank]
+  parentAccountId String? @db.Uuid
+  parentAccount   Account? @relation("AccountHierarchy", fields: [parentAccountId], references: [id], onDelete: SetNull)
+  subAccounts     Account[] @relation("AccountHierarchy")
+
   description String? @db.Text
 
   // FIX: Balance is cached, can be recalculated from Journal
@@ -1243,6 +1324,8 @@ model Account {
 
   @@unique([marketId, name])
   @@index([marketId])
+  @@index([parentAccountId])
+  @@index([classification])
   @@index([deletedAt])
   @@map("accounts")
 }
@@ -1260,8 +1343,17 @@ model JournalEntry {
 
   status JournalStatus @default(DRAFT)
 
+  // Intentionally polymorphic: JournalEntry can originate from multiple source entity types (RentPayment, UtilityBill, MarketExpense, etc.).
+  // AccountTransaction.journalEntryId is the canonical FK-backed link back to this entry.
+  // TODO: Consider adding individual FK fields per source type if the number of sources stabilizes.
   referenceType TransactionReferenceType?
   referenceId   String? @db.Uuid
+
+  // FIXED: Added reversal reference for void/reversal audit trail (ACT-05)
+  // REASON: When a JournalEntry is voided, auditors must trace to the replacement entry
+  reversalOfJournalId String? @db.Uuid
+  reversalOfJournal   JournalEntry? @relation("JournalReversal", fields: [reversalOfJournalId], references: [id], onDelete: SetNull)
+  reversalJournal     JournalEntry[] @relation("JournalReversal")
 
   lines JournalLine[]
 
@@ -1272,17 +1364,30 @@ model JournalEntry {
   createdById String? @db.Uuid
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @db.Timestamptz(6) // Only for DRAFT -> POSTED transition
+  // FIXED: Changed updatedAt from nullable to non-nullable with @updatedAt
+  // REASON: A journal entry always has a last modification time; nullable was inconsistent
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   postedAt  DateTime? @db.Timestamptz(6)
   voidedAt  DateTime? @db.Timestamptz(6)
   voidedBy  String? @db.Uuid
   voidReason String? @db.Text
 
+  // FIXED: Added Prisma relation for voidedBy
+  // REASON: Orphaned UUID with no FK constraint risks dangling references
+  voidedByUser User? @relation("JournalEntryVoidedBy", fields: [voidedBy], references: [id], onDelete: SetNull)
+
+  // FIXED: Added reverse relation for AccountTransaction FK
+  accountTransactions AccountTransaction[]
+
   version Int @default(1)
 
   @@unique([marketId, journalNumber])
   @@index([marketId, date])
+  // FIXED: Added composite index for market-scoped status queries
+  // REASON: Dashboard and reporting frequently filter by market + status
+  @@index([marketId, status])
   @@index([referenceType, referenceId])
+  @@index([reversalOfJournalId])
   @@index([status])
   @@index([accountingPeriodId])
   @@map("journal_entries")
@@ -1297,6 +1402,10 @@ model JournalLine {
   journal JournalEntry @relation(fields: [journalId], references: [id], onDelete: Cascade)
   account Account      @relation(fields: [accountId], references: [id], onDelete: Restrict)
 
+  // FIXED: Added lineNumber for deterministic ordering (ACT-08)
+  // REASON: Financial statements and journal printouts require consistent line ordering
+  lineNumber Int @db.SmallInt
+
   debit  Decimal @default(0) @db.Decimal(18, 2)
   credit Decimal @default(0) @db.Decimal(18, 2)
 
@@ -1309,10 +1418,15 @@ model JournalLine {
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
 
-  // Migration: ALTER TABLE journal_lines ADD CONSTRAINT debit_credit_exclusive 
+  // Migration: ALTER TABLE journal_lines ADD CONSTRAINT chk_journal_line_debit_credit_exclusive
   // CHECK ((debit > 0 AND credit = 0) OR (debit = 0 AND credit > 0));
+  // Migration: ALTER TABLE journal_lines ADD CONSTRAINT chk_journal_line_amounts_non_negative
+  // CHECK (debit >= 0 AND credit >= 0);
+  // Migration: ALTER TABLE journal_lines ADD CONSTRAINT chk_journal_line_number_positive
+  // CHECK (line_number > 0);
   @@index([journalId])
   @@index([accountId])
+  @@index([journalId, lineNumber])
   @@map("journal_lines")
 }
 
@@ -1320,6 +1434,7 @@ model MiscellaneousIncome {
     id String @id @db.Uuid
 
   marketId  String @db.Uuid
+  // DENORMALIZED: for reporting/query only. Source of truth for balance is AccountTransaction + JournalEntry via journalEntryId. Application layer MUST create a matching AccountTransaction/JournalEntry in the same DB transaction whenever this record is created/updated.
   accountId String @db.Uuid
 
   market  Market  @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1358,9 +1473,6 @@ model AccountTransaction {
 
   status TransactionStatus @default(PENDING)
 
-  referenceType TransactionReferenceType?
-  referenceId   String? @db.Uuid
-
   balanceBeforeTransaction Decimal @db.Decimal(18, 2)
   balanceAfterTransaction  Decimal @db.Decimal(18, 2)
 
@@ -1371,6 +1483,11 @@ model AccountTransaction {
   reversalId String? @db.Uuid
   reversal   AccountTransaction? @relation("TransactionReversal", fields: [reversalId], references: [id], onDelete: SetNull)
   reversedBy AccountTransaction[] @relation("TransactionReversal")
+
+  // FIXED: Added optional direct FK to JournalEntry
+  // REASON: Polymorphic referenceType/referenceId alone loses referential integrity
+  journalEntryId String? @db.Uuid
+  journalEntry   JournalEntry? @relation(fields: [journalEntryId], references: [id], onDelete: SetNull)
 
   createdById String? @db.Uuid
 
@@ -1387,8 +1504,10 @@ model AccountTransaction {
   @@index([marketId, transactionDate])
   @@index([accountId, transactionDate])
   @@index([accountId, transactionDate, status])
-  @@index([referenceType, referenceId])
   @@index([reversalId])
+  // FIXED: Added index for direct journal entry lookups
+  // REASON: Performance for transaction-to-journal tracing
+  @@index([journalEntryId])
   @@index([status])
   @@index([isArchived])
   @@map("account_transactions")
@@ -1468,6 +1587,10 @@ model ExitClearance {
   reason       String? @db.Text
   approvedById String? @db.Uuid
 
+  // FIXED: Added Prisma relation for approvedById
+  // REASON: Orphaned UUID with no FK constraint risks dangling references
+  approvedBy User? @relation("ExitClearanceApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
   description String? @db.Text
 
   createdById String? @db.Uuid
@@ -1492,6 +1615,7 @@ model Cheque {
   marketId   String  @db.Uuid
   tenantId   String  @db.Uuid
   contractId String? @db.Uuid
+  // DENORMALIZED: for reporting/query only. Source of truth for balance is AccountTransaction + JournalEntry via journalEntryId. Application layer MUST create a matching AccountTransaction/JournalEntry in the same DB transaction whenever this record is created/updated.
   accountId  String? @db.Uuid
 
   market   Market    @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -1541,7 +1665,7 @@ model Document {
     id String @id @db.Uuid
 
   marketId String @db.Uuid
-  market   Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  market   Market @relation(fields: [marketId], references: [id], onDelete: Restrict)
 
   entityType DocumentEntityType
   entityId   String @db.Uuid
@@ -1620,6 +1744,16 @@ model User {
   sessions       Session[]
   passwordResets PasswordReset[]
   apiKeys        ApiKey[]
+
+  // FIXED: Added opposite relations for orphaned FK fields
+  // REASON: All UUID audit/approval fields need FK constraints for data integrity
+  maintenanceAssigned    MaintenanceRequest[] @relation("MaintenanceAssignedTo")
+  exitClearanceApproved  ExitClearance[]      @relation("ExitClearanceApprovedBy")
+  contractApproved       Contract[]           @relation("ContractApprovedBy")
+  contractTerminated     Contract[]           @relation("ContractTerminatedBy")
+  journalEntryVoided     JournalEntry[]       @relation("JournalEntryVoidedBy")
+  notificationCreated    Notification[]       @relation("NotificationCreatedBy")
+  ownershipApproved      OwnershipHistory[]   @relation("OwnershipHistoryApprovedBy")
 
 
   createdAt DateTime @default(now()) @db.Timestamptz(6)
@@ -1773,6 +1907,11 @@ model Session {
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // FIXED: Added marketId for session audit context
+  // REASON: Need to know which market context a session operates in for compliance
+  marketId String? @db.Uuid
+  market   Market? @relation(fields: [marketId], references: [id], onDelete: SetNull)
+
   refreshTokenHash String @unique @db.VarChar(255)
 
   userAgent String? @db.Text
@@ -1787,6 +1926,7 @@ model Session {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
 
   @@index([userId])
+  @@index([marketId])
   @@index([expiresAt])
   @@index([userId, expiresAt])
   @@map("sessions")
@@ -1799,6 +1939,11 @@ model PasswordReset {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   tokenHash String @unique @db.VarChar(255)
+
+  // FIXED: Added IP and user agent for security tracking
+  // REASON: Password reset requests need audit trail for compliance and brute force detection
+  ipAddress String? @db.VarChar(45)
+  userAgent String? @db.Text
 
   expiresAt DateTime @db.Timestamptz(6)
   usedAt    DateTime? @db.Timestamptz(6)
@@ -1987,6 +2132,10 @@ model Notification {
 
   createdById String? @db.Uuid
 
+  // FIXED: Added Prisma relation for createdById
+  // REASON: Orphaned UUID with no FK constraint risks dangling references
+  createdBy User? @relation("NotificationCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
   readAt     DateTime? @db.Timestamptz(6)
   resolvedAt DateTime? @db.Timestamptz(6)
   expiresAt  DateTime? @db.Timestamptz(6)
@@ -1997,6 +2146,9 @@ model Notification {
   version Int @default(1)
 
   @@index([marketId, isRead, createdAt])
+  // FIXED: Added standalone userId index for user-centric notification queries
+  // REASON: User dashboard needs efficient lookup by userId alone
+  @@index([userId])
   @@index([userId, isRead, createdAt])
   @@index([referenceType, referenceId])
   @@index([expiresAt])
@@ -2056,6 +2208,10 @@ model OwnershipHistory {
 
   approvedById String? @db.Uuid
 
+  // FIXED: Added Prisma relation for approvedById
+  // REASON: Orphaned UUID with no FK constraint risks dangling references
+  approvedBy User? @relation("OwnershipHistoryApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
@@ -2101,6 +2257,7 @@ model Withdrawal {
 
   marketId      String  @db.Uuid
   shareholderId String  @db.Uuid
+  // DENORMALIZED: for reporting/query only. Source of truth for balance is AccountTransaction + JournalEntry via journalEntryId. Application layer MUST create a matching AccountTransaction/JournalEntry in the same DB transaction whenever this record is created/updated.
   accountId     String? @db.Uuid
 
   market      Market      @relation(fields: [marketId], references: [id], onDelete: Restrict)
@@ -2126,3 +2283,284 @@ model Withdrawal {
   @@index([accountId])
   @@map("withdrawals")
 }
+
+// ============================================================
+// MIGRATION SQL COMMENTS
+// PostgreSQL features Prisma cannot express natively.
+// Apply these in migration.sql files.
+// ============================================================
+
+// --- CHECK CONSTRAINTS ---
+
+// Migration: ALTER TABLE market_tenants ADD CONSTRAINT chk_market_tenant_active
+// CHECK ((is_active = true AND left_at IS NULL) OR (is_active = false));
+
+// Migration: ALTER TABLE exchange_rates ADD CONSTRAINT chk_exchange_rate_different_currencies
+// CHECK (from_currency != to_currency);
+
+// Migration: ALTER TABLE accounting_periods ADD CONSTRAINT chk_accounting_period_month
+// CHECK (month BETWEEN 1 AND 12);
+
+// Migration: ALTER TABLE accounting_periods ADD CONSTRAINT chk_accounting_period_year
+// CHECK (year BETWEEN 2000 AND 2100);
+
+// Migration: ALTER TABLE cheques ADD CONSTRAINT chk_cheque_date_order
+// CHECK (due_date >= issue_date);
+
+// Migration: ALTER TABLE security_deposits ADD CONSTRAINT chk_deposit_returned_amount
+// CHECK (returned_amount IS NULL OR returned_amount <= amount);
+
+// Migration: ALTER TABLE ownership_histories ADD CONSTRAINT chk_ownership_percentage
+// CHECK (percentage > 0 AND percentage <= 100);
+
+// Migration: ALTER TABLE rent_payments ADD CONSTRAINT chk_rent_payment_amounts
+// CHECK (amount_paid >= 0 AND amount_paid <= amount_due);
+
+// Migration: ALTER TABLE rent_payments ADD CONSTRAINT chk_rent_payment_month
+// CHECK (month BETWEEN 1 AND 12);
+
+// FIXED: Added remainingAmount consistency constraint (ACT-06)
+// REASON: remainingAmount must equal amountDue - amountPaid to prevent drift
+// Formula: remainingAmount = amountDue - amountPaid, where amountDue already reflects lateFee added and discount subtracted at creation/update time
+// Migration: ALTER TABLE rent_payments ADD CONSTRAINT chk_rent_payment_remaining_amount
+// CHECK (remaining_amount = amount_due - amount_paid);
+
+// Migration: ALTER TABLE utility_bills ADD CONSTRAINT chk_utility_bill_month
+// CHECK (bill_month BETWEEN 1 AND 12);
+
+// Migration: ALTER TABLE journal_lines ADD CONSTRAINT chk_journal_line_debit_credit_exclusive
+// CHECK ((debit > 0 AND credit = 0) OR (debit = 0 AND credit > 0));
+
+// Migration: ALTER TABLE journal_lines ADD CONSTRAINT chk_journal_line_amounts_non_negative
+// CHECK (debit >= 0 AND credit >= 0);
+
+// FIXED: Added lineNumber positivity constraint (ACT-08)
+// Migration: ALTER TABLE journal_lines ADD CONSTRAINT chk_journal_line_number_positive
+// CHECK (line_number > 0);
+
+// Migration: ALTER TABLE contracts ADD CONSTRAINT chk_contract_date_range
+// CHECK (end_date >= start_date);
+
+// Migration: ALTER TABLE account_transactions ADD CONSTRAINT chk_transaction_amount_positive
+// CHECK (amount > 0);
+
+// FIXED: Added postedAt consistency constraint (ACT-07)
+// REASON: POSTED transactions must always have postedAt set for audit trail
+// Migration: ALTER TABLE account_transactions ADD CONSTRAINT chk_transaction_posted_at_consistency
+// CHECK (status != 'POSTED' OR posted_at IS NOT NULL);
+
+// FIXED: Added PaymentAllocation.amount positivity constraint (ACT-10)
+// REASON: Zero or negative allocations corrupt the financial record
+// Migration: ALTER TABLE payment_allocations ADD CONSTRAINT chk_payment_allocation_amount_positive
+// CHECK (amount > 0);
+
+// Migration: ALTER TABLE documents ADD CONSTRAINT chk_document_file_size
+// CHECK (file_size IS NULL OR file_size >= 0);
+
+// --- PARTIAL UNIQUE INDEXES ---
+
+// Migration: CREATE UNIQUE INDEX tenant_phone_active ON tenants(phone) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX tenant_national_id_active ON tenants(national_id) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX guarantor_phone_active ON guarantors(phone) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX employee_phone_active ON employees(phone) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX user_username_active ON users(username) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX user_email_active ON users(email) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX roles_global_unique ON roles(name) WHERE market_id IS NULL;
+// Migration: CREATE UNIQUE INDEX roles_market_unique ON roles(market_id, name) WHERE market_id IS NOT NULL;
+// Migration: CREATE UNIQUE INDEX user_global_role_unique ON user_roles(user_id, role_id) WHERE market_id IS NULL;
+// Migration: CREATE UNIQUE INDEX user_market_role_unique ON user_roles(user_id, role_id, market_id) WHERE market_id IS NOT NULL;
+// Migration: CREATE UNIQUE INDEX shareholder_phone_active ON shareholders(phone) WHERE deleted_at IS NULL;
+// Migration: CREATE UNIQUE INDEX documents_checksum_unique ON documents(market_id, checksum, entity_type, entity_id) WHERE checksum IS NOT NULL;
+
+// --- TRIGGERS ---
+
+// Migration: CREATE OR REPLACE FUNCTION enforce_role_market_match()
+// RETURNS TRIGGER AS $$
+// BEGIN
+//   IF NEW.market_id IS NOT NULL THEN
+//     IF NOT EXISTS (SELECT 1 FROM user_markets WHERE user_id = NEW.user_id AND market_id = NEW.market_id AND deleted_at IS NULL) THEN
+//       RAISE EXCEPTION 'UserRole.marketId must match one of the user''s UserMarket entries';
+//     END IF;
+//     IF EXISTS (SELECT 1 FROM roles WHERE id = NEW.role_id AND market_id IS NULL) THEN
+//       RAISE EXCEPTION 'Cannot assign a GLOBAL role with a market scope';
+//     END IF;
+//   ELSE
+//     IF EXISTS (SELECT 1 FROM roles WHERE id = NEW.role_id AND market_id IS NOT NULL) THEN
+//       RAISE EXCEPTION 'Cannot assign a MARKET role without a market scope';
+//     END IF;
+//   END IF;
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER enforce_role_market_match
+// BEFORE INSERT OR UPDATE ON user_roles
+// FOR EACH ROW EXECUTE FUNCTION enforce_role_market_match();
+
+// Migration: CREATE OR REPLACE FUNCTION enforce_cheque_tenant_market_match()
+// RETURNS TRIGGER AS $$
+// BEGIN
+//   IF NOT EXISTS (
+//     SELECT 1 FROM market_tenants
+//     WHERE tenant_id = NEW.tenant_id AND market_id = NEW.market_id AND deleted_at IS NULL
+//   ) THEN
+//     RAISE EXCEPTION 'Cheque.tenantId and marketId must correspond to an active MarketTenant entry';
+//   END IF;
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER enforce_cheque_tenant_market_match
+// BEFORE INSERT OR UPDATE ON cheques
+// FOR EACH ROW EXECUTE FUNCTION enforce_cheque_tenant_market_match();
+
+// Migration: CREATE OR REPLACE FUNCTION enforce_maintenance_tenant_market_match()
+// RETURNS TRIGGER AS $$
+// BEGIN
+//   IF NOT EXISTS (
+//     SELECT 1 FROM market_tenants
+//     WHERE tenant_id = NEW.tenant_id AND market_id = NEW.market_id AND deleted_at IS NULL
+//   ) THEN
+//     RAISE EXCEPTION 'MaintenanceRequest.tenantId and marketId must correspond to an active MarketTenant entry';
+//   END IF;
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER enforce_maintenance_tenant_market_match
+// BEFORE INSERT OR UPDATE ON maintenance_requests
+// FOR EACH ROW EXECUTE FUNCTION enforce_maintenance_tenant_market_match();
+
+// Migration: CREATE OR REPLACE FUNCTION enforce_expense_employee_market_match()
+// RETURNS TRIGGER AS $$
+// BEGIN
+//   IF NEW.employee_id IS NOT NULL THEN
+//     IF NOT EXISTS (
+//       SELECT 1 FROM market_employees
+//       WHERE employee_id = NEW.employee_id AND market_id = NEW.market_id AND is_active = true AND deleted_at IS NULL
+//     ) THEN
+//       RAISE EXCEPTION 'MarketExpense.employeeId must belong to an active MarketEmployee in the same market';
+//     END IF;
+//   END IF;
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER enforce_expense_employee_market_match
+// BEFORE INSERT OR UPDATE ON market_expenses
+// FOR EACH ROW EXECUTE FUNCTION enforce_expense_employee_market_match();
+
+// FIXED: Expanded immutability trigger to protect all content fields (ACT-04)
+// REASON: Previous trigger only checked description and date; referenceType,
+// referenceId, accountingPeriodId, and journalNumber must also be immutable
+// Migration: CREATE OR REPLACE FUNCTION enforce_journal_entry_immutability()
+// RETURNS TRIGGER AS $$
+// BEGIN
+//   -- VOID entries are fully immutable
+//   IF OLD.status = 'VOID' THEN
+//     RAISE EXCEPTION 'VOID journal entries are fully immutable.';
+//   END IF;
+//   -- POSTED entries: only status transition to VOID and void-tracking fields allowed
+//   IF OLD.status = 'POSTED' THEN
+//     IF NEW.status != 'VOID' THEN
+//       RAISE EXCEPTION 'POSTED journal entries cannot be modified. Use VOID to reverse.';
+//     END IF;
+//     -- Only voidedAt, voidedBy, voidReason, and updatedAt may change on POSTED -> VOID
+//     IF NEW.description IS DISTINCT FROM OLD.description
+//        OR NEW.date IS DISTINCT FROM OLD.date
+//        OR NEW.reference_type IS DISTINCT FROM OLD.reference_type
+//        OR NEW.reference_id IS DISTINCT FROM OLD.reference_id
+//        OR NEW.accounting_period_id IS DISTINCT FROM OLD.accounting_period_id
+//        OR NEW.journal_number IS DISTINCT FROM OLD.journal_number
+//        OR NEW.created_by_id IS DISTINCT FROM OLD.created_by_id THEN
+//       RAISE EXCEPTION 'POSTED journal entry content is immutable. Only status transition to VOID is allowed.';
+//     END IF;
+//   END IF;
+//   RETURN NEW;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER trg_journal_entry_immutability
+// BEFORE UPDATE ON journal_entries
+// FOR EACH ROW EXECUTE FUNCTION enforce_journal_entry_immutability();
+
+// FIXED: Added JournalLine immutability trigger (ACT-03)
+// REASON: The journal_entries trigger protects the header; this protects the lines
+// Migration: CREATE OR REPLACE FUNCTION enforce_journal_line_immutability()
+// RETURNS TRIGGER AS $$
+// DECLARE
+//   je_status journal_entries.status%TYPE;
+// BEGIN
+//   IF TG_OP = 'DELETE' THEN
+//     SELECT status INTO je_status FROM journal_entries WHERE id = OLD.journal_id;
+//   ELSE
+//     SELECT status INTO je_status FROM journal_entries WHERE id = NEW.journal_id;
+//   END IF;
+//   IF je_status = 'POSTED' THEN
+//     RAISE EXCEPTION 'Journal lines on a POSTED entry are immutable. Void the entry to reverse.';
+//   END IF;
+//   IF je_status = 'VOID' THEN
+//     RAISE EXCEPTION 'Journal lines on a VOID entry are fully immutable.';
+//   END IF;
+//   IF TG_OP = 'DELETE' THEN
+//     RETURN OLD;
+//   ELSE
+//     RETURN NEW;
+//   END IF;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER trg_journal_line_immutability
+// BEFORE INSERT OR UPDATE OR DELETE ON journal_lines
+// FOR EACH ROW EXECUTE FUNCTION enforce_journal_line_immutability();
+
+// FIXED: Added journal entry balance enforcement trigger (ACT-02)
+// REASON: Double-entry accounting requires SUM(debit) = SUM(credit) per entry
+// This trigger fires after any JournalLine change and validates balance for POSTED entries
+// Migration: CREATE OR REPLACE FUNCTION enforce_journal_balance()
+// RETURNS TRIGGER AS $$
+// DECLARE
+//   je_status journal_entries.status%TYPE;
+//   total_debit  NUMERIC;
+//   total_credit NUMERIC;
+//   target_journal_id UUID;
+// BEGIN
+//   IF TG_OP = 'DELETE' THEN
+//     target_journal_id := OLD.journal_id;
+//   ELSE
+//     target_journal_id := NEW.journal_id;
+//   END IF;
+//   SELECT status INTO je_status FROM journal_entries WHERE id = target_journal_id;
+//   -- Only enforce for POSTED entries (DRAFT entries are still being built)
+//   IF je_status = 'POSTED' THEN
+//     SELECT COALESCE(SUM(debit), 0), COALESCE(SUM(credit), 0)
+//       INTO total_debit, total_credit
+//       FROM journal_lines
+//       WHERE journal_id = target_journal_id;
+//     IF total_debit != total_credit THEN
+//       RAISE EXCEPTION 'Journal entry is unbalanced. Debit: %, Credit: %. POSTED entries must have balanced debits and credits.',
+//         total_debit, total_credit;
+//     END IF;
+//   END IF;
+//   IF TG_OP = 'DELETE' THEN
+//     RETURN OLD;
+//   ELSE
+//     RETURN NEW;
+//   END IF;
+// END;
+// $$ LANGUAGE plpgsql;
+//
+// Migration: CREATE TRIGGER trg_enforce_journal_balance
+// AFTER INSERT OR UPDATE OR DELETE ON journal_lines
+// FOR EACH ROW EXECUTE FUNCTION enforce_journal_balance();
+
+// --- EXCLUSION CONSTRAINTS ---
+
+// Migration: ALTER TABLE contracts ADD CONSTRAINT no_overlapping_contracts
+// EXCLUDE USING gist (shop_id WITH =, daterange(start_date, end_date, '[]') WITH &&)
+// WHERE (status IN ('ACTIVE'));
+
+// --- PARTITIONING ---
+
+// Migration: ALTER TABLE audit_logs PARTITION BY RANGE (created_at);
+// Migration: ALTER TABLE account_transactions PARTITION BY RANGE (transaction_date);

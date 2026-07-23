@@ -4587,6 +4587,7 @@ export type MarketTenantScalarFieldEnum = (typeof MarketTenantScalarFieldEnum)[k
 
 export const TenantHistoryScalarFieldEnum = {
   id: 'id',
+  marketId: 'marketId',
   tenantId: 'tenantId',
   fieldName: 'fieldName',
   oldValue: 'oldValue',
@@ -4600,6 +4601,7 @@ export type TenantHistoryScalarFieldEnum = (typeof TenantHistoryScalarFieldEnum)
 
 export const GuarantorScalarFieldEnum = {
   id: 'id',
+  marketId: 'marketId',
   fullName: 'fullName',
   phone: 'phone',
   address: 'address',
@@ -4895,6 +4897,8 @@ export const AccountScalarFieldEnum = {
   name: 'name',
   type: 'type',
   currency: 'currency',
+  classification: 'classification',
+  parentAccountId: 'parentAccountId',
   description: 'description',
   currentBalance: 'currentBalance',
   balanceUpdatedAt: 'balanceUpdatedAt',
@@ -4919,6 +4923,7 @@ export const JournalEntryScalarFieldEnum = {
   status: 'status',
   referenceType: 'referenceType',
   referenceId: 'referenceId',
+  reversalOfJournalId: 'reversalOfJournalId',
   accountingPeriodId: 'accountingPeriodId',
   createdById: 'createdById',
   createdAt: 'createdAt',
@@ -4937,6 +4942,7 @@ export const JournalLineScalarFieldEnum = {
   id: 'id',
   journalId: 'journalId',
   accountId: 'accountId',
+  lineNumber: 'lineNumber',
   debit: 'debit',
   credit: 'credit',
   description: 'description',
@@ -4974,13 +4980,12 @@ export const AccountTransactionScalarFieldEnum = {
   type: 'type',
   amount: 'amount',
   status: 'status',
-  referenceType: 'referenceType',
-  referenceId: 'referenceId',
   balanceBeforeTransaction: 'balanceBeforeTransaction',
   balanceAfterTransaction: 'balanceAfterTransaction',
   sequenceNo: 'sequenceNo',
   description: 'description',
   reversalId: 'reversalId',
+  journalEntryId: 'journalEntryId',
   createdById: 'createdById',
   transactionDate: 'transactionDate',
   createdAt: 'createdAt',
@@ -5196,6 +5201,7 @@ export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnu
 export const SessionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  marketId: 'marketId',
   refreshTokenHash: 'refreshTokenHash',
   userAgent: 'userAgent',
   ipAddress: 'ipAddress',
@@ -5213,6 +5219,8 @@ export const PasswordResetScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   tokenHash: 'tokenHash',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
   expiresAt: 'expiresAt',
   usedAt: 'usedAt',
   createdAt: 'createdAt',
@@ -5804,6 +5812,20 @@ export type EnumAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'AccountType[]'
  */
 export type ListEnumAccountTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AccountClassification'
+ */
+export type EnumAccountClassificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountClassification'>
+    
+
+
+/**
+ * Reference to a field of type 'AccountClassification[]'
+ */
+export type ListEnumAccountClassificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountClassification[]'>
     
 
 

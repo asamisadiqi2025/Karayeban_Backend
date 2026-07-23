@@ -27,6 +27,7 @@ export type AggregateJournalLine = {
 }
 
 export type JournalLineAvgAggregateOutputType = {
+  lineNumber: number | null
   debit: runtime.Decimal | null
   credit: runtime.Decimal | null
   exchangeRate: runtime.Decimal | null
@@ -34,6 +35,7 @@ export type JournalLineAvgAggregateOutputType = {
 }
 
 export type JournalLineSumAggregateOutputType = {
+  lineNumber: number | null
   debit: runtime.Decimal | null
   credit: runtime.Decimal | null
   exchangeRate: runtime.Decimal | null
@@ -44,6 +46,7 @@ export type JournalLineMinAggregateOutputType = {
   id: string | null
   journalId: string | null
   accountId: string | null
+  lineNumber: number | null
   debit: runtime.Decimal | null
   credit: runtime.Decimal | null
   description: string | null
@@ -57,6 +60,7 @@ export type JournalLineMaxAggregateOutputType = {
   id: string | null
   journalId: string | null
   accountId: string | null
+  lineNumber: number | null
   debit: runtime.Decimal | null
   credit: runtime.Decimal | null
   description: string | null
@@ -70,6 +74,7 @@ export type JournalLineCountAggregateOutputType = {
   id: number
   journalId: number
   accountId: number
+  lineNumber: number
   debit: number
   credit: number
   description: number
@@ -82,6 +87,7 @@ export type JournalLineCountAggregateOutputType = {
 
 
 export type JournalLineAvgAggregateInputType = {
+  lineNumber?: true
   debit?: true
   credit?: true
   exchangeRate?: true
@@ -89,6 +95,7 @@ export type JournalLineAvgAggregateInputType = {
 }
 
 export type JournalLineSumAggregateInputType = {
+  lineNumber?: true
   debit?: true
   credit?: true
   exchangeRate?: true
@@ -99,6 +106,7 @@ export type JournalLineMinAggregateInputType = {
   id?: true
   journalId?: true
   accountId?: true
+  lineNumber?: true
   debit?: true
   credit?: true
   description?: true
@@ -112,6 +120,7 @@ export type JournalLineMaxAggregateInputType = {
   id?: true
   journalId?: true
   accountId?: true
+  lineNumber?: true
   debit?: true
   credit?: true
   description?: true
@@ -125,6 +134,7 @@ export type JournalLineCountAggregateInputType = {
   id?: true
   journalId?: true
   accountId?: true
+  lineNumber?: true
   debit?: true
   credit?: true
   description?: true
@@ -225,6 +235,7 @@ export type JournalLineGroupByOutputType = {
   id: string
   journalId: string
   accountId: string
+  lineNumber: number
   debit: runtime.Decimal
   credit: runtime.Decimal
   description: string | null
@@ -261,6 +272,7 @@ export type JournalLineWhereInput = {
   id?: Prisma.UuidFilter<"JournalLine"> | string
   journalId?: Prisma.UuidFilter<"JournalLine"> | string
   accountId?: Prisma.UuidFilter<"JournalLine"> | string
+  lineNumber?: Prisma.IntFilter<"JournalLine"> | number
   debit?: Prisma.DecimalFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"JournalLine"> | string | null
@@ -276,6 +288,7 @@ export type JournalLineOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   journalId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -294,6 +307,7 @@ export type JournalLineWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.JournalLineWhereInput | Prisma.JournalLineWhereInput[]
   journalId?: Prisma.UuidFilter<"JournalLine"> | string
   accountId?: Prisma.UuidFilter<"JournalLine"> | string
+  lineNumber?: Prisma.IntFilter<"JournalLine"> | number
   debit?: Prisma.DecimalFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"JournalLine"> | string | null
@@ -309,6 +323,7 @@ export type JournalLineOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   journalId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,6 +345,7 @@ export type JournalLineScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"JournalLine"> | string
   journalId?: Prisma.UuidWithAggregatesFilter<"JournalLine"> | string
   accountId?: Prisma.UuidWithAggregatesFilter<"JournalLine"> | string
+  lineNumber?: Prisma.IntWithAggregatesFilter<"JournalLine"> | number
   debit?: Prisma.DecimalWithAggregatesFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalWithAggregatesFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableWithAggregatesFilter<"JournalLine"> | string | null
@@ -341,6 +357,7 @@ export type JournalLineScalarWhereWithAggregatesInput = {
 
 export type JournalLineCreateInput = {
   id: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -356,6 +373,7 @@ export type JournalLineUncheckedCreateInput = {
   id: string
   journalId: string
   accountId: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -367,6 +385,7 @@ export type JournalLineUncheckedCreateInput = {
 
 export type JournalLineUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -382,6 +401,7 @@ export type JournalLineUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   journalId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -395,6 +415,7 @@ export type JournalLineCreateManyInput = {
   id: string
   journalId: string
   accountId: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -406,6 +427,7 @@ export type JournalLineCreateManyInput = {
 
 export type JournalLineUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -419,6 +441,7 @@ export type JournalLineUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   journalId?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -442,6 +465,7 @@ export type JournalLineCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   journalId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -452,6 +476,7 @@ export type JournalLineCountOrderByAggregateInput = {
 }
 
 export type JournalLineAvgOrderByAggregateInput = {
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   exchangeRate?: Prisma.SortOrder
@@ -462,6 +487,7 @@ export type JournalLineMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   journalId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -475,6 +501,7 @@ export type JournalLineMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   journalId?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -485,6 +512,7 @@ export type JournalLineMinOrderByAggregateInput = {
 }
 
 export type JournalLineSumOrderByAggregateInput = {
+  lineNumber?: Prisma.SortOrder
   debit?: Prisma.SortOrder
   credit?: Prisma.SortOrder
   exchangeRate?: Prisma.SortOrder
@@ -581,6 +609,7 @@ export type NullableEnumCurrencyFieldUpdateOperationsInput = {
 
 export type JournalLineCreateWithoutAccountInput = {
   id: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -594,6 +623,7 @@ export type JournalLineCreateWithoutAccountInput = {
 export type JournalLineUncheckedCreateWithoutAccountInput = {
   id: string
   journalId: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -636,6 +666,7 @@ export type JournalLineScalarWhereInput = {
   id?: Prisma.UuidFilter<"JournalLine"> | string
   journalId?: Prisma.UuidFilter<"JournalLine"> | string
   accountId?: Prisma.UuidFilter<"JournalLine"> | string
+  lineNumber?: Prisma.IntFilter<"JournalLine"> | number
   debit?: Prisma.DecimalFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFilter<"JournalLine"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"JournalLine"> | string | null
@@ -647,6 +678,7 @@ export type JournalLineScalarWhereInput = {
 
 export type JournalLineCreateWithoutJournalInput = {
   id: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -660,6 +692,7 @@ export type JournalLineCreateWithoutJournalInput = {
 export type JournalLineUncheckedCreateWithoutJournalInput = {
   id: string
   accountId: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -698,6 +731,7 @@ export type JournalLineUpdateManyWithWhereWithoutJournalInput = {
 export type JournalLineCreateManyAccountInput = {
   id: string
   journalId: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -709,6 +743,7 @@ export type JournalLineCreateManyAccountInput = {
 
 export type JournalLineUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -722,6 +757,7 @@ export type JournalLineUpdateWithoutAccountInput = {
 export type JournalLineUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   journalId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -734,6 +770,7 @@ export type JournalLineUncheckedUpdateWithoutAccountInput = {
 export type JournalLineUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   journalId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -746,6 +783,7 @@ export type JournalLineUncheckedUpdateManyWithoutAccountInput = {
 export type JournalLineCreateManyJournalInput = {
   id: string
   accountId: string
+  lineNumber: number
   debit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -757,6 +795,7 @@ export type JournalLineCreateManyJournalInput = {
 
 export type JournalLineUpdateWithoutJournalInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -770,6 +809,7 @@ export type JournalLineUpdateWithoutJournalInput = {
 export type JournalLineUncheckedUpdateWithoutJournalInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -782,6 +822,7 @@ export type JournalLineUncheckedUpdateWithoutJournalInput = {
 export type JournalLineUncheckedUpdateManyWithoutJournalInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  lineNumber?: Prisma.IntFieldUpdateOperationsInput | number
   debit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   credit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -797,6 +838,7 @@ export type JournalLineSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   journalId?: boolean
   accountId?: boolean
+  lineNumber?: boolean
   debit?: boolean
   credit?: boolean
   description?: boolean
@@ -812,6 +854,7 @@ export type JournalLineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   journalId?: boolean
   accountId?: boolean
+  lineNumber?: boolean
   debit?: boolean
   credit?: boolean
   description?: boolean
@@ -827,6 +870,7 @@ export type JournalLineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   journalId?: boolean
   accountId?: boolean
+  lineNumber?: boolean
   debit?: boolean
   credit?: boolean
   description?: boolean
@@ -842,6 +886,7 @@ export type JournalLineSelectScalar = {
   id?: boolean
   journalId?: boolean
   accountId?: boolean
+  lineNumber?: boolean
   debit?: boolean
   credit?: boolean
   description?: boolean
@@ -851,7 +896,7 @@ export type JournalLineSelectScalar = {
   createdAt?: boolean
 }
 
-export type JournalLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "journalId" | "accountId" | "debit" | "credit" | "description" | "exchangeRate" | "originalCurrency" | "originalAmount" | "createdAt", ExtArgs["result"]["journalLine"]>
+export type JournalLineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "journalId" | "accountId" | "lineNumber" | "debit" | "credit" | "description" | "exchangeRate" | "originalCurrency" | "originalAmount" | "createdAt", ExtArgs["result"]["journalLine"]>
 export type JournalLineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   journal?: boolean | Prisma.JournalEntryDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
@@ -875,6 +920,7 @@ export type $JournalLinePayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     journalId: string
     accountId: string
+    lineNumber: number
     debit: runtime.Decimal
     credit: runtime.Decimal
     description: string | null
@@ -1310,6 +1356,7 @@ export interface JournalLineFieldRefs {
   readonly id: Prisma.FieldRef<"JournalLine", 'String'>
   readonly journalId: Prisma.FieldRef<"JournalLine", 'String'>
   readonly accountId: Prisma.FieldRef<"JournalLine", 'String'>
+  readonly lineNumber: Prisma.FieldRef<"JournalLine", 'Int'>
   readonly debit: Prisma.FieldRef<"JournalLine", 'Decimal'>
   readonly credit: Prisma.FieldRef<"JournalLine", 'Decimal'>
   readonly description: Prisma.FieldRef<"JournalLine", 'String'>

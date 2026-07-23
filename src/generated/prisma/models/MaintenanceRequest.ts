@@ -319,6 +319,7 @@ export type MaintenanceRequestWhereInput = {
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type MaintenanceRequestOrderByWithRelationInput = {
@@ -342,6 +343,7 @@ export type MaintenanceRequestOrderByWithRelationInput = {
   shop?: Prisma.ShopOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
   market?: Prisma.MarketOrderByWithRelationInput
+  assignedToUser?: Prisma.UserOrderByWithRelationInput
 }
 
 export type MaintenanceRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -368,6 +370,7 @@ export type MaintenanceRequestWhereUniqueInput = Prisma.AtLeast<{
   shop?: Prisma.XOR<Prisma.ShopScalarRelationFilter, Prisma.ShopWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
+  assignedToUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type MaintenanceRequestOrderByWithAggregationInput = {
@@ -423,7 +426,6 @@ export type MaintenanceRequestCreateInput = {
   issue: string
   priority?: $Enums.MaintenancePriority
   status?: $Enums.MaintenanceStatus
-  assignedTo?: string | null
   assignedAt?: Date | string | null
   completedAt?: Date | string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -436,6 +438,7 @@ export type MaintenanceRequestCreateInput = {
   shop: Prisma.ShopCreateNestedOneWithoutMaintenanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutMaintenanceInput
   market: Prisma.MarketCreateNestedOneWithoutMaintenanceRequestsInput
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutMaintenanceAssignedInput
 }
 
 export type MaintenanceRequestUncheckedCreateInput = {
@@ -463,7 +466,6 @@ export type MaintenanceRequestUpdateInput = {
   issue?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
   status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
-  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -476,6 +478,7 @@ export type MaintenanceRequestUpdateInput = {
   shop?: Prisma.ShopUpdateOneRequiredWithoutMaintenanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutMaintenanceNestedInput
   market?: Prisma.MarketUpdateOneRequiredWithoutMaintenanceRequestsNestedInput
+  assignedToUser?: Prisma.UserUpdateOneWithoutMaintenanceAssignedNestedInput
 }
 
 export type MaintenanceRequestUncheckedUpdateInput = {
@@ -523,7 +526,6 @@ export type MaintenanceRequestUpdateManyMutationInput = {
   issue?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
   status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
-  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -769,12 +771,53 @@ export type EnumMaintenanceStatusFieldUpdateOperationsInput = {
   set?: $Enums.MaintenanceStatus
 }
 
+export type MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput = {
+  create?: Prisma.XOR<Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput> | Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput[] | Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput[]
+  connectOrCreate?: Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput | Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput[]
+  createMany?: Prisma.MaintenanceRequestCreateManyAssignedToUserInputEnvelope
+  connect?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+}
+
+export type MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput = {
+  create?: Prisma.XOR<Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput> | Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput[] | Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput[]
+  connectOrCreate?: Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput | Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput[]
+  createMany?: Prisma.MaintenanceRequestCreateManyAssignedToUserInputEnvelope
+  connect?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+}
+
+export type MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput> | Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput[] | Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput[]
+  connectOrCreate?: Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput | Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput[]
+  upsert?: Prisma.MaintenanceRequestUpsertWithWhereUniqueWithoutAssignedToUserInput | Prisma.MaintenanceRequestUpsertWithWhereUniqueWithoutAssignedToUserInput[]
+  createMany?: Prisma.MaintenanceRequestCreateManyAssignedToUserInputEnvelope
+  set?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  disconnect?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  delete?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  connect?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  update?: Prisma.MaintenanceRequestUpdateWithWhereUniqueWithoutAssignedToUserInput | Prisma.MaintenanceRequestUpdateWithWhereUniqueWithoutAssignedToUserInput[]
+  updateMany?: Prisma.MaintenanceRequestUpdateManyWithWhereWithoutAssignedToUserInput | Prisma.MaintenanceRequestUpdateManyWithWhereWithoutAssignedToUserInput[]
+  deleteMany?: Prisma.MaintenanceRequestScalarWhereInput | Prisma.MaintenanceRequestScalarWhereInput[]
+}
+
+export type MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput> | Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput[] | Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput[]
+  connectOrCreate?: Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput | Prisma.MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput[]
+  upsert?: Prisma.MaintenanceRequestUpsertWithWhereUniqueWithoutAssignedToUserInput | Prisma.MaintenanceRequestUpsertWithWhereUniqueWithoutAssignedToUserInput[]
+  createMany?: Prisma.MaintenanceRequestCreateManyAssignedToUserInputEnvelope
+  set?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  disconnect?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  delete?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  connect?: Prisma.MaintenanceRequestWhereUniqueInput | Prisma.MaintenanceRequestWhereUniqueInput[]
+  update?: Prisma.MaintenanceRequestUpdateWithWhereUniqueWithoutAssignedToUserInput | Prisma.MaintenanceRequestUpdateWithWhereUniqueWithoutAssignedToUserInput[]
+  updateMany?: Prisma.MaintenanceRequestUpdateManyWithWhereWithoutAssignedToUserInput | Prisma.MaintenanceRequestUpdateManyWithWhereWithoutAssignedToUserInput[]
+  deleteMany?: Prisma.MaintenanceRequestScalarWhereInput | Prisma.MaintenanceRequestScalarWhereInput[]
+}
+
 export type MaintenanceRequestCreateWithoutMarketInput = {
   id: string
   issue: string
   priority?: $Enums.MaintenancePriority
   status?: $Enums.MaintenanceStatus
-  assignedTo?: string | null
   assignedAt?: Date | string | null
   completedAt?: Date | string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -786,6 +829,7 @@ export type MaintenanceRequestCreateWithoutMarketInput = {
   version?: number
   shop: Prisma.ShopCreateNestedOneWithoutMaintenanceInput
   tenant: Prisma.TenantCreateNestedOneWithoutMaintenanceInput
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutMaintenanceAssignedInput
 }
 
 export type MaintenanceRequestUncheckedCreateWithoutMarketInput = {
@@ -861,7 +905,6 @@ export type MaintenanceRequestCreateWithoutShopInput = {
   issue: string
   priority?: $Enums.MaintenancePriority
   status?: $Enums.MaintenanceStatus
-  assignedTo?: string | null
   assignedAt?: Date | string | null
   completedAt?: Date | string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -873,6 +916,7 @@ export type MaintenanceRequestCreateWithoutShopInput = {
   version?: number
   tenant: Prisma.TenantCreateNestedOneWithoutMaintenanceInput
   market: Prisma.MarketCreateNestedOneWithoutMaintenanceRequestsInput
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutMaintenanceAssignedInput
 }
 
 export type MaintenanceRequestUncheckedCreateWithoutShopInput = {
@@ -925,7 +969,6 @@ export type MaintenanceRequestCreateWithoutTenantInput = {
   issue: string
   priority?: $Enums.MaintenancePriority
   status?: $Enums.MaintenanceStatus
-  assignedTo?: string | null
   assignedAt?: Date | string | null
   completedAt?: Date | string | null
   cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -937,6 +980,7 @@ export type MaintenanceRequestCreateWithoutTenantInput = {
   version?: number
   shop: Prisma.ShopCreateNestedOneWithoutMaintenanceInput
   market: Prisma.MarketCreateNestedOneWithoutMaintenanceRequestsInput
+  assignedToUser?: Prisma.UserCreateNestedOneWithoutMaintenanceAssignedInput
 }
 
 export type MaintenanceRequestUncheckedCreateWithoutTenantInput = {
@@ -984,6 +1028,70 @@ export type MaintenanceRequestUpdateManyWithWhereWithoutTenantInput = {
   data: Prisma.XOR<Prisma.MaintenanceRequestUpdateManyMutationInput, Prisma.MaintenanceRequestUncheckedUpdateManyWithoutTenantInput>
 }
 
+export type MaintenanceRequestCreateWithoutAssignedToUserInput = {
+  id: string
+  issue: string
+  priority?: $Enums.MaintenancePriority
+  status?: $Enums.MaintenanceStatus
+  assignedAt?: Date | string | null
+  completedAt?: Date | string | null
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  resolutionNote?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  version?: number
+  shop: Prisma.ShopCreateNestedOneWithoutMaintenanceInput
+  tenant: Prisma.TenantCreateNestedOneWithoutMaintenanceInput
+  market: Prisma.MarketCreateNestedOneWithoutMaintenanceRequestsInput
+}
+
+export type MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput = {
+  id: string
+  shopId: string
+  tenantId: string
+  marketId: string
+  issue: string
+  priority?: $Enums.MaintenancePriority
+  status?: $Enums.MaintenanceStatus
+  assignedAt?: Date | string | null
+  completedAt?: Date | string | null
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  resolutionNote?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  version?: number
+}
+
+export type MaintenanceRequestCreateOrConnectWithoutAssignedToUserInput = {
+  where: Prisma.MaintenanceRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput>
+}
+
+export type MaintenanceRequestCreateManyAssignedToUserInputEnvelope = {
+  data: Prisma.MaintenanceRequestCreateManyAssignedToUserInput | Prisma.MaintenanceRequestCreateManyAssignedToUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type MaintenanceRequestUpsertWithWhereUniqueWithoutAssignedToUserInput = {
+  where: Prisma.MaintenanceRequestWhereUniqueInput
+  update: Prisma.XOR<Prisma.MaintenanceRequestUpdateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedUpdateWithoutAssignedToUserInput>
+  create: Prisma.XOR<Prisma.MaintenanceRequestCreateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedCreateWithoutAssignedToUserInput>
+}
+
+export type MaintenanceRequestUpdateWithWhereUniqueWithoutAssignedToUserInput = {
+  where: Prisma.MaintenanceRequestWhereUniqueInput
+  data: Prisma.XOR<Prisma.MaintenanceRequestUpdateWithoutAssignedToUserInput, Prisma.MaintenanceRequestUncheckedUpdateWithoutAssignedToUserInput>
+}
+
+export type MaintenanceRequestUpdateManyWithWhereWithoutAssignedToUserInput = {
+  where: Prisma.MaintenanceRequestScalarWhereInput
+  data: Prisma.XOR<Prisma.MaintenanceRequestUpdateManyMutationInput, Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserInput>
+}
+
 export type MaintenanceRequestCreateManyMarketInput = {
   id: string
   shopId: string
@@ -1008,7 +1116,6 @@ export type MaintenanceRequestUpdateWithoutMarketInput = {
   issue?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
   status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
-  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1020,6 +1127,7 @@ export type MaintenanceRequestUpdateWithoutMarketInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   shop?: Prisma.ShopUpdateOneRequiredWithoutMaintenanceNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutMaintenanceNestedInput
+  assignedToUser?: Prisma.UserUpdateOneWithoutMaintenanceAssignedNestedInput
 }
 
 export type MaintenanceRequestUncheckedUpdateWithoutMarketInput = {
@@ -1084,7 +1192,6 @@ export type MaintenanceRequestUpdateWithoutShopInput = {
   issue?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
   status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
-  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1096,6 +1203,7 @@ export type MaintenanceRequestUpdateWithoutShopInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutMaintenanceNestedInput
   market?: Prisma.MarketUpdateOneRequiredWithoutMaintenanceRequestsNestedInput
+  assignedToUser?: Prisma.UserUpdateOneWithoutMaintenanceAssignedNestedInput
 }
 
 export type MaintenanceRequestUncheckedUpdateWithoutShopInput = {
@@ -1160,7 +1268,6 @@ export type MaintenanceRequestUpdateWithoutTenantInput = {
   issue?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
   status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
-  assignedTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -1172,6 +1279,7 @@ export type MaintenanceRequestUpdateWithoutTenantInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   shop?: Prisma.ShopUpdateOneRequiredWithoutMaintenanceNestedInput
   market?: Prisma.MarketUpdateOneRequiredWithoutMaintenanceRequestsNestedInput
+  assignedToUser?: Prisma.UserUpdateOneWithoutMaintenanceAssignedNestedInput
 }
 
 export type MaintenanceRequestUncheckedUpdateWithoutTenantInput = {
@@ -1212,6 +1320,82 @@ export type MaintenanceRequestUncheckedUpdateManyWithoutTenantInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
+export type MaintenanceRequestCreateManyAssignedToUserInput = {
+  id: string
+  shopId: string
+  tenantId: string
+  marketId: string
+  issue: string
+  priority?: $Enums.MaintenancePriority
+  status?: $Enums.MaintenanceStatus
+  assignedAt?: Date | string | null
+  completedAt?: Date | string | null
+  cost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  resolutionNote?: string | null
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  version?: number
+}
+
+export type MaintenanceRequestUpdateWithoutAssignedToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  issue?: Prisma.StringFieldUpdateOperationsInput | string
+  priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
+  status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  resolutionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  shop?: Prisma.ShopUpdateOneRequiredWithoutMaintenanceNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutMaintenanceNestedInput
+  market?: Prisma.MarketUpdateOneRequiredWithoutMaintenanceRequestsNestedInput
+}
+
+export type MaintenanceRequestUncheckedUpdateWithoutAssignedToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  issue?: Prisma.StringFieldUpdateOperationsInput | string
+  priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
+  status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  resolutionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  shopId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  issue?: Prisma.StringFieldUpdateOperationsInput | string
+  priority?: Prisma.EnumMaintenancePriorityFieldUpdateOperationsInput | $Enums.MaintenancePriority
+  status?: Prisma.EnumMaintenanceStatusFieldUpdateOperationsInput | $Enums.MaintenanceStatus
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  resolutionNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 
 
 export type MaintenanceRequestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1235,6 +1419,7 @@ export type MaintenanceRequestSelect<ExtArgs extends runtime.Types.Extensions.In
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>
 }, ExtArgs["result"]["maintenanceRequest"]>
 
 export type MaintenanceRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1258,6 +1443,7 @@ export type MaintenanceRequestSelectCreateManyAndReturn<ExtArgs extends runtime.
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>
 }, ExtArgs["result"]["maintenanceRequest"]>
 
 export type MaintenanceRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1281,6 +1467,7 @@ export type MaintenanceRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>
 }, ExtArgs["result"]["maintenanceRequest"]>
 
 export type MaintenanceRequestSelectScalar = {
@@ -1308,16 +1495,19 @@ export type MaintenanceRequestInclude<ExtArgs extends runtime.Types.Extensions.I
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>
 }
 export type MaintenanceRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>
 }
 export type MaintenanceRequestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   shop?: boolean | Prisma.ShopDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
+  assignedToUser?: boolean | Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>
 }
 
 export type $MaintenanceRequestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1326,6 +1516,7 @@ export type $MaintenanceRequestPayload<ExtArgs extends runtime.Types.Extensions.
     shop: Prisma.$ShopPayload<ExtArgs>
     tenant: Prisma.$TenantPayload<ExtArgs>
     market: Prisma.$MarketPayload<ExtArgs>
+    assignedToUser: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1742,6 +1933,7 @@ export interface Prisma__MaintenanceRequestClient<T, Null = never, ExtArgs exten
   shop<T extends Prisma.ShopDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShopDefaultArgs<ExtArgs>>): Prisma.Prisma__ShopClient<runtime.Types.Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  assignedToUser<T extends Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MaintenanceRequest$assignedToUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2186,6 +2378,25 @@ export type MaintenanceRequestDeleteManyArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many MaintenanceRequests to delete.
    */
   limit?: number
+}
+
+/**
+ * MaintenanceRequest.assignedToUser
+ */
+export type MaintenanceRequest$assignedToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

@@ -26,6 +26,7 @@ export type AggregateTenantHistory = {
 
 export type TenantHistoryMinAggregateOutputType = {
   id: string | null
+  marketId: string | null
   tenantId: string | null
   fieldName: string | null
   oldValue: string | null
@@ -36,6 +37,7 @@ export type TenantHistoryMinAggregateOutputType = {
 
 export type TenantHistoryMaxAggregateOutputType = {
   id: string | null
+  marketId: string | null
   tenantId: string | null
   fieldName: string | null
   oldValue: string | null
@@ -46,6 +48,7 @@ export type TenantHistoryMaxAggregateOutputType = {
 
 export type TenantHistoryCountAggregateOutputType = {
   id: number
+  marketId: number
   tenantId: number
   fieldName: number
   oldValue: number
@@ -58,6 +61,7 @@ export type TenantHistoryCountAggregateOutputType = {
 
 export type TenantHistoryMinAggregateInputType = {
   id?: true
+  marketId?: true
   tenantId?: true
   fieldName?: true
   oldValue?: true
@@ -68,6 +72,7 @@ export type TenantHistoryMinAggregateInputType = {
 
 export type TenantHistoryMaxAggregateInputType = {
   id?: true
+  marketId?: true
   tenantId?: true
   fieldName?: true
   oldValue?: true
@@ -78,6 +83,7 @@ export type TenantHistoryMaxAggregateInputType = {
 
 export type TenantHistoryCountAggregateInputType = {
   id?: true
+  marketId?: true
   tenantId?: true
   fieldName?: true
   oldValue?: true
@@ -161,6 +167,7 @@ export type TenantHistoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 
 export type TenantHistoryGroupByOutputType = {
   id: string
+  marketId: string
   tenantId: string
   fieldName: string
   oldValue: string | null
@@ -192,23 +199,27 @@ export type TenantHistoryWhereInput = {
   OR?: Prisma.TenantHistoryWhereInput[]
   NOT?: Prisma.TenantHistoryWhereInput | Prisma.TenantHistoryWhereInput[]
   id?: Prisma.UuidFilter<"TenantHistory"> | string
+  marketId?: Prisma.UuidFilter<"TenantHistory"> | string
   tenantId?: Prisma.UuidFilter<"TenantHistory"> | string
   fieldName?: Prisma.StringFilter<"TenantHistory"> | string
   oldValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
   newValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
   changedById?: Prisma.UuidNullableFilter<"TenantHistory"> | string | null
   changedAt?: Prisma.DateTimeFilter<"TenantHistory"> | Date | string
+  market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type TenantHistoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   fieldName?: Prisma.SortOrder
   oldValue?: Prisma.SortOrderInput | Prisma.SortOrder
   newValue?: Prisma.SortOrderInput | Prisma.SortOrder
   changedById?: Prisma.SortOrderInput | Prisma.SortOrder
   changedAt?: Prisma.SortOrder
+  market?: Prisma.MarketOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
@@ -217,17 +228,20 @@ export type TenantHistoryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TenantHistoryWhereInput | Prisma.TenantHistoryWhereInput[]
   OR?: Prisma.TenantHistoryWhereInput[]
   NOT?: Prisma.TenantHistoryWhereInput | Prisma.TenantHistoryWhereInput[]
+  marketId?: Prisma.UuidFilter<"TenantHistory"> | string
   tenantId?: Prisma.UuidFilter<"TenantHistory"> | string
   fieldName?: Prisma.StringFilter<"TenantHistory"> | string
   oldValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
   newValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
   changedById?: Prisma.UuidNullableFilter<"TenantHistory"> | string | null
   changedAt?: Prisma.DateTimeFilter<"TenantHistory"> | Date | string
+  market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type TenantHistoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   fieldName?: Prisma.SortOrder
   oldValue?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -244,6 +258,7 @@ export type TenantHistoryScalarWhereWithAggregatesInput = {
   OR?: Prisma.TenantHistoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantHistoryScalarWhereWithAggregatesInput | Prisma.TenantHistoryScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"TenantHistory"> | string
+  marketId?: Prisma.UuidWithAggregatesFilter<"TenantHistory"> | string
   tenantId?: Prisma.UuidWithAggregatesFilter<"TenantHistory"> | string
   fieldName?: Prisma.StringWithAggregatesFilter<"TenantHistory"> | string
   oldValue?: Prisma.StringNullableWithAggregatesFilter<"TenantHistory"> | string | null
@@ -259,11 +274,13 @@ export type TenantHistoryCreateInput = {
   newValue?: string | null
   changedById?: string | null
   changedAt?: Date | string
+  market: Prisma.MarketCreateNestedOneWithoutTenantHistoriesInput
   tenant: Prisma.TenantCreateNestedOneWithoutHistoryInput
 }
 
 export type TenantHistoryUncheckedCreateInput = {
   id: string
+  marketId: string
   tenantId: string
   fieldName: string
   oldValue?: string | null
@@ -279,11 +296,13 @@ export type TenantHistoryUpdateInput = {
   newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  market?: Prisma.MarketUpdateOneRequiredWithoutTenantHistoriesNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutHistoryNestedInput
 }
 
 export type TenantHistoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fieldName?: Prisma.StringFieldUpdateOperationsInput | string
   oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -294,6 +313,7 @@ export type TenantHistoryUncheckedUpdateInput = {
 
 export type TenantHistoryCreateManyInput = {
   id: string
+  marketId: string
   tenantId: string
   fieldName: string
   oldValue?: string | null
@@ -313,6 +333,7 @@ export type TenantHistoryUpdateManyMutationInput = {
 
 export type TenantHistoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fieldName?: Prisma.StringFieldUpdateOperationsInput | string
   oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -333,6 +354,7 @@ export type TenantHistoryOrderByRelationAggregateInput = {
 
 export type TenantHistoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   fieldName?: Prisma.SortOrder
   oldValue?: Prisma.SortOrder
@@ -343,6 +365,7 @@ export type TenantHistoryCountOrderByAggregateInput = {
 
 export type TenantHistoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   fieldName?: Prisma.SortOrder
   oldValue?: Prisma.SortOrder
@@ -353,12 +376,55 @@ export type TenantHistoryMaxOrderByAggregateInput = {
 
 export type TenantHistoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  marketId?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   fieldName?: Prisma.SortOrder
   oldValue?: Prisma.SortOrder
   newValue?: Prisma.SortOrder
   changedById?: Prisma.SortOrder
   changedAt?: Prisma.SortOrder
+}
+
+export type TenantHistoryCreateNestedManyWithoutMarketInput = {
+  create?: Prisma.XOR<Prisma.TenantHistoryCreateWithoutMarketInput, Prisma.TenantHistoryUncheckedCreateWithoutMarketInput> | Prisma.TenantHistoryCreateWithoutMarketInput[] | Prisma.TenantHistoryUncheckedCreateWithoutMarketInput[]
+  connectOrCreate?: Prisma.TenantHistoryCreateOrConnectWithoutMarketInput | Prisma.TenantHistoryCreateOrConnectWithoutMarketInput[]
+  createMany?: Prisma.TenantHistoryCreateManyMarketInputEnvelope
+  connect?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+}
+
+export type TenantHistoryUncheckedCreateNestedManyWithoutMarketInput = {
+  create?: Prisma.XOR<Prisma.TenantHistoryCreateWithoutMarketInput, Prisma.TenantHistoryUncheckedCreateWithoutMarketInput> | Prisma.TenantHistoryCreateWithoutMarketInput[] | Prisma.TenantHistoryUncheckedCreateWithoutMarketInput[]
+  connectOrCreate?: Prisma.TenantHistoryCreateOrConnectWithoutMarketInput | Prisma.TenantHistoryCreateOrConnectWithoutMarketInput[]
+  createMany?: Prisma.TenantHistoryCreateManyMarketInputEnvelope
+  connect?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+}
+
+export type TenantHistoryUpdateManyWithoutMarketNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantHistoryCreateWithoutMarketInput, Prisma.TenantHistoryUncheckedCreateWithoutMarketInput> | Prisma.TenantHistoryCreateWithoutMarketInput[] | Prisma.TenantHistoryUncheckedCreateWithoutMarketInput[]
+  connectOrCreate?: Prisma.TenantHistoryCreateOrConnectWithoutMarketInput | Prisma.TenantHistoryCreateOrConnectWithoutMarketInput[]
+  upsert?: Prisma.TenantHistoryUpsertWithWhereUniqueWithoutMarketInput | Prisma.TenantHistoryUpsertWithWhereUniqueWithoutMarketInput[]
+  createMany?: Prisma.TenantHistoryCreateManyMarketInputEnvelope
+  set?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  disconnect?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  delete?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  connect?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  update?: Prisma.TenantHistoryUpdateWithWhereUniqueWithoutMarketInput | Prisma.TenantHistoryUpdateWithWhereUniqueWithoutMarketInput[]
+  updateMany?: Prisma.TenantHistoryUpdateManyWithWhereWithoutMarketInput | Prisma.TenantHistoryUpdateManyWithWhereWithoutMarketInput[]
+  deleteMany?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
+}
+
+export type TenantHistoryUncheckedUpdateManyWithoutMarketNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantHistoryCreateWithoutMarketInput, Prisma.TenantHistoryUncheckedCreateWithoutMarketInput> | Prisma.TenantHistoryCreateWithoutMarketInput[] | Prisma.TenantHistoryUncheckedCreateWithoutMarketInput[]
+  connectOrCreate?: Prisma.TenantHistoryCreateOrConnectWithoutMarketInput | Prisma.TenantHistoryCreateOrConnectWithoutMarketInput[]
+  upsert?: Prisma.TenantHistoryUpsertWithWhereUniqueWithoutMarketInput | Prisma.TenantHistoryUpsertWithWhereUniqueWithoutMarketInput[]
+  createMany?: Prisma.TenantHistoryCreateManyMarketInputEnvelope
+  set?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  disconnect?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  delete?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  connect?: Prisma.TenantHistoryWhereUniqueInput | Prisma.TenantHistoryWhereUniqueInput[]
+  update?: Prisma.TenantHistoryUpdateWithWhereUniqueWithoutMarketInput | Prisma.TenantHistoryUpdateWithWhereUniqueWithoutMarketInput[]
+  updateMany?: Prisma.TenantHistoryUpdateManyWithWhereWithoutMarketInput | Prisma.TenantHistoryUpdateManyWithWhereWithoutMarketInput[]
+  deleteMany?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
 }
 
 export type TenantHistoryCreateNestedManyWithoutTenantInput = {
@@ -403,8 +469,19 @@ export type TenantHistoryUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
 }
 
-export type TenantHistoryCreateWithoutTenantInput = {
+export type TenantHistoryCreateWithoutMarketInput = {
   id: string
+  fieldName: string
+  oldValue?: string | null
+  newValue?: string | null
+  changedById?: string | null
+  changedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutHistoryInput
+}
+
+export type TenantHistoryUncheckedCreateWithoutMarketInput = {
+  id: string
+  tenantId: string
   fieldName: string
   oldValue?: string | null
   newValue?: string | null
@@ -412,8 +489,59 @@ export type TenantHistoryCreateWithoutTenantInput = {
   changedAt?: Date | string
 }
 
+export type TenantHistoryCreateOrConnectWithoutMarketInput = {
+  where: Prisma.TenantHistoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantHistoryCreateWithoutMarketInput, Prisma.TenantHistoryUncheckedCreateWithoutMarketInput>
+}
+
+export type TenantHistoryCreateManyMarketInputEnvelope = {
+  data: Prisma.TenantHistoryCreateManyMarketInput | Prisma.TenantHistoryCreateManyMarketInput[]
+  skipDuplicates?: boolean
+}
+
+export type TenantHistoryUpsertWithWhereUniqueWithoutMarketInput = {
+  where: Prisma.TenantHistoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.TenantHistoryUpdateWithoutMarketInput, Prisma.TenantHistoryUncheckedUpdateWithoutMarketInput>
+  create: Prisma.XOR<Prisma.TenantHistoryCreateWithoutMarketInput, Prisma.TenantHistoryUncheckedCreateWithoutMarketInput>
+}
+
+export type TenantHistoryUpdateWithWhereUniqueWithoutMarketInput = {
+  where: Prisma.TenantHistoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.TenantHistoryUpdateWithoutMarketInput, Prisma.TenantHistoryUncheckedUpdateWithoutMarketInput>
+}
+
+export type TenantHistoryUpdateManyWithWhereWithoutMarketInput = {
+  where: Prisma.TenantHistoryScalarWhereInput
+  data: Prisma.XOR<Prisma.TenantHistoryUpdateManyMutationInput, Prisma.TenantHistoryUncheckedUpdateManyWithoutMarketInput>
+}
+
+export type TenantHistoryScalarWhereInput = {
+  AND?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
+  OR?: Prisma.TenantHistoryScalarWhereInput[]
+  NOT?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
+  id?: Prisma.UuidFilter<"TenantHistory"> | string
+  marketId?: Prisma.UuidFilter<"TenantHistory"> | string
+  tenantId?: Prisma.UuidFilter<"TenantHistory"> | string
+  fieldName?: Prisma.StringFilter<"TenantHistory"> | string
+  oldValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
+  newValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
+  changedById?: Prisma.UuidNullableFilter<"TenantHistory"> | string | null
+  changedAt?: Prisma.DateTimeFilter<"TenantHistory"> | Date | string
+}
+
+export type TenantHistoryCreateWithoutTenantInput = {
+  id: string
+  fieldName: string
+  oldValue?: string | null
+  newValue?: string | null
+  changedById?: string | null
+  changedAt?: Date | string
+  market: Prisma.MarketCreateNestedOneWithoutTenantHistoriesInput
+}
+
 export type TenantHistoryUncheckedCreateWithoutTenantInput = {
   id: string
+  marketId: string
   fieldName: string
   oldValue?: string | null
   newValue?: string | null
@@ -447,21 +575,49 @@ export type TenantHistoryUpdateManyWithWhereWithoutTenantInput = {
   data: Prisma.XOR<Prisma.TenantHistoryUpdateManyMutationInput, Prisma.TenantHistoryUncheckedUpdateManyWithoutTenantInput>
 }
 
-export type TenantHistoryScalarWhereInput = {
-  AND?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
-  OR?: Prisma.TenantHistoryScalarWhereInput[]
-  NOT?: Prisma.TenantHistoryScalarWhereInput | Prisma.TenantHistoryScalarWhereInput[]
-  id?: Prisma.UuidFilter<"TenantHistory"> | string
-  tenantId?: Prisma.UuidFilter<"TenantHistory"> | string
-  fieldName?: Prisma.StringFilter<"TenantHistory"> | string
-  oldValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
-  newValue?: Prisma.StringNullableFilter<"TenantHistory"> | string | null
-  changedById?: Prisma.UuidNullableFilter<"TenantHistory"> | string | null
-  changedAt?: Prisma.DateTimeFilter<"TenantHistory"> | Date | string
+export type TenantHistoryCreateManyMarketInput = {
+  id: string
+  tenantId: string
+  fieldName: string
+  oldValue?: string | null
+  newValue?: string | null
+  changedById?: string | null
+  changedAt?: Date | string
+}
+
+export type TenantHistoryUpdateWithoutMarketInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fieldName?: Prisma.StringFieldUpdateOperationsInput | string
+  oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  changedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutHistoryNestedInput
+}
+
+export type TenantHistoryUncheckedUpdateWithoutMarketInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  fieldName?: Prisma.StringFieldUpdateOperationsInput | string
+  oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  changedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TenantHistoryUncheckedUpdateManyWithoutMarketInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  fieldName?: Prisma.StringFieldUpdateOperationsInput | string
+  oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  changedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TenantHistoryCreateManyTenantInput = {
   id: string
+  marketId: string
   fieldName: string
   oldValue?: string | null
   newValue?: string | null
@@ -476,10 +632,12 @@ export type TenantHistoryUpdateWithoutTenantInput = {
   newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   changedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  market?: Prisma.MarketUpdateOneRequiredWithoutTenantHistoriesNestedInput
 }
 
 export type TenantHistoryUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   fieldName?: Prisma.StringFieldUpdateOperationsInput | string
   oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -489,6 +647,7 @@ export type TenantHistoryUncheckedUpdateWithoutTenantInput = {
 
 export type TenantHistoryUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
   fieldName?: Prisma.StringFieldUpdateOperationsInput | string
   oldValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   newValue?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -500,39 +659,46 @@ export type TenantHistoryUncheckedUpdateManyWithoutTenantInput = {
 
 export type TenantHistorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  marketId?: boolean
   tenantId?: boolean
   fieldName?: boolean
   oldValue?: boolean
   newValue?: boolean
   changedById?: boolean
   changedAt?: boolean
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenantHistory"]>
 
 export type TenantHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  marketId?: boolean
   tenantId?: boolean
   fieldName?: boolean
   oldValue?: boolean
   newValue?: boolean
   changedById?: boolean
   changedAt?: boolean
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenantHistory"]>
 
 export type TenantHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  marketId?: boolean
   tenantId?: boolean
   fieldName?: boolean
   oldValue?: boolean
   newValue?: boolean
   changedById?: boolean
   changedAt?: boolean
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenantHistory"]>
 
 export type TenantHistorySelectScalar = {
   id?: boolean
+  marketId?: boolean
   tenantId?: boolean
   fieldName?: boolean
   oldValue?: boolean
@@ -541,24 +707,29 @@ export type TenantHistorySelectScalar = {
   changedAt?: boolean
 }
 
-export type TenantHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "fieldName" | "oldValue" | "newValue" | "changedById" | "changedAt", ExtArgs["result"]["tenantHistory"]>
+export type TenantHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "tenantId" | "fieldName" | "oldValue" | "newValue" | "changedById" | "changedAt", ExtArgs["result"]["tenantHistory"]>
 export type TenantHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type TenantHistoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type TenantHistoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $TenantHistoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TenantHistory"
   objects: {
+    market: Prisma.$MarketPayload<ExtArgs>
     tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    marketId: string
     tenantId: string
     fieldName: string
     oldValue: string | null
@@ -959,6 +1130,7 @@ readonly fields: TenantHistoryFieldRefs;
  */
 export interface Prisma__TenantHistoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -990,6 +1162,7 @@ export interface Prisma__TenantHistoryClient<T, Null = never, ExtArgs extends ru
  */
 export interface TenantHistoryFieldRefs {
   readonly id: Prisma.FieldRef<"TenantHistory", 'String'>
+  readonly marketId: Prisma.FieldRef<"TenantHistory", 'String'>
   readonly tenantId: Prisma.FieldRef<"TenantHistory", 'String'>
   readonly fieldName: Prisma.FieldRef<"TenantHistory", 'String'>
   readonly oldValue: Prisma.FieldRef<"TenantHistory", 'String'>

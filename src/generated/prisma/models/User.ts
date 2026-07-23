@@ -373,6 +373,13 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   passwordResets?: Prisma.PasswordResetListRelationFilter
   apiKeys?: Prisma.ApiKeyListRelationFilter
+  maintenanceAssigned?: Prisma.MaintenanceRequestListRelationFilter
+  exitClearanceApproved?: Prisma.ExitClearanceListRelationFilter
+  contractApproved?: Prisma.ContractListRelationFilter
+  contractTerminated?: Prisma.ContractListRelationFilter
+  journalEntryVoided?: Prisma.JournalEntryListRelationFilter
+  notificationCreated?: Prisma.NotificationListRelationFilter
+  ownershipApproved?: Prisma.OwnershipHistoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -411,6 +418,13 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   passwordResets?: Prisma.PasswordResetOrderByRelationAggregateInput
   apiKeys?: Prisma.ApiKeyOrderByRelationAggregateInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestOrderByRelationAggregateInput
+  exitClearanceApproved?: Prisma.ExitClearanceOrderByRelationAggregateInput
+  contractApproved?: Prisma.ContractOrderByRelationAggregateInput
+  contractTerminated?: Prisma.ContractOrderByRelationAggregateInput
+  journalEntryVoided?: Prisma.JournalEntryOrderByRelationAggregateInput
+  notificationCreated?: Prisma.NotificationOrderByRelationAggregateInput
+  ownershipApproved?: Prisma.OwnershipHistoryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -452,6 +466,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   passwordResets?: Prisma.PasswordResetListRelationFilter
   apiKeys?: Prisma.ApiKeyListRelationFilter
+  maintenanceAssigned?: Prisma.MaintenanceRequestListRelationFilter
+  exitClearanceApproved?: Prisma.ExitClearanceListRelationFilter
+  contractApproved?: Prisma.ContractListRelationFilter
+  contractTerminated?: Prisma.ContractListRelationFilter
+  journalEntryVoided?: Prisma.JournalEntryListRelationFilter
+  notificationCreated?: Prisma.NotificationListRelationFilter
+  ownershipApproved?: Prisma.OwnershipHistoryListRelationFilter
 }, "id">
 
 export type UserOrderByWithAggregationInput = {
@@ -547,6 +568,13 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -584,6 +612,13 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUpdateInput = {
@@ -621,6 +656,13 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -658,6 +700,13 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -883,6 +932,38 @@ export type UserUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
+export type UserCreateNestedOneWithoutContractApprovedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutContractApprovedInput, Prisma.UserUncheckedCreateWithoutContractApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutContractApprovedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutContractTerminatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutContractTerminatedInput, Prisma.UserUncheckedCreateWithoutContractTerminatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutContractTerminatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutContractApprovedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutContractApprovedInput, Prisma.UserUncheckedCreateWithoutContractApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutContractApprovedInput
+  upsert?: Prisma.UserUpsertWithoutContractApprovedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutContractApprovedInput, Prisma.UserUpdateWithoutContractApprovedInput>, Prisma.UserUncheckedUpdateWithoutContractApprovedInput>
+}
+
+export type UserUpdateOneWithoutContractTerminatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutContractTerminatedInput, Prisma.UserUncheckedCreateWithoutContractTerminatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutContractTerminatedInput
+  upsert?: Prisma.UserUpsertWithoutContractTerminatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutContractTerminatedInput, Prisma.UserUpdateWithoutContractTerminatedInput>, Prisma.UserUncheckedUpdateWithoutContractTerminatedInput>
+}
+
 export type UserCreateNestedOneWithoutEmployeeInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutEmployeeInput, Prisma.UserUncheckedCreateWithoutEmployeeInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmployeeInput
@@ -897,6 +978,38 @@ export type UserUpdateOneWithoutEmployeeNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployeeInput, Prisma.UserUpdateWithoutEmployeeInput>, Prisma.UserUncheckedUpdateWithoutEmployeeInput>
+}
+
+export type UserCreateNestedOneWithoutMaintenanceAssignedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMaintenanceAssignedInput, Prisma.UserUncheckedCreateWithoutMaintenanceAssignedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMaintenanceAssignedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutMaintenanceAssignedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMaintenanceAssignedInput, Prisma.UserUncheckedCreateWithoutMaintenanceAssignedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMaintenanceAssignedInput
+  upsert?: Prisma.UserUpsertWithoutMaintenanceAssignedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMaintenanceAssignedInput, Prisma.UserUpdateWithoutMaintenanceAssignedInput>, Prisma.UserUncheckedUpdateWithoutMaintenanceAssignedInput>
+}
+
+export type UserCreateNestedOneWithoutJournalEntryVoidedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutJournalEntryVoidedInput, Prisma.UserUncheckedCreateWithoutJournalEntryVoidedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutJournalEntryVoidedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutJournalEntryVoidedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutJournalEntryVoidedInput, Prisma.UserUncheckedCreateWithoutJournalEntryVoidedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutJournalEntryVoidedInput
+  upsert?: Prisma.UserUpsertWithoutJournalEntryVoidedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutJournalEntryVoidedInput, Prisma.UserUpdateWithoutJournalEntryVoidedInput>, Prisma.UserUncheckedUpdateWithoutJournalEntryVoidedInput>
 }
 
 export type UserCreateNestedOneWithoutApprovalRequestsRequestedInput = {
@@ -929,6 +1042,22 @@ export type UserUpdateOneWithoutApprovalRequestsApprovedNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovalRequestsApprovedInput, Prisma.UserUpdateWithoutApprovalRequestsApprovedInput>, Prisma.UserUncheckedUpdateWithoutApprovalRequestsApprovedInput>
+}
+
+export type UserCreateNestedOneWithoutExitClearanceApprovedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExitClearanceApprovedInput, Prisma.UserUncheckedCreateWithoutExitClearanceApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExitClearanceApprovedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutExitClearanceApprovedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExitClearanceApprovedInput, Prisma.UserUncheckedCreateWithoutExitClearanceApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExitClearanceApprovedInput
+  upsert?: Prisma.UserUpsertWithoutExitClearanceApprovedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutExitClearanceApprovedInput, Prisma.UserUpdateWithoutExitClearanceApprovedInput>, Prisma.UserUncheckedUpdateWithoutExitClearanceApprovedInput>
 }
 
 export type NullableEnumSuperAdminLevelFieldUpdateOperationsInput = {
@@ -1061,6 +1190,12 @@ export type UserCreateNestedOneWithoutNotificationsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutNotificationCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneWithoutNotificationsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
@@ -1069,6 +1204,32 @@ export type UserUpdateOneWithoutNotificationsNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateOneWithoutNotificationCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationCreatedInput
+  upsert?: Prisma.UserUpsertWithoutNotificationCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationCreatedInput, Prisma.UserUpdateWithoutNotificationCreatedInput>, Prisma.UserUncheckedUpdateWithoutNotificationCreatedInput>
+}
+
+export type UserCreateNestedOneWithoutOwnershipApprovedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnershipApprovedInput, Prisma.UserUncheckedCreateWithoutOwnershipApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnershipApprovedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutOwnershipApprovedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnershipApprovedInput, Prisma.UserUncheckedCreateWithoutOwnershipApprovedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnershipApprovedInput
+  upsert?: Prisma.UserUpsertWithoutOwnershipApprovedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnershipApprovedInput, Prisma.UserUpdateWithoutOwnershipApprovedInput>, Prisma.UserUncheckedUpdateWithoutOwnershipApprovedInput>
 }
 
 export type UserCreateWithoutMarketInput = {
@@ -1105,6 +1266,13 @@ export type UserCreateWithoutMarketInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutMarketInput = {
@@ -1141,6 +1309,13 @@ export type UserUncheckedCreateWithoutMarketInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutMarketInput = {
@@ -1197,6 +1372,382 @@ export type UserScalarWhereInput = {
   version?: Prisma.IntFilter<"User"> | number
 }
 
+export type UserCreateWithoutContractApprovedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutContractApprovedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutContractApprovedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutContractApprovedInput, Prisma.UserUncheckedCreateWithoutContractApprovedInput>
+}
+
+export type UserCreateWithoutContractTerminatedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutContractTerminatedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutContractTerminatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutContractTerminatedInput, Prisma.UserUncheckedCreateWithoutContractTerminatedInput>
+}
+
+export type UserUpsertWithoutContractApprovedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutContractApprovedInput, Prisma.UserUncheckedUpdateWithoutContractApprovedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutContractApprovedInput, Prisma.UserUncheckedCreateWithoutContractApprovedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutContractApprovedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutContractApprovedInput, Prisma.UserUncheckedUpdateWithoutContractApprovedInput>
+}
+
+export type UserUpdateWithoutContractApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutContractApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUpsertWithoutContractTerminatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutContractTerminatedInput, Prisma.UserUncheckedUpdateWithoutContractTerminatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutContractTerminatedInput, Prisma.UserUncheckedCreateWithoutContractTerminatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutContractTerminatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutContractTerminatedInput, Prisma.UserUncheckedUpdateWithoutContractTerminatedInput>
+}
+
+export type UserUpdateWithoutContractTerminatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutContractTerminatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
 export type UserCreateWithoutEmployeeInput = {
   id: string
   name: string
@@ -1231,6 +1782,13 @@ export type UserCreateWithoutEmployeeInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutEmployeeInput = {
@@ -1267,6 +1825,13 @@ export type UserUncheckedCreateWithoutEmployeeInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutEmployeeInput = {
@@ -1319,6 +1884,13 @@ export type UserUpdateWithoutEmployeeInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmployeeInput = {
@@ -1355,6 +1927,389 @@ export type UserUncheckedUpdateWithoutEmployeeInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutMaintenanceAssignedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutMaintenanceAssignedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutMaintenanceAssignedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMaintenanceAssignedInput, Prisma.UserUncheckedCreateWithoutMaintenanceAssignedInput>
+}
+
+export type UserUpsertWithoutMaintenanceAssignedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMaintenanceAssignedInput, Prisma.UserUncheckedUpdateWithoutMaintenanceAssignedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMaintenanceAssignedInput, Prisma.UserUncheckedCreateWithoutMaintenanceAssignedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMaintenanceAssignedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMaintenanceAssignedInput, Prisma.UserUncheckedUpdateWithoutMaintenanceAssignedInput>
+}
+
+export type UserUpdateWithoutMaintenanceAssignedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMaintenanceAssignedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutJournalEntryVoidedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutJournalEntryVoidedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutJournalEntryVoidedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutJournalEntryVoidedInput, Prisma.UserUncheckedCreateWithoutJournalEntryVoidedInput>
+}
+
+export type UserUpsertWithoutJournalEntryVoidedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutJournalEntryVoidedInput, Prisma.UserUncheckedUpdateWithoutJournalEntryVoidedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutJournalEntryVoidedInput, Prisma.UserUncheckedCreateWithoutJournalEntryVoidedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutJournalEntryVoidedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutJournalEntryVoidedInput, Prisma.UserUncheckedUpdateWithoutJournalEntryVoidedInput>
+}
+
+export type UserUpdateWithoutJournalEntryVoidedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutJournalEntryVoidedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutApprovalRequestsRequestedInput = {
@@ -1391,6 +2346,13 @@ export type UserCreateWithoutApprovalRequestsRequestedInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutApprovalRequestsRequestedInput = {
@@ -1427,6 +2389,13 @@ export type UserUncheckedCreateWithoutApprovalRequestsRequestedInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutApprovalRequestsRequestedInput = {
@@ -1468,6 +2437,13 @@ export type UserCreateWithoutApprovalRequestsApprovedInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutApprovalRequestsApprovedInput = {
@@ -1504,6 +2480,13 @@ export type UserUncheckedCreateWithoutApprovalRequestsApprovedInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutApprovalRequestsApprovedInput = {
@@ -1556,6 +2539,13 @@ export type UserUpdateWithoutApprovalRequestsRequestedInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovalRequestsRequestedInput = {
@@ -1592,6 +2582,13 @@ export type UserUncheckedUpdateWithoutApprovalRequestsRequestedInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUpsertWithoutApprovalRequestsApprovedInput = {
@@ -1639,6 +2636,13 @@ export type UserUpdateWithoutApprovalRequestsApprovedInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovalRequestsApprovedInput = {
@@ -1675,6 +2679,201 @@ export type UserUncheckedUpdateWithoutApprovalRequestsApprovedInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutExitClearanceApprovedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutExitClearanceApprovedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutExitClearanceApprovedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutExitClearanceApprovedInput, Prisma.UserUncheckedCreateWithoutExitClearanceApprovedInput>
+}
+
+export type UserUpsertWithoutExitClearanceApprovedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutExitClearanceApprovedInput, Prisma.UserUncheckedUpdateWithoutExitClearanceApprovedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutExitClearanceApprovedInput, Prisma.UserUncheckedCreateWithoutExitClearanceApprovedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutExitClearanceApprovedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutExitClearanceApprovedInput, Prisma.UserUncheckedUpdateWithoutExitClearanceApprovedInput>
+}
+
+export type UserUpdateWithoutExitClearanceApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutExitClearanceApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutMarketsInput = {
@@ -1711,6 +2910,13 @@ export type UserCreateWithoutMarketsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutMarketsInput = {
@@ -1747,6 +2953,13 @@ export type UserUncheckedCreateWithoutMarketsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutMarketsInput = {
@@ -1799,6 +3012,13 @@ export type UserUpdateWithoutMarketsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMarketsInput = {
@@ -1835,6 +3055,13 @@ export type UserUncheckedUpdateWithoutMarketsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutRolesInput = {
@@ -1871,6 +3098,13 @@ export type UserCreateWithoutRolesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -1907,6 +3141,13 @@ export type UserUncheckedCreateWithoutRolesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -1959,6 +3200,13 @@ export type UserUpdateWithoutRolesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -1995,6 +3243,13 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -2031,6 +3286,13 @@ export type UserCreateWithoutSessionsInput = {
   loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -2067,6 +3329,13 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -2119,6 +3388,13 @@ export type UserUpdateWithoutSessionsInput = {
   loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -2155,6 +3431,13 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutPasswordResetsInput = {
@@ -2191,6 +3474,13 @@ export type UserCreateWithoutPasswordResetsInput = {
   loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetsInput = {
@@ -2227,6 +3517,13 @@ export type UserUncheckedCreateWithoutPasswordResetsInput = {
   loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetsInput = {
@@ -2279,6 +3576,13 @@ export type UserUpdateWithoutPasswordResetsInput = {
   loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetsInput = {
@@ -2315,6 +3619,13 @@ export type UserUncheckedUpdateWithoutPasswordResetsInput = {
   loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutApiKeysInput = {
@@ -2351,6 +3662,13 @@ export type UserCreateWithoutApiKeysInput = {
   loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutApiKeysInput = {
@@ -2387,6 +3705,13 @@ export type UserUncheckedCreateWithoutApiKeysInput = {
   loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutApiKeysInput = {
@@ -2439,6 +3764,13 @@ export type UserUpdateWithoutApiKeysInput = {
   loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApiKeysInput = {
@@ -2475,6 +3807,13 @@ export type UserUncheckedUpdateWithoutApiKeysInput = {
   loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutLoginAttemptsInput = {
@@ -2511,6 +3850,13 @@ export type UserCreateWithoutLoginAttemptsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutLoginAttemptsInput = {
@@ -2547,6 +3893,13 @@ export type UserUncheckedCreateWithoutLoginAttemptsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutLoginAttemptsInput = {
@@ -2599,6 +3952,13 @@ export type UserUpdateWithoutLoginAttemptsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLoginAttemptsInput = {
@@ -2635,6 +3995,13 @@ export type UserUncheckedUpdateWithoutLoginAttemptsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -2671,6 +4038,13 @@ export type UserCreateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -2707,6 +4081,13 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -2759,6 +4140,13 @@ export type UserUpdateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -2795,6 +4183,13 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutActivitiesInput = {
@@ -2831,6 +4226,13 @@ export type UserCreateWithoutActivitiesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutActivitiesInput = {
@@ -2867,6 +4269,13 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutActivitiesInput = {
@@ -2919,6 +4328,13 @@ export type UserUpdateWithoutActivitiesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivitiesInput = {
@@ -2955,6 +4371,13 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -2991,6 +4414,13 @@ export type UserCreateWithoutNotificationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -3027,11 +4457,109 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
   apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserCreateWithoutNotificationCreatedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  ownershipApproved?: Prisma.OwnershipHistoryCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutNotificationCreatedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutNotificationCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationCreatedInput>
 }
 
 export type UserUpsertWithoutNotificationsInput = {
@@ -3079,6 +4607,13 @@ export type UserUpdateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -3115,6 +4650,298 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUpsertWithoutNotificationCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationCreatedInput, Prisma.UserUncheckedUpdateWithoutNotificationCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationCreatedInput, Prisma.UserUncheckedCreateWithoutNotificationCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationCreatedInput, Prisma.UserUncheckedUpdateWithoutNotificationCreatedInput>
+}
+
+export type UserUpdateWithoutNotificationCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserCreateWithoutOwnershipApprovedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  market?: Prisma.MarketCreateNestedOneWithoutUsersInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutOwnershipApprovedInput = {
+  id: string
+  name: string
+  username: string
+  email?: string | null
+  passwordHash: string
+  marketId?: string | null
+  lastLoginAt?: Date | string | null
+  isSuperAdmin?: boolean
+  superAdminLevel?: $Enums.SuperAdminLevel | null
+  status?: $Enums.UserStatus
+  failedLoginAttempts?: number
+  lockedUntil?: Date | string | null
+  passwordVersion?: number
+  gdprConsent?: boolean
+  gdprConsentDate?: Date | string | null
+  dataAnonymizedAt?: Date | string | null
+  dataDeletionRequestedAt?: Date | string | null
+  dataDeletionApprovedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  version?: number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutRequestedByInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedCreateNestedManyWithoutApprovedByInput
+  markets?: Prisma.UserMarketUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  employee?: Prisma.EmployeeUncheckedCreateNestedOneWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  passwordResets?: Prisma.PasswordResetUncheckedCreateNestedManyWithoutUserInput
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutUserInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedCreateNestedManyWithoutApprovedByInput
+  contractApproved?: Prisma.ContractUncheckedCreateNestedManyWithoutApprovedByInput
+  contractTerminated?: Prisma.ContractUncheckedCreateNestedManyWithoutTerminatedByInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedCreateNestedManyWithoutVoidedByUserInput
+  notificationCreated?: Prisma.NotificationUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutOwnershipApprovedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnershipApprovedInput, Prisma.UserUncheckedCreateWithoutOwnershipApprovedInput>
+}
+
+export type UserUpsertWithoutOwnershipApprovedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnershipApprovedInput, Prisma.UserUncheckedUpdateWithoutOwnershipApprovedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnershipApprovedInput, Prisma.UserUncheckedCreateWithoutOwnershipApprovedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOwnershipApprovedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnershipApprovedInput, Prisma.UserUncheckedUpdateWithoutOwnershipApprovedInput>
+}
+
+export type UserUpdateWithoutOwnershipApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneWithoutUsersNestedInput
+  approvalRequestsRequested?: Prisma.ApprovalRequestUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOwnershipApprovedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  superAdminLevel?: Prisma.NullableEnumSuperAdminLevelFieldUpdateOperationsInput | $Enums.SuperAdminLevel | null
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  failedLoginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  gdprConsent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  gdprConsentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataAnonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dataDeletionApprovedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  approvalRequestsRequested?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutRequestedByNestedInput
+  approvalRequestsApproved?: Prisma.ApprovalRequestUncheckedUpdateManyWithoutApprovedByNestedInput
+  markets?: Prisma.UserMarketUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  employee?: Prisma.EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+  loginAttempts?: Prisma.UserLoginAttemptUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyMarketInput = {
@@ -3175,6 +5002,13 @@ export type UserUpdateWithoutMarketInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMarketInput = {
@@ -3211,6 +5045,13 @@ export type UserUncheckedUpdateWithoutMarketInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   passwordResets?: Prisma.PasswordResetUncheckedUpdateManyWithoutUserNestedInput
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutUserNestedInput
+  maintenanceAssigned?: Prisma.MaintenanceRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
+  exitClearanceApproved?: Prisma.ExitClearanceUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractApproved?: Prisma.ContractUncheckedUpdateManyWithoutApprovedByNestedInput
+  contractTerminated?: Prisma.ContractUncheckedUpdateManyWithoutTerminatedByNestedInput
+  journalEntryVoided?: Prisma.JournalEntryUncheckedUpdateManyWithoutVoidedByUserNestedInput
+  notificationCreated?: Prisma.NotificationUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownershipApproved?: Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutMarketInput = {
@@ -3254,6 +5095,13 @@ export type UserCountOutputType = {
   sessions: number
   passwordResets: number
   apiKeys: number
+  maintenanceAssigned: number
+  exitClearanceApproved: number
+  contractApproved: number
+  contractTerminated: number
+  journalEntryVoided: number
+  notificationCreated: number
+  ownershipApproved: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3268,6 +5116,13 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   passwordResets?: boolean | UserCountOutputTypeCountPasswordResetsArgs
   apiKeys?: boolean | UserCountOutputTypeCountApiKeysArgs
+  maintenanceAssigned?: boolean | UserCountOutputTypeCountMaintenanceAssignedArgs
+  exitClearanceApproved?: boolean | UserCountOutputTypeCountExitClearanceApprovedArgs
+  contractApproved?: boolean | UserCountOutputTypeCountContractApprovedArgs
+  contractTerminated?: boolean | UserCountOutputTypeCountContractTerminatedArgs
+  journalEntryVoided?: boolean | UserCountOutputTypeCountJournalEntryVoidedArgs
+  notificationCreated?: boolean | UserCountOutputTypeCountNotificationCreatedArgs
+  ownershipApproved?: boolean | UserCountOutputTypeCountOwnershipApprovedArgs
 }
 
 /**
@@ -3357,6 +5212,55 @@ export type UserCountOutputTypeCountApiKeysArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ApiKeyWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMaintenanceAssignedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MaintenanceRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountExitClearanceApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExitClearanceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountContractApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContractWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountContractTerminatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContractWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountJournalEntryVoidedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JournalEntryWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOwnershipApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OwnershipHistoryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3394,6 +5298,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   passwordResets?: boolean | Prisma.User$passwordResetsArgs<ExtArgs>
   apiKeys?: boolean | Prisma.User$apiKeysArgs<ExtArgs>
+  maintenanceAssigned?: boolean | Prisma.User$maintenanceAssignedArgs<ExtArgs>
+  exitClearanceApproved?: boolean | Prisma.User$exitClearanceApprovedArgs<ExtArgs>
+  contractApproved?: boolean | Prisma.User$contractApprovedArgs<ExtArgs>
+  contractTerminated?: boolean | Prisma.User$contractTerminatedArgs<ExtArgs>
+  journalEntryVoided?: boolean | Prisma.User$journalEntryVoidedArgs<ExtArgs>
+  notificationCreated?: boolean | Prisma.User$notificationCreatedArgs<ExtArgs>
+  ownershipApproved?: boolean | Prisma.User$ownershipApprovedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3489,6 +5400,13 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   passwordResets?: boolean | Prisma.User$passwordResetsArgs<ExtArgs>
   apiKeys?: boolean | Prisma.User$apiKeysArgs<ExtArgs>
+  maintenanceAssigned?: boolean | Prisma.User$maintenanceAssignedArgs<ExtArgs>
+  exitClearanceApproved?: boolean | Prisma.User$exitClearanceApprovedArgs<ExtArgs>
+  contractApproved?: boolean | Prisma.User$contractApprovedArgs<ExtArgs>
+  contractTerminated?: boolean | Prisma.User$contractTerminatedArgs<ExtArgs>
+  journalEntryVoided?: boolean | Prisma.User$journalEntryVoidedArgs<ExtArgs>
+  notificationCreated?: boolean | Prisma.User$notificationCreatedArgs<ExtArgs>
+  ownershipApproved?: boolean | Prisma.User$ownershipApprovedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3514,6 +5432,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     passwordResets: Prisma.$PasswordResetPayload<ExtArgs>[]
     apiKeys: Prisma.$ApiKeyPayload<ExtArgs>[]
+    maintenanceAssigned: Prisma.$MaintenanceRequestPayload<ExtArgs>[]
+    exitClearanceApproved: Prisma.$ExitClearancePayload<ExtArgs>[]
+    contractApproved: Prisma.$ContractPayload<ExtArgs>[]
+    contractTerminated: Prisma.$ContractPayload<ExtArgs>[]
+    journalEntryVoided: Prisma.$JournalEntryPayload<ExtArgs>[]
+    notificationCreated: Prisma.$NotificationPayload<ExtArgs>[]
+    ownershipApproved: Prisma.$OwnershipHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3945,6 +5870,13 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResets<T extends Prisma.User$passwordResetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   apiKeys<T extends Prisma.User$apiKeysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$apiKeysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApiKeyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  maintenanceAssigned<T extends Prisma.User$maintenanceAssignedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$maintenanceAssignedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MaintenanceRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  exitClearanceApproved<T extends Prisma.User$exitClearanceApprovedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$exitClearanceApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExitClearancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contractApproved<T extends Prisma.User$contractApprovedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$contractApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contractTerminated<T extends Prisma.User$contractTerminatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$contractTerminatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  journalEntryVoided<T extends Prisma.User$journalEntryVoidedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$journalEntryVoidedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JournalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationCreated<T extends Prisma.User$notificationCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownershipApproved<T extends Prisma.User$ownershipApprovedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownershipApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OwnershipHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4696,6 +6628,174 @@ export type User$apiKeysArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ApiKeyScalarFieldEnum | Prisma.ApiKeyScalarFieldEnum[]
+}
+
+/**
+ * User.maintenanceAssigned
+ */
+export type User$maintenanceAssignedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MaintenanceRequest
+   */
+  select?: Prisma.MaintenanceRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MaintenanceRequest
+   */
+  omit?: Prisma.MaintenanceRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MaintenanceRequestInclude<ExtArgs> | null
+  where?: Prisma.MaintenanceRequestWhereInput
+  orderBy?: Prisma.MaintenanceRequestOrderByWithRelationInput | Prisma.MaintenanceRequestOrderByWithRelationInput[]
+  cursor?: Prisma.MaintenanceRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MaintenanceRequestScalarFieldEnum | Prisma.MaintenanceRequestScalarFieldEnum[]
+}
+
+/**
+ * User.exitClearanceApproved
+ */
+export type User$exitClearanceApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExitClearance
+   */
+  select?: Prisma.ExitClearanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExitClearance
+   */
+  omit?: Prisma.ExitClearanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExitClearanceInclude<ExtArgs> | null
+  where?: Prisma.ExitClearanceWhereInput
+  orderBy?: Prisma.ExitClearanceOrderByWithRelationInput | Prisma.ExitClearanceOrderByWithRelationInput[]
+  cursor?: Prisma.ExitClearanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExitClearanceScalarFieldEnum | Prisma.ExitClearanceScalarFieldEnum[]
+}
+
+/**
+ * User.contractApproved
+ */
+export type User$contractApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Contract
+   */
+  select?: Prisma.ContractSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Contract
+   */
+  omit?: Prisma.ContractOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractInclude<ExtArgs> | null
+  where?: Prisma.ContractWhereInput
+  orderBy?: Prisma.ContractOrderByWithRelationInput | Prisma.ContractOrderByWithRelationInput[]
+  cursor?: Prisma.ContractWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContractScalarFieldEnum | Prisma.ContractScalarFieldEnum[]
+}
+
+/**
+ * User.contractTerminated
+ */
+export type User$contractTerminatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Contract
+   */
+  select?: Prisma.ContractSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Contract
+   */
+  omit?: Prisma.ContractOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContractInclude<ExtArgs> | null
+  where?: Prisma.ContractWhereInput
+  orderBy?: Prisma.ContractOrderByWithRelationInput | Prisma.ContractOrderByWithRelationInput[]
+  cursor?: Prisma.ContractWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContractScalarFieldEnum | Prisma.ContractScalarFieldEnum[]
+}
+
+/**
+ * User.journalEntryVoided
+ */
+export type User$journalEntryVoidedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JournalEntry
+   */
+  select?: Prisma.JournalEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JournalEntry
+   */
+  omit?: Prisma.JournalEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JournalEntryInclude<ExtArgs> | null
+  where?: Prisma.JournalEntryWhereInput
+  orderBy?: Prisma.JournalEntryOrderByWithRelationInput | Prisma.JournalEntryOrderByWithRelationInput[]
+  cursor?: Prisma.JournalEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JournalEntryScalarFieldEnum | Prisma.JournalEntryScalarFieldEnum[]
+}
+
+/**
+ * User.notificationCreated
+ */
+export type User$notificationCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.ownershipApproved
+ */
+export type User$ownershipApprovedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OwnershipHistory
+   */
+  select?: Prisma.OwnershipHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OwnershipHistory
+   */
+  omit?: Prisma.OwnershipHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OwnershipHistoryInclude<ExtArgs> | null
+  where?: Prisma.OwnershipHistoryWhereInput
+  orderBy?: Prisma.OwnershipHistoryOrderByWithRelationInput | Prisma.OwnershipHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.OwnershipHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OwnershipHistoryScalarFieldEnum | Prisma.OwnershipHistoryScalarFieldEnum[]
 }
 
 /**

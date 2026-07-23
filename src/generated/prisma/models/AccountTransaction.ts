@@ -47,13 +47,12 @@ export type AccountTransactionMinAggregateOutputType = {
   type: $Enums.TransactionType | null
   amount: runtime.Decimal | null
   status: $Enums.TransactionStatus | null
-  referenceType: $Enums.TransactionReferenceType | null
-  referenceId: string | null
   balanceBeforeTransaction: runtime.Decimal | null
   balanceAfterTransaction: runtime.Decimal | null
   sequenceNo: bigint | null
   description: string | null
   reversalId: string | null
+  journalEntryId: string | null
   createdById: string | null
   transactionDate: Date | null
   createdAt: Date | null
@@ -70,13 +69,12 @@ export type AccountTransactionMaxAggregateOutputType = {
   type: $Enums.TransactionType | null
   amount: runtime.Decimal | null
   status: $Enums.TransactionStatus | null
-  referenceType: $Enums.TransactionReferenceType | null
-  referenceId: string | null
   balanceBeforeTransaction: runtime.Decimal | null
   balanceAfterTransaction: runtime.Decimal | null
   sequenceNo: bigint | null
   description: string | null
   reversalId: string | null
+  journalEntryId: string | null
   createdById: string | null
   transactionDate: Date | null
   createdAt: Date | null
@@ -93,13 +91,12 @@ export type AccountTransactionCountAggregateOutputType = {
   type: number
   amount: number
   status: number
-  referenceType: number
-  referenceId: number
   balanceBeforeTransaction: number
   balanceAfterTransaction: number
   sequenceNo: number
   description: number
   reversalId: number
+  journalEntryId: number
   createdById: number
   transactionDate: number
   createdAt: number
@@ -132,13 +129,12 @@ export type AccountTransactionMinAggregateInputType = {
   type?: true
   amount?: true
   status?: true
-  referenceType?: true
-  referenceId?: true
   balanceBeforeTransaction?: true
   balanceAfterTransaction?: true
   sequenceNo?: true
   description?: true
   reversalId?: true
+  journalEntryId?: true
   createdById?: true
   transactionDate?: true
   createdAt?: true
@@ -155,13 +151,12 @@ export type AccountTransactionMaxAggregateInputType = {
   type?: true
   amount?: true
   status?: true
-  referenceType?: true
-  referenceId?: true
   balanceBeforeTransaction?: true
   balanceAfterTransaction?: true
   sequenceNo?: true
   description?: true
   reversalId?: true
+  journalEntryId?: true
   createdById?: true
   transactionDate?: true
   createdAt?: true
@@ -178,13 +173,12 @@ export type AccountTransactionCountAggregateInputType = {
   type?: true
   amount?: true
   status?: true
-  referenceType?: true
-  referenceId?: true
   balanceBeforeTransaction?: true
   balanceAfterTransaction?: true
   sequenceNo?: true
   description?: true
   reversalId?: true
+  journalEntryId?: true
   createdById?: true
   transactionDate?: true
   createdAt?: true
@@ -288,13 +282,12 @@ export type AccountTransactionGroupByOutputType = {
   type: $Enums.TransactionType
   amount: runtime.Decimal
   status: $Enums.TransactionStatus
-  referenceType: $Enums.TransactionReferenceType | null
-  referenceId: string | null
   balanceBeforeTransaction: runtime.Decimal
   balanceAfterTransaction: runtime.Decimal
   sequenceNo: bigint
   description: string | null
   reversalId: string | null
+  journalEntryId: string | null
   createdById: string | null
   transactionDate: Date
   createdAt: Date
@@ -334,13 +327,12 @@ export type AccountTransactionWhereInput = {
   type?: Prisma.EnumTransactionTypeFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFilter<"AccountTransaction"> | $Enums.TransactionStatus
-  referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   balanceBeforeTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFilter<"AccountTransaction"> | bigint | number
   description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
   reversalId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  journalEntryId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   createdById?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   transactionDate?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
@@ -352,6 +344,7 @@ export type AccountTransactionWhereInput = {
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
   reversal?: Prisma.XOR<Prisma.AccountTransactionNullableScalarRelationFilter, Prisma.AccountTransactionWhereInput> | null
   reversedBy?: Prisma.AccountTransactionListRelationFilter
+  journalEntry?: Prisma.XOR<Prisma.JournalEntryNullableScalarRelationFilter, Prisma.JournalEntryWhereInput> | null
 }
 
 export type AccountTransactionOrderByWithRelationInput = {
@@ -361,13 +354,12 @@ export type AccountTransactionOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  referenceType?: Prisma.SortOrderInput | Prisma.SortOrder
-  referenceId?: Prisma.SortOrderInput | Prisma.SortOrder
   balanceBeforeTransaction?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
   sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   reversalId?: Prisma.SortOrderInput | Prisma.SortOrder
+  journalEntryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -379,6 +371,7 @@ export type AccountTransactionOrderByWithRelationInput = {
   account?: Prisma.AccountOrderByWithRelationInput
   reversal?: Prisma.AccountTransactionOrderByWithRelationInput
   reversedBy?: Prisma.AccountTransactionOrderByRelationAggregateInput
+  journalEntry?: Prisma.JournalEntryOrderByWithRelationInput
 }
 
 export type AccountTransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -392,12 +385,11 @@ export type AccountTransactionWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumTransactionTypeFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFilter<"AccountTransaction"> | $Enums.TransactionStatus
-  referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   balanceBeforeTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
   reversalId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  journalEntryId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   createdById?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   transactionDate?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
@@ -409,6 +401,7 @@ export type AccountTransactionWhereUniqueInput = Prisma.AtLeast<{
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
   reversal?: Prisma.XOR<Prisma.AccountTransactionNullableScalarRelationFilter, Prisma.AccountTransactionWhereInput> | null
   reversedBy?: Prisma.AccountTransactionListRelationFilter
+  journalEntry?: Prisma.XOR<Prisma.JournalEntryNullableScalarRelationFilter, Prisma.JournalEntryWhereInput> | null
 }, "id" | "sequenceNo">
 
 export type AccountTransactionOrderByWithAggregationInput = {
@@ -418,13 +411,12 @@ export type AccountTransactionOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  referenceType?: Prisma.SortOrderInput | Prisma.SortOrder
-  referenceId?: Prisma.SortOrderInput | Prisma.SortOrder
   balanceBeforeTransaction?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
   sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   reversalId?: Prisma.SortOrderInput | Prisma.SortOrder
+  journalEntryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -449,13 +441,12 @@ export type AccountTransactionScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumTransactionTypeWithAggregatesFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusWithAggregatesFilter<"AccountTransaction"> | $Enums.TransactionStatus
-  referenceType?: Prisma.EnumTransactionReferenceTypeNullableWithAggregatesFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
   balanceBeforeTransaction?: Prisma.DecimalWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalWithAggregatesFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntWithAggregatesFilter<"AccountTransaction"> | bigint | number
   description?: Prisma.StringNullableWithAggregatesFilter<"AccountTransaction"> | string | null
   reversalId?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
+  journalEntryId?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
   createdById?: Prisma.UuidNullableWithAggregatesFilter<"AccountTransaction"> | string | null
   transactionDate?: Prisma.DateTimeWithAggregatesFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AccountTransaction"> | Date | string
@@ -470,8 +461,6 @@ export type AccountTransactionCreateInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
@@ -487,6 +476,7 @@ export type AccountTransactionCreateInput = {
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
   reversal?: Prisma.AccountTransactionCreateNestedOneWithoutReversedByInput
   reversedBy?: Prisma.AccountTransactionCreateNestedManyWithoutReversalInput
+  journalEntry?: Prisma.JournalEntryCreateNestedOneWithoutAccountTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateInput = {
@@ -496,13 +486,12 @@ export type AccountTransactionUncheckedCreateInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -518,8 +507,6 @@ export type AccountTransactionUpdateInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -535,6 +522,7 @@ export type AccountTransactionUpdateInput = {
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
   reversal?: Prisma.AccountTransactionUpdateOneWithoutReversedByNestedInput
   reversedBy?: Prisma.AccountTransactionUpdateManyWithoutReversalNestedInput
+  journalEntry?: Prisma.JournalEntryUpdateOneWithoutAccountTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateInput = {
@@ -544,13 +532,12 @@ export type AccountTransactionUncheckedUpdateInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -568,13 +555,12 @@ export type AccountTransactionCreateManyInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -589,8 +575,6 @@ export type AccountTransactionUpdateManyMutationInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -611,13 +595,12 @@ export type AccountTransactionUncheckedUpdateManyInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -649,13 +632,12 @@ export type AccountTransactionCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  referenceType?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
   balanceBeforeTransaction?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
   sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrder
   reversalId?: Prisma.SortOrder
+  journalEntryId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -679,13 +661,12 @@ export type AccountTransactionMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  referenceType?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
   balanceBeforeTransaction?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
   sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrder
   reversalId?: Prisma.SortOrder
+  journalEntryId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -702,13 +683,12 @@ export type AccountTransactionMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  referenceType?: Prisma.SortOrder
-  referenceId?: Prisma.SortOrder
   balanceBeforeTransaction?: Prisma.SortOrder
   balanceAfterTransaction?: Prisma.SortOrder
   sequenceNo?: Prisma.SortOrder
   description?: Prisma.SortOrder
   reversalId?: Prisma.SortOrder
+  journalEntryId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -809,6 +789,48 @@ export type AccountTransactionUncheckedUpdateManyWithoutAccountNestedInput = {
   deleteMany?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
 }
 
+export type AccountTransactionCreateNestedManyWithoutJournalEntryInput = {
+  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput> | Prisma.AccountTransactionCreateWithoutJournalEntryInput[] | Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput[]
+  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput | Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput[]
+  createMany?: Prisma.AccountTransactionCreateManyJournalEntryInputEnvelope
+  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+}
+
+export type AccountTransactionUncheckedCreateNestedManyWithoutJournalEntryInput = {
+  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput> | Prisma.AccountTransactionCreateWithoutJournalEntryInput[] | Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput[]
+  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput | Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput[]
+  createMany?: Prisma.AccountTransactionCreateManyJournalEntryInputEnvelope
+  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+}
+
+export type AccountTransactionUpdateManyWithoutJournalEntryNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput> | Prisma.AccountTransactionCreateWithoutJournalEntryInput[] | Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput[]
+  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput | Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput[]
+  upsert?: Prisma.AccountTransactionUpsertWithWhereUniqueWithoutJournalEntryInput | Prisma.AccountTransactionUpsertWithWhereUniqueWithoutJournalEntryInput[]
+  createMany?: Prisma.AccountTransactionCreateManyJournalEntryInputEnvelope
+  set?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  disconnect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  delete?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  update?: Prisma.AccountTransactionUpdateWithWhereUniqueWithoutJournalEntryInput | Prisma.AccountTransactionUpdateWithWhereUniqueWithoutJournalEntryInput[]
+  updateMany?: Prisma.AccountTransactionUpdateManyWithWhereWithoutJournalEntryInput | Prisma.AccountTransactionUpdateManyWithWhereWithoutJournalEntryInput[]
+  deleteMany?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
+}
+
+export type AccountTransactionUncheckedUpdateManyWithoutJournalEntryNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput> | Prisma.AccountTransactionCreateWithoutJournalEntryInput[] | Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput[]
+  connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput | Prisma.AccountTransactionCreateOrConnectWithoutJournalEntryInput[]
+  upsert?: Prisma.AccountTransactionUpsertWithWhereUniqueWithoutJournalEntryInput | Prisma.AccountTransactionUpsertWithWhereUniqueWithoutJournalEntryInput[]
+  createMany?: Prisma.AccountTransactionCreateManyJournalEntryInputEnvelope
+  set?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  disconnect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  delete?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  connect?: Prisma.AccountTransactionWhereUniqueInput | Prisma.AccountTransactionWhereUniqueInput[]
+  update?: Prisma.AccountTransactionUpdateWithWhereUniqueWithoutJournalEntryInput | Prisma.AccountTransactionUpdateWithWhereUniqueWithoutJournalEntryInput[]
+  updateMany?: Prisma.AccountTransactionUpdateManyWithWhereWithoutJournalEntryInput | Prisma.AccountTransactionUpdateManyWithWhereWithoutJournalEntryInput[]
+  deleteMany?: Prisma.AccountTransactionScalarWhereInput | Prisma.AccountTransactionScalarWhereInput[]
+}
+
 export type AccountTransactionCreateNestedOneWithoutReversedByInput = {
   create?: Prisma.XOR<Prisma.AccountTransactionCreateWithoutReversedByInput, Prisma.AccountTransactionUncheckedCreateWithoutReversedByInput>
   connectOrCreate?: Prisma.AccountTransactionCreateOrConnectWithoutReversedByInput
@@ -888,8 +910,6 @@ export type AccountTransactionCreateWithoutMarketInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
@@ -904,6 +924,7 @@ export type AccountTransactionCreateWithoutMarketInput = {
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
   reversal?: Prisma.AccountTransactionCreateNestedOneWithoutReversedByInput
   reversedBy?: Prisma.AccountTransactionCreateNestedManyWithoutReversalInput
+  journalEntry?: Prisma.JournalEntryCreateNestedOneWithoutAccountTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateWithoutMarketInput = {
@@ -912,13 +933,12 @@ export type AccountTransactionUncheckedCreateWithoutMarketInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -965,13 +985,12 @@ export type AccountTransactionScalarWhereInput = {
   type?: Prisma.EnumTransactionTypeFilter<"AccountTransaction"> | $Enums.TransactionType
   amount?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFilter<"AccountTransaction"> | $Enums.TransactionStatus
-  referenceType?: Prisma.EnumTransactionReferenceTypeNullableFilter<"AccountTransaction"> | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   balanceBeforeTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFilter<"AccountTransaction"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFilter<"AccountTransaction"> | bigint | number
   description?: Prisma.StringNullableFilter<"AccountTransaction"> | string | null
   reversalId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
+  journalEntryId?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   createdById?: Prisma.UuidNullableFilter<"AccountTransaction"> | string | null
   transactionDate?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"AccountTransaction"> | Date | string
@@ -986,8 +1005,6 @@ export type AccountTransactionCreateWithoutAccountInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
@@ -1002,6 +1019,7 @@ export type AccountTransactionCreateWithoutAccountInput = {
   market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
   reversal?: Prisma.AccountTransactionCreateNestedOneWithoutReversedByInput
   reversedBy?: Prisma.AccountTransactionCreateNestedManyWithoutReversalInput
+  journalEntry?: Prisma.JournalEntryCreateNestedOneWithoutAccountTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateWithoutAccountInput = {
@@ -1010,13 +1028,12 @@ export type AccountTransactionUncheckedCreateWithoutAccountInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -1053,13 +1070,11 @@ export type AccountTransactionUpdateManyWithWhereWithoutAccountInput = {
   data: Prisma.XOR<Prisma.AccountTransactionUpdateManyMutationInput, Prisma.AccountTransactionUncheckedUpdateManyWithoutAccountInput>
 }
 
-export type AccountTransactionCreateWithoutReversedByInput = {
+export type AccountTransactionCreateWithoutJournalEntryInput = {
   id: string
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
@@ -1074,6 +1089,77 @@ export type AccountTransactionCreateWithoutReversedByInput = {
   market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
   reversal?: Prisma.AccountTransactionCreateNestedOneWithoutReversedByInput
+  reversedBy?: Prisma.AccountTransactionCreateNestedManyWithoutReversalInput
+}
+
+export type AccountTransactionUncheckedCreateWithoutJournalEntryInput = {
+  id: string
+  marketId: string
+  accountId: string
+  type: $Enums.TransactionType
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.TransactionStatus
+  balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
+  description?: string | null
+  reversalId?: string | null
+  createdById?: string | null
+  transactionDate?: Date | string
+  createdAt?: Date | string
+  postedAt?: Date | string | null
+  isArchived?: boolean
+  archivedAt?: Date | string | null
+  partitionKey?: string | null
+  reversedBy?: Prisma.AccountTransactionUncheckedCreateNestedManyWithoutReversalInput
+}
+
+export type AccountTransactionCreateOrConnectWithoutJournalEntryInput = {
+  where: Prisma.AccountTransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountTransactionCreateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput>
+}
+
+export type AccountTransactionCreateManyJournalEntryInputEnvelope = {
+  data: Prisma.AccountTransactionCreateManyJournalEntryInput | Prisma.AccountTransactionCreateManyJournalEntryInput[]
+  skipDuplicates?: boolean
+}
+
+export type AccountTransactionUpsertWithWhereUniqueWithoutJournalEntryInput = {
+  where: Prisma.AccountTransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.AccountTransactionUpdateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedUpdateWithoutJournalEntryInput>
+  create: Prisma.XOR<Prisma.AccountTransactionCreateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedCreateWithoutJournalEntryInput>
+}
+
+export type AccountTransactionUpdateWithWhereUniqueWithoutJournalEntryInput = {
+  where: Prisma.AccountTransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.AccountTransactionUpdateWithoutJournalEntryInput, Prisma.AccountTransactionUncheckedUpdateWithoutJournalEntryInput>
+}
+
+export type AccountTransactionUpdateManyWithWhereWithoutJournalEntryInput = {
+  where: Prisma.AccountTransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.AccountTransactionUpdateManyMutationInput, Prisma.AccountTransactionUncheckedUpdateManyWithoutJournalEntryInput>
+}
+
+export type AccountTransactionCreateWithoutReversedByInput = {
+  id: string
+  type: $Enums.TransactionType
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.TransactionStatus
+  balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
+  description?: string | null
+  createdById?: string | null
+  transactionDate?: Date | string
+  createdAt?: Date | string
+  postedAt?: Date | string | null
+  isArchived?: boolean
+  archivedAt?: Date | string | null
+  partitionKey?: string | null
+  market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
+  account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
+  reversal?: Prisma.AccountTransactionCreateNestedOneWithoutReversedByInput
+  journalEntry?: Prisma.JournalEntryCreateNestedOneWithoutAccountTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateWithoutReversedByInput = {
@@ -1083,13 +1169,12 @@ export type AccountTransactionUncheckedCreateWithoutReversedByInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -1109,8 +1194,6 @@ export type AccountTransactionCreateWithoutReversalInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
@@ -1125,6 +1208,7 @@ export type AccountTransactionCreateWithoutReversalInput = {
   market: Prisma.MarketCreateNestedOneWithoutAccountTransactionsInput
   account: Prisma.AccountCreateNestedOneWithoutTransactionsInput
   reversedBy?: Prisma.AccountTransactionCreateNestedManyWithoutReversalInput
+  journalEntry?: Prisma.JournalEntryCreateNestedOneWithoutAccountTransactionsInput
 }
 
 export type AccountTransactionUncheckedCreateWithoutReversalInput = {
@@ -1134,12 +1218,11 @@ export type AccountTransactionUncheckedCreateWithoutReversalInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -1176,8 +1259,6 @@ export type AccountTransactionUpdateWithoutReversedByInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1192,6 +1273,7 @@ export type AccountTransactionUpdateWithoutReversedByInput = {
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
   reversal?: Prisma.AccountTransactionUpdateOneWithoutReversedByNestedInput
+  journalEntry?: Prisma.JournalEntryUpdateOneWithoutAccountTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateWithoutReversedByInput = {
@@ -1201,13 +1283,12 @@ export type AccountTransactionUncheckedUpdateWithoutReversedByInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1239,13 +1320,12 @@ export type AccountTransactionCreateManyMarketInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -1260,8 +1340,6 @@ export type AccountTransactionUpdateWithoutMarketInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1276,6 +1354,7 @@ export type AccountTransactionUpdateWithoutMarketInput = {
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
   reversal?: Prisma.AccountTransactionUpdateOneWithoutReversedByNestedInput
   reversedBy?: Prisma.AccountTransactionUpdateManyWithoutReversalNestedInput
+  journalEntry?: Prisma.JournalEntryUpdateOneWithoutAccountTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateWithoutMarketInput = {
@@ -1284,13 +1363,12 @@ export type AccountTransactionUncheckedUpdateWithoutMarketInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1307,13 +1385,12 @@ export type AccountTransactionUncheckedUpdateManyWithoutMarketInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1329,13 +1406,12 @@ export type AccountTransactionCreateManyAccountInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
   reversalId?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -1350,8 +1426,6 @@ export type AccountTransactionUpdateWithoutAccountInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1366,6 +1440,7 @@ export type AccountTransactionUpdateWithoutAccountInput = {
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
   reversal?: Prisma.AccountTransactionUpdateOneWithoutReversedByNestedInput
   reversedBy?: Prisma.AccountTransactionUpdateManyWithoutReversalNestedInput
+  journalEntry?: Prisma.JournalEntryUpdateOneWithoutAccountTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateWithoutAccountInput = {
@@ -1374,13 +1449,12 @@ export type AccountTransactionUncheckedUpdateWithoutAccountInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1397,8 +1471,93 @@ export type AccountTransactionUncheckedUpdateManyWithoutAccountInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  partitionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AccountTransactionCreateManyJournalEntryInput = {
+  id: string
+  marketId: string
+  accountId: string
+  type: $Enums.TransactionType
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.TransactionStatus
+  balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: bigint | number
+  description?: string | null
+  reversalId?: string | null
+  createdById?: string | null
+  transactionDate?: Date | string
+  createdAt?: Date | string
+  postedAt?: Date | string | null
+  isArchived?: boolean
+  archivedAt?: Date | string | null
+  partitionKey?: string | null
+}
+
+export type AccountTransactionUpdateWithoutJournalEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  partitionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
+  reversal?: Prisma.AccountTransactionUpdateOneWithoutReversedByNestedInput
+  reversedBy?: Prisma.AccountTransactionUpdateManyWithoutReversalNestedInput
+}
+
+export type AccountTransactionUncheckedUpdateWithoutJournalEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  postedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  partitionKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reversedBy?: Prisma.AccountTransactionUncheckedUpdateManyWithoutReversalNestedInput
+}
+
+export type AccountTransactionUncheckedUpdateManyWithoutJournalEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1420,12 +1579,11 @@ export type AccountTransactionCreateManyReversalInput = {
   type: $Enums.TransactionType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: $Enums.TransactionStatus
-  referenceType?: $Enums.TransactionReferenceType | null
-  referenceId?: string | null
   balanceBeforeTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction: runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: bigint | number
   description?: string | null
+  journalEntryId?: string | null
   createdById?: string | null
   transactionDate?: Date | string
   createdAt?: Date | string
@@ -1440,8 +1598,6 @@ export type AccountTransactionUpdateWithoutReversalInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1456,6 +1612,7 @@ export type AccountTransactionUpdateWithoutReversalInput = {
   market?: Prisma.MarketUpdateOneRequiredWithoutAccountTransactionsNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutTransactionsNestedInput
   reversedBy?: Prisma.AccountTransactionUpdateManyWithoutReversalNestedInput
+  journalEntry?: Prisma.JournalEntryUpdateOneWithoutAccountTransactionsNestedInput
 }
 
 export type AccountTransactionUncheckedUpdateWithoutReversalInput = {
@@ -1465,12 +1622,11 @@ export type AccountTransactionUncheckedUpdateWithoutReversalInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1488,12 +1644,11 @@ export type AccountTransactionUncheckedUpdateManyWithoutReversalInput = {
   type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
-  referenceType?: Prisma.NullableEnumTransactionReferenceTypeFieldUpdateOperationsInput | $Enums.TransactionReferenceType | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balanceBeforeTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfterTransaction?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   sequenceNo?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  journalEntryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1541,13 +1696,12 @@ export type AccountTransactionSelect<ExtArgs extends runtime.Types.Extensions.In
   type?: boolean
   amount?: boolean
   status?: boolean
-  referenceType?: boolean
-  referenceId?: boolean
   balanceBeforeTransaction?: boolean
   balanceAfterTransaction?: boolean
   sequenceNo?: boolean
   description?: boolean
   reversalId?: boolean
+  journalEntryId?: boolean
   createdById?: boolean
   transactionDate?: boolean
   createdAt?: boolean
@@ -1559,6 +1713,7 @@ export type AccountTransactionSelect<ExtArgs extends runtime.Types.Extensions.In
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   reversal?: boolean | Prisma.AccountTransaction$reversalArgs<ExtArgs>
   reversedBy?: boolean | Prisma.AccountTransaction$reversedByArgs<ExtArgs>
+  journalEntry?: boolean | Prisma.AccountTransaction$journalEntryArgs<ExtArgs>
   _count?: boolean | Prisma.AccountTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["accountTransaction"]>
 
@@ -1569,13 +1724,12 @@ export type AccountTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.
   type?: boolean
   amount?: boolean
   status?: boolean
-  referenceType?: boolean
-  referenceId?: boolean
   balanceBeforeTransaction?: boolean
   balanceAfterTransaction?: boolean
   sequenceNo?: boolean
   description?: boolean
   reversalId?: boolean
+  journalEntryId?: boolean
   createdById?: boolean
   transactionDate?: boolean
   createdAt?: boolean
@@ -1586,6 +1740,7 @@ export type AccountTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   reversal?: boolean | Prisma.AccountTransaction$reversalArgs<ExtArgs>
+  journalEntry?: boolean | Prisma.AccountTransaction$journalEntryArgs<ExtArgs>
 }, ExtArgs["result"]["accountTransaction"]>
 
 export type AccountTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1595,13 +1750,12 @@ export type AccountTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.
   type?: boolean
   amount?: boolean
   status?: boolean
-  referenceType?: boolean
-  referenceId?: boolean
   balanceBeforeTransaction?: boolean
   balanceAfterTransaction?: boolean
   sequenceNo?: boolean
   description?: boolean
   reversalId?: boolean
+  journalEntryId?: boolean
   createdById?: boolean
   transactionDate?: boolean
   createdAt?: boolean
@@ -1612,6 +1766,7 @@ export type AccountTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   reversal?: boolean | Prisma.AccountTransaction$reversalArgs<ExtArgs>
+  journalEntry?: boolean | Prisma.AccountTransaction$journalEntryArgs<ExtArgs>
 }, ExtArgs["result"]["accountTransaction"]>
 
 export type AccountTransactionSelectScalar = {
@@ -1621,13 +1776,12 @@ export type AccountTransactionSelectScalar = {
   type?: boolean
   amount?: boolean
   status?: boolean
-  referenceType?: boolean
-  referenceId?: boolean
   balanceBeforeTransaction?: boolean
   balanceAfterTransaction?: boolean
   sequenceNo?: boolean
   description?: boolean
   reversalId?: boolean
+  journalEntryId?: boolean
   createdById?: boolean
   transactionDate?: boolean
   createdAt?: boolean
@@ -1637,23 +1791,26 @@ export type AccountTransactionSelectScalar = {
   partitionKey?: boolean
 }
 
-export type AccountTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "accountId" | "type" | "amount" | "status" | "referenceType" | "referenceId" | "balanceBeforeTransaction" | "balanceAfterTransaction" | "sequenceNo" | "description" | "reversalId" | "createdById" | "transactionDate" | "createdAt" | "postedAt" | "isArchived" | "archivedAt" | "partitionKey", ExtArgs["result"]["accountTransaction"]>
+export type AccountTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "marketId" | "accountId" | "type" | "amount" | "status" | "balanceBeforeTransaction" | "balanceAfterTransaction" | "sequenceNo" | "description" | "reversalId" | "journalEntryId" | "createdById" | "transactionDate" | "createdAt" | "postedAt" | "isArchived" | "archivedAt" | "partitionKey", ExtArgs["result"]["accountTransaction"]>
 export type AccountTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   reversal?: boolean | Prisma.AccountTransaction$reversalArgs<ExtArgs>
   reversedBy?: boolean | Prisma.AccountTransaction$reversedByArgs<ExtArgs>
+  journalEntry?: boolean | Prisma.AccountTransaction$journalEntryArgs<ExtArgs>
   _count?: boolean | Prisma.AccountTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountTransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   reversal?: boolean | Prisma.AccountTransaction$reversalArgs<ExtArgs>
+  journalEntry?: boolean | Prisma.AccountTransaction$journalEntryArgs<ExtArgs>
 }
 export type AccountTransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   reversal?: boolean | Prisma.AccountTransaction$reversalArgs<ExtArgs>
+  journalEntry?: boolean | Prisma.AccountTransaction$journalEntryArgs<ExtArgs>
 }
 
 export type $AccountTransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1663,6 +1820,7 @@ export type $AccountTransactionPayload<ExtArgs extends runtime.Types.Extensions.
     account: Prisma.$AccountPayload<ExtArgs>
     reversal: Prisma.$AccountTransactionPayload<ExtArgs> | null
     reversedBy: Prisma.$AccountTransactionPayload<ExtArgs>[]
+    journalEntry: Prisma.$JournalEntryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1671,13 +1829,12 @@ export type $AccountTransactionPayload<ExtArgs extends runtime.Types.Extensions.
     type: $Enums.TransactionType
     amount: runtime.Decimal
     status: $Enums.TransactionStatus
-    referenceType: $Enums.TransactionReferenceType | null
-    referenceId: string | null
     balanceBeforeTransaction: runtime.Decimal
     balanceAfterTransaction: runtime.Decimal
     sequenceNo: bigint
     description: string | null
     reversalId: string | null
+    journalEntryId: string | null
     createdById: string | null
     transactionDate: Date
     createdAt: Date
@@ -2083,6 +2240,7 @@ export interface Prisma__AccountTransactionClient<T, Null = never, ExtArgs exten
   account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reversal<T extends Prisma.AccountTransaction$reversalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountTransaction$reversalArgs<ExtArgs>>): Prisma.Prisma__AccountTransactionClient<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reversedBy<T extends Prisma.AccountTransaction$reversedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountTransaction$reversedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  journalEntry<T extends Prisma.AccountTransaction$journalEntryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountTransaction$journalEntryArgs<ExtArgs>>): Prisma.Prisma__JournalEntryClient<runtime.Types.Result.GetResult<Prisma.$JournalEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2118,13 +2276,12 @@ export interface AccountTransactionFieldRefs {
   readonly type: Prisma.FieldRef<"AccountTransaction", 'TransactionType'>
   readonly amount: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
   readonly status: Prisma.FieldRef<"AccountTransaction", 'TransactionStatus'>
-  readonly referenceType: Prisma.FieldRef<"AccountTransaction", 'TransactionReferenceType'>
-  readonly referenceId: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly balanceBeforeTransaction: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
   readonly balanceAfterTransaction: Prisma.FieldRef<"AccountTransaction", 'Decimal'>
   readonly sequenceNo: Prisma.FieldRef<"AccountTransaction", 'BigInt'>
   readonly description: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly reversalId: Prisma.FieldRef<"AccountTransaction", 'String'>
+  readonly journalEntryId: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly createdById: Prisma.FieldRef<"AccountTransaction", 'String'>
   readonly transactionDate: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"AccountTransaction", 'DateTime'>
@@ -2573,6 +2730,25 @@ export type AccountTransaction$reversedByArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.AccountTransactionScalarFieldEnum | Prisma.AccountTransactionScalarFieldEnum[]
+}
+
+/**
+ * AccountTransaction.journalEntry
+ */
+export type AccountTransaction$journalEntryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JournalEntry
+   */
+  select?: Prisma.JournalEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JournalEntry
+   */
+  omit?: Prisma.JournalEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JournalEntryInclude<ExtArgs> | null
+  where?: Prisma.JournalEntryWhereInput
 }
 
 /**

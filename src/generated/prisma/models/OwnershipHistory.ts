@@ -262,6 +262,7 @@ export type OwnershipHistoryWhereInput = {
   version?: Prisma.IntFilter<"OwnershipHistory"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type OwnershipHistoryOrderByWithRelationInput = {
@@ -277,6 +278,7 @@ export type OwnershipHistoryOrderByWithRelationInput = {
   version?: Prisma.SortOrder
   market?: Prisma.MarketOrderByWithRelationInput
   shareholder?: Prisma.ShareholderOrderByWithRelationInput
+  approvedBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type OwnershipHistoryWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +298,7 @@ export type OwnershipHistoryWhereUniqueInput = Prisma.AtLeast<{
   version?: Prisma.IntFilter<"OwnershipHistory"> | number
   market?: Prisma.XOR<Prisma.MarketScalarRelationFilter, Prisma.MarketWhereInput>
   shareholder?: Prisma.XOR<Prisma.ShareholderScalarRelationFilter, Prisma.ShareholderWhereInput>
+  approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "shareholderId_startDate">
 
 export type OwnershipHistoryOrderByWithAggregationInput = {
@@ -337,12 +340,12 @@ export type OwnershipHistoryCreateInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  approvedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   version?: number
   market: Prisma.MarketCreateNestedOneWithoutOwnershipHistoriesInput
   shareholder: Prisma.ShareholderCreateNestedOneWithoutOwnershipHistoriesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutOwnershipApprovedInput
 }
 
 export type OwnershipHistoryUncheckedCreateInput = {
@@ -363,12 +366,12 @@ export type OwnershipHistoryUpdateInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutOwnershipApprovedNestedInput
 }
 
 export type OwnershipHistoryUncheckedUpdateInput = {
@@ -402,7 +405,6 @@ export type OwnershipHistoryUpdateManyMutationInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
@@ -527,6 +529,48 @@ export type OwnershipHistoryUncheckedUpdateManyWithoutMarketNestedInput = {
   deleteMany?: Prisma.OwnershipHistoryScalarWhereInput | Prisma.OwnershipHistoryScalarWhereInput[]
 }
 
+export type OwnershipHistoryCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput> | Prisma.OwnershipHistoryCreateWithoutApprovedByInput[] | Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput | Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.OwnershipHistoryCreateManyApprovedByInputEnvelope
+  connect?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+}
+
+export type OwnershipHistoryUncheckedCreateNestedManyWithoutApprovedByInput = {
+  create?: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput> | Prisma.OwnershipHistoryCreateWithoutApprovedByInput[] | Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput | Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput[]
+  createMany?: Prisma.OwnershipHistoryCreateManyApprovedByInputEnvelope
+  connect?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+}
+
+export type OwnershipHistoryUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput> | Prisma.OwnershipHistoryCreateWithoutApprovedByInput[] | Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput | Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.OwnershipHistoryUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.OwnershipHistoryUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.OwnershipHistoryCreateManyApprovedByInputEnvelope
+  set?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  disconnect?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  delete?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  connect?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  update?: Prisma.OwnershipHistoryUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.OwnershipHistoryUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.OwnershipHistoryUpdateManyWithWhereWithoutApprovedByInput | Prisma.OwnershipHistoryUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.OwnershipHistoryScalarWhereInput | Prisma.OwnershipHistoryScalarWhereInput[]
+}
+
+export type OwnershipHistoryUncheckedUpdateManyWithoutApprovedByNestedInput = {
+  create?: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput> | Prisma.OwnershipHistoryCreateWithoutApprovedByInput[] | Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput[]
+  connectOrCreate?: Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput | Prisma.OwnershipHistoryCreateOrConnectWithoutApprovedByInput[]
+  upsert?: Prisma.OwnershipHistoryUpsertWithWhereUniqueWithoutApprovedByInput | Prisma.OwnershipHistoryUpsertWithWhereUniqueWithoutApprovedByInput[]
+  createMany?: Prisma.OwnershipHistoryCreateManyApprovedByInputEnvelope
+  set?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  disconnect?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  delete?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  connect?: Prisma.OwnershipHistoryWhereUniqueInput | Prisma.OwnershipHistoryWhereUniqueInput[]
+  update?: Prisma.OwnershipHistoryUpdateWithWhereUniqueWithoutApprovedByInput | Prisma.OwnershipHistoryUpdateWithWhereUniqueWithoutApprovedByInput[]
+  updateMany?: Prisma.OwnershipHistoryUpdateManyWithWhereWithoutApprovedByInput | Prisma.OwnershipHistoryUpdateManyWithWhereWithoutApprovedByInput[]
+  deleteMany?: Prisma.OwnershipHistoryScalarWhereInput | Prisma.OwnershipHistoryScalarWhereInput[]
+}
+
 export type OwnershipHistoryCreateNestedManyWithoutShareholderInput = {
   create?: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutShareholderInput, Prisma.OwnershipHistoryUncheckedCreateWithoutShareholderInput> | Prisma.OwnershipHistoryCreateWithoutShareholderInput[] | Prisma.OwnershipHistoryUncheckedCreateWithoutShareholderInput[]
   connectOrCreate?: Prisma.OwnershipHistoryCreateOrConnectWithoutShareholderInput | Prisma.OwnershipHistoryCreateOrConnectWithoutShareholderInput[]
@@ -574,11 +618,11 @@ export type OwnershipHistoryCreateWithoutMarketInput = {
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  approvedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   version?: number
   shareholder: Prisma.ShareholderCreateNestedOneWithoutOwnershipHistoriesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutOwnershipApprovedInput
 }
 
 export type OwnershipHistoryUncheckedCreateWithoutMarketInput = {
@@ -635,16 +679,66 @@ export type OwnershipHistoryScalarWhereInput = {
   version?: Prisma.IntFilter<"OwnershipHistory"> | number
 }
 
+export type OwnershipHistoryCreateWithoutApprovedByInput = {
+  id: string
+  percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  startDate: Date | string
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  version?: number
+  market: Prisma.MarketCreateNestedOneWithoutOwnershipHistoriesInput
+  shareholder: Prisma.ShareholderCreateNestedOneWithoutOwnershipHistoriesInput
+}
+
+export type OwnershipHistoryUncheckedCreateWithoutApprovedByInput = {
+  id: string
+  marketId: string
+  shareholderId: string
+  percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  startDate: Date | string
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  version?: number
+}
+
+export type OwnershipHistoryCreateOrConnectWithoutApprovedByInput = {
+  where: Prisma.OwnershipHistoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput>
+}
+
+export type OwnershipHistoryCreateManyApprovedByInputEnvelope = {
+  data: Prisma.OwnershipHistoryCreateManyApprovedByInput | Prisma.OwnershipHistoryCreateManyApprovedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type OwnershipHistoryUpsertWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.OwnershipHistoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.OwnershipHistoryUpdateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedUpdateWithoutApprovedByInput>
+  create: Prisma.XOR<Prisma.OwnershipHistoryCreateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedCreateWithoutApprovedByInput>
+}
+
+export type OwnershipHistoryUpdateWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.OwnershipHistoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.OwnershipHistoryUpdateWithoutApprovedByInput, Prisma.OwnershipHistoryUncheckedUpdateWithoutApprovedByInput>
+}
+
+export type OwnershipHistoryUpdateManyWithWhereWithoutApprovedByInput = {
+  where: Prisma.OwnershipHistoryScalarWhereInput
+  data: Prisma.XOR<Prisma.OwnershipHistoryUpdateManyMutationInput, Prisma.OwnershipHistoryUncheckedUpdateManyWithoutApprovedByInput>
+}
+
 export type OwnershipHistoryCreateWithoutShareholderInput = {
   id: string
   percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate?: Date | string | null
-  approvedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   version?: number
   market: Prisma.MarketCreateNestedOneWithoutOwnershipHistoriesInput
+  approvedBy?: Prisma.UserCreateNestedOneWithoutOwnershipApprovedInput
 }
 
 export type OwnershipHistoryUncheckedCreateWithoutShareholderInput = {
@@ -702,11 +796,11 @@ export type OwnershipHistoryUpdateWithoutMarketInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutOwnershipApprovedNestedInput
 }
 
 export type OwnershipHistoryUncheckedUpdateWithoutMarketInput = {
@@ -733,6 +827,54 @@ export type OwnershipHistoryUncheckedUpdateManyWithoutMarketInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
+export type OwnershipHistoryCreateManyApprovedByInput = {
+  id: string
+  marketId: string
+  shareholderId: string
+  percentage: runtime.Decimal | runtime.DecimalJsLike | number | string
+  startDate: Date | string
+  endDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  version?: number
+}
+
+export type OwnershipHistoryUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  market?: Prisma.MarketUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
+  shareholder?: Prisma.ShareholderUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
+}
+
+export type OwnershipHistoryUncheckedUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
+  percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type OwnershipHistoryUncheckedUpdateManyWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  marketId?: Prisma.StringFieldUpdateOperationsInput | string
+  shareholderId?: Prisma.StringFieldUpdateOperationsInput | string
+  percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 export type OwnershipHistoryCreateManyShareholderInput = {
   id: string
   marketId: string
@@ -750,11 +892,11 @@ export type OwnershipHistoryUpdateWithoutShareholderInput = {
   percentage?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   market?: Prisma.MarketUpdateOneRequiredWithoutOwnershipHistoriesNestedInput
+  approvedBy?: Prisma.UserUpdateOneWithoutOwnershipApprovedNestedInput
 }
 
 export type OwnershipHistoryUncheckedUpdateWithoutShareholderInput = {
@@ -796,6 +938,7 @@ export type OwnershipHistorySelect<ExtArgs extends runtime.Types.Extensions.Inte
   version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.OwnershipHistory$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["ownershipHistory"]>
 
 export type OwnershipHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -811,6 +954,7 @@ export type OwnershipHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.OwnershipHistory$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["ownershipHistory"]>
 
 export type OwnershipHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -826,6 +970,7 @@ export type OwnershipHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   version?: boolean
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.OwnershipHistory$approvedByArgs<ExtArgs>
 }, ExtArgs["result"]["ownershipHistory"]>
 
 export type OwnershipHistorySelectScalar = {
@@ -845,14 +990,17 @@ export type OwnershipHistoryOmit<ExtArgs extends runtime.Types.Extensions.Intern
 export type OwnershipHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.OwnershipHistory$approvedByArgs<ExtArgs>
 }
 export type OwnershipHistoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.OwnershipHistory$approvedByArgs<ExtArgs>
 }
 export type OwnershipHistoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   market?: boolean | Prisma.MarketDefaultArgs<ExtArgs>
   shareholder?: boolean | Prisma.ShareholderDefaultArgs<ExtArgs>
+  approvedBy?: boolean | Prisma.OwnershipHistory$approvedByArgs<ExtArgs>
 }
 
 export type $OwnershipHistoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -860,6 +1008,7 @@ export type $OwnershipHistoryPayload<ExtArgs extends runtime.Types.Extensions.In
   objects: {
     market: Prisma.$MarketPayload<ExtArgs>
     shareholder: Prisma.$ShareholderPayload<ExtArgs>
+    approvedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1268,6 +1417,7 @@ export interface Prisma__OwnershipHistoryClient<T, Null = never, ExtArgs extends
   readonly [Symbol.toStringTag]: "PrismaPromise"
   market<T extends Prisma.MarketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketClient<runtime.Types.Result.GetResult<Prisma.$MarketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   shareholder<T extends Prisma.ShareholderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShareholderDefaultArgs<ExtArgs>>): Prisma.Prisma__ShareholderClient<runtime.Types.Result.GetResult<Prisma.$ShareholderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  approvedBy<T extends Prisma.OwnershipHistory$approvedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OwnershipHistory$approvedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1705,6 +1855,25 @@ export type OwnershipHistoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many OwnershipHistories to delete.
    */
   limit?: number
+}
+
+/**
+ * OwnershipHistory.approvedBy
+ */
+export type OwnershipHistory$approvedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
