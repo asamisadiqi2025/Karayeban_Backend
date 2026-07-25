@@ -4,6 +4,7 @@ export interface AuthUser {
   username: string;
   email: string | null;
   marketId: string | null;
+  isSuperAdmin: boolean;
   roles: string[];
   permissions: string[];
 }

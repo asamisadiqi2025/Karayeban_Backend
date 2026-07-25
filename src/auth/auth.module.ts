@@ -15,7 +15,6 @@ import { RegisterService } from './services/register.service';
 import { LoginService } from './services/login.service';
 import { LogoutService } from './services/logout.service';
 import { RefreshTokenService } from './services/refresh-token.service';
-import { MarketOnboardingService } from './services/market-onboarding.service';
 
 @Module({
   imports: [
@@ -42,7 +41,6 @@ import { MarketOnboardingService } from './services/market-onboarding.service';
     LoginService,
     LogoutService,
     RefreshTokenService,
-    MarketOnboardingService,
   ],
   exports: [AuthService, JwtModule, TokenService],
 })

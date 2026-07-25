@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { MarketModule } from './market/market.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 
 @Module({
@@ -11,6 +12,7 @@ import { JwtAuthGuard } from './auth/guards/jwt.guard';
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     AuthModule,
+    MarketModule,
   ],
   providers: [
     {

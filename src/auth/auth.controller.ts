@@ -13,7 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { CreateMarketDto } from './dto/create-market.dto';
+import { CreateMarketDto } from '../market/dto/create-market.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { AuthUser } from './types/jwt-payload.type';

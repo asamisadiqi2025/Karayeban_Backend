@@ -39,6 +39,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
         errors = data.errors ?? null;
       }
+    } else {
+      console.error('[UNHANDLED ERROR]', exception);
     }
 
     response.status(status).json({

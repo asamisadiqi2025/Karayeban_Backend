@@ -433,8 +433,8 @@ export type RentPaymentScalarFieldEnum = (typeof RentPaymentScalarFieldEnum)[key
 
 export const PaymentAllocationScalarFieldEnum = {
   id: 'id',
-  paymentId: 'paymentId',
-  rentPaymentId: 'rentPaymentId',
+  sourcePaymentId: 'sourcePaymentId',
+  targetPaymentId: 'targetPaymentId',
   amount: 'amount',
   allocatedAt: 'allocatedAt'
 } as const
