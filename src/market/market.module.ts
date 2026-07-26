@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 
 import { MarketController } from './market.controller';
 import { MarketService } from './market.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [MarketController],
   providers: [MarketService],
   exports: [MarketService],

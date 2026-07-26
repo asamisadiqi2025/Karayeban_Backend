@@ -5,7 +5,6 @@ import {
   Post,
   Req,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import type { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -13,11 +12,9 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { CreateMarketDto } from '../market/dto/create-market.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { AuthUser } from './types/jwt-payload.type';
-import { TenantGuard } from './guards/tenant.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -113,34 +110,6 @@ export class AuthController {
   @Get('me')
   me(@CurrentUser() user: AuthUser) {
     return { user };
-  }
-
-  @Post('create-market')
-  @UseGuards(TenantGuard)
-  async createMarket(
-    @CurrentUser() user: AuthUser,
-    @Body() dto: CreateMarketDto,
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const userAgent = req.headers['user-agent'] ?? undefined;
-    const ipAddress = req.ip;
-
-    const result = await this.authService.createMarket(
-      user.id,
-      dto,
-      userAgent,
-      ipAddress,
-    );
-
-    this.setRefreshTokenCookie(res, result.refreshToken);
-
-    return {
-      accessToken: result.accessToken,
-      user: result.user,
-      setupRequired: result.setupRequired,
-      message: 'Market created successfully',
-    };
   }
 
   private setRefreshTokenCookie(res: Response, token: string) {
