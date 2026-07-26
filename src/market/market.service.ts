@@ -93,38 +93,45 @@ export class MarketService {
     return createPaginationResponse(markets, total, page, limit);
   }
 
-  async findOne(user: AuthUser, id: string) {
-    const market = await this.prisma.market.findFirst({
-      where: {
-        id,
-        deletedAt: null,
-      },
-      select: {
-        id: true,
-        name: true,
-        code: true,
-        address: true,
-        phone: true,
-        status: true,
-        createdById: true,
-        updatedById: true,
-        createdAt: true,
-        updatedAt: true,
-        version: true,
-        ...MARKET_COUNT_SELECT,
-      },
-    });
+ async findOne(user: AuthUser, id: string) {
+  const where: Prisma.MarketWhereInput = {
+    id,
+    deletedAt: null,
+  };
 
-    if (!market) {
-      throw new NotFoundException('بازار يافت نشد.');
+  // فقط SuperAdmin اجازه دیدن همه مارکت‌ها را دارد
+  if (!user.isSuperAdmin) {
+    if (!user.marketId) {
+      throw new NotFoundException('بازار برای این کاربر تعیین نشده است.');
     }
 
-    if (!user.isSuperAdmin && user.marketId !== market.id) {
-      throw new NotFoundException('بازار يافت نشد.');
-    }
-
-    return market;
+    where.id = user.marketId;
   }
+
+  const market = await this.prisma.market.findFirst({
+    where,
+    select: {
+      id: true,
+      name: true,
+      code: true,
+      address: true,
+      phone: true,
+      status: true,
+      createdById: true,
+      updatedById: true,
+      createdAt: true,
+      updatedAt: true,
+      version: true,
+      ...MARKET_COUNT_SELECT,
+    },
+  });
+
+  if (!market) {
+    throw new NotFoundException('بازار یافت نشد.');
+  }
+
+  return market;
+}
 
   async create(dto: CreateMarketDto, userId?: string) {
     const existingMarket = await this.prisma.market.findFirst({
