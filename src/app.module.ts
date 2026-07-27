@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { MarketModule } from './market/market.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
