@@ -1,8 +1,15 @@
-export const databaseConfig = () => ({
-  type: process.env.DB_TYPE || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: Number(process.env.DB_PORT) || 5432,
-  username: process.env.DB_USER || 'user',
-  password: process.env.DB_PASS || 'pass',
-  database: process.env.DB_NAME || 'db',
-});
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('database', () => ({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT ?? 5432),
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+
+  poolSize: Number(process.env.DB_POOL_SIZE ?? 10),
+
+  logging: process.env.DB_LOGGING === 'true',
+
+  synchronize: process.env.DB_SYNCHRONIZE === 'true',
+}));

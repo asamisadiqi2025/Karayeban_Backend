@@ -13,11 +13,13 @@ async function bootstrap() {
     logger.log(`🚀 Application is running on: http://localhost:${port}`);
     logger.log(`✅ Database connection established successfully`);
   } catch (error) {
-    logger.error(`❌ Failed to start application: ${error.message}`);
-    logger.error(`Stack trace: ${error.stack}`);
-    
-     process.exit(1);
-  }
+  logger.error(
+    '❌ Failed to start application',
+    error instanceof Error ? error.stack : String(error),
+  );
+
+  process.exit(1);
+}
 }
 
 bootstrap();
