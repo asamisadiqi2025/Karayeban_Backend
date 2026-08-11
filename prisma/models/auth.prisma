@@ -1,0 +1,3 @@
+// auth.prisma
+// This file is intentionally left empty to avoid duplicating the User model.
+// The actual User model now lives in user.prisma.

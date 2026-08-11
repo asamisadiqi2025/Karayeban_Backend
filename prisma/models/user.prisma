@@ -1,0 +1,18 @@
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  username     String   @db.VarChar(100)
+  fullName     String   @db.VarChar(150)
+  email        String   @db.VarChar(255)
+  passwordHash String   @db.VarChar(255)
+  role         String   @db.VarChar(50)
+  customRoleId String?  @db.Uuid
+  marketId     String   @db.Uuid
+  isActive     Boolean  @default(true)
+  lastLogin    DateTime? @db.Timestamp(6)
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime @updatedAt @db.Timestamp(6)
+
+  @@unique([username], map: "IDX_users_username_unique")
+  @@map("users")
+}

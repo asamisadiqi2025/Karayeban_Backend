@@ -1,0 +1,3 @@
+// assets.prisma
+// Existing TypeORM files: src/modules/assets/entities/*.ts
+// Placeholder - provide fields to create models for Asset and DepreciationEvent

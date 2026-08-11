@@ -1,0 +1,3 @@
+// permission.prisma
+// Existing TypeORM file: src/modules/roles/entities/permission.entity.ts
+// Placeholder - no model created because entity has no explicit schema fields in source.

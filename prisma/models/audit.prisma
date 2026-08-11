@@ -1,0 +1,4 @@
+// audit.prisma
+// Existing TypeORM file: src/common/entities/audit-log.entity.ts
+// The TypeORM entity lists fields but no DB decorators; please confirm schema if you'd like a Prisma model.
+// Source fields: id, action, entity, entityId, timestamp, userId

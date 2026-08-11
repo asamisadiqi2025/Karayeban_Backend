@@ -1,0 +1,3 @@
+// fund.prisma
+// Represents cash fund / fund transaction related models; related files exist at src/modules/market/entities.
+// Placeholder - no model created automatically.

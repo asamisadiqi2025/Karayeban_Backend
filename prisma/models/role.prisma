@@ -1,0 +1,5 @@
+// role.prisma
+// No concrete field definitions found in TypeORM entities; please provide fields if you want a full model.
+// Existing TypeORM file: src/modules/roles/entities/role.entity.ts
+
+// Placeholder: no model defined to avoid inventing schema.

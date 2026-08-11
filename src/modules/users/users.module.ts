@@ -1,8 +1,9 @@
-// src/modules/user/user.module.ts
+// src/modules/users/users.module.ts
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
+
 @Module({
-  controllers: [UsersController], // 👈 Register it here
-  providers: [], 
+  controllers: [UsersController],
+  providers: [],
 })
-export class UserModule {}
+export class UsersModule {}

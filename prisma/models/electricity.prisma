@@ -1,0 +1,3 @@
+// electricity.prisma
+// Existing TypeORM files: src/modules/electricity/entities/*.ts
+// Placeholder - no concrete fields found in entity files. Provide schema definitions if needed.
