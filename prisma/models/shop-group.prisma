@@ -1,0 +1,34 @@
+model ShopGroup {
+  id             String    @id @default(uuid()) @db.Uuid
+  marketId       String    @map("market_id") @db.Uuid
+  primaryMeterId String?   @map("primary_meter_id") @db.Uuid
+  // قراردادِ واحدی که هنگام ادغام روی همهٔ دوکان‌های عضو این گروه بسته می‌شود (ن.ک. Contract/ContractShop).
+  contractId     String?   @map("contract_id") @db.Uuid
+  startedAt      DateTime  @map("started_at") @db.Timestamptz(6)
+  endedAt        DateTime? @map("ended_at") @db.Timestamptz(6)
+
+  market       Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  primaryMeter ElectricityMeter? @relation("PrimaryMeterForShopGroup", fields: [primaryMeterId], references: [id], onDelete: SetNull)
+  contract     Contract?         @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  members      ShopGroupMember[]
+
+  @@unique([primaryMeterId])
+  @@index([marketId])
+  @@index([contractId])
+  @@map("shop_groups")
+}
+
+model ShopGroupMember {
+  id       String    @id @default(uuid()) @db.Uuid
+  groupId  String    @map("group_id") @db.Uuid
+  shopId   String    @map("shop_id") @db.Uuid
+  joinedAt DateTime  @map("joined_at") @db.Timestamptz(6)
+  leftAt   DateTime? @map("left_at") @db.Timestamptz(6)
+
+  group ShopGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  shop  Shop      @relation(fields: [shopId], references: [id], onDelete: Restrict)
+
+  @@unique([groupId, shopId])
+  @@index([shopId])
+  @@map("shop_group_members")
+}

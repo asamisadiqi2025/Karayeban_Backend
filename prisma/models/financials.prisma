@@ -1,0 +1,174 @@
+model ElectricityMeter {
+  id           String      @id @default(uuid()) @db.Uuid
+  marketId     String      @map("market_id") @db.Uuid
+  // شمارهٔ نمایشی کنتور — هنگام ساخت برابر shopNumber مقداردهی می‌شود (شمارهٔ کنتور = شمارهٔ دوکان).
+  meterNumber  String?     @map("meter_number")
+  serialNumber String? // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
+  // shopId «خانهٔ اصلی و ثابت» کنتور است و هنگام ادغام/تفکیک دوکان‌ها هرگز تغییر نمی‌کند؛
+  // فقط status عوض می‌شود (فعال/غیرفعال). دوکان فعلاً‌فعال یک گروه از ShopGroup.primaryMeterId معلوم می‌شود.
+  shopId       String?     @map("shop_id") @db.Uuid
+  status       MeterStatus @default(active)
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market              Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop                Shop?             @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  primaryForShopGroup ShopGroup?        @relation("PrimaryMeterForShopGroup")
+  bills               ElectricityBill[]
+
+  @@unique([marketId, meterNumber])
+  @@index([shopId])
+  @@index([status])
+}
+
+enum ElectricityBillStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELED
+}
+
+// بل برق دوره‌ای (هر دو ماه)؛ جمع‌آوری همچنان هفته‌وار و قسطی است — همان الگوی RentCharges.
+// وقتی paidAmount به totalAmount برسد، سرویس status را PAID می‌کند و دوره «بسته» تلقی می‌شود.
+model ElectricityBill {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String  @map("market_id") @db.Uuid
+  shopId   String  @map("shop_id") @db.Uuid
+  meterId  String? @map("meter_id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid
+
+  periodStart     DateTime @map("period_start") @db.Timestamptz(6)
+  periodEnd       DateTime @map("period_end") @db.Timestamptz(6)
+  previousReading Decimal? @map("previous_reading") @db.Decimal(12, 2)
+  currentReading  Decimal? @map("current_reading") @db.Decimal(12, 2)
+
+  totalAmount     Decimal @map("total_amount") @db.Decimal(15, 2)
+  paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(15, 2)
+  remainingAmount Decimal @default(0) @map("remaining_amount") @db.Decimal(15, 2)
+
+  currency       String                @default("AFN") @db.VarChar(10)
+  status         ElectricityBillStatus @default(PENDING)
+  // برای بل‌هایی که از کتابچهٔ کاغذی مهاجرت شده‌اند (ن.ک. حالت پرخطر ۵ در گزارش)
+  isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
+
+  notes       String? @db.Text
+  createdById String? @map("created_by_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop      Shop              @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  meter     ElectricityMeter? @relation(fields: [meterId], references: [id], onDelete: SetNull)
+  tenant    Tenant?           @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  createdBy User?             @relation("ElectricityBillCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  allocations ElectricityPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([shopId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@map("electricity_bills")
+}
+
+// خلاصهٔ زندهٔ بدهی برق هر مستأجر — دقیقاً هم‌الگو با RentDebt.
+model ElectricityDebt {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @unique @map("tenant_id") @db.Uuid
+
+  totalDebt         Decimal   @default(0) @map("total_debt") @db.Decimal(15, 2)
+  lastBillAmount    Decimal   @default(0) @map("last_bill_amount") @db.Decimal(15, 2)
+  lastPaymentAmount Decimal   @default(0) @map("last_payment_amount") @db.Decimal(15, 2)
+  lastBillDate      DateTime? @map("last_bill_date") @db.Timestamptz(6)
+  lastPaymentDate   DateTime? @map("last_payment_date") @db.Timestamptz(6)
+
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("electricity_debts")
+}
+
+// یک پرداخت فیزیکی (یک رسید) برای برق؛ می‌تواند بین چند بل تقسیم شود (ن.ک. ElectricityPaymentAllocation) —
+// دقیقاً همان قانونی که برای کرایه خواستید: هر پرداخت اول بدهی قدیمی‌تر را می‌پوشاند.
+model ElectricityPayment {
+  id            String        @id @default(uuid()) @db.Uuid
+  marketId      String        @map("market_id") @db.Uuid
+  shopId        String        @map("shop_id") @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  amount        Decimal       @db.Decimal(15, 2)
+  currency      String        @default("AFN") @db.VarChar(10)
+  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
+  paymentMethod PaymentMethod @map("payment_method")
+  accountId     String?       @map("account_id") @db.Uuid
+  collectedById String?       @map("collected_by_id") @db.Uuid
+  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
+  notes         String?       @db.Text
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  account     Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  collectedBy User?    @relation("ElectricityCollectedBy", fields: [collectedById], references: [id], onDelete: SetNull)
+
+  allocations ElectricityPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([shopId])
+  @@index([tenantId])
+  @@map("electricity_payments")
+}
+
+model ElectricityPaymentAllocation {
+  id        String   @id @default(uuid()) @db.Uuid
+  paymentId String   @map("payment_id") @db.Uuid
+  billId    String   @map("bill_id") @db.Uuid
+  amount    Decimal  @db.Decimal(15, 2)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  payment ElectricityPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  bill    ElectricityBill    @relation(fields: [billId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, billId])
+  @@index([paymentId])
+  @@index([billId])
+  @@map("electricity_payment_allocations")
+}
+
+model OverdueDebt {
+  id       String   @id @default(uuid()) @db.Uuid
+  amount   Decimal?
+  shopId   String?  @map("shop_id") @db.Uuid
+  shop     Shop?    @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  tenantId String?  @map("tenant_id") @db.Uuid
+  tenant   Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+}
+
+// مدل ShareholderTransaction به prisma/models/shareholder.prisma منتقل شد
+// (کنار Shareholder و ShareholderEquity، چون دیگر یک ردیف اسکلتی نیست).
+
+// ==========================================
+// ✅ اصلاح‌شده: اضافه کردن رابطه با Asset
+// ==========================================
+model DepreciationEvent {
+  id                 String   @id @default(uuid()) @db.Uuid
+  assetId            String   @map("asset_id") @db.Uuid // 👈 اضافه شد
+  year               Int
+  depreciationAmount Decimal  @map("depreciation_amount") @db.Decimal(12, 2)
+  bookValueBefore    Decimal  @map("book_value_before") @db.Decimal(12, 2)
+  bookValueAfter     Decimal  @map("book_value_after") @db.Decimal(12, 2)
+  appliedAt          DateTime @default(now()) @map("applied_at") @db.Timestamptz(6)
+  appliedById        String?  @map("applied_by_id") @db.Uuid
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 👇 رابطه با Asset (کلید اصلی)
+  asset     Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  appliedBy User? @relation("DepreciationAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
+
+  @@index([assetId])
+  @@map("depreciation_events")
+}

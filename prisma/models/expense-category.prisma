@@ -1,0 +1,11 @@
+model ExpenseCategory {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String? @map("market_id") @db.Uuid
+  name     String  @db.VarChar(255)
+  isActive Boolean @default(true) @map("is_active")
+
+  market   Market?   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  expenses Expense[]
+
+  @@index([marketId])
+}

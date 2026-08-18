@@ -1,0 +1,17 @@
+model CustomRole {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(100)
+  marketId    String   @map("market_id") @db.Uuid
+  permissions String[]
+  description String?  @db.Text
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  users  User[]
+
+  @@unique([marketId, name])
+  @@index([marketId])
+  @@map("custom_roles")
+}

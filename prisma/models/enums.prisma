@@ -1,0 +1,66 @@
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  ACCOUNTANT
+  STAFF
+}
+
+enum ShopType {
+  shop
+  kiosk
+  stall // بساط
+  vendor
+  office
+  warehouse
+}
+
+// چهار وضعیت دقیقاً منطبق با نیازمندی: فعال، غیرفعال، خالی، کرایه‌داده‌شده.
+enum ShopStatus {
+  active
+  inactive
+  empty
+  rented
+}
+
+enum ContractStatus {
+  draft
+  suspended
+  active
+  early_terminated
+  expired
+  cancelled
+}
+
+enum PaymentMethod {
+  cash
+  bank_transfer
+  cheque
+  online
+}
+
+enum MeterStatus {
+  active
+  inactive
+}
+
+enum AssetStatus {
+  active
+  disposed
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  ACTIVATE
+  DEACTIVATE
+  TERMINATE
+  RENEW
+}

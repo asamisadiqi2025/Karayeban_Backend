@@ -1,3 +1,43 @@
-// market.prisma
-// Existing TypeORM file: src/modules/market/entities/market-profile.entity.ts
-// Placeholder - provide schema fields if you want this model added.
+model Market {
+  id              String   @id @default(uuid()) @db.Uuid
+  name            String   @db.VarChar(200)
+  logo            String?  @db.Text
+  address         String?  @db.Text
+  contacts        Json?    @default("[]")
+  details         String?  @db.Text
+  // ارز پایه از فهرست Currency انتخاب می‌شود (نه یک رشتهٔ آزاد)؛ نرخ‌های ارز در ExchangeRate با تاریخ نگه داشته می‌شوند.
+  baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
+  isSetupComplete Boolean  @default(false)
+  createdAt       DateTime @default(now()) @db.Timestamp(6)
+  updatedAt       DateTime @updatedAt @db.Timestamp(6)
+
+  baseCurrency Currency? @relation(fields: [baseCurrencyId], references: [id], onDelete: SetNull)
+
+  customRoles             CustomRole[]
+  users                   User[]
+  accounts                Account[]
+  auditLogs               AuditLog[]
+  contracts               Contract[]
+  expenses                Expense[]
+  floors                  Floor[]
+  miscellaneousIncome     MiscellaneousIncome[]
+  openingBalances         OpeningBalance[]
+  rentCharges             RentCharges[]
+  rentPayments            RentPayment[]
+  shopGroups              ShopGroup[]
+  shops                   Shop[]
+  tenants                 Tenant[]
+  assets                  Asset[]
+  shareholders            Shareholder[]
+  shareholderTransactions ShareholderTransaction[]
+  accountTransfers        AccountTransfer[]
+  electricityBills        ElectricityBill[]
+  electricityPayments     ElectricityPayment[]
+  electricityMeters       ElectricityMeter[]
+  collateralItems         CollateralItem[]
+  lotteryDraws            LotteryDraw[]
+  exchangeRates           ExchangeRate[]
+  expenseCategories       ExpenseCategory[]
+
+  @@map("markets")
+}

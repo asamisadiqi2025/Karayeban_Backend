@@ -1,0 +1,26 @@
+model OpeningBalance {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId   String @map("market_id") @db.Uuid
+  accountId  String @map("account_id") @db.Uuid
+  currencyId String @map("currency_id") @db.Uuid
+
+  amount Decimal @db.Decimal(18, 4)
+
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(18, 6)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
+  openingDate DateTime @map("opening_date") @db.Date
+  createdById String   @map("created_by_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  account   Account  @relation(fields: [accountId], references: [id])
+  currency  Currency @relation(fields: [currencyId], references: [id])
+  market    Market   @relation(fields: [marketId], references: [id])
+  createdBy User     @relation(fields: [createdById], references: [id])
+
+  @@index([marketId])
+  @@index([accountId])
+  @@map("opening_balances")
+}

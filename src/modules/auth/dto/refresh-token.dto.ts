@@ -1,3 +1,7 @@
+import { IsString } from 'class-validator';
+
 export class RefreshTokenDto {
-  refreshToken?: string;
+  @IsString()
+  refreshToken: string;
 }
+// ❌ کلاس دوم RefreshTokenDto را حذف کنید

@@ -1,0 +1,73 @@
+enum AccountType {
+  CASH
+  BANK
+}
+
+model Account {
+  id         String @id @default(uuid()) @db.Uuid
+  marketId   String @map("market_id") @db.Uuid
+  currencyId String @map("currency_id") @db.Uuid
+
+  name String
+  type AccountType
+
+  accountNumber String? @map("account_number")
+  bankName      String? @map("bank_name")
+
+  balance Decimal @default(0) @db.Decimal(18, 4)
+
+  isActive Boolean @default(true) @map("is_active")
+  isSystem Boolean @default(false) @map("is_system")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  market   Market   @relation(fields: [marketId], references: [id])
+  currency Currency @relation(fields: [currencyId], references: [id])
+
+  openingBalances OpeningBalance[]
+
+  expenses                Expense[]
+  rentPayments            RentPayment[]
+  rentCharges             RentCharges[]
+  miscellaneousIncome     MiscellaneousIncome[]
+  electricityPayments     ElectricityPayment[]
+  shareholderTransactions ShareholderTransaction[]
+  collateralItems         CollateralItem[]
+
+  transfersOut AccountTransfer[] @relation("TransferFrom")
+  transfersIn  AccountTransfer[] @relation("TransferTo")
+
+  @@unique([marketId, name])
+  @@index([marketId])
+  @@index([currencyId])
+  @@map("accounts")
+}
+
+// انتقال پول بین دو «بانک/دخل» داخلی (مثلاً صرافی حاجی داود ← دخل مارکت).
+// فقط بین دو Account با ارز یکسان مجاز است (هم‌جنس)؛ این قید در سطح سرویس اعمال می‌شود
+// چون Prisma/Postgres راهی برای مقایسهٔ currencyId دو ردیف مرتبط در سطح schema ندارد.
+model AccountTransfer {
+  id            String @id @default(uuid()) @db.Uuid
+  marketId      String @map("market_id") @db.Uuid
+  fromAccountId String @map("from_account_id") @db.Uuid
+  toAccountId   String @map("to_account_id") @db.Uuid
+
+  amount       Decimal  @db.Decimal(18, 4)
+  transferDate DateTime @map("transfer_date") @db.Timestamptz(6)
+  notes        String?  @db.Text
+
+  createdById String   @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id], onDelete: Restrict)
+  toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id], onDelete: Restrict)
+  createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([marketId])
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@map("account_transfers")
+}

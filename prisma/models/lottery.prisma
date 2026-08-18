@@ -1,0 +1,79 @@
+// ============================
+// قرعه‌کشی/تشویقی — هر خرید بالای یک سقف مبلغ (مثلاً ۵۰۰ افغانی) یک قرعه صادر می‌کند.
+// خریدار معمولاً مشتری است، نه مستاجر/دوکاندار؛ چون در سیستم ثبت‌نام ندارد،
+// نام و تماسش مستقیم روی ردیف LotteryEntry نگه داشته می‌شود (نه FK به Tenant).
+// ============================
+
+enum LotteryDrawStatus {
+  OPEN // هنوز قرعه می‌گیرد
+  CLOSED // مهلت ثبت تمام شده، هنوز قرعه‌کشی نشده
+  DRAWN // برنده(ها) مشخص شده‌اند
+}
+
+model LotteryDraw {
+  id                    String            @id @default(uuid()) @db.Uuid
+  marketId              String            @map("market_id") @db.Uuid
+  title                 String?           @db.VarChar(150)
+  periodStart           DateTime          @map("period_start") @db.Timestamptz(6)
+  periodEnd             DateTime          @map("period_end") @db.Timestamptz(6)
+  ticketThresholdAmount Decimal           @map("ticket_threshold_amount") @db.Decimal(15, 2)
+  status                LotteryDrawStatus @default(OPEN)
+  drawnAt               DateTime?         @map("drawn_at") @db.Timestamptz(6)
+  createdAt             DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market  Market         @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  entries LotteryEntry[]
+  prizes  LotteryPrize[]
+
+  @@index([marketId])
+  @@map("lottery_draws")
+}
+
+model LotteryEntry {
+  id     String  @id @default(uuid()) @db.Uuid
+  drawId String  @map("draw_id") @db.Uuid
+  shopId String? @map("shop_id") @db.Uuid
+
+  buyerName    String  @map("buyer_name") @db.VarChar(150)
+  buyerContact String? @map("buyer_contact") @db.VarChar(30)
+
+  purchaseAmount Decimal @map("purchase_amount") @db.Decimal(15, 2)
+  ticketCount    Int     @map("ticket_count")
+  ticketNumber   String? @map("ticket_number") @db.VarChar(50)
+
+  issuedAt   DateTime @default(now()) @map("issued_at") @db.Timestamptz(6)
+  issuedById String?  @map("issued_by_id") @db.Uuid
+
+  draw     LotteryDraw @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  shop     Shop?       @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  issuedBy User?       @relation(fields: [issuedById], references: [id], onDelete: SetNull)
+
+  wonPrizes LotteryPrize[]
+
+  @@index([drawId])
+  @@index([shopId])
+  @@map("lottery_entries")
+}
+
+model LotteryPrize {
+  id            String  @id @default(uuid()) @db.Uuid
+  drawId        String  @map("draw_id") @db.Uuid
+  winnerEntryId String? @map("winner_entry_id") @db.Uuid
+
+  description String    @db.Text
+  cost        Decimal   @db.Decimal(15, 2)
+  currency    String    @default("AFN") @db.VarChar(10)
+  awardedAt   DateTime? @map("awarded_at") @db.Timestamptz(6)
+
+  // پس از اهدا، هزینه‌اش به‌عنوان یک مصرف هم ثبت می‌شود.
+  expenseId String? @map("expense_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  draw        LotteryDraw   @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  winnerEntry LotteryEntry? @relation(fields: [winnerEntryId], references: [id], onDelete: SetNull)
+  expense     Expense?      @relation(fields: [expenseId], references: [id], onDelete: SetNull)
+
+  @@index([drawId])
+  @@map("lottery_prizes")
+}

@@ -1,3 +1,28 @@
-// expenses.prisma
-// Existing TypeORM files: src/modules/expenses/entities/*.ts
-// Placeholder - entity files lack field definitions; provide schema to generate models.
+model Expense {
+  id            String   @id @default(uuid()) @db.Uuid
+  marketId      String   @map("market_id") @db.Uuid
+  categoryId    String   @map("category_id") @db.Uuid
+  amount        Decimal  @db.Decimal(18, 2)
+  currencyId    String   @map("currency_id") @db.Uuid
+  usdEquivalent Decimal? @map("usd_equivalent") @db.Decimal(18, 2)
+  expenseDate   DateTime @map("expense_date") @db.Timestamptz(6)
+  description   String?  @db.Text
+  accountId     String   @map("account_id") @db.Uuid
+  paidById      String   @map("paid_by_id") @db.Uuid
+  receiptImage  String?  @map("receipt_image") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market   Market          @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  category ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  account  Account         @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency Currency        @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  paidBy   User            @relation("ExpensePaidBy", fields: [paidById], references: [id], onDelete: Restrict)
+
+  // وقتی جایزهٔ قرعه‌کشی اهدا می‌شود، هزینه‌اش این‌جا هم به‌عنوان یک مصرف ثبت می‌شود.
+  lotteryPrizes LotteryPrize[]
+
+  @@index([marketId])
+  @@index([categoryId])
+  @@index([accountId])
+  @@map("expenses")
+}

@@ -1,3 +1,32 @@
-// tenant.prisma
-// Existing TypeORM file: src/modules/tenants/entities/tenant.entity.ts
-// Placeholder - entity file has no concrete fields; supply definitions to create model.
+model Tenant {
+  id              String   @id @default(uuid()) @db.Uuid
+  marketId        String   @map("market_id") @db.Uuid
+  fullName        String   @map("full_name") @db.VarChar(150)
+  fatherName      String?  @map("father_name") @db.VarChar(100)
+  grandfatherName String?  @map("grandfather_name") @db.VarChar(100)
+  idNumber        String?  @map("id_number") @db.VarChar(50)
+  contact         String?  @db.VarChar(30)
+  gender          Gender?
+  details         String?  @db.Text
+  photo           String?  @db.Text
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market       Market        @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  guarantors   Guarantor[]
+  contracts    Contract[]
+  rentCharges  RentCharges[]
+  rentPayments RentPayment[]
+  rentDebt     RentDebt?
+  overdueDebts OverdueDebt[]
+  shops        Shop[]
+
+  electricityBills    ElectricityBill[]
+  electricityPayments ElectricityPayment[]
+  electricityDebt     ElectricityDebt?
+  collateralItems     CollateralItem[]
+
+  @@index([marketId])
+  @@index([idNumber])
+  @@map("tenants")
+}

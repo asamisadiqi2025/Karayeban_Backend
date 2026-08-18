@@ -16,6 +16,7 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
+        "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "paths": {}

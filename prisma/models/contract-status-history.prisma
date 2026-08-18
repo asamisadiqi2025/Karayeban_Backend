@@ -1,0 +1,16 @@
+model ContractStatusHistory {
+  id          String          @id @default(uuid()) @db.Uuid
+  contractId  String          @map("contract_id") @db.Uuid
+  fromStatus  ContractStatus? @map("from_status")
+  toStatus    ContractStatus  @map("to_status")
+  changedAt   DateTime        @default(now()) @map("changed_at") @db.Timestamptz(6)
+  changedById String?         @map("changed_by_id") @db.Uuid
+  reason      String?         @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  contract  Contract @relation("ContractStatusHistory", fields: [contractId], references: [id], onDelete: Cascade)
+  changedBy User?    @relation("ContractStatusChangedBy", fields: [changedById], references: [id], onDelete: SetNull)
+
+  @@index([contractId])
+  @@map("contract_status_history")
+}

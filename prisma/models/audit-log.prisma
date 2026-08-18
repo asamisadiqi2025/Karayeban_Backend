@@ -1,0 +1,22 @@
+model AuditLog {
+  id         String      @id @default(uuid()) @db.Uuid
+  marketId   String      @map("market_id") @db.Uuid
+  userId     String?     @map("user_id") @db.Uuid
+  action     AuditAction
+  entityType String      @map("entity_type") @db.VarChar(100)
+  entityId   String      @map("entity_id") @db.Uuid
+  oldData    Json?       @map("old_data")
+  newData    Json?       @map("new_data")
+  ipAddress  String?     @map("ip_address") @db.Inet
+  userAgent  String?     @map("user_agent") @db.Text
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([marketId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

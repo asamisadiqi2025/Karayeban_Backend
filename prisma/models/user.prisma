@@ -1,18 +1,54 @@
-
 model User {
   id           String   @id @default(uuid()) @db.Uuid
-  username     String   @db.VarChar(100)
-  fullName     String   @db.VarChar(150)
-  email        String   @db.VarChar(255)
-  passwordHash String   @db.VarChar(255)
-  role         String   @db.VarChar(50)
-  customRoleId String?  @db.Uuid
-  marketId     String   @db.Uuid
-  isActive     Boolean  @default(true)
-  lastLogin    DateTime? @db.Timestamp(6)
-  createdAt    DateTime @default(now()) @db.Timestamp(6)
-  updatedAt    DateTime @updatedAt @db.Timestamp(6)
+  fullName     String   @map("full_name") @db.VarChar(150)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  role         UserRole @default(STAFF)
+  customRoleId String?  @map("custom_role_id") @db.Uuid
+  marketId     String?  @map("market_id") @db.Uuid
 
-  @@unique([username], map: "IDX_users_username_unique")
+  fatherName      String? @map("father_name") @db.VarChar(100)
+  grandfatherName String? @map("grandfather_name") @db.VarChar(100)
+  phone           String? @db.VarChar(30)
+  tazkiraNumber   String? @unique @map("tazkira_number") @db.VarChar(50)
+  address         String? @db.Text
+  profilePhoto    String? @map("profile_photo") @db.Text
+
+  extraPermissions  Json? @map("extra_permissions")
+  deniedPermissions Json? @map("denied_permissions")
+
+  isSuperAdmin Boolean   @default(false) @map("is_super_admin")
+  isActive     Boolean   @default(true) @map("is_active")
+  lastLogin    DateTime? @map("last_login") @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market     Market?     @relation(fields: [marketId], references: [id], onDelete: SetNull)
+  customRole CustomRole? @relation(fields: [customRoleId], references: [id], onDelete: SetNull)
+
+  refreshTokens RefreshToken[]
+
+  terminatedContracts          Contract[]               @relation("ContractTerminatedBy")
+  collectedRentPayments        RentPayment[]            @relation("RentCollectedBy")
+  createdRentCharges           RentCharges[]            @relation("RentChargeCreator")
+  changedContractStatuses      ContractStatusHistory[]  @relation("ContractStatusChangedBy")
+  paidExpenses                 Expense[]                @relation("ExpensePaidBy")
+  depreciationEvents           DepreciationEvent[]      @relation("DepreciationAppliedBy")
+  shareholderTransactions      ShareholderTransaction[] @relation("ShareholderTransactionCreatedBy")
+  shareholderEquityChanges     ShareholderEquity[]
+  accountTransfers             AccountTransfer[]
+  openingBalances              OpeningBalance[]
+  createdElectricityBills      ElectricityBill[]        @relation("ElectricityBillCreator")
+  collectedElectricityPayments ElectricityPayment[]     @relation("ElectricityCollectedBy")
+  createdCollateralItems       CollateralItem[]
+  issuedLotteryEntries         LotteryEntry[]
+  approvedSettlements          ContractSettlement[]
+  createdExchangeRates         ExchangeRate[]
+  refreshToken                 String?                  @map("refresh_token") @db.Text
+  refreshTokenExpiry           DateTime?                @map("refresh_token_expiry") @db.Timestamptz(6)
+  auditLogs                    AuditLog[]
+
+  @@index([marketId])
+  @@index([customRoleId])
   @@map("users")
 }

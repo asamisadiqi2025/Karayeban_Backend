@@ -1,3 +1,43 @@
-// rent-debt.prisma
-// Existing TypeORM file: src/modules/rent/entities/rent-debt.entity.ts
-// Placeholder - no field definitions in the entity source.
+// ============================
+// مدل RentDebt - خلاصه وضعیت بدهی هر مستأجر
+// ============================
+
+enum DebtStatus {
+  CLEAN // بدهی صفر یا مثبت (بستانکار)
+  LOW // بدهی کمتر از یک ماه
+  MEDIUM // بدهی ۱ تا ۳ ماه
+  HIGH // بدهی بیش از ۳ ماه
+  CRITICAL // بدهی بیش از ۶ ماه یا دارای شکایت
+}
+
+model RentDebt {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @unique @map("tenant_id") @db.Uuid
+
+  // مبالغ کلی
+  totalDebt         Decimal @default(0) @map("total_debt") @db.Decimal(18, 2)
+  overdueDebt       Decimal @default(0) @map("overdue_debt") @db.Decimal(18, 2)
+  lastChargeAmount  Decimal @default(0) @map("last_charge_amount") @db.Decimal(18, 2)
+  lastPaymentAmount Decimal @default(0) @map("last_payment_amount") @db.Decimal(18, 2)
+
+  // تاریخ‌های آخرین رویدادها
+  lastChargeDate  DateTime? @map("last_charge_date") @db.Timestamptz(6)
+  lastPaymentDate DateTime? @map("last_payment_date") @db.Timestamptz(6)
+
+  // وضعیت کلی
+  status    DebtStatus @default(CLEAN)
+  riskScore Int?       @map("risk_score") // امتیاز ریسک (مثلاً ۱ تا ۱۰۰)
+
+  // اطلاعات تکمیلی
+  notes     String?  @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // ارتباط با مستأجر
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // ایندکس‌ها
+  @@index([tenantId])
+  @@index([status])
+  @@index([updatedAt])
+  @@map("rent_debts")
+}

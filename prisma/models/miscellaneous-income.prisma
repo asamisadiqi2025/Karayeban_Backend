@@ -1,0 +1,19 @@
+model MiscellaneousIncome {
+  id          String   @id @default(uuid()) @db.Uuid
+  marketId    String   @map("market_id") @db.Uuid
+  type        String   @db.VarChar(100)
+  amount      Decimal  @db.Decimal(18, 2)
+  currencyId  String   @map("currency_id") @db.Uuid
+  accountId   String   @map("account_id") @db.Uuid
+  date        DateTime @db.Timestamptz(6)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market   Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+
+  @@index([marketId])
+  @@index([accountId])
+  @@map("miscellaneous_income")
+}

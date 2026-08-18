@@ -1,3 +1,65 @@
-// contract.prisma
-// Existing TypeORM file: src/modules/contracts/entities/contract.entity.ts
-// Placeholder - provide schema fields to create model.
+model Contract {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String  @map("market_id") @db.Uuid
+  // برای دوکان‌های ادغام‌شده، shopId به دوکانِ اصلی/فاکتورشونده اشاره می‌کند؛
+  // فهرست کامل همهٔ دوکان‌های تحت این قرارداد از رابطهٔ contractShops به‌دست می‌آید.
+  // نکته: هیچ قید دیتابیسی جلوی دو قرارداد status=active هم‌زمان روی یک shopId را نمی‌گیرد؛
+  // باید با یک migration دستی (CREATE UNIQUE INDEX ... WHERE status = 'active') و/یا چک تراکنشی در سرویس تضمین شود.
+  shopId   String? @map("shop_id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid
+
+  startDate DateTime?      @map("start_date")
+  endDate   DateTime?      @map("end_date")
+  status    ContractStatus @default(draft)
+  rent      Decimal?       @db.Decimal(18, 2)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop   Shop?   @relation("ContractPrimaryShop", fields: [shopId], references: [id], onDelete: SetNull)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  rentCharges    RentCharges[]
+  rentPayments   RentPayment[]
+  statusHistory  ContractStatusHistory[] @relation("ContractStatusHistory")
+  terminatedById String?                 @map("terminated_by_id") @db.Uuid
+  terminatedBy   User?                   @relation("ContractTerminatedBy", fields: [terminatedById], references: [id], onDelete: SetNull)
+
+  currentShop Shop? @relation("CurrentShopContract")
+
+  // همهٔ دوکان‌های تحت پوشش این قرارداد (برای قرارداد ساده یک ردیف، برای دوکان‌های ادغام‌شده چند ردیف).
+  contractShops   ContractShop[]
+  // دورهٔ ادغامی که این قرارداد میزبان آن بوده (برای همبستگی با کنتور برق مشترک).
+  shopGroups      ShopGroup[]
+  collateralItems CollateralItem[]
+
+  // اگر این قرارداد از تمدید یک قرارداد قبلی ساخته شده، زنجیرهٔ تمدید قابل‌بازسازی است.
+  renewedFromContractId String?   @unique @map("renewed_from_contract_id") @db.Uuid
+  renewedFromContract   Contract? @relation("ContractRenewal", fields: [renewedFromContractId], references: [id], onDelete: SetNull)
+  renewedToContract     Contract? @relation("ContractRenewal")
+
+  settlement ContractSettlement?
+
+  @@index([marketId])
+  @@index([shopId])
+  @@index([tenantId])
+  @@map("contracts")
+}
+
+// پیوند چندبه‌چند بین قرارداد و دوکان — برای زمانی که چند دوکانِ ادغام‌شده زیر یک قرارداد واحد می‌روند.
+model ContractShop {
+  id         String    @id @default(uuid()) @db.Uuid
+  contractId String    @map("contract_id") @db.Uuid
+  shopId     String    @map("shop_id") @db.Uuid
+  isPrimary  Boolean   @default(false) @map("is_primary")
+  joinedAt   DateTime  @default(now()) @map("joined_at") @db.Timestamptz(6)
+  leftAt     DateTime? @map("left_at") @db.Timestamptz(6)
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  shop     Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+
+  @@unique([contractId, shopId])
+  @@index([contractId])
+  @@index([shopId])
+  @@map("contract_shops")
+}

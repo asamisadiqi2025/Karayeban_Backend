@@ -1,0 +1,23 @@
+model Asset {
+  id                 String      @id @default(uuid()) @db.Uuid
+  marketId           String      @map("market_id") @db.Uuid
+  name               String      @db.VarChar(150)
+  category           String?     @db.VarChar(100)
+  purchasePrice      Decimal     @map("purchase_price") @db.Decimal(12, 2)
+  currencyId         String      @map("currency_id") @db.Uuid
+  lifespanYears      Int         @map("lifespan_years")
+  annualDepreciation Decimal     @map("annual_depreciation") @db.Decimal(12, 2)
+  currentBookValue   Decimal     @map("current_book_value") @db.Decimal(12, 2)
+  purchaseDate       DateTime    @map("purchase_date")
+  status             AssetStatus @default(active)
+  details            String?     @db.Text
+  isDeleted          Boolean     @default(false) @map("is_deleted")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market             Market              @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  currency           Currency            @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  depreciationEvents DepreciationEvent[]
+
+  @@map("assets")
+}

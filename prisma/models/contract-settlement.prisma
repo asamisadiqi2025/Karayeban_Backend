@@ -1,0 +1,32 @@
+enum SettlementMethod {
+  CASH
+  COLLATERAL
+  WRITE_OFF
+  MIXED
+}
+
+// تسویهٔ نهایی هنگام خروج مستاجر/پایان قرارداد — رکورد ساختاریافتهٔ اینکه بدهی چگونه صفر شد
+// (نقد، از محل وثیقهٔ جنسی، بخشیده‌شده، یا ترکیبی)، به‌جای یک متن آزاد در ContractStatusHistory.reason.
+model ContractSettlement {
+  id         String @id @default(uuid()) @db.Uuid
+  contractId String @unique @map("contract_id") @db.Uuid
+
+  finalRentDebt        Decimal          @map("final_rent_debt") @db.Decimal(18, 2)
+  finalElectricityDebt Decimal          @map("final_electricity_debt") @db.Decimal(15, 2)
+  settlementMethod     SettlementMethod @map("settlement_method")
+  settledAmount        Decimal          @map("settled_amount") @db.Decimal(18, 2)
+  currency             String           @default("AFN") @db.VarChar(10)
+
+  notes        String?  @db.Text
+  approvedById String?  @map("approved_by_id") @db.Uuid
+  settledAt    DateTime @map("settled_at") @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  approvedBy User?    @relation(fields: [approvedById], references: [id], onDelete: SetNull)
+
+  // اجناس وثیقه‌ای که برای پوشش بدهی در همین تسویه فروخته/برگردانده شدند.
+  collateralItems CollateralItem[]
+
+  @@map("contract_settlements")
+}

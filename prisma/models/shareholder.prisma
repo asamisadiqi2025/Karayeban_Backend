@@ -1,0 +1,68 @@
+// ============================
+// سهام‌داران مارکت — برداشت/واریز از هر بانک + درصد سهم تاریخچه‌دار
+// ============================
+
+model Shareholder {
+  id        String   @id @default(uuid()) @db.Uuid
+  marketId  String   @map("market_id") @db.Uuid
+  fullName  String   @map("full_name") @db.VarChar(150)
+  contact   String?  @db.VarChar(30)
+  idNumber  String?  @map("id_number") @db.VarChar(50)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market        Market                   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  equityHistory ShareholderEquity[]
+  transactions  ShareholderTransaction[]
+
+  @@index([marketId])
+  @@map("shareholders")
+}
+
+// درصد سهم هر سهام‌دار در طول زمان — هر بار که سهم خرید/فروخت یک ردیف جدید ثبت می‌شود
+// (نه آپدیت روی جای قبلی)، تا تاریخچهٔ کامل مالکیت قابل بازسازی بماند.
+// درصد «فعلی» = آخرین ردیف بر اساس effectiveFrom برای آن سهام‌دار.
+model ShareholderEquity {
+  id            String   @id @default(uuid()) @db.Uuid
+  shareholderId String   @map("shareholder_id") @db.Uuid
+  percentage    Decimal  @db.Decimal(5, 2)
+  effectiveFrom DateTime @map("effective_from") @db.Date
+  notes         String?  @db.Text
+  createdById   String?  @map("created_by_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
+  createdBy   User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([shareholderId, effectiveFrom])
+  @@map("shareholder_equity_history")
+}
+
+enum ShareholderTransactionType {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+model ShareholderTransaction {
+  id              String                     @id @default(uuid()) @db.Uuid
+  marketId        String                     @map("market_id") @db.Uuid
+  shareholderId   String                     @map("shareholder_id") @db.Uuid
+  accountId       String                     @map("account_id") @db.Uuid
+  type            ShareholderTransactionType
+  amount          Decimal                    @db.Decimal(18, 2)
+  transactionDate DateTime                   @map("transaction_date") @db.Timestamptz(6)
+  receiptNumber   String?                    @map("receipt_number") @db.VarChar(100)
+  details         String?                    @db.Text
+  createdById     String?                    @map("created_by_id") @db.Uuid
+  createdAt       DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market      @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Restrict)
+  account     Account     @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  createdBy   User?       @relation("ShareholderTransactionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([marketId])
+  @@index([shareholderId])
+  @@index([accountId])
+  @@map("shareholder_transactions")
+}

@@ -1,0 +1,50 @@
+// ============================
+// گدام — اجناسی که مستاجر به‌جای پول نقد به‌عنوان وثیقهٔ بدهی می‌گذارد.
+// اگر بدهی تسویه نشود، جنس فروخته می‌شود (status=SOLD) و مبلغ فروش صرف بدهی می‌شود.
+// ============================
+
+enum CollateralStatus {
+  HELD // در گدام است
+  RETURNED // بدون فروش به مستاجر پس داده شد
+  SOLD // برای پوشش بدهی فروخته شد
+}
+
+model CollateralItem {
+  id         String  @id @default(uuid()) @db.Uuid
+  marketId   String  @map("market_id") @db.Uuid
+  tenantId   String  @map("tenant_id") @db.Uuid
+  contractId String? @map("contract_id") @db.Uuid
+
+  description    String           @db.Text
+  estimatedValue Decimal          @map("estimated_value") @db.Decimal(15, 2)
+  currency       String           @default("AFN") @db.VarChar(10)
+  receivedDate   DateTime         @map("received_date") @db.Timestamptz(6)
+  status         CollateralStatus @default(HELD)
+
+  returnedDate DateTime? @map("returned_date") @db.Timestamptz(6)
+
+  // جزئیات فروش — وقتی دوکاندار بدهی خود را نیاورد و جنسش فروخته می‌شود
+  soldDate            DateTime? @map("sold_date") @db.Timestamptz(6)
+  soldAmount          Decimal?  @map("sold_amount") @db.Decimal(15, 2)
+  soldToDescription   String?   @map("sold_to_description") @db.Text
+  appliedToDebtAmount Decimal?  @map("applied_to_debt_amount") @db.Decimal(15, 2)
+  accountId           String?   @map("account_id") @db.Uuid
+  settlementId        String?   @map("settlement_id") @db.Uuid
+
+  notes       String?  @db.Text
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market     Market              @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  tenant     Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  contract   Contract?           @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  account    Account?            @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  createdBy  User?               @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  settlement ContractSettlement? @relation(fields: [settlementId], references: [id], onDelete: SetNull)
+
+  @@index([marketId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("collateral_items")
+}

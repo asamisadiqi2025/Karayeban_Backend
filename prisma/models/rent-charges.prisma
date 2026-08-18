@@ -1,0 +1,62 @@
+// ============================
+// مدل RentCharges - فاکتور/بدهکاری اجاره
+// ============================
+
+enum RentChargeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELED
+}
+
+model RentCharges {
+  id         String @id @default(uuid()) @db.Uuid
+  marketId   String @map("market_id") @db.Uuid
+  contractId String @map("contract_id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  shopId     String @map("shop_id") @db.Uuid
+
+  periodStart DateTime @map("period_start") @db.Timestamptz(6)
+  periodEnd   DateTime @map("period_end") @db.Timestamptz(6)
+  days        Int
+  dailyRate   Decimal  @map("daily_rate") @db.Decimal(15, 2)
+
+  // ========== ✅ ستون‌های محاسباتی (بدون @dbgenerated) ==========
+  // این مقادیر را در کد NestJS محاسبه کنید
+  grossAmount     Decimal @default(0) @map("gross_amount") @db.Decimal(15, 2)
+  discountAmount  Decimal @default(0) @map("discount_amount") @db.Decimal(15, 2)
+  netAmount       Decimal @default(0) @map("net_amount") @db.Decimal(15, 2)
+  paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(15, 2)
+  remainingAmount Decimal @default(0) @map("remaining_amount") @db.Decimal(15, 2)
+  // ============================================================
+
+  currencyId String           @map("currency_id") @db.Uuid
+  status     RentChargeStatus @default(PENDING)
+
+  accountId   String? @map("account_id") @db.Uuid
+  createdById String? @map("created_by_id") @db.Uuid
+  notes       String? @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  contract  Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  currency  Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation("RentChargeCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  // یک پرداخت می‌تواند بین چند فاکتور/ماه تقسیم شود؛ منبع حقیقت تخصیص RentPaymentAllocation است.
+  allocations RentPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([contractId])
+  @@index([tenantId])
+  @@index([shopId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@map("rent_charges")
+}

@@ -1,3 +1,16 @@
-// floor.prisma
-// Existing TypeORM file: src/modules/floors/entities/floor.entity.ts
-// Placeholder: no fields found in source entity file; provide definitions to generate model.
+model Floor {
+  id          String   @id @default(uuid()) @db.Uuid
+  marketId    String   @map("market_id") @db.Uuid
+  floorNumber Int      @map("floor_number")
+  name        String?  @db.VarChar(100)
+  details     String?  @db.Text
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shops  Shop[]
+
+  @@unique([marketId, floorNumber])
+  @@index([marketId])
+  @@map("floors")
+}

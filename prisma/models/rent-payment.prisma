@@ -1,3 +1,58 @@
-// rent-payment.prisma
-// Existing TypeORM file: src/modules/rent/entities/rent-payment.entity.ts
-// Placeholder - entity has no fields defined in source; provide schema to generate model.
+model RentPayment {
+  id            String        @id @default(uuid()) @db.Uuid
+  marketId      String        @map("market_id") @db.Uuid
+  contractId    String        @map("contract_id") @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  shopId        String        @map("shop_id") @db.Uuid
+  // month/year بر مبنای تقویم هجری‌شمسی‌اند (month: 1=حمل ... 12=حوت، year: سال شمسی)، نه میلادی.
+  month         Int
+  year          Int
+  amount        Decimal       @db.Decimal(18, 2)
+  currencyId    String        @map("currency_id") @db.Uuid
+  usdEquivalent Decimal?      @map("usd_equivalent") @db.Decimal(18, 2)
+  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
+  paymentMethod PaymentMethod @map("payment_method")
+  accountId     String        @map("account_id") @db.Uuid
+  collectedById String        @map("collected_by_id") @db.Uuid
+  notes         String?       @db.Text
+  isPartial     Boolean       @default(false) @map("is_partial")
+  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  contract    Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  account     Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency    Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  collectedBy User     @relation("RentCollectedBy", fields: [collectedById], references: [id], onDelete: Restrict)
+
+  // این پرداخت (یک رسید فیزیکی واحد) می‌تواند بین چند فاکتور/ماه تقسیم شود —
+  // مثلاً ۱۰۰۰ افغانی که بخشی بدهی ماه قبل و بخشی ماه جاری را می‌پوشاند.
+  allocations RentPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([contractId])
+  @@index([tenantId])
+  @@index([shopId])
+  @@index([year, month])
+  @@map("rent_payments")
+}
+
+// تخصیص یک پرداخت به یک یا چند فاکتور کرایه (چندبه‌چند).
+// سرویس هنگام ثبت پرداخت، مبلغ را ابتدا به قدیمی‌ترین فاکتور بازِ مستاجر (بر اساس periodStart) تخصیص می‌دهد.
+model RentPaymentAllocation {
+  id           String   @id @default(uuid()) @db.Uuid
+  paymentId    String   @map("payment_id") @db.Uuid
+  rentChargeId String   @map("rent_charge_id") @db.Uuid
+  amount       Decimal  @db.Decimal(18, 2)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  payment    RentPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  rentCharge RentCharges @relation(fields: [rentChargeId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, rentChargeId])
+  @@index([paymentId])
+  @@index([rentChargeId])
+  @@map("rent_payment_allocations")
+}
