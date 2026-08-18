@@ -16,11 +16,17 @@ export class MarketService {
       address: dto.address,
       phone: dto.phone || null,
       logo: dto.logo || null,
-      baseCurrency: dto.baseCurrency || 'AFN',
       exchangeRate: dto.exchangeRate || 0,
       hasWater: dto.hasWater || false,
       isSetupComplete: false,
     };
+
+    // map baseCurrency string (code or id) to Prisma nested connect object
+    // map `baseCurrency` to a nested connect; default to 'AFN' if not provided
+    const baseCode = dto.baseCurrency || 'AFN';
+    if (baseCode) {
+      data.baseCurrency = { connect: { code: baseCode } };
+    }
 
     const market = await this.prisma.market.create({ data });
     return market;
@@ -38,7 +44,12 @@ export class MarketService {
     if (!market) throw new NotFoundException('Market not found');
     if (currentUser.role !== 'SUPER_ADMIN' && currentUser.marketId !== id) throw new ForbiddenException('Access denied');
 
-    const updated = await this.prisma.market.update({ where: { id }, data: { ...dto } });
+    // prepare update payload and map baseCurrency to nested connect when provided
+    const { baseCurrency, ...rest } = dto as any;
+    const updateData: any = { ...rest };
+    if (baseCurrency) updateData.baseCurrency = { connect: { code: baseCurrency } };
+
+    const updated = await this.prisma.market.update({ where: { id }, data: updateData });
     return updated;
   }
 
