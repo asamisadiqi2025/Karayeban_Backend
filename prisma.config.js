@@ -1,19 +1,23 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("prisma/config");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-exports.default = (0, config_1.defineConfig)({
+const { defineConfig } = require('prisma/config');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+    throw new Error('DATABASE_URL environment variable is required by prisma.config.js');
+}
+
+module.exports = defineConfig({
     schema: 'prisma/',
     migrations: {
         path: 'prisma/migrations',
         seed: 'ts-node --transpile-only prisma/seed.ts',
     },
     datasource: {
-        url: process.env.DATABASE_URL,
+        url: databaseUrl,
     },
 });
+
 //# sourceMappingURL=prisma.config.js.map

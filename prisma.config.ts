@@ -3,6 +3,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+  throw new Error('DATABASE_URL environment variable is required by prisma.config.ts');
+}
+
 export default defineConfig({
   schema: 'prisma/',
 
@@ -12,6 +17,6 @@ export default defineConfig({
   },
 
   datasource: {
-    url: process.env.DATABASE_URL!,
+    url: databaseUrl,
   },
 });
