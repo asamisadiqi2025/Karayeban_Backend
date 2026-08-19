@@ -5,13 +5,25 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import * as bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // ==========================================
 // ایجاد PrismaClient با adapter
 // ==========================================
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const connectionString = process.env.DATABASE_URL;
+const pool = connectionString
+  ? new Pool({ connectionString, ssl: { rejectUnauthorized: false } })
+  : new Pool({
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
+      user: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD ? String(process.env.DB_PASSWORD) : undefined,
+      database: process.env.DB_NAME,
+      // optional: enable SSL if your production DB requires it
+      // ssl: { rejectUnauthorized: false },
+    });
 
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });

@@ -1,6 +1,7 @@
 import { Controller, Post, Body, UseGuards, Req, Get, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterSuperAdminDto } from './dto/register-super-admin.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { Public } from '../../common/decorators/public.decorator';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
@@ -14,6 +15,12 @@ export class AuthController {
   @Post('login')
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
+  }
+
+  @Public()
+  @Post('register-super-admin')
+  async registerSuperAdmin(@Body() dto: RegisterSuperAdminDto) {
+    return this.authService.registerSuperAdmin(dto);
   }
 
   @Public()
