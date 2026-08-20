@@ -1,9 +1,16 @@
-import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { UserRole } from './create-user.dto';
 
 export class UpdateUserDto {
   @IsOptional()
+  @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase() : value))
   @IsString()
+  @MinLength(3)
+  @MaxLength(30)
+  @Matches(/^[a-z0-9_.]+$/, {
+    message: 'username can only contain lowercase letters, numbers, "_" and "."',
+  })
   username?: string;
 
   @IsOptional()
