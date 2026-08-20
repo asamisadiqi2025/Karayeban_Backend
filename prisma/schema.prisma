@@ -5,3 +5,1295 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum AccountType {
+  CASH
+  BANK
+}
+
+model Account {
+  id         String @id @default(uuid()) @db.Uuid
+  marketId   String @map("market_id") @db.Uuid
+  currencyId String @map("currency_id") @db.Uuid
+
+  name String
+  type AccountType
+
+  accountNumber String? @map("account_number")
+  bankName      String? @map("bank_name")
+
+  balance Decimal @default(0) @db.Decimal(18, 4)
+
+  isActive Boolean @default(true) @map("is_active")
+  isSystem Boolean @default(false) @map("is_system")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  market   Market   @relation(fields: [marketId], references: [id])
+  currency Currency @relation(fields: [currencyId], references: [id])
+
+  openingBalances OpeningBalance[]
+
+  expenses                Expense[]
+  rentPayments            RentPayment[]
+  rentCharges             RentCharges[]
+  miscellaneousIncome     MiscellaneousIncome[]
+  electricityPayments     ElectricityPayment[]
+  shareholderTransactions ShareholderTransaction[]
+  collateralItems         CollateralItem[]
+
+  transfersOut AccountTransfer[] @relation("TransferFrom")
+  transfersIn  AccountTransfer[] @relation("TransferTo")
+
+  @@unique([marketId, name])
+  @@index([marketId])
+  @@index([currencyId])
+  @@map("accounts")
+}
+
+// انتقال پول بین دو «بانک/دخل» داخلی (مثلاً صرافی حاجی داود ← دخل مارکت).
+// فقط بین دو Account با ارز یکسان مجاز است (هم‌جنس)؛ این قید در سطح سرویس اعمال می‌شود
+// چون Prisma/Postgres راهی برای مقایسهٔ currencyId دو ردیف مرتبط در سطح schema ندارد.
+model AccountTransfer {
+  id            String @id @default(uuid()) @db.Uuid
+  marketId      String @map("market_id") @db.Uuid
+  fromAccountId String @map("from_account_id") @db.Uuid
+  toAccountId   String @map("to_account_id") @db.Uuid
+
+  amount       Decimal  @db.Decimal(18, 4)
+  transferDate DateTime @map("transfer_date") @db.Timestamptz(6)
+  notes        String?  @db.Text
+
+  createdById String   @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id], onDelete: Restrict)
+  toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id], onDelete: Restrict)
+  createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([marketId])
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@map("account_transfers")
+}
+
+
+model Asset {
+  id                 String      @id @default(uuid()) @db.Uuid
+  marketId           String      @map("market_id") @db.Uuid
+  name               String      @db.VarChar(150)
+  category           String?     @db.VarChar(100)
+  purchasePrice      Decimal     @map("purchase_price") @db.Decimal(12, 2)
+  currencyId         String      @map("currency_id") @db.Uuid
+  lifespanYears      Int         @map("lifespan_years")
+  annualDepreciation Decimal     @map("annual_depreciation") @db.Decimal(12, 2)
+  currentBookValue   Decimal     @map("current_book_value") @db.Decimal(12, 2)
+  purchaseDate       DateTime    @map("purchase_date")
+  status             AssetStatus @default(active)
+  details            String?     @db.Text
+  isDeleted          Boolean     @default(false) @map("is_deleted")
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market             Market              @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  currency           Currency            @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  depreciationEvents DepreciationEvent[]
+
+  @@map("assets")
+}
+
+
+model AuditLog {
+  id         String      @id @default(uuid()) @db.Uuid
+  marketId   String      @map("market_id") @db.Uuid
+  userId     String?     @map("user_id") @db.Uuid
+  action     AuditAction
+  entityType String      @map("entity_type") @db.VarChar(100)
+  entityId   String      @map("entity_id") @db.Uuid
+  oldData    Json?       @map("old_data")
+  newData    Json?       @map("new_data")
+  ipAddress  String?     @map("ip_address") @db.Inet
+  userAgent  String?     @map("user_agent") @db.Text
+  createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([marketId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+
+// auth.prisma
+// This file is intentionally left empty to avoid duplicating the User model.
+// The actual User model now lives in user.prisma.
+
+
+// ============================
+// گدام — اجناسی که مستاجر به‌جای پول نقد به‌عنوان وثیقهٔ بدهی می‌گذارد.
+// اگر بدهی تسویه نشود، جنس فروخته می‌شود (status=SOLD) و مبلغ فروش صرف بدهی می‌شود.
+// ============================
+
+enum CollateralStatus {
+  HELD // در گدام است
+  RETURNED // بدون فروش به مستاجر پس داده شد
+  SOLD // برای پوشش بدهی فروخته شد
+}
+
+model CollateralItem {
+  id         String  @id @default(uuid()) @db.Uuid
+  marketId   String  @map("market_id") @db.Uuid
+  tenantId   String  @map("tenant_id") @db.Uuid
+  contractId String? @map("contract_id") @db.Uuid
+
+  description    String           @db.Text
+  estimatedValue Decimal          @map("estimated_value") @db.Decimal(15, 2)
+  currency       String           @default("AFN") @db.VarChar(10)
+  receivedDate   DateTime         @map("received_date") @db.Timestamptz(6)
+  status         CollateralStatus @default(HELD)
+
+  returnedDate DateTime? @map("returned_date") @db.Timestamptz(6)
+
+  // جزئیات فروش — وقتی دوکاندار بدهی خود را نیاورد و جنسش فروخته می‌شود
+  soldDate            DateTime? @map("sold_date") @db.Timestamptz(6)
+  soldAmount          Decimal?  @map("sold_amount") @db.Decimal(15, 2)
+  soldToDescription   String?   @map("sold_to_description") @db.Text
+  appliedToDebtAmount Decimal?  @map("applied_to_debt_amount") @db.Decimal(15, 2)
+  accountId           String?   @map("account_id") @db.Uuid
+  settlementId        String?   @map("settlement_id") @db.Uuid
+
+  notes       String?  @db.Text
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market     Market              @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  tenant     Tenant              @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  contract   Contract?           @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  account    Account?            @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  createdBy  User?               @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  settlement ContractSettlement? @relation(fields: [settlementId], references: [id], onDelete: SetNull)
+
+  @@index([marketId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("collateral_items")
+}
+
+
+enum SettlementMethod {
+  CASH
+  COLLATERAL
+  WRITE_OFF
+  MIXED
+}
+
+// تسویهٔ نهایی هنگام خروج مستاجر/پایان قرارداد — رکورد ساختاریافتهٔ اینکه بدهی چگونه صفر شد
+// (نقد، از محل وثیقهٔ جنسی، بخشیده‌شده، یا ترکیبی)، به‌جای یک متن آزاد در ContractStatusHistory.reason.
+model ContractSettlement {
+  id         String @id @default(uuid()) @db.Uuid
+  contractId String @unique @map("contract_id") @db.Uuid
+
+  finalRentDebt        Decimal          @map("final_rent_debt") @db.Decimal(18, 2)
+  finalElectricityDebt Decimal          @map("final_electricity_debt") @db.Decimal(15, 2)
+  settlementMethod     SettlementMethod @map("settlement_method")
+  settledAmount        Decimal          @map("settled_amount") @db.Decimal(18, 2)
+  currency             String           @default("AFN") @db.VarChar(10)
+
+  notes        String?  @db.Text
+  approvedById String?  @map("approved_by_id") @db.Uuid
+  settledAt    DateTime @map("settled_at") @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  approvedBy User?    @relation(fields: [approvedById], references: [id], onDelete: SetNull)
+
+  // اجناس وثیقه‌ای که برای پوشش بدهی در همین تسویه فروخته/برگردانده شدند.
+  collateralItems CollateralItem[]
+
+  @@map("contract_settlements")
+}
+
+
+model ContractStatusHistory {
+  id          String          @id @default(uuid()) @db.Uuid
+  contractId  String          @map("contract_id") @db.Uuid
+  fromStatus  ContractStatus? @map("from_status")
+  toStatus    ContractStatus  @map("to_status")
+  changedAt   DateTime        @default(now()) @map("changed_at") @db.Timestamptz(6)
+  changedById String?         @map("changed_by_id") @db.Uuid
+  reason      String?         @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  contract  Contract @relation("ContractStatusHistory", fields: [contractId], references: [id], onDelete: Cascade)
+  changedBy User?    @relation("ContractStatusChangedBy", fields: [changedById], references: [id], onDelete: SetNull)
+
+  @@index([contractId])
+  @@map("contract_status_history")
+}
+
+
+model Contract {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String  @map("market_id") @db.Uuid
+  // برای دوکان‌های ادغام‌شده، shopId به دوکانِ اصلی/فاکتورشونده اشاره می‌کند؛
+  // فهرست کامل همهٔ دوکان‌های تحت این قرارداد از رابطهٔ contractShops به‌دست می‌آید.
+  // نکته: هیچ قید دیتابیسی جلوی دو قرارداد status=active هم‌زمان روی یک shopId را نمی‌گیرد؛
+  // باید با یک migration دستی (CREATE UNIQUE INDEX ... WHERE status = 'active') و/یا چک تراکنشی در سرویس تضمین شود.
+  shopId   String? @map("shop_id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid
+
+  startDate DateTime?      @map("start_date")
+  endDate   DateTime?      @map("end_date")
+  status    ContractStatus @default(draft)
+  rent      Decimal?       @db.Decimal(18, 2)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop   Shop?   @relation("ContractPrimaryShop", fields: [shopId], references: [id], onDelete: SetNull)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  rentCharges    RentCharges[]
+  rentPayments   RentPayment[]
+  statusHistory  ContractStatusHistory[] @relation("ContractStatusHistory")
+  terminatedById String?                 @map("terminated_by_id") @db.Uuid
+  terminatedBy   User?                   @relation("ContractTerminatedBy", fields: [terminatedById], references: [id], onDelete: SetNull)
+
+  currentShop Shop? @relation("CurrentShopContract")
+
+  // همهٔ دوکان‌های تحت پوشش این قرارداد (برای قرارداد ساده یک ردیف، برای دوکان‌های ادغام‌شده چند ردیف).
+  contractShops   ContractShop[]
+  // دورهٔ ادغامی که این قرارداد میزبان آن بوده (برای همبستگی با کنتور برق مشترک).
+  shopGroups      ShopGroup[]
+  collateralItems CollateralItem[]
+
+  // اگر این قرارداد از تمدید یک قرارداد قبلی ساخته شده، زنجیرهٔ تمدید قابل‌بازسازی است.
+  renewedFromContractId String?   @unique @map("renewed_from_contract_id") @db.Uuid
+  renewedFromContract   Contract? @relation("ContractRenewal", fields: [renewedFromContractId], references: [id], onDelete: SetNull)
+  renewedToContract     Contract? @relation("ContractRenewal")
+
+  settlement ContractSettlement?
+
+  @@index([marketId])
+  @@index([shopId])
+  @@index([tenantId])
+  @@map("contracts")
+}
+
+// پیوند چندبه‌چند بین قرارداد و دوکان — برای زمانی که چند دوکانِ ادغام‌شده زیر یک قرارداد واحد می‌روند.
+model ContractShop {
+  id         String    @id @default(uuid()) @db.Uuid
+  contractId String    @map("contract_id") @db.Uuid
+  shopId     String    @map("shop_id") @db.Uuid
+  isPrimary  Boolean   @default(false) @map("is_primary")
+  joinedAt   DateTime  @default(now()) @map("joined_at") @db.Timestamptz(6)
+  leftAt     DateTime? @map("left_at") @db.Timestamptz(6)
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  shop     Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+
+  @@unique([contractId, shopId])
+  @@index([contractId])
+  @@index([shopId])
+  @@map("contract_shops")
+}
+
+
+model Currency {
+  id              String           @id @default(uuid()) @db.Uuid
+  code            String           @unique @db.VarChar(3)
+  name            String?
+  accounts        Account[]
+  openingBalances OpeningBalance[]
+
+  markets             Market[]
+  exchangeRates       ExchangeRate[]
+  expenses            Expense[]
+  rentPayments        RentPayment[]
+  rentCharges         RentCharges[]
+  assets              Asset[]
+  miscellaneousIncome MiscellaneousIncome[]
+}
+
+
+model CustomRole {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(100)
+  marketId    String   @map("market_id") @db.Uuid
+  permissions String[]
+  description String?  @db.Text
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  users  User[]
+
+  @@unique([marketId, name])
+  @@index([marketId])
+  @@map("custom_roles")
+}
+
+
+// electricity.prisma
+// Existing TypeORM files: src/modules/electricity/entities/*.ts
+// Placeholder - no concrete fields found in entity files. Provide schema definitions if needed.
+
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  ACCOUNTANT
+  STAFF
+}
+
+enum ShopType {
+  shop
+  kiosk
+  stall // بساط
+  vendor
+  office
+  warehouse
+}
+
+// چهار وضعیت دقیقاً منطبق با نیازمندی: فعال، غیرفعال، خالی، کرایه‌داده‌شده.
+enum ShopStatus {
+  active
+  inactive
+  empty
+  rented
+}
+
+enum ContractStatus {
+  draft
+  suspended
+  active
+  early_terminated
+  expired
+  cancelled
+}
+
+enum PaymentMethod {
+  cash
+  bank_transfer
+  cheque
+  online
+}
+
+enum MeterStatus {
+  active
+  inactive
+}
+
+enum AssetStatus {
+  active
+  disposed
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  ACTIVATE
+  DEACTIVATE
+  TERMINATE
+  RENEW
+}
+
+
+// تاریخچهٔ نرخ تبدیل هر ارز به ارز پایهٔ مارکت — به‌جای یک عدد تکی روی Market که با نرخ جدید گم می‌شد.
+// چند جفت ارز هم‌زمان (مثلاً AFN↔USD و AFN↔PKR) و نرخ هر روز/دوره قابل نگه‌داری است.
+model ExchangeRate {
+  id            String   @id @default(uuid()) @db.Uuid
+  marketId      String   @map("market_id") @db.Uuid
+  currencyId    String   @map("currency_id") @db.Uuid
+  rateToBase    Decimal  @map("rate_to_base") @db.Decimal(18, 6)
+  effectiveDate DateTime @map("effective_date") @db.Date
+
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  currency  Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@unique([marketId, currencyId, effectiveDate])
+  @@index([marketId])
+  @@index([currencyId, effectiveDate])
+  @@map("exchange_rates")
+}
+
+
+model ExpenseCategory {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String? @map("market_id") @db.Uuid
+  name     String  @db.VarChar(255)
+  isActive Boolean @default(true) @map("is_active")
+
+  market   Market?   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  expenses Expense[]
+
+  @@index([marketId])
+}
+
+
+model Expense {
+  id            String   @id @default(uuid()) @db.Uuid
+  marketId      String   @map("market_id") @db.Uuid
+  categoryId    String   @map("category_id") @db.Uuid
+  amount        Decimal  @db.Decimal(18, 2)
+  currencyId    String   @map("currency_id") @db.Uuid
+  usdEquivalent Decimal? @map("usd_equivalent") @db.Decimal(18, 2)
+  expenseDate   DateTime @map("expense_date") @db.Timestamptz(6)
+  description   String?  @db.Text
+  accountId     String   @map("account_id") @db.Uuid
+  paidById      String   @map("paid_by_id") @db.Uuid
+  receiptImage  String?  @map("receipt_image") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market   Market          @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  category ExpenseCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  account  Account         @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency Currency        @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  paidBy   User            @relation("ExpensePaidBy", fields: [paidById], references: [id], onDelete: Restrict)
+
+  // وقتی جایزهٔ قرعه‌کشی اهدا می‌شود، هزینه‌اش این‌جا هم به‌عنوان یک مصرف ثبت می‌شود.
+  lotteryPrizes LotteryPrize[]
+
+  @@index([marketId])
+  @@index([categoryId])
+  @@index([accountId])
+  @@map("expenses")
+}
+
+
+model ElectricityMeter {
+  id           String      @id @default(uuid()) @db.Uuid
+  marketId     String      @map("market_id") @db.Uuid
+  // شمارهٔ نمایشی کنتور — هنگام ساخت برابر shopNumber مقداردهی می‌شود (شمارهٔ کنتور = شمارهٔ دوکان).
+  meterNumber  String?     @map("meter_number")
+  serialNumber String? // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
+  // shopId «خانهٔ اصلی و ثابت» کنتور است و هنگام ادغام/تفکیک دوکان‌ها هرگز تغییر نمی‌کند؛
+  // فقط status عوض می‌شود (فعال/غیرفعال). دوکان فعلاً‌فعال یک گروه از ShopGroup.primaryMeterId معلوم می‌شود.
+  shopId       String?     @map("shop_id") @db.Uuid
+  status       MeterStatus @default(active)
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market              Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop                Shop?             @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  primaryForShopGroup ShopGroup?        @relation("PrimaryMeterForShopGroup")
+  bills               ElectricityBill[]
+
+  @@unique([marketId, meterNumber])
+  @@index([shopId])
+  @@index([status])
+}
+
+enum ElectricityBillStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELED
+}
+
+// بل برق دوره‌ای (هر دو ماه)؛ جمع‌آوری همچنان هفته‌وار و قسطی است — همان الگوی RentCharges.
+// وقتی paidAmount به totalAmount برسد، سرویس status را PAID می‌کند و دوره «بسته» تلقی می‌شود.
+model ElectricityBill {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String  @map("market_id") @db.Uuid
+  shopId   String  @map("shop_id") @db.Uuid
+  meterId  String? @map("meter_id") @db.Uuid
+  tenantId String? @map("tenant_id") @db.Uuid
+
+  periodStart     DateTime @map("period_start") @db.Timestamptz(6)
+  periodEnd       DateTime @map("period_end") @db.Timestamptz(6)
+  previousReading Decimal? @map("previous_reading") @db.Decimal(12, 2)
+  currentReading  Decimal? @map("current_reading") @db.Decimal(12, 2)
+
+  totalAmount     Decimal @map("total_amount") @db.Decimal(15, 2)
+  paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(15, 2)
+  remainingAmount Decimal @default(0) @map("remaining_amount") @db.Decimal(15, 2)
+
+  currency       String                @default("AFN") @db.VarChar(10)
+  status         ElectricityBillStatus @default(PENDING)
+  // برای بل‌هایی که از کتابچهٔ کاغذی مهاجرت شده‌اند (ن.ک. حالت پرخطر ۵ در گزارش)
+  isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
+
+  notes       String? @db.Text
+  createdById String? @map("created_by_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop      Shop              @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  meter     ElectricityMeter? @relation(fields: [meterId], references: [id], onDelete: SetNull)
+  tenant    Tenant?           @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  createdBy User?             @relation("ElectricityBillCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  allocations ElectricityPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([shopId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@map("electricity_bills")
+}
+
+// خلاصهٔ زندهٔ بدهی برق هر مستأجر — دقیقاً هم‌الگو با RentDebt.
+model ElectricityDebt {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @unique @map("tenant_id") @db.Uuid
+
+  totalDebt         Decimal   @default(0) @map("total_debt") @db.Decimal(15, 2)
+  lastBillAmount    Decimal   @default(0) @map("last_bill_amount") @db.Decimal(15, 2)
+  lastPaymentAmount Decimal   @default(0) @map("last_payment_amount") @db.Decimal(15, 2)
+  lastBillDate      DateTime? @map("last_bill_date") @db.Timestamptz(6)
+  lastPaymentDate   DateTime? @map("last_payment_date") @db.Timestamptz(6)
+
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("electricity_debts")
+}
+
+// یک پرداخت فیزیکی (یک رسید) برای برق؛ می‌تواند بین چند بل تقسیم شود (ن.ک. ElectricityPaymentAllocation) —
+// دقیقاً همان قانونی که برای کرایه خواستید: هر پرداخت اول بدهی قدیمی‌تر را می‌پوشاند.
+model ElectricityPayment {
+  id            String        @id @default(uuid()) @db.Uuid
+  marketId      String        @map("market_id") @db.Uuid
+  shopId        String        @map("shop_id") @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  amount        Decimal       @db.Decimal(15, 2)
+  currency      String        @default("AFN") @db.VarChar(10)
+  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
+  paymentMethod PaymentMethod @map("payment_method")
+  accountId     String?       @map("account_id") @db.Uuid
+  collectedById String?       @map("collected_by_id") @db.Uuid
+  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
+  notes         String?       @db.Text
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  account     Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  collectedBy User?    @relation("ElectricityCollectedBy", fields: [collectedById], references: [id], onDelete: SetNull)
+
+  allocations ElectricityPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([shopId])
+  @@index([tenantId])
+  @@map("electricity_payments")
+}
+
+model ElectricityPaymentAllocation {
+  id        String   @id @default(uuid()) @db.Uuid
+  paymentId String   @map("payment_id") @db.Uuid
+  billId    String   @map("bill_id") @db.Uuid
+  amount    Decimal  @db.Decimal(15, 2)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  payment ElectricityPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  bill    ElectricityBill    @relation(fields: [billId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, billId])
+  @@index([paymentId])
+  @@index([billId])
+  @@map("electricity_payment_allocations")
+}
+
+model OverdueDebt {
+  id       String   @id @default(uuid()) @db.Uuid
+  amount   Decimal?
+  shopId   String?  @map("shop_id") @db.Uuid
+  shop     Shop?    @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  tenantId String?  @map("tenant_id") @db.Uuid
+  tenant   Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+}
+
+// مدل ShareholderTransaction به prisma/models/shareholder.prisma منتقل شد
+// (کنار Shareholder و ShareholderEquity، چون دیگر یک ردیف اسکلتی نیست).
+
+// ==========================================
+// ✅ اصلاح‌شده: اضافه کردن رابطه با Asset
+// ==========================================
+model DepreciationEvent {
+  id                 String   @id @default(uuid()) @db.Uuid
+  assetId            String   @map("asset_id") @db.Uuid // 👈 اضافه شد
+  year               Int
+  depreciationAmount Decimal  @map("depreciation_amount") @db.Decimal(12, 2)
+  bookValueBefore    Decimal  @map("book_value_before") @db.Decimal(12, 2)
+  bookValueAfter     Decimal  @map("book_value_after") @db.Decimal(12, 2)
+  appliedAt          DateTime @default(now()) @map("applied_at") @db.Timestamptz(6)
+  appliedById        String?  @map("applied_by_id") @db.Uuid
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 👇 رابطه با Asset (کلید اصلی)
+  asset     Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  appliedBy User? @relation("DepreciationAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
+
+  @@index([assetId])
+  @@map("depreciation_events")
+}
+
+
+model Floor {
+  id          String   @id @default(uuid()) @db.Uuid
+  marketId    String   @map("market_id") @db.Uuid
+  floorNumber Int      @map("floor_number")
+  name        String?  @db.VarChar(100)
+  details     String?  @db.Text
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shops  Shop[]
+
+  @@unique([marketId, floorNumber])
+  @@index([marketId])
+  @@map("floors")
+}
+
+
+model Guarantor {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String   @db.VarChar(150)
+  contact   String?  @db.VarChar(30)
+  idNumber  String?  @map("id_number") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("guarantors")
+}
+
+
+// ============================
+// قرعه‌کشی/تشویقی — هر خرید بالای یک سقف مبلغ (مثلاً ۵۰۰ افغانی) یک قرعه صادر می‌کند.
+// خریدار معمولاً مشتری است، نه مستاجر/دوکاندار؛ چون در سیستم ثبت‌نام ندارد،
+// نام و تماسش مستقیم روی ردیف LotteryEntry نگه داشته می‌شود (نه FK به Tenant).
+// ============================
+
+enum LotteryDrawStatus {
+  OPEN // هنوز قرعه می‌گیرد
+  CLOSED // مهلت ثبت تمام شده، هنوز قرعه‌کشی نشده
+  DRAWN // برنده(ها) مشخص شده‌اند
+}
+
+model LotteryDraw {
+  id                    String            @id @default(uuid()) @db.Uuid
+  marketId              String            @map("market_id") @db.Uuid
+  title                 String?           @db.VarChar(150)
+  periodStart           DateTime          @map("period_start") @db.Timestamptz(6)
+  periodEnd             DateTime          @map("period_end") @db.Timestamptz(6)
+  ticketThresholdAmount Decimal           @map("ticket_threshold_amount") @db.Decimal(15, 2)
+  status                LotteryDrawStatus @default(OPEN)
+  drawnAt               DateTime?         @map("drawn_at") @db.Timestamptz(6)
+  createdAt             DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market  Market         @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  entries LotteryEntry[]
+  prizes  LotteryPrize[]
+
+  @@index([marketId])
+  @@map("lottery_draws")
+}
+
+model LotteryEntry {
+  id     String  @id @default(uuid()) @db.Uuid
+  drawId String  @map("draw_id") @db.Uuid
+  shopId String? @map("shop_id") @db.Uuid
+
+  buyerName    String  @map("buyer_name") @db.VarChar(150)
+  buyerContact String? @map("buyer_contact") @db.VarChar(30)
+
+  purchaseAmount Decimal @map("purchase_amount") @db.Decimal(15, 2)
+  ticketCount    Int     @map("ticket_count")
+  ticketNumber   String? @map("ticket_number") @db.VarChar(50)
+
+  issuedAt   DateTime @default(now()) @map("issued_at") @db.Timestamptz(6)
+  issuedById String?  @map("issued_by_id") @db.Uuid
+
+  draw     LotteryDraw @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  shop     Shop?       @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  issuedBy User?       @relation(fields: [issuedById], references: [id], onDelete: SetNull)
+
+  wonPrizes LotteryPrize[]
+
+  @@index([drawId])
+  @@index([shopId])
+  @@map("lottery_entries")
+}
+
+model LotteryPrize {
+  id            String  @id @default(uuid()) @db.Uuid
+  drawId        String  @map("draw_id") @db.Uuid
+  winnerEntryId String? @map("winner_entry_id") @db.Uuid
+
+  description String    @db.Text
+  cost        Decimal   @db.Decimal(15, 2)
+  currency    String    @default("AFN") @db.VarChar(10)
+  awardedAt   DateTime? @map("awarded_at") @db.Timestamptz(6)
+
+  // پس از اهدا، هزینه‌اش به‌عنوان یک مصرف هم ثبت می‌شود.
+  expenseId String? @map("expense_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  draw        LotteryDraw   @relation(fields: [drawId], references: [id], onDelete: Cascade)
+  winnerEntry LotteryEntry? @relation(fields: [winnerEntryId], references: [id], onDelete: SetNull)
+  expense     Expense?      @relation(fields: [expenseId], references: [id], onDelete: SetNull)
+
+  @@index([drawId])
+  @@map("lottery_prizes")
+}
+
+
+model Market {
+  id              String   @id @default(uuid()) @db.Uuid
+  name            String   @db.VarChar(200)
+  logo            String?  @db.Text
+  address         String?  @db.Text
+  contacts        Json?    @default("[]")
+  details         String?  @db.Text
+  // ارز پایه از فهرست Currency انتخاب می‌شود (نه یک رشتهٔ آزاد)؛ نرخ‌های ارز در ExchangeRate با تاریخ نگه داشته می‌شوند.
+  baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
+  isSetupComplete Boolean  @default(false)
+  createdAt       DateTime @default(now()) @db.Timestamp(6)
+  updatedAt       DateTime @updatedAt @db.Timestamp(6)
+
+  baseCurrency Currency? @relation(fields: [baseCurrencyId], references: [id], onDelete: SetNull)
+
+  customRoles             CustomRole[]
+  users                   User[]
+  accounts                Account[]
+  auditLogs               AuditLog[]
+  contracts               Contract[]
+  expenses                Expense[]
+  floors                  Floor[]
+  miscellaneousIncome     MiscellaneousIncome[]
+  openingBalances         OpeningBalance[]
+  rentCharges             RentCharges[]
+  rentPayments            RentPayment[]
+  shopGroups              ShopGroup[]
+  shops                   Shop[]
+  tenants                 Tenant[]
+  assets                  Asset[]
+  shareholders            Shareholder[]
+  shareholderTransactions ShareholderTransaction[]
+  accountTransfers        AccountTransfer[]
+  electricityBills        ElectricityBill[]
+  electricityPayments     ElectricityPayment[]
+  electricityMeters       ElectricityMeter[]
+  collateralItems         CollateralItem[]
+  lotteryDraws            LotteryDraw[]
+  exchangeRates           ExchangeRate[]
+  expenseCategories       ExpenseCategory[]
+
+  @@map("markets")
+}
+
+
+// meters.prisma
+// Existing TypeORM files: src/modules/meters/entities/*.ts
+// Placeholder - entity files had no field declarations to safely convert.
+
+
+model MiscellaneousIncome {
+  id          String   @id @default(uuid()) @db.Uuid
+  marketId    String   @map("market_id") @db.Uuid
+  type        String   @db.VarChar(100)
+  amount      Decimal  @db.Decimal(18, 2)
+  currencyId  String   @map("currency_id") @db.Uuid
+  accountId   String   @map("account_id") @db.Uuid
+  date        DateTime @db.Timestamptz(6)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market   Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+
+  @@index([marketId])
+  @@index([accountId])
+  @@map("miscellaneous_income")
+}
+
+
+model OpeningBalance {
+  id String @id @default(uuid()) @db.Uuid
+
+  marketId   String @map("market_id") @db.Uuid
+  accountId  String @map("account_id") @db.Uuid
+  currencyId String @map("currency_id") @db.Uuid
+
+  amount Decimal @db.Decimal(18, 4)
+
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(18, 6)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
+  openingDate DateTime @map("opening_date") @db.Date
+  createdById String   @map("created_by_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  account   Account  @relation(fields: [accountId], references: [id])
+  currency  Currency @relation(fields: [currencyId], references: [id])
+  market    Market   @relation(fields: [marketId], references: [id])
+  createdBy User     @relation(fields: [createdById], references: [id])
+
+  @@index([marketId])
+  @@index([accountId])
+  @@map("opening_balances")
+}
+
+
+// permission.prisma
+// Existing TypeORM file: src/modules/roles/entities/permission.entity.ts
+// Placeholder - no model created because entity has no explicit schema fields in source.
+
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @unique @db.Text
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+
+// ============================
+// مدل RentCharges - فاکتور/بدهکاری اجاره
+// ============================
+
+enum RentChargeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELED
+}
+
+model RentCharges {
+  id         String @id @default(uuid()) @db.Uuid
+  marketId   String @map("market_id") @db.Uuid
+  contractId String @map("contract_id") @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  shopId     String @map("shop_id") @db.Uuid
+
+  periodStart DateTime @map("period_start") @db.Timestamptz(6)
+  periodEnd   DateTime @map("period_end") @db.Timestamptz(6)
+  days        Int
+  dailyRate   Decimal  @map("daily_rate") @db.Decimal(15, 2)
+
+  // ========== ✅ ستون‌های محاسباتی (بدون @dbgenerated) ==========
+  // این مقادیر را در کد NestJS محاسبه کنید
+  grossAmount     Decimal @default(0) @map("gross_amount") @db.Decimal(15, 2)
+  discountAmount  Decimal @default(0) @map("discount_amount") @db.Decimal(15, 2)
+  netAmount       Decimal @default(0) @map("net_amount") @db.Decimal(15, 2)
+  paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(15, 2)
+  remainingAmount Decimal @default(0) @map("remaining_amount") @db.Decimal(15, 2)
+  // ============================================================
+
+  currencyId String           @map("currency_id") @db.Uuid
+  status     RentChargeStatus @default(PENDING)
+
+  accountId   String? @map("account_id") @db.Uuid
+  createdById String? @map("created_by_id") @db.Uuid
+  notes       String? @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  contract  Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  currency  Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation("RentChargeCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  // یک پرداخت می‌تواند بین چند فاکتور/ماه تقسیم شود؛ منبع حقیقت تخصیص RentPaymentAllocation است.
+  allocations RentPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([contractId])
+  @@index([tenantId])
+  @@index([shopId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@map("rent_charges")
+}
+
+
+// ============================
+// مدل RentDebt - خلاصه وضعیت بدهی هر مستأجر
+// ============================
+
+enum DebtStatus {
+  CLEAN // بدهی صفر یا مثبت (بستانکار)
+  LOW // بدهی کمتر از یک ماه
+  MEDIUM // بدهی ۱ تا ۳ ماه
+  HIGH // بدهی بیش از ۳ ماه
+  CRITICAL // بدهی بیش از ۶ ماه یا دارای شکایت
+}
+
+model RentDebt {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @unique @map("tenant_id") @db.Uuid
+
+  // مبالغ کلی
+  totalDebt         Decimal @default(0) @map("total_debt") @db.Decimal(18, 2)
+  overdueDebt       Decimal @default(0) @map("overdue_debt") @db.Decimal(18, 2)
+  lastChargeAmount  Decimal @default(0) @map("last_charge_amount") @db.Decimal(18, 2)
+  lastPaymentAmount Decimal @default(0) @map("last_payment_amount") @db.Decimal(18, 2)
+
+  // تاریخ‌های آخرین رویدادها
+  lastChargeDate  DateTime? @map("last_charge_date") @db.Timestamptz(6)
+  lastPaymentDate DateTime? @map("last_payment_date") @db.Timestamptz(6)
+
+  // وضعیت کلی
+  status    DebtStatus @default(CLEAN)
+  riskScore Int?       @map("risk_score") // امتیاز ریسک (مثلاً ۱ تا ۱۰۰)
+
+  // اطلاعات تکمیلی
+  notes     String?  @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // ارتباط با مستأجر
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // ایندکس‌ها
+  @@index([tenantId])
+  @@index([status])
+  @@index([updatedAt])
+  @@map("rent_debts")
+}
+
+
+model RentPayment {
+  id            String        @id @default(uuid()) @db.Uuid
+  marketId      String        @map("market_id") @db.Uuid
+  contractId    String        @map("contract_id") @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  shopId        String        @map("shop_id") @db.Uuid
+  // month/year بر مبنای تقویم هجری‌شمسی‌اند (month: 1=حمل ... 12=حوت، year: سال شمسی)، نه میلادی.
+  month         Int
+  year          Int
+  amount        Decimal       @db.Decimal(18, 2)
+  currencyId    String        @map("currency_id") @db.Uuid
+  usdEquivalent Decimal?      @map("usd_equivalent") @db.Decimal(18, 2)
+  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
+  paymentMethod PaymentMethod @map("payment_method")
+  accountId     String        @map("account_id") @db.Uuid
+  collectedById String        @map("collected_by_id") @db.Uuid
+  notes         String?       @db.Text
+  isPartial     Boolean       @default(false) @map("is_partial")
+  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  contract    Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  account     Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency    Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  collectedBy User     @relation("RentCollectedBy", fields: [collectedById], references: [id], onDelete: Restrict)
+
+  // این پرداخت (یک رسید فیزیکی واحد) می‌تواند بین چند فاکتور/ماه تقسیم شود —
+  // مثلاً ۱۰۰۰ افغانی که بخشی بدهی ماه قبل و بخشی ماه جاری را می‌پوشاند.
+  allocations RentPaymentAllocation[]
+
+  @@index([marketId])
+  @@index([contractId])
+  @@index([tenantId])
+  @@index([shopId])
+  @@index([year, month])
+  @@map("rent_payments")
+}
+
+// تخصیص یک پرداخت به یک یا چند فاکتور کرایه (چندبه‌چند).
+// سرویس هنگام ثبت پرداخت، مبلغ را ابتدا به قدیمی‌ترین فاکتور بازِ مستاجر (بر اساس periodStart) تخصیص می‌دهد.
+model RentPaymentAllocation {
+  id           String   @id @default(uuid()) @db.Uuid
+  paymentId    String   @map("payment_id") @db.Uuid
+  rentChargeId String   @map("rent_charge_id") @db.Uuid
+  amount       Decimal  @db.Decimal(18, 2)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  payment    RentPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  rentCharge RentCharges @relation(fields: [rentChargeId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, rentChargeId])
+  @@index([paymentId])
+  @@index([rentChargeId])
+  @@map("rent_payment_allocations")
+}
+
+
+// ============================
+// سهام‌داران مارکت — برداشت/واریز از هر بانک + درصد سهم تاریخچه‌دار
+// ============================
+
+model Shareholder {
+  id        String   @id @default(uuid()) @db.Uuid
+  marketId  String   @map("market_id") @db.Uuid
+  fullName  String   @map("full_name") @db.VarChar(150)
+  contact   String?  @db.VarChar(30)
+  idNumber  String?  @map("id_number") @db.VarChar(50)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market        Market                   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  equityHistory ShareholderEquity[]
+  transactions  ShareholderTransaction[]
+
+  @@index([marketId])
+  @@map("shareholders")
+}
+
+// درصد سهم هر سهام‌دار در طول زمان — هر بار که سهم خرید/فروخت یک ردیف جدید ثبت می‌شود
+// (نه آپدیت روی جای قبلی)، تا تاریخچهٔ کامل مالکیت قابل بازسازی بماند.
+// درصد «فعلی» = آخرین ردیف بر اساس effectiveFrom برای آن سهام‌دار.
+model ShareholderEquity {
+  id            String   @id @default(uuid()) @db.Uuid
+  shareholderId String   @map("shareholder_id") @db.Uuid
+  percentage    Decimal  @db.Decimal(5, 2)
+  effectiveFrom DateTime @map("effective_from") @db.Date
+  notes         String?  @db.Text
+  createdById   String?  @map("created_by_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Cascade)
+  createdBy   User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([shareholderId, effectiveFrom])
+  @@map("shareholder_equity_history")
+}
+
+enum ShareholderTransactionType {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+model ShareholderTransaction {
+  id              String                     @id @default(uuid()) @db.Uuid
+  marketId        String                     @map("market_id") @db.Uuid
+  shareholderId   String                     @map("shareholder_id") @db.Uuid
+  accountId       String                     @map("account_id") @db.Uuid
+  type            ShareholderTransactionType
+  amount          Decimal                    @db.Decimal(18, 2)
+  transactionDate DateTime                   @map("transaction_date") @db.Timestamptz(6)
+  receiptNumber   String?                    @map("receipt_number") @db.VarChar(100)
+  details         String?                    @db.Text
+  createdById     String?                    @map("created_by_id") @db.Uuid
+  createdAt       DateTime                   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market      Market      @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Restrict)
+  account     Account     @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  createdBy   User?       @relation("ShareholderTransactionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([marketId])
+  @@index([shareholderId])
+  @@index([accountId])
+  @@map("shareholder_transactions")
+}
+
+
+model ShopGroup {
+  id             String    @id @default(uuid()) @db.Uuid
+  marketId       String    @map("market_id") @db.Uuid
+  primaryMeterId String?   @map("primary_meter_id") @db.Uuid
+  // قراردادِ واحدی که هنگام ادغام روی همهٔ دوکان‌های عضو این گروه بسته می‌شود (ن.ک. Contract/ContractShop).
+  contractId     String?   @map("contract_id") @db.Uuid
+  startedAt      DateTime  @map("started_at") @db.Timestamptz(6)
+  endedAt        DateTime? @map("ended_at") @db.Timestamptz(6)
+
+  market       Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  primaryMeter ElectricityMeter? @relation("PrimaryMeterForShopGroup", fields: [primaryMeterId], references: [id], onDelete: SetNull)
+  contract     Contract?         @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  members      ShopGroupMember[]
+
+  @@unique([primaryMeterId])
+  @@index([marketId])
+  @@index([contractId])
+  @@map("shop_groups")
+}
+
+model ShopGroupMember {
+  id       String    @id @default(uuid()) @db.Uuid
+  groupId  String    @map("group_id") @db.Uuid
+  shopId   String    @map("shop_id") @db.Uuid
+  joinedAt DateTime  @map("joined_at") @db.Timestamptz(6)
+  leftAt   DateTime? @map("left_at") @db.Timestamptz(6)
+
+  group ShopGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  shop  Shop      @relation(fields: [shopId], references: [id], onDelete: Restrict)
+
+  @@unique([groupId, shopId])
+  @@index([shopId])
+  @@map("shop_group_members")
+}
+
+
+model Shop {
+  id         String     @id @default(uuid()) @db.Uuid
+  marketId   String     @map("market_id") @db.Uuid
+  floorId    String?    @map("floor_id") @db.Uuid
+  shopNumber String     @map("shop_number") @db.VarChar(50)
+  area       Decimal?   @db.Decimal(12, 2)
+  location   String?    @db.VarChar(255)
+  type       ShopType   @default(shop)
+  status     ShopStatus @default(empty)
+  details    String?    @db.Text
+
+  currentContractId String? @unique @map("current_contract_id") @db.Uuid
+  currentTenantId   String? @map("current_tenant_id") @db.Uuid
+
+  // isActive یعنی «آیا این دوکان در سیستم فعال/آرشیو نشده» (حذف نرم) — بعد جدا از status
+  // که وضعیت اشغال روزمره (فعال/غیرفعال/خالی/کرایه‌داده‌شده) را نشان می‌دهد.
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  floor  Floor? @relation(fields: [floorId], references: [id], onDelete: SetNull)
+
+  currentContract Contract? @relation("CurrentShopContract", fields: [currentContractId], references: [id], onDelete: SetNull)
+  currentTenant   Tenant?   @relation(fields: [currentTenantId], references: [id], onDelete: SetNull)
+
+  contracts           Contract[]           @relation("ContractPrimaryShop")
+  contractShops       ContractShop[]
+  rentPayments        RentPayment[]
+  rentCharges         RentCharges[]
+  electricityMeters   ElectricityMeter[]
+  electricityBills    ElectricityBill[]
+  electricityPayments ElectricityPayment[]
+  shopGroupMembers    ShopGroupMember[]
+  overdueDebts        OverdueDebt[]
+  lotteryEntries      LotteryEntry[]
+
+  @@unique([marketId, shopNumber])
+  @@index([marketId])
+  @@index([floorId])
+  @@map("shops")
+}
+
+
+model Tenant {
+  id              String   @id @default(uuid()) @db.Uuid
+  marketId        String   @map("market_id") @db.Uuid
+  fullName        String   @map("full_name") @db.VarChar(150)
+  fatherName      String?  @map("father_name") @db.VarChar(100)
+  grandfatherName String?  @map("grandfather_name") @db.VarChar(100)
+  idNumber        String?  @map("id_number") @db.VarChar(50)
+  contact         String?  @db.VarChar(30)
+  gender          Gender?
+  details         String?  @db.Text
+  photo           String?  @db.Text
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market       Market        @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  guarantors   Guarantor[]
+  contracts    Contract[]
+  rentCharges  RentCharges[]
+  rentPayments RentPayment[]
+  rentDebt     RentDebt?
+  overdueDebts OverdueDebt[]
+  shops        Shop[]
+
+  electricityBills    ElectricityBill[]
+  electricityPayments ElectricityPayment[]
+  electricityDebt     ElectricityDebt?
+  collateralItems     CollateralItem[]
+
+  @@index([marketId])
+  @@index([idNumber])
+  @@map("tenants")
+}
+
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  fullName     String   @map("full_name") @db.VarChar(150)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  role         UserRole @default(STAFF)
+  customRoleId String?  @map("custom_role_id") @db.Uuid
+  marketId     String?  @map("market_id") @db.Uuid
+
+  fatherName      String? @map("father_name") @db.VarChar(100)
+  grandfatherName String? @map("grandfather_name") @db.VarChar(100)
+  phone           String? @db.VarChar(30)
+  tazkiraNumber   String? @unique @map("tazkira_number") @db.VarChar(50)
+  address         String? @db.Text
+  profilePhoto    String? @map("profile_photo") @db.Text
+
+  extraPermissions  Json? @map("extra_permissions")
+  deniedPermissions Json? @map("denied_permissions")
+
+  isSuperAdmin Boolean   @default(false) @map("is_super_admin")
+  isActive     Boolean   @default(true) @map("is_active")
+  lastLogin    DateTime? @map("last_login") @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market     Market?     @relation(fields: [marketId], references: [id], onDelete: SetNull)
+  customRole CustomRole? @relation(fields: [customRoleId], references: [id], onDelete: SetNull)
+
+  refreshTokens RefreshToken[]
+
+  terminatedContracts          Contract[]               @relation("ContractTerminatedBy")
+  collectedRentPayments        RentPayment[]            @relation("RentCollectedBy")
+  createdRentCharges           RentCharges[]            @relation("RentChargeCreator")
+  changedContractStatuses      ContractStatusHistory[]  @relation("ContractStatusChangedBy")
+  paidExpenses                 Expense[]                @relation("ExpensePaidBy")
+  depreciationEvents           DepreciationEvent[]      @relation("DepreciationAppliedBy")
+  shareholderTransactions      ShareholderTransaction[] @relation("ShareholderTransactionCreatedBy")
+  shareholderEquityChanges     ShareholderEquity[]
+  accountTransfers             AccountTransfer[]
+  openingBalances              OpeningBalance[]
+  createdElectricityBills      ElectricityBill[]        @relation("ElectricityBillCreator")
+  collectedElectricityPayments ElectricityPayment[]     @relation("ElectricityCollectedBy")
+  createdCollateralItems       CollateralItem[]
+  issuedLotteryEntries         LotteryEntry[]
+  approvedSettlements          ContractSettlement[]
+  createdExchangeRates         ExchangeRate[]
+  refreshToken                 String?                  @map("refresh_token") @db.Text
+  refreshTokenExpiry           DateTime?                @map("refresh_token_expiry") @db.Timestamptz(6)
+  auditLogs                    AuditLog[]
+
+  @@index([marketId])
+  @@index([customRoleId])
+  @@map("users")
+}
