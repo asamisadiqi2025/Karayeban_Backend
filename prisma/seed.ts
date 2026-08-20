@@ -100,6 +100,7 @@ async function main() {
     await prisma.user.create({
       data: {
         email: 'admin@karayeban.com',
+        username: 'admin',
         passwordHash: hashedPassword,
         fullName: 'مدیر سیستم',
         isSuperAdmin: true,

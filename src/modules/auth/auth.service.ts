@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { RegisterSuperAdminDto } from './dto/register-super-admin.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,10 @@ export class AuthService {
     private readonly config: ConfigService,
   ) {}
 
-  async validateUser(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+  async validateUser(identifier: string, password: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { OR: [{ email: identifier }, { username: identifier }] },
+    });
     if (!user) return null;
     // ✅ اصلاح: passwordHash
     const match = await bcrypt.compare(password, user.passwordHash);
@@ -24,8 +27,10 @@ export class AuthService {
     return rest;
   }
 
-  async login(dto: { email: string; password: string }) {
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+  async login(dto: LoginDto) {
+    const user = await this.prisma.user.findFirst({
+      where: { OR: [{ email: dto.identifier }, { username: dto.identifier }] },
+    });
     if (!user) throw new UnauthorizedException('Invalid credentials');
     // ✅ اصلاح: passwordHash
     const match = await bcrypt.compare(dto.password, user.passwordHash);
@@ -140,6 +145,7 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
+        username: dto.username,
         passwordHash: hashed,
         fullName: dto.fullName || 'System Admin',
         isSuperAdmin: true,

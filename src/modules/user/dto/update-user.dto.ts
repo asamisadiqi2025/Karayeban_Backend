@@ -3,6 +3,10 @@ import { UserRole } from './create-user.dto';
 
 export class UpdateUserDto {
   @IsOptional()
+  @IsString()
+  username?: string;
+
+  @IsOptional()
   @IsEmail()
   email?: string;
 
