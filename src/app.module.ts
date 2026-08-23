@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { MarketModule } from './modules/market/market.module';
+import { CurrenciesModule } from './modules/currencies/currencies.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 
 @Module({
@@ -12,6 +14,8 @@ import { PrismaModule } from './database/prisma/prisma.module';
     AuthModule,
     UserModule,
     MarketModule,
+    CurrenciesModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

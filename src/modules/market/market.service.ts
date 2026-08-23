@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateMarketDto } from './dto/create-market.dto';
 import { UpdateMarketProfileDto } from './dto/update-market-profile.dto';
@@ -14,10 +14,7 @@ export class MarketService {
     const data: any = {
       name: dto.name,
       address: dto.address,
-      phone: dto.phone || null,
       logo: dto.logo || null,
-      exchangeRate: dto.exchangeRate || 0,
-      hasWater: dto.hasWater || false,
       isSetupComplete: false,
     };
 
@@ -47,7 +44,12 @@ export class MarketService {
     // prepare update payload and map baseCurrency to nested connect when provided
     const { baseCurrency, ...rest } = dto as any;
     const updateData: any = { ...rest };
-    if (baseCurrency) updateData.baseCurrency = { connect: { code: baseCurrency } };
+    if (baseCurrency) {
+      if (market.baseCurrencyId) {
+        throw new ConflictException('ارز پایه بعد از تنظیم اولیه قابل تغییر نیست');
+      }
+      updateData.baseCurrency = { connect: { code: baseCurrency } };
+    }
 
     const updated = await this.prisma.market.update({ where: { id }, data: updateData });
     return updated;

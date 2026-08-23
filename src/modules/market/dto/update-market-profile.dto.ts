@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateMarketProfileDto {
   @IsOptional()
@@ -11,21 +11,10 @@ export class UpdateMarketProfileDto {
 
   @IsOptional()
   @IsString()
-  phone?: string;
-
-  @IsOptional()
-  @IsString()
   logo?: string;
 
   @IsOptional()
   @IsString()
   baseCurrency?: string;
-
-  @IsOptional()
-  exchangeRate?: number;
-
-  @IsOptional()
-  @IsBoolean()
-  hasWater?: boolean;
 }
  
