@@ -13,8 +13,9 @@ dotenv.config();
 // ایجاد PrismaClient با adapter
 // ==========================================
 const connectionString = process.env.DATABASE_URL;
+const isLocalHost = connectionString ? ['localhost', '127.0.0.1'].includes(new URL(connectionString).hostname) : false;
 const pool = connectionString
-  ? new Pool({ connectionString, ssl: { rejectUnauthorized: false } })
+  ? new Pool({ connectionString, ssl: isLocalHost ? false : { rejectUnauthorized: false } })
   : new Pool({
       host: process.env.DB_HOST,
       port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
@@ -34,62 +35,8 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log('🌱 Seeding database...');
 
-  // ۰. ایجاد ارز افغانی (به‌عنوان ارز پایه)
-  const afn = await prisma.currency.upsert({
-    where: { code: 'AFN' },
-    update: {},
-    create: { code: 'AFN', name: 'افغانی' },
-  });
-
-  // ۱. ایجاد بازار (اگر وجود ندارد)
-  const market = await prisma.market.upsert({
-    where: { id: '11111111-1111-1111-1111-111111111111' },
-    update: {},
-    create: {
-      id: '11111111-1111-1111-1111-111111111111',
-      name: 'بازار مرکزی',
-      address: 'کابل، افغانستان',
-      baseCurrencyId: afn.id,
-      isSetupComplete: true,
-    },
-  });
-
-  // ۲. ایجاد نقش super_admin (سیستمی)
-  await prisma.customRole.upsert({
-    where: { id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
-    update: {},
-    create: {
-      id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      name: 'super_admin',
-      marketId: market.id,
-      permissions: ['*'],
-      isSystem: true,
-      description: 'دسترسی کامل به سیستم',
-    },
-  });
-
-  // ۳. ایجاد نقش accountant (سیستمی)
-  await prisma.customRole.upsert({
-    where: { id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb' },
-    update: {},
-    create: {
-      id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-      name: 'accountant',
-      marketId: market.id,
-      permissions: [
-        'rent:collect',
-        'rent:read',
-        'expense:read',
-        'expense:write',
-        'report:read',
-        'report:export',
-      ],
-      isSystem: true,
-      description: 'نقش پیش‌فرض حسابدار',
-    },
-  });
-
-  // ۴. ایجاد سوپرادمین (اگر وجود ندارد)
+  // فقط سوپرادمین ساخته می‌شود — بدون ارز/مارکت/نقش خودکار.
+  // بقیه (اضافه‌کردن ارز، ستاپ کمپنی، نرخ ارز، بانک‌ها) باید از طریق فلوی واقعی برنامه انجام شود.
   const existingAdmin = await prisma.user.findFirst({
     where: { isSuperAdmin: true },
   });
@@ -104,8 +51,7 @@ async function main() {
         passwordHash: hashedPassword,
         fullName: 'مدیر سیستم',
         isSuperAdmin: true,
-        marketId: market.id,
-        role: "SUPER_ADMIN",
+        role: 'SUPER_ADMIN',
         isActive: true,
       },
     });

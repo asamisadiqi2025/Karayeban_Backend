@@ -52,7 +52,14 @@ export class AuthService {
       },
     });
 
-    return { accessToken, refreshToken, expiresIn: this.config.get<string>('JWT_EXPIRES_IN') };
+    const { passwordHash, ...userWithoutPassword } = user;
+
+    return {
+      accessToken,
+      refreshToken,
+      expiresIn: this.config.get<string>('JWT_EXPIRES_IN'),
+      user: userWithoutPassword,
+    };
   }
 
   async refresh(token: string, userId: string) {
@@ -99,47 +106,6 @@ export class AuthService {
     const existing = await this.prisma.user.findFirst({ where: { isSuperAdmin: true } });
     if (existing) throw new BadRequestException('Super admin already exists');
 
-    // Ensure base data exists (currency, market, roles)
-    const afn = await this.prisma.currency.upsert({ where: { code: 'AFN' }, update: {}, create: { code: 'AFN', name: 'Afghani' } });
-
-    const market = await this.prisma.market.upsert({
-      where: { id: '11111111-1111-1111-1111-111111111111' },
-      update: {},
-      create: {
-        id: '11111111-1111-1111-1111-111111111111',
-        name: 'Central Market',
-        address: 'Kabul, Afghanistan',
-        baseCurrencyId: afn.id,
-        isSetupComplete: true,
-      },
-    });
-
-    await this.prisma.customRole.upsert({
-      where: { id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' },
-      update: {},
-      create: {
-        id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-        name: 'super_admin',
-        marketId: market.id,
-        permissions: ['*'],
-        isSystem: true,
-        description: 'Full system access',
-      },
-    });
-
-    await this.prisma.customRole.upsert({
-      where: { id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb' },
-      update: {},
-      create: {
-        id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-        name: 'accountant',
-        marketId: market.id,
-        permissions: ['rent:collect', 'rent:read', 'expense:read', 'expense:write', 'report:read', 'report:export'],
-        isSystem: true,
-        description: 'Default accountant role',
-      },
-    });
-
     const hashed = await bcrypt.hash(dto.password, 10);
 
     const user = await this.prisma.user.create({
@@ -149,11 +115,9 @@ export class AuthService {
         passwordHash: hashed,
         fullName: dto.fullName || 'System Admin',
         isSuperAdmin: true,
-        marketId: market.id,
         role: 'SUPER_ADMIN',
         isActive: true,
       },
-      include: { market: true, customRole: true },
     });
 
     const { passwordHash, ...rest } = user as any;

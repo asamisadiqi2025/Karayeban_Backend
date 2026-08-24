@@ -44,7 +44,7 @@ async function bootstrap() {
     const reflector = app.get(Reflector);
     app.useGlobalGuards(new JwtAuthGuard(reflector));
 
-    const port = process.env.PORT ||  3000;
+    const port = process.env.PORT ||  4000;
     await app.listen(port);
     logger.log(`🚀 Application is running on: http://localhost:${port}`);
     logger.log(`✅ Database connection established successfully`);
