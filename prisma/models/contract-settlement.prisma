@@ -11,11 +11,11 @@ model ContractSettlement {
   id         String @id @default(uuid()) @db.Uuid
   contractId String @unique @map("contract_id") @db.Uuid
 
-  finalRentDebt        Decimal          @map("final_rent_debt") @db.Decimal(18, 2)
-  finalElectricityDebt Decimal          @map("final_electricity_debt") @db.Decimal(15, 2)
+  finalRentDebt        Decimal          @map("final_rent_debt") @db.Decimal(18, 4)
+  finalElectricityDebt Decimal          @map("final_electricity_debt") @db.Decimal(18, 4)
   settlementMethod     SettlementMethod @map("settlement_method")
-  settledAmount        Decimal          @map("settled_amount") @db.Decimal(18, 2)
-  currency             String           @default("AFN") @db.VarChar(10)
+  settledAmount        Decimal          @map("settled_amount") @db.Decimal(18, 4)
+  currencyId           String           @map("currency_id") @db.Uuid
 
   notes        String?  @db.Text
   approvedById String?  @map("approved_by_id") @db.Uuid
@@ -23,6 +23,7 @@ model ContractSettlement {
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  currency   Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
   approvedBy User?    @relation(fields: [approvedById], references: [id], onDelete: SetNull)
 
   // اجناس وثیقه‌ای که برای پوشش بدهی در همین تسویه فروخته/برگردانده شدند.

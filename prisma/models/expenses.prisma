@@ -2,9 +2,9 @@ model Expense {
   id            String   @id @default(uuid()) @db.Uuid
   marketId      String   @map("market_id") @db.Uuid
   categoryId    String   @map("category_id") @db.Uuid
-  amount        Decimal  @db.Decimal(18, 2)
+  amount        Decimal  @db.Decimal(18, 4)
   currencyId    String   @map("currency_id") @db.Uuid
-  usdEquivalent Decimal? @map("usd_equivalent") @db.Decimal(18, 2)
+  usdEquivalent Decimal? @map("usd_equivalent") @db.Decimal(18, 4)
   expenseDate   DateTime @map("expense_date") @db.Timestamptz(6)
   description   String?  @db.Text
   accountId     String   @map("account_id") @db.Uuid
@@ -20,6 +20,7 @@ model Expense {
 
   // وقتی جایزهٔ قرعه‌کشی اهدا می‌شود، هزینه‌اش این‌جا هم به‌عنوان یک مصرف ثبت می‌شود.
   lotteryPrizes LotteryPrize[]
+  ledgerEntry   LedgerEntry?
 
   @@index([marketId])
   @@index([categoryId])

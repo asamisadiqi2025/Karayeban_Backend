@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { MarketModule } from './modules/market/market.module';
 import { CurrenciesModule } from './modules/currencies/currencies.module';
+import { AccountsModule } from './modules/accounts/accounts.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { PrismaModule } from './database/prisma/prisma.module';
     UserModule,
     MarketModule,
     CurrenciesModule,
+    AccountsModule,
   ],
   controllers: [AppController],
 })

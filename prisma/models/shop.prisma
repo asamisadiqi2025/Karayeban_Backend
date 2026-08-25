@@ -31,7 +31,6 @@ model Shop {
   electricityBills    ElectricityBill[]
   electricityPayments ElectricityPayment[]
   shopGroupMembers    ShopGroupMember[]
-  overdueDebts        OverdueDebt[]
   lotteryEntries      LotteryEntry[]
 
   @@unique([marketId, shopNumber])

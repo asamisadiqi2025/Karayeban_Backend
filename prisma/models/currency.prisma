@@ -12,4 +12,11 @@ model Currency {
   rentCharges         RentCharges[]
   assets              Asset[]
   miscellaneousIncome MiscellaneousIncome[]
+
+  electricityBills    ElectricityBill[]
+  electricityPayments ElectricityPayment[]
+  collateralItems     CollateralItem[]
+  lotteryPrizes       LotteryPrize[]
+  contractSettlements ContractSettlement[]
+  ledgerEntries       LedgerEntry[]
 }

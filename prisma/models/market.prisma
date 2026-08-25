@@ -3,10 +3,10 @@ model Market {
   name            String   @db.VarChar(200)
   logo            String?  @db.Text
   address         String?  @db.Text
-  contacts        Json?    @default("[]")
+  phones          String[] @default([])
+  emails          String[] @default([])
   details         String?  @db.Text
-  // ارز پایه از فهرست Currency انتخاب می‌شود (نه یک رشتهٔ آزاد)؛ نرخ‌های ارز در ExchangeRate با تاریخ نگه داشته می‌شوند.
-  baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
+   baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
   isSetupComplete Boolean  @default(false)
   createdAt       DateTime @default(now()) @db.Timestamp(6)
   updatedAt       DateTime @updatedAt @db.Timestamp(6)
@@ -38,6 +38,7 @@ model Market {
   lotteryDraws            LotteryDraw[]
   exchangeRates           ExchangeRate[]
   expenseCategories       ExpenseCategory[]
+  ledgerEntries           LedgerEntry[]
 
   @@map("markets")
 }

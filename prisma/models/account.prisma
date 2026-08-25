@@ -39,6 +39,8 @@ model Account {
   transfersOut AccountTransfer[] @relation("TransferFrom")
   transfersIn  AccountTransfer[] @relation("TransferTo")
 
+  ledgerEntries LedgerEntry[]
+
   @@unique([marketId, name])
   @@index([marketId])
   @@index([currencyId])
@@ -65,6 +67,9 @@ model AccountTransfer {
   fromAccount Account @relation("TransferFrom", fields: [fromAccountId], references: [id], onDelete: Restrict)
   toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id], onDelete: Restrict)
   createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  // یک AccountTransfer دو LedgerEntry می‌سازد: یک OUT روی fromAccount و یک IN روی toAccount.
+  ledgerEntries LedgerEntry[]
 
   @@index([marketId])
   @@index([fromAccountId])

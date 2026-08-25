@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { ArrayUnique, IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdateMarketProfileDto {
   @IsOptional()
@@ -16,5 +16,18 @@ export class UpdateMarketProfileDto {
   @IsOptional()
   @IsString()
   baseCurrency?: string;
+
+  // کل آرایه جایگزین می‌شود؛ برای اضافه/حذف یک شماره، آرایهٔ کامل و به‌روزشده را بفرستید.
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayUnique()
+  phones?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayUnique()
+  emails?: string[];
 }
  

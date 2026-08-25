@@ -45,6 +45,7 @@ model User {
   issuedLotteryEntries         LotteryEntry[]
   approvedSettlements          ContractSettlement[]
   createdExchangeRates         ExchangeRate[]
+  ledgerEntries                LedgerEntry[]
   refreshToken                 String?                  @map("refresh_token") @db.Text
   refreshTokenExpiry           DateTime?                @map("refresh_token_expiry") @db.Timestamptz(6)
   auditLogs                    AuditLog[]

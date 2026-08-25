@@ -15,10 +15,10 @@ model RentDebt {
   tenantId String @unique @map("tenant_id") @db.Uuid
 
   // مبالغ کلی
-  totalDebt         Decimal @default(0) @map("total_debt") @db.Decimal(18, 2)
-  overdueDebt       Decimal @default(0) @map("overdue_debt") @db.Decimal(18, 2)
-  lastChargeAmount  Decimal @default(0) @map("last_charge_amount") @db.Decimal(18, 2)
-  lastPaymentAmount Decimal @default(0) @map("last_payment_amount") @db.Decimal(18, 2)
+  totalDebt         Decimal @default(0) @map("total_debt") @db.Decimal(18, 4)
+  overdueDebt       Decimal @default(0) @map("overdue_debt") @db.Decimal(18, 4)
+  lastChargeAmount  Decimal @default(0) @map("last_charge_amount") @db.Decimal(18, 4)
+  lastPaymentAmount Decimal @default(0) @map("last_payment_amount") @db.Decimal(18, 4)
 
   // تاریخ‌های آخرین رویدادها
   lastChargeDate  DateTime? @map("last_charge_date") @db.Timestamptz(6)

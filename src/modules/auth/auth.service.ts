@@ -20,8 +20,7 @@ export class AuthService {
       where: { OR: [{ email: identifier }, { username: identifier }] },
     });
     if (!user) return null;
-    // ✅ اصلاح: passwordHash
-    const match = await bcrypt.compare(password, user.passwordHash);
+     const match = await bcrypt.compare(password, user.passwordHash);
     if (!match) return null;
     const { passwordHash, ...rest } = user;
     return rest;
@@ -32,8 +31,7 @@ export class AuthService {
       where: { OR: [{ email: dto.identifier }, { username: dto.identifier }] },
     });
     if (!user) throw new UnauthorizedException('Invalid credentials');
-    // ✅ اصلاح: passwordHash
-    const match = await bcrypt.compare(dto.password, user.passwordHash);
+     const match = await bcrypt.compare(dto.password, user.passwordHash);
     if (!match) throw new UnauthorizedException('Invalid credentials');
 
     const payload = { sub: user.id, id: user.id, email: user.email, role: user.role };

@@ -1,0 +1,55 @@
+enum LedgerDirection {
+  IN
+  OUT
+}
+
+// دفتر واحدِ حرکات پول — منبع حقیقتِ اینکه چرا موجودی یک Account تغییر کرد.
+// هر رویداد پولی (پرداخت کرایه/برق، مصرف، درآمد متفرقه، انتقال بین حساب‌ها،
+// موجودی اولیه، فروش وثیقه) دقیقاً یک (یا برای AccountTransfer، دو) ردیف اینجا می‌سازد.
+model LedgerEntry {
+  id         String @id @default(uuid()) @db.Uuid
+  marketId   String @map("market_id") @db.Uuid
+  accountId  String @map("account_id") @db.Uuid
+  currencyId String @map("currency_id") @db.Uuid
+
+  direction    LedgerDirection
+  amount       Decimal         @db.Decimal(18, 4) // همیشه مثبت؛ جهت را direction مشخص می‌کند
+  balanceAfter Decimal         @map("balance_after") @db.Decimal(18, 4)
+
+  entryDate   DateTime @map("entry_date") @db.Timestamptz(6)
+  description String?  @db.Text
+
+  // دقیقاً یکی از فیلدهای زیر توسط سرویسی که این ردیف را می‌سازد پر می‌شود.
+  // استثنا AccountTransfer است: هر انتقال دو ردیف می‌سازد (OUT از fromAccount، IN به toAccount)،
+  // پس accountTransferId یکتا نیست.
+  rentPaymentId            String? @unique @map("rent_payment_id") @db.Uuid
+  electricityPaymentId     String? @unique @map("electricity_payment_id") @db.Uuid
+  expenseId                String? @unique @map("expense_id") @db.Uuid
+  miscellaneousIncomeId    String? @unique @map("miscellaneous_income_id") @db.Uuid
+  shareholderTransactionId String? @unique @map("shareholder_transaction_id") @db.Uuid
+  accountTransferId        String? @map("account_transfer_id") @db.Uuid
+  openingBalanceId         String? @unique @map("opening_balance_id") @db.Uuid
+  collateralItemId         String? @unique @map("collateral_item_id") @db.Uuid
+
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency  Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  rentPayment            RentPayment?            @relation(fields: [rentPaymentId], references: [id], onDelete: Cascade)
+  electricityPayment     ElectricityPayment?     @relation(fields: [electricityPaymentId], references: [id], onDelete: Cascade)
+  expense                Expense?                @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  miscellaneousIncome    MiscellaneousIncome?    @relation(fields: [miscellaneousIncomeId], references: [id], onDelete: Cascade)
+  shareholderTransaction ShareholderTransaction? @relation(fields: [shareholderTransactionId], references: [id], onDelete: Cascade)
+  accountTransfer        AccountTransfer?        @relation(fields: [accountTransferId], references: [id], onDelete: Cascade)
+  openingBalance         OpeningBalance?         @relation(fields: [openingBalanceId], references: [id], onDelete: Cascade)
+  collateralItem         CollateralItem?         @relation(fields: [collateralItemId], references: [id], onDelete: Cascade)
+
+  @@index([marketId])
+  @@index([accountId, entryDate])
+  @@index([accountTransferId])
+  @@map("ledger_entries")
+}

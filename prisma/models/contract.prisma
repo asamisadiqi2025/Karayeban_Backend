@@ -11,7 +11,7 @@ model Contract {
   startDate DateTime?      @map("start_date")
   endDate   DateTime?      @map("end_date")
   status    ContractStatus @default(draft)
-  rent      Decimal?       @db.Decimal(18, 2)
+  rent      Decimal?       @db.Decimal(18, 4)
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 

@@ -11,21 +11,29 @@ export class MarketService {
   async create(currentUser: any, dto: CreateMarketDto) {
     if (!currentUser || currentUser.role !== 'SUPER_ADMIN') throw new ForbiddenException('Only super admin');
 
-    const data: any = {
-      name: dto.name,
-      address: dto.address,
-      logo: dto.logo || null,
-      isSetupComplete: false,
-    };
-
-    // map baseCurrency string (code or id) to Prisma nested connect object
-    // map `baseCurrency` to a nested connect; default to 'AFN' if not provided
-    const baseCode = dto.baseCurrency || 'AFN';
-    if (baseCode) {
-      data.baseCurrency = { connect: { code: baseCode } };
+    const existing = await this.prisma.market.findFirst();
+    if (existing) {
+      throw new ConflictException('یک مارکت از قبل ساخته شده؛ فقط یک مارکت در سیستم مجاز است. برای تکمیل اطلاعات از ویرایش پروفایل استفاده کنید');
     }
 
-    const market = await this.prisma.market.create({ data });
+    const currency = await this.prisma.currency.findUnique({ where: { code: dto.baseCurrency } });
+    if (!currency) {
+      throw new NotFoundException(`ارز "${dto.baseCurrency}" در سیستم ثبت نشده؛ اول آن را از بخش ارزها اضافه کنید`);
+    }
+
+    // این تنها فراخوانی ساخت مارکت است: نام/آدرس/ارز پایه همین‌جا کامل می‌شود
+    // و isSetupComplete بلافاصله true می‌شود — دیگر نیازی به یک مرحلهٔ جداگانهٔ «تکمیل پروفایل» نیست.
+    const market = await this.prisma.market.create({
+      data: {
+        name: dto.name,
+        address: dto.address,
+        logo: dto.logo || null,
+        phones: dto.phones ?? [],
+        emails: dto.emails ?? [],
+        baseCurrency: { connect: { id: currency.id } },
+        isSetupComplete: true,
+      },
+    });
     return market;
   }
 

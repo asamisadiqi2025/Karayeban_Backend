@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { ArrayUnique, IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateMarketDto {
   @IsString()
@@ -11,7 +11,18 @@ export class CreateMarketDto {
   @IsString()
   logo?: string;
 
-  @IsOptional()
   @IsString()
-  baseCurrency?: string;
+  baseCurrency: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayUnique()
+  phones?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayUnique()
+  emails?: string[];
 }

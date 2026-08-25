@@ -20,6 +20,8 @@ model OpeningBalance {
   market    Market   @relation(fields: [marketId], references: [id])
   createdBy User     @relation(fields: [createdById], references: [id])
 
+  ledgerEntry LedgerEntry?
+
   @@index([marketId])
   @@index([accountId])
   @@map("opening_balances")

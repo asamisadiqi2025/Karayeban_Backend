@@ -18,7 +18,6 @@ model Tenant {
   rentCharges  RentCharges[]
   rentPayments RentPayment[]
   rentDebt     RentDebt?
-  overdueDebts OverdueDebt[]
   shops        Shop[]
 
   electricityBills    ElectricityBill[]

@@ -49,7 +49,7 @@ model ShareholderTransaction {
   shareholderId   String                     @map("shareholder_id") @db.Uuid
   accountId       String                     @map("account_id") @db.Uuid
   type            ShareholderTransactionType
-  amount          Decimal                    @db.Decimal(18, 2)
+  amount          Decimal                    @db.Decimal(18, 4)
   transactionDate DateTime                   @map("transaction_date") @db.Timestamptz(6)
   receiptNumber   String?                    @map("receipt_number") @db.VarChar(100)
   details         String?                    @db.Text
@@ -60,6 +60,8 @@ model ShareholderTransaction {
   shareholder Shareholder @relation(fields: [shareholderId], references: [id], onDelete: Restrict)
   account     Account     @relation(fields: [accountId], references: [id], onDelete: Restrict)
   createdBy   User?       @relation("ShareholderTransactionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  ledgerEntry LedgerEntry?
 
   @@index([marketId])
   @@index([shareholderId])

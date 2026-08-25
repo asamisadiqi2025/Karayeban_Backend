@@ -20,15 +20,15 @@ model RentCharges {
   periodStart DateTime @map("period_start") @db.Timestamptz(6)
   periodEnd   DateTime @map("period_end") @db.Timestamptz(6)
   days        Int
-  dailyRate   Decimal  @map("daily_rate") @db.Decimal(15, 2)
+  dailyRate   Decimal  @map("daily_rate") @db.Decimal(18, 4)
 
   // ========== ✅ ستون‌های محاسباتی (بدون @dbgenerated) ==========
   // این مقادیر را در کد NestJS محاسبه کنید
-  grossAmount     Decimal @default(0) @map("gross_amount") @db.Decimal(15, 2)
-  discountAmount  Decimal @default(0) @map("discount_amount") @db.Decimal(15, 2)
-  netAmount       Decimal @default(0) @map("net_amount") @db.Decimal(15, 2)
-  paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(15, 2)
-  remainingAmount Decimal @default(0) @map("remaining_amount") @db.Decimal(15, 2)
+  grossAmount     Decimal @default(0) @map("gross_amount") @db.Decimal(18, 4)
+  discountAmount  Decimal @default(0) @map("discount_amount") @db.Decimal(18, 4)
+  netAmount       Decimal @default(0) @map("net_amount") @db.Decimal(18, 4)
+  paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(18, 4)
+  remainingAmount Decimal @default(0) @map("remaining_amount") @db.Decimal(18, 4)
   // ============================================================
 
   currencyId String           @map("currency_id") @db.Uuid
