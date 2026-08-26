@@ -47,7 +47,11 @@ model Account {
   @@map("accounts")
 }
 
- Rate.
+// انتقال پول بین دو «بانک/دخل» داخلی (مثلاً صرافی حاجی داود ← دخل مارکت).
+// هر دو حساب باید متعلق به یک Market باشند؛ این قید در سطح سرویس اعمال می‌شود
+// چون Prisma/Postgres راهی برای مقایسهٔ marketId دو ردیف مرتبط در سطح schema ندارد.
+// هم‌ارز (AFN←AFN) و بین‌ارزی (AFN←USD با شکستن به نرخ روز) هر دو پشتیبانی می‌شوند —
+// ن.ک. amount/receivedAmount/exchangeRate.
 model AccountTransfer {
   id            String @id @default(uuid()) @db.Uuid
   marketId      String @map("market_id") @db.Uuid
