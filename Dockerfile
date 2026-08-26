@@ -7,7 +7,9 @@ COPY prisma ./prisma
 COPY prisma.config.ts ./
 
 ENV DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/karayeban"
-RUN npm ci
+# Coolify injects NODE_ENV=production as a build ARG, which would skip
+# typescript and @types/* and break `tsc`. --include=dev keeps them.
+RUN npm ci --include=dev
 
 FROM node:22-alpine AS builder
 WORKDIR /app
@@ -16,7 +18,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/karayeban"
-ENV NODE_ENV=production
 RUN npm run build
 
 FROM node:22-alpine AS runner
