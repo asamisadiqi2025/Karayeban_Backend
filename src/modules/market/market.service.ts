@@ -21,8 +21,7 @@ export class MarketService {
       throw new NotFoundException(`ارز "${dto.baseCurrency}" در سیستم ثبت نشده؛ اول آن را از بخش ارزها اضافه کنید`);
     }
 
-    // این تنها فراخوانی ساخت مارکت است: نام/آدرس/ارز پایه همین‌جا کامل می‌شود
-    // و isSetupComplete بلافاصله true می‌شود — دیگر نیازی به یک مرحلهٔ جداگانهٔ «تکمیل پروفایل» نیست.
+     
     const market = await this.prisma.market.create({
       data: {
         name: dto.name,
@@ -49,8 +48,7 @@ export class MarketService {
     if (!market) throw new NotFoundException('Market not found');
     if (currentUser.role !== 'SUPER_ADMIN' && currentUser.marketId !== id) throw new ForbiddenException('Access denied');
 
-    // prepare update payload and map baseCurrency to nested connect when provided
-    const { baseCurrency, ...rest } = dto as any;
+     const { baseCurrency, ...rest } = dto as any;
     const updateData: any = { ...rest };
     if (baseCurrency) {
       if (market.baseCurrencyId) {

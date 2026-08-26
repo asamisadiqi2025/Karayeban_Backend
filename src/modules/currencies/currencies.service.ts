@@ -83,7 +83,7 @@ export class CurrenciesService {
     const usage: string[] = [];
     if (accountsCount) usage.push(`${accountsCount} حساب`);
     if (openingBalancesCount) usage.push(`${openingBalancesCount} موجودی افتتاحیه`);
-    if (marketsCount) usage.push(`${marketsCount} بازار (به‌عنوان ارز پایه)`);
+    if (marketsCount) usage.push(`${marketsCount}مارکت (به‌عنوان ارز پایه)`);
     if (exchangeRatesCount) usage.push(`${exchangeRatesCount} نرخ ارز ثبت‌شده`);
     if (expensesCount) usage.push(`${expensesCount} هزینه`);
     if (rentPaymentsCount) usage.push(`${rentPaymentsCount} پرداخت کرایه`);

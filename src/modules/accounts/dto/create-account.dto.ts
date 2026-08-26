@@ -41,8 +41,7 @@ export class CreateAccountDto {
   @Type(() => CreateOpeningBalanceDto)
   openingBalance?: CreateOpeningBalanceDto;
 
-  // فقط برای SUPER_ADMIN: ساخت حساب زیر یک بازار مشخص. برای نقش‌های دیگر نادیده گرفته می‌شود
-  // و بازار از روی کاربر جاری تعیین می‌گردد.
+   
   @IsOptional()
   @IsUUID()
   marketId?: string;

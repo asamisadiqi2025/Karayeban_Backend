@@ -54,7 +54,7 @@ async function main() {
         update: {},
         create: {
             id: '11111111-1111-1111-1111-111111111111',
-            name: 'بازار مرکزی',
+            name: 'مارکت مرکزی',
             address: 'کابل، افغانستان',
             baseCurrencyId: afn.id,
             isSetupComplete: true,

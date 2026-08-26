@@ -17,8 +17,7 @@ export class UpdateMarketProfileDto {
   @IsString()
   baseCurrency?: string;
 
-  // کل آرایه جایگزین می‌شود؛ برای اضافه/حذف یک شماره، آرایهٔ کامل و به‌روزشده را بفرستید.
-  @IsOptional()
+   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   @ArrayUnique()

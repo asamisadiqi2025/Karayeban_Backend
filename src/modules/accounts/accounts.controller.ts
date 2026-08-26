@@ -1,7 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { TransferFundsDto } from './dto/transfer-funds.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -17,6 +28,12 @@ export class AccountsController {
     return this.accountsService.create(req.user, dto);
   }
 
+  @Post('transfer')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  transfer(@Req() req: any, @Body() dto: TransferFundsDto) {
+    return this.accountsService.transfer(req.user, dto);
+  }
+
   @Get()
   findAll(@Req() req: any) {
     return this.accountsService.findAll(req.user);
@@ -29,7 +46,11 @@ export class AccountsController {
 
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
-  update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateAccountDto) {
+  update(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: UpdateAccountDto,
+  ) {
     return this.accountsService.update(req.user, id, dto);
   }
 

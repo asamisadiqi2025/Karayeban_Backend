@@ -7,7 +7,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
-import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard'; // 👈 اضافه شد
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';  
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -40,7 +40,7 @@ async function bootstrap() {
       }),
     );
 
-    // 👇 اضافه کردن Global JWT Guard
+    //  ضافه کردن Global JWT Guard
     const reflector = app.get(Reflector);
     app.useGlobalGuards(new JwtAuthGuard(reflector));
 
