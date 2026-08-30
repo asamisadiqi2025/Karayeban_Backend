@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { setupSwagger } from './config/swagger.setup';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -26,6 +27,9 @@ async function bootstrap() {
       type: VersioningType.URI,
       defaultVersion: '1',
     });
+
+    // Mount Swagger UI (must run after prefix/versioning are configured)
+    setupSwagger(app);
 
     // Register Custom Global Exception filter
     app.useGlobalFilters(new HttpExceptionFilter());
