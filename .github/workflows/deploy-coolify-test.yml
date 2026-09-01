@@ -1,0 +1,56 @@
+name: Deploy to Coolify (test)
+
+# Merging a PR into `test` also fires `push`, so a separate pull_request trigger is not needed.
+on:
+  push:
+    branches:
+      - test
+  workflow_dispatch: {}
+
+concurrency:
+  group: coolify-deploy-test
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Trigger Coolify deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || (!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[skip cd]')) }}
+    steps:
+      - name: Trigger Coolify deployment
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          COOLIFY_APP_UUID: ${{ secrets.COOLIFY_APP_UUID }}
+        run: |
+          set -euo pipefail
+
+          missing=0
+          for var in COOLIFY_URL COOLIFY_TOKEN COOLIFY_APP_UUID; do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::Missing GitHub secret: ${var}"
+              missing=1
+            fi
+          done
+          if [ "${missing}" -ne 0 ]; then
+            echo "::error::Add COOLIFY_URL, COOLIFY_TOKEN, and COOLIFY_APP_UUID in repo Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+          COOLIFY_URL="${COOLIFY_URL%/}"
+
+          echo "Deploying ${GITHUB_SHA} from ${GITHUB_REF_NAME} to Coolify app ${COOLIFY_APP_UUID}..."
+
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --url "${COOLIFY_URL}/api/v1/deploy" \
+            --header "Authorization: Bearer ${COOLIFY_TOKEN}" \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json" \
+            --data "{\"uuid\": \"${COOLIFY_APP_UUID}\"}"
+
+          echo
+          echo "Coolify deploy triggered."
