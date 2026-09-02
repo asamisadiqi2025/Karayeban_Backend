@@ -58,12 +58,12 @@ model AccountTransfer {
   fromAccountId String @map("from_account_id") @db.Uuid
   toAccountId   String @map("to_account_id") @db.Uuid
 
-   amount Decimal @db.Decimal(18, 4)
- 
+  amount Decimal @db.Decimal(18, 4)
+
   receivedAmount Decimal @map("received_amount") @db.Decimal(18, 4)
 
-  
-  exchangeRate Decimal? @map("exchange_rate") @db.Decimal(18, 6)
+  // همان دقت ۱۰ رقم اعشاری ExchangeRate — برای ارزهای کم‌ارزش مثل تومان لازم است.
+  exchangeRate Decimal? @map("exchange_rate") @db.Decimal(24, 10)
 
   transferDate DateTime @map("transfer_date") @db.Timestamptz(6)
   notes        String?  @db.Text

@@ -6,13 +6,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
+import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { CreateFloorDto } from './dto/create-floor.dto';
 import { UpdateFloorDto } from './dto/update-floor.dto';
+import { FloorQueryDto } from './dto/floor-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
 @Injectable()
 export class FloorsService {
+  private static readonly SORT_FIELDS = ['floorNumber', 'name', 'createdAt'] as const;
+  private static readonly SEARCH_FIELDS = ['name'] as const;
+
   constructor(private readonly prisma: PrismaService) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند (ن.ک. jwt.strategy.ts)،
@@ -54,6 +60,8 @@ export class FloorsService {
       marketId = actor.marketId;
     }
 
+    await ensureMarketSetupComplete(this.prisma, marketId);
+
     try {
       const floor = await this.prisma.floor.create({
         data: {
@@ -75,19 +83,31 @@ export class FloorsService {
     }
   }
 
-  async findAll(currentUser: { id: string }) {
+  async findAll(currentUser: { id: string }, query: FloorQueryDto) {
     const actor = await this.getActor(currentUser);
     if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
       throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
     }
-    const where =
+    const where: any =
       actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! };
-    const floors = await this.prisma.floor.findMany({
-      where,
-      include: { _count: { select: { shops: true } } },
-      orderBy: { floorNumber: 'asc' },
+    if (query.isActive !== undefined) where.isActive = query.isActive;
+
+    const searchWhere = buildSearchWhere(FloorsService.SEARCH_FIELDS, query.search);
+    if (searchWhere) Object.assign(where, searchWhere);
+
+    const orderBy = resolveSort(query.sortBy, query.sortOrder, FloorsService.SORT_FIELDS, {
+      floorNumber: 'asc',
     });
-    return floors.map((floor) => this.mapFloor(floor));
+
+    const result = await paginate(this.prisma.floor, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+      include: { _count: { select: { shops: true } } },
+    });
+
+    return { ...result, data: result.data.map((floor: any) => this.mapFloor(floor)) };
   }
 
   async findOne(currentUser: { id: string }, id: string) {

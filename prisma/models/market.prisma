@@ -1,12 +1,13 @@
 model Market {
   id              String   @id @default(uuid()) @db.Uuid
   name            String   @db.VarChar(200)
+  subdomain       String   @unique @db.VarChar(63)
   logo            String?  @db.Text
   address         String?  @db.Text
-  phones          String[] @default([])
-  emails          String[] @default([])
+  phone           String?  @db.VarChar(30)
+  email           String?  @db.VarChar(255)
   details         String?  @db.Text
-   baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
+  baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
   isSetupComplete Boolean  @default(false)
   createdAt       DateTime @default(now()) @db.Timestamp(6)
   updatedAt       DateTime @updatedAt @db.Timestamp(6)
@@ -14,6 +15,7 @@ model Market {
   baseCurrency Currency? @relation(fields: [baseCurrencyId], references: [id], onDelete: SetNull)
 
   customRoles             CustomRole[]
+  marketCurrencies        MarketCurrency[]
   users                   User[]
   accounts                Account[]
   auditLogs               AuditLog[]

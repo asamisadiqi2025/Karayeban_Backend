@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
+import { AccountQueryDto } from './dto/account-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -35,8 +37,8 @@ export class AccountsController {
   }
 
   @Get()
-  findAll(@Req() req: any) {
-    return this.accountsService.findAll(req.user);
+  findAll(@Req() req: any, @Query() query: AccountQueryDto) {
+    return this.accountsService.findAll(req.user, query);
   }
 
   @Get(':id')

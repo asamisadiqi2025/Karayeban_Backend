@@ -2,6 +2,7 @@ import { Controller, Post, Body, UseGuards, Patch, Param, Get, Query, Req } from
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserQueryDto } from './dto/user-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -30,7 +31,7 @@ export class UserController {
 
   @Get()
   @Roles('SUPER_ADMIN', 'ADMIN')
-  async list(@Req() req: any, @Query('marketId') marketId: string, @Query('role') role: string, @Query('skip') skip = '0', @Query('take') take = '20') {
-    return this.userService.findAll({ marketId, role, skip: parseInt(skip, 10), take: parseInt(take, 10) }, req.user);
+  async list(@Req() req: any, @Query() query: UserQueryDto) {
+    return this.userService.findAll(query, req.user);
   }
 }
