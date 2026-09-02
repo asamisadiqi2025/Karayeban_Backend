@@ -6,6 +6,7 @@ model Currency {
   openingBalances OpeningBalance[]
 
   markets             Market[]
+  marketCurrencies    MarketCurrency[]
   exchangeRates       ExchangeRate[]
   expenses            Expense[]
   rentPayments        RentPayment[]
@@ -19,4 +20,23 @@ model Currency {
   lotteryPrizes       LotteryPrize[]
   contractSettlements ContractSettlement[]
   ledgerEntries       LedgerEntry[]
+}
+
+// کاتالوگ Currency جهانی و بدون تکرار می‌ماند (کد/نام استاندارد ISO)؛ این جدول واسط
+// مشخص می‌کند هر مارکت کدام ارزها را برای خودش «فعال» کرده — یعنی چه چیزی در
+// انتخاب‌گر ارز پایه، ارز حساب بانکی، و نرخ ارز همان مارکت قابل‌انتخاب است.
+// اگر مارکت B هیچ‌وقت این دکمه را برای یک ارز نزده باشد، آن ارز را هیچ‌جای
+// سیستم خودش نمی‌بیند، حتی اگر مارکت A از قبل همان ارز را به کاتالوگ اضافه کرده باشد.
+model MarketCurrency {
+  id         String   @id @default(uuid()) @db.Uuid
+  marketId   String   @map("market_id") @db.Uuid
+  currencyId String   @map("currency_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market   Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  currency Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+
+  @@unique([marketId, currencyId])
+  @@index([marketId])
+  @@map("market_currencies")
 }

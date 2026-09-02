@@ -10,14 +10,21 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
+import { AccountQueryDto } from './dto/account-query.dto';
+import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
+import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
 @Injectable()
 export class AccountsService {
+  private static readonly SORT_FIELDS = ['name', 'balance', 'createdAt'] as const;
+  private static readonly SEARCH_FIELDS = ['name', 'bankName', 'accountNumber'] as const;
+
   constructor(private readonly prisma: PrismaService) {}
 
-    private async getActor(currentUser: { id: string }): Promise<Actor> {
+  private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
       where: { id: currentUser.id },
       select: { id: true, role: true, marketId: true },
@@ -31,6 +38,51 @@ export class AccountsService {
     if (actor.marketId !== accountMarketId) {
       throw new ForbiddenException('دسترسی به این حساب مجاز نیست');
     }
+  }
+
+  // نرخ «۱ واحد این ارز = X واحد ارز پایه» را برمی‌گرداند: ۱ برای خودِ ارز پایه،
+  // وگرنه آخرین نرخ ثبت‌شده در ExchangeRate (تنظیمات مارکت). این متد فقط می‌خواند،
+  // هرگز چیزی در جدول نرخ ارز نمی‌نویسد.
+  private async getRateToBase(
+    marketId: string,
+    currencyId: string,
+    baseCurrencyId: string,
+  ): Promise<Prisma.Decimal | null> {
+    if (currencyId === baseCurrencyId) return new Prisma.Decimal(1);
+    const row = await this.prisma.exchangeRate.findFirst({
+      where: { marketId, currencyId },
+      orderBy: { effectiveDate: 'desc' },
+    });
+    return row ? row.rateToBase : null;
+  }
+
+  // وقتی کاربر نرخ تبدیل را دستی نمی‌فرستد، از روی آخرین نرخ‌های ثبت‌شدهٔ هر دو ارز
+  // نسبت به ارز پایهٔ مارکت محاسبه می‌شود («نرخ خوانده می‌شود»، طبق چیزی که خواستی).
+  private async resolveExchangeRate(
+    marketId: string,
+    fromCurrencyId: string,
+    toCurrencyId: string,
+  ): Promise<Prisma.Decimal> {
+    const market = await this.prisma.market.findUnique({
+      where: { id: marketId },
+      select: { baseCurrencyId: true },
+    });
+    if (!market?.baseCurrencyId) {
+      throw new BadRequestException(
+        'نرخ تبدیل ارسال نشده و ارز پایهٔ مارکت هم تنظیم نیست؛ نرخ را دستی بفرستید',
+      );
+    }
+
+    const [fromRate, toRate] = await Promise.all([
+      this.getRateToBase(marketId, fromCurrencyId, market.baseCurrencyId),
+      this.getRateToBase(marketId, toCurrencyId, market.baseCurrencyId),
+    ]);
+    if (!fromRate || !toRate) {
+      throw new BadRequestException(
+        'نرخ تبدیل ارسال نشده و برای این جفت ارز در تنظیمات مارکت هم نرخی ثبت نشده؛ نرخ را دستی بفرستید یا ابتدا نرخ روز را ثبت کنید',
+      );
+    }
+    return fromRate.div(toRate);
   }
 
   async create(currentUser: { id: string }, dto: CreateAccountDto) {
@@ -49,10 +101,13 @@ export class AccountsService {
       marketId = actor.marketId;
     }
 
+    await ensureMarketSetupComplete(this.prisma, marketId);
+
     const currency = await this.prisma.currency.findUnique({
       where: { id: dto.currencyId },
     });
     if (!currency) throw new NotFoundException('ارز مورد نظر یافت نشد');
+    await ensureCurrencyEnabledForMarket(this.prisma, marketId, dto.currencyId);
 
     const openingAmount = dto.openingBalance?.amount ?? 0;
     const openingDate = dto.openingBalance?.openingDate
@@ -116,16 +171,28 @@ export class AccountsService {
     }
   }
 
-  async findAll(currentUser: { id: string }) {
+  async findAll(currentUser: { id: string }, query: AccountQueryDto) {
     const actor = await this.getActor(currentUser);
     if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
-      throw new ForbiddenException('کاربر جاری به هیچ   مارکت ازاری متصل نیست');
+      throw new ForbiddenException('کاربر جاری به هیچ مارکتی متصل نیست');
     }
-    const where =
+    const where: any =
       actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! };
-    return this.prisma.account.findMany({
+    if (query.type !== undefined) where.type = query.type;
+    if (query.isActive !== undefined) where.isActive = query.isActive;
+
+    const searchWhere = buildSearchWhere(AccountsService.SEARCH_FIELDS, query.search);
+    if (searchWhere) Object.assign(where, searchWhere);
+
+    const orderBy = resolveSort(query.sortBy, query.sortOrder, AccountsService.SORT_FIELDS, {
+      createdAt: 'asc',
+    });
+
+    return paginate(this.prisma.account, {
       where,
-      orderBy: { createdAt: 'asc' },
+      orderBy,
+      page: query.page,
+      limit: query.limit,
     });
   }
 
@@ -255,12 +322,16 @@ export class AccountsService {
     let exchangeRate: Prisma.Decimal | null = null;
 
     if (isCrossCurrency) {
-      if (dto.exchangeRate === undefined || dto.exchangeRate === null) {
-        throw new BadRequestException(
-          'چون ارز حساب مبدا و مقصد متفاوت است، نرخ تبدیل (exchangeRate) الزامی است',
+      if (dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
+        // نرخ دستی همین یک انتقال را می‌پوشاند؛ هیچ‌جا در ExchangeRate ذخیره نمی‌شود.
+        exchangeRate = new Prisma.Decimal(dto.exchangeRate);
+      } else {
+        exchangeRate = await this.resolveExchangeRate(
+          fromAccount.marketId,
+          fromAccount.currencyId,
+          toAccount.currencyId,
         );
       }
-      exchangeRate = new Prisma.Decimal(dto.exchangeRate);
       receivedAmount = amount.mul(exchangeRate).toDecimalPlaces(4);
     } else {
       if (dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
