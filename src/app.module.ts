@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { MarketModule } from './modules/market/market.module';
 import { CurrenciesModule } from './modules/currencies/currencies.module';
 import { AccountsModule } from './modules/accounts/accounts.module';
+import { FloorsModule } from './modules/floors/floors.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 
 @Module({
@@ -17,6 +18,7 @@ import { PrismaModule } from './database/prisma/prisma.module';
     MarketModule,
     CurrenciesModule,
     AccountsModule,
+    FloorsModule,
   ],
   controllers: [AppController],
 })
