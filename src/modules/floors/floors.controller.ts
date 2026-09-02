@@ -6,12 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { FloorsService } from './floors.service';
 import { CreateFloorDto } from './dto/create-floor.dto';
 import { UpdateFloorDto } from './dto/update-floor.dto';
+import { FloorQueryDto } from './dto/floor-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -28,8 +30,8 @@ export class FloorsController {
   }
 
   @Get()
-  findAll(@Req() req: any) {
-    return this.floorsService.findAll(req.user);
+  findAll(@Req() req: any, @Query() query: FloorQueryDto) {
+    return this.floorsService.findAll(req.user, query);
   }
 
   @Get(':id')

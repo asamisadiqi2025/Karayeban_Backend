@@ -7,7 +7,7 @@ model OpeningBalance {
 
   amount Decimal @db.Decimal(18, 4)
 
-  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(18, 6)
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
   baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
 
   openingDate DateTime @map("opening_date") @db.Date

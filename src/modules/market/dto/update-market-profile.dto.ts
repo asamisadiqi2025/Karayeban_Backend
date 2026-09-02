@@ -1,4 +1,4 @@
-import { ArrayUnique, IsArray, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class UpdateMarketProfileDto {
   @IsOptional()
@@ -17,16 +17,17 @@ export class UpdateMarketProfileDto {
   @IsString()
   baseCurrency?: string;
 
-   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @ArrayUnique()
-  phones?: string[];
+  @IsOptional()
+  @IsString()
+  @MaxLength(30)
+  phone?: string;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @ArrayUnique()
-  emails?: string[];
+  @IsEmail()
+  @MaxLength(255)
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  details?: string;
 }
- 
