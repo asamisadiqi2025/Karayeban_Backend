@@ -17,8 +17,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
 
-    // همهٔ روت‌ها زیر /api/v{n} می‌روند، به‌جز health-check ریشه (GET /) که باید
-    // بدون نسخه و همیشه در یک مسیر ثابت برای مانیتورینگ/آپ‌تایم در دسترس بماند.
+     
     app.setGlobalPrefix('api', {
       exclude: [{ path: '/', method: RequestMethod.GET }],
     });
