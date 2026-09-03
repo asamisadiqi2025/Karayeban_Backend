@@ -11,6 +11,7 @@ import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
 import { AccountQueryDto } from './dto/account-query.dto';
+import { TransferQueryDto } from './dto/transfer-query.dto';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
@@ -21,6 +22,12 @@ type Actor = { id: string; role: string; marketId: string | null };
 export class AccountsService {
   private static readonly SORT_FIELDS = ['name', 'balance', 'createdAt'] as const;
   private static readonly SEARCH_FIELDS = ['name', 'bankName', 'accountNumber'] as const;
+  private static readonly TRANSFER_SORT_FIELDS = ['transferDate', 'amount', 'createdAt'] as const;
+  private static readonly TRANSFER_SEARCH_FIELDS = [
+    'notes',
+    'fromAccount.name',
+    'toAccount.name',
+  ] as const;
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -417,6 +424,46 @@ export class AccountsService {
         fromAccount: updatedFromAccount,
         toAccount: updatedToAccount,
       };
+    });
+  }
+
+  async findAllTransfers(currentUser: { id: string }, query: TransferQueryDto) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ مارکتی متصل نیست');
+    }
+    const where: any =
+      actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! };
+
+    if (query.accountId) {
+      where.OR = [
+        { fromAccountId: query.accountId },
+        { toAccountId: query.accountId },
+      ];
+    }
+    if (query.fromAccountId) where.fromAccountId = query.fromAccountId;
+    if (query.toAccountId) where.toAccountId = query.toAccountId;
+
+    const searchWhere = buildSearchWhere(AccountsService.TRANSFER_SEARCH_FIELDS, query.search);
+    if (searchWhere) where.AND = [searchWhere];
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      AccountsService.TRANSFER_SORT_FIELDS,
+      { transferDate: 'desc' },
+    );
+
+    return paginate(this.prisma.accountTransfer, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+      include: {
+        fromAccount: { select: { id: true, name: true, type: true } },
+        toAccount: { select: { id: true, name: true, type: true } },
+        createdBy: { select: { id: true, fullName: true } },
+      },
     });
   }
 }
