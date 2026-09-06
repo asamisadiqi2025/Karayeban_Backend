@@ -1,26 +1,26 @@
 import {
   IsDateString,
   IsEnum,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
   Min,
   MaxLength,
 } from 'class-validator';
 import { MeterStatus } from '@prisma/client';
 
-export class CreateMeterDto {
+export class UpdateMeterDto {
+  // جابه‌جایی کنتور به دوکان دیگر (مثلاً وقتی هنوز assign/merge اختصاصی نداریم) —
+  // meterNumber هم خودکار با شمارهٔ دوکان جدید یکی می‌شود.
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(50)
-  shopNumber: string;
+  shopNumber?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(100)
-  serialNumber: string;
+  serialNumber?: string;
 
   @IsOptional()
   @IsEnum(MeterStatus)
@@ -39,9 +39,4 @@ export class CreateMeterDto {
   @IsOptional()
   @IsDateString()
   lastReadingDate?: string;
-
-  // فقط برای SUPER_ADMIN: ساخت کنتور زیر یک بازار مشخص.
-  @IsOptional()
-  @IsUUID()
-  marketId?: string;
 }
