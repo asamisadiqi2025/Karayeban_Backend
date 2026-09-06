@@ -64,13 +64,16 @@ export async function paginate<T>(
 
 // sortBy را فقط اگر داخل فهرست سفید ماژول باشد می‌پذیرد؛ وگرنه ترتیب پیش‌فرض همان ماژول
 // برمی‌گردد. جلوی probing با فیلدهای ناشناخته/حساس (مثل passwordHash) و خطای Prisma
-// روی فیلد غلط را می‌گیرد.
+// روی فیلد غلط را می‌گیرد. fallback می‌تواند یک ترتیب ساده یا یک آرایهٔ ترتیب مرکب باشد
+// (مثلاً «اول طبقه، بعد شماره دوکان») — برای وقتی که کاربر صریحاً sortBy نفرستاده.
+type SortOrder = Record<string, any>;
+
 export function resolveSort<TField extends string>(
   sortBy: string | undefined,
   sortOrder: 'asc' | 'desc' | undefined,
   allowedFields: readonly TField[],
-  fallback: Record<string, 'asc' | 'desc'>,
-): Record<string, 'asc' | 'desc'> {
+  fallback: SortOrder | SortOrder[],
+): SortOrder | SortOrder[] {
   if (sortBy && (allowedFields as readonly string[]).includes(sortBy)) {
     return { [sortBy]: sortOrder ?? 'desc' };
   }
