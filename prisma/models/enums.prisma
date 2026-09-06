@@ -6,19 +6,19 @@ enum UserRole {
 }
 
 enum ShopType {
-  shop
-  kiosk
+  shop // دوکان
+  unit // واحد
   stall // بساط
-  vendor
-  office
-  warehouse
 }
 
-// چهار وضعیت دقیقاً منطبق با نیازمندی: فعال، غیرفعال، خالی، کرایه‌داده‌شده.
+// خالی → (وقتی قراردادی برای این دوکان ساخته شد ولی هنوز شروع نشده) pending →
+// (وقتی تاریخ شروع قرارداد رسید) rented. active/inactive مستقل از اجاره‌داری‌اند:
+// وضعیت باز/بستهٔ روزمرهٔ دوکان، نه اینکه مستأجر دارد یا نه (جدا از isActive که حذف نرم است).
 enum ShopStatus {
   active
   inactive
   empty
+  pending
   rented
 }
 
