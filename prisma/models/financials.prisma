@@ -1,15 +1,20 @@
 model ElectricityMeter {
-  id           String      @id @default(uuid()) @db.Uuid
-  marketId     String      @map("market_id") @db.Uuid
+  id              String      @id @default(uuid()) @db.Uuid
+  marketId        String      @map("market_id") @db.Uuid
   // شمارهٔ نمایشی کنتور — هنگام ساخت برابر shopNumber مقداردهی می‌شود (شمارهٔ کنتور = شمارهٔ دوکان).
-  meterNumber  String?     @map("meter_number")
-  serialNumber String? // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
+  meterNumber     String?     @map("meter_number")
+  serialNumber    String?     @map("serial_number") // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
   // shopId «خانهٔ اصلی و ثابت» کنتور است و هنگام ادغام/تفکیک دوکان‌ها هرگز تغییر نمی‌کند؛
   // فقط status عوض می‌شود (فعال/غیرفعال). دوکان فعلاً‌فعال یک گروه از ShopGroup.primaryMeterId معلوم می‌شود.
-  shopId       String?     @map("shop_id") @db.Uuid
-  status       MeterStatus @default(active)
-  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  shopId          String?     @map("shop_id") @db.Uuid
+  status          MeterStatus @default(active)
+  location        String?     @db.VarChar(255)
+  // آخرین درجه/رقمی که هنگام ثبت یا آخرین بازدید روی کنتور خوانده شده — مستقل از
+  // previousReading/currentReading خودِ هر بل که مربوط به یک دورهٔ مشخص است.
+  lastReading     Decimal?    @map("last_reading") @db.Decimal(12, 2)
+  lastReadingDate DateTime?   @map("last_reading_date") @db.Timestamptz(6)
+  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   market              Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
   shop                Shop?             @relation(fields: [shopId], references: [id], onDelete: SetNull)
@@ -17,8 +22,11 @@ model ElectricityMeter {
   bills               ElectricityBill[]
 
   @@unique([marketId, meterNumber])
+  @@unique([marketId, serialNumber])
+  @@unique([shopId])
   @@index([shopId])
   @@index([status])
+  @@map("electricity_meters")
 }
 
 enum ElectricityBillStatus {
