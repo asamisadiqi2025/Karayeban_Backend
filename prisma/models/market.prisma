@@ -41,6 +41,7 @@ model Market {
   exchangeRates           ExchangeRate[]
   expenseCategories       ExpenseCategory[]
   ledgerEntries           LedgerEntry[]
+  guarantors              Guarantor[]
 
   @@map("markets")
 }

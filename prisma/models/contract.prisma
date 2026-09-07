@@ -1,12 +1,14 @@
 model Contract {
-  id       String  @id @default(uuid()) @db.Uuid
-  marketId String  @map("market_id") @db.Uuid
+  id          String  @id @default(uuid()) @db.Uuid
+  marketId    String  @map("market_id") @db.Uuid
   // برای دوکان‌های ادغام‌شده، shopId به دوکانِ اصلی/فاکتورشونده اشاره می‌کند؛
   // فهرست کامل همهٔ دوکان‌های تحت این قرارداد از رابطهٔ contractShops به‌دست می‌آید.
   // نکته: هیچ قید دیتابیسی جلوی دو قرارداد status=active هم‌زمان روی یک shopId را نمی‌گیرد؛
   // باید با یک migration دستی (CREATE UNIQUE INDEX ... WHERE status = 'active') و/یا چک تراکنشی در سرویس تضمین شود.
-  shopId   String? @map("shop_id") @db.Uuid
-  tenantId String? @map("tenant_id") @db.Uuid
+  shopId      String? @map("shop_id") @db.Uuid
+  tenantId    String? @map("tenant_id") @db.Uuid
+  // ضامن مستقل است (ن.ک. guarantor.prisma) — این‌جاست که هنگام بستن قرارداد به مستأجر/دوکان وصل می‌شود.
+  guarantorId String? @map("guarantor_id") @db.Uuid
 
   startDate DateTime?      @map("start_date")
   endDate   DateTime?      @map("end_date")
@@ -15,9 +17,10 @@ model Contract {
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  market Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  shop   Shop?   @relation("ContractPrimaryShop", fields: [shopId], references: [id], onDelete: SetNull)
-  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  market    Market     @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop      Shop?      @relation("ContractPrimaryShop", fields: [shopId], references: [id], onDelete: SetNull)
+  tenant    Tenant?    @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  guarantor Guarantor? @relation(fields: [guarantorId], references: [id], onDelete: SetNull)
 
   rentCharges    RentCharges[]
   rentPayments   RentPayment[]
@@ -43,6 +46,7 @@ model Contract {
   @@index([marketId])
   @@index([shopId])
   @@index([tenantId])
+  @@index([guarantorId])
   @@map("contracts")
 }
 

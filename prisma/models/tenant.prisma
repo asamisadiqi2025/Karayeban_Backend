@@ -13,7 +13,6 @@ model Tenant {
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   market       Market        @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  guarantors   Guarantor[]
   contracts    Contract[]
   rentCharges  RentCharges[]
   rentPayments RentPayment[]

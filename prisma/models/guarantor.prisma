@@ -1,13 +1,24 @@
+// ضامن یک موجودیت کاملاً مستقل است — نه به یک مستأجر خاص قفل شده. یک ضامن می‌تواند
+// هم‌زمان یا در طول زمان، ضامنِ چند مستأجر/دوکاندارِ مختلف در چند قرارداد جداگانه باشد.
+// پیوند واقعی «کدام ضامن، ضامنِ کدام مستأجر/دوکان است» فقط از طریق Contract.guarantorId
+// برقرار می‌شود (وقتی قرارداد بسته می‌شود)، نه یک رابطهٔ مستقیم و دائمی اینجا.
 model Guarantor {
   id        String   @id @default(uuid()) @db.Uuid
-  tenantId  String   @map("tenant_id") @db.Uuid
+  marketId  String   @map("market_id") @db.Uuid
   name      String   @db.VarChar(150)
   contact   String?  @db.VarChar(30)
   idNumber  String?  @map("id_number") @db.VarChar(50)
+  details   String?  @db.Text
+  isActive  Boolean  @default(true) @map("is_active")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  market    Market     @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  contracts Contract[]
 
-  @@index([tenantId])
+  // یک شمارهٔ تذکره دقیقاً یک نفر واقعی را مشخص می‌کند — دو رکورد ضامن جدا با یک تذکرهٔ
+  // یکسان یعنی همان یک نفر دوبار ثبت شده. وقتی idNumber داده نشود (null)، محدودیتی نیست.
+  @@unique([marketId, idNumber])
+  @@index([marketId])
   @@map("guarantors")
 }
