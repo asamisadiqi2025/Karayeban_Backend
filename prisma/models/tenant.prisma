@@ -11,6 +11,7 @@ model Tenant {
   photo           String?  @db.Text
   isActive        Boolean  @default(true) @map("is_active")
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   market       Market        @relation(fields: [marketId], references: [id], onDelete: Cascade)
   contracts    Contract[]
@@ -24,7 +25,10 @@ model Tenant {
   electricityDebt     ElectricityDebt?
   collateralItems     CollateralItem[]
 
+  // یک شمارهٔ تذکره دقیقاً یک نفر واقعی را مشخص می‌کند — همان درسی که برای Guarantor
+  // گرفتیم؛ اگر همان مستأجر چند دوکان دیگر هم بگیرد، باید همین یک رکورد از طریق چند
+  // Contract دوباره استفاده شود، نه یک رکورد Tenant جدید و تکراری.
+  @@unique([marketId, idNumber])
   @@index([marketId])
-  @@index([idNumber])
   @@map("tenants")
 }
