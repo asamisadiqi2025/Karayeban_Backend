@@ -9,6 +9,7 @@ import { AccountsModule } from './modules/accounts/accounts.module';
 import { FloorsModule } from './modules/floors/floors.module';
 import { ShopsModule } from './modules/shops/shops.module';
 import { MetersModule } from './modules/meters/meters.module';
+import { GuarantorsModule } from './modules/guarantors/guarantors.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { PrismaModule } from './database/prisma/prisma.module';
     FloorsModule,
     ShopsModule,
     MetersModule,
+    GuarantorsModule,
   ],
   controllers: [AppController],
 })
