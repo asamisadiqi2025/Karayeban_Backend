@@ -1,6 +1,3 @@
-// ============================
-// سهام‌داران مارکت — برداشت/واریز از هر بانک + درصد سهم تاریخچه‌دار
-// ============================
 
 model Shareholder {
   id        String   @id @default(uuid()) @db.Uuid
@@ -10,18 +7,18 @@ model Shareholder {
   idNumber  String?  @map("id_number") @db.VarChar(50)
   isActive  Boolean  @default(true) @map("is_active")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   market        Market                   @relation(fields: [marketId], references: [id], onDelete: Cascade)
   equityHistory ShareholderEquity[]
   transactions  ShareholderTransaction[]
 
+   @@unique([marketId, idNumber])
   @@index([marketId])
   @@map("shareholders")
 }
 
-// درصد سهم هر سهام‌دار در طول زمان — هر بار که سهم خرید/فروخت یک ردیف جدید ثبت می‌شود
-// (نه آپدیت روی جای قبلی)، تا تاریخچهٔ کامل مالکیت قابل بازسازی بماند.
-// درصد «فعلی» = آخرین ردیف بر اساس effectiveFrom برای آن سهام‌دار.
+ 
 model ShareholderEquity {
   id            String   @id @default(uuid()) @db.Uuid
   shareholderId String   @map("shareholder_id") @db.Uuid
