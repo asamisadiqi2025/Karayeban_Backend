@@ -1,1 +1,60 @@
-export class AssetsController {}
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { AssetsService } from './assets.service';
+import { CreateAssetDto } from './dto/create-asset.dto';
+import { UpdateAssetDto } from './dto/update-asset.dto';
+import { AssetQueryDto } from './dto/asset-query.dto';
+import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+
+@Controller('assets')
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class AssetsController {
+  constructor(private readonly assetsService: AssetsService) {}
+
+  @Post()
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  create(@Req() req: any, @Body() dto: CreateAssetDto) {
+    return this.assetsService.create(req.user, dto);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "summary" را :id تفسیر می‌کند.
+  @Get('summary')
+  getSummary(@Req() req: any, @Query() query: AssetSummaryQueryDto) {
+    return this.assetsService.getSummary(req.user, query);
+  }
+
+  @Get()
+  findAll(@Req() req: any, @Query() query: AssetQueryDto) {
+    return this.assetsService.findAll(req.user, query);
+  }
+
+  @Get(':id')
+  findOne(@Req() req: any, @Param('id') id: string) {
+    return this.assetsService.findOne(req.user, id);
+  }
+
+  @Patch(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateAssetDto) {
+    return this.assetsService.update(req.user, id, dto);
+  }
+
+  @Delete(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  remove(@Req() req: any, @Param('id') id: string) {
+    return this.assetsService.remove(req.user, id);
+  }
+}
