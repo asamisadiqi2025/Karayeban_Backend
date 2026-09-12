@@ -1,0 +1,48 @@
+// PURCHASE/SALE پول را از/به یک Account (دفتر همان مارکت) جابه‌جا می‌کنند و یک LedgerEntry می‌سازند.
+// CONSUMPTION (مصرف داخلی، نه فروش) و ADJUSTMENT (اصلاح موجودی بعد از شمارش فیزیکی) فقط
+// موجودی را تغییر می‌دهند؛ accountId ندارند و LedgerEntry نمی‌سازند.
+enum InventoryTransactionType {
+  PURCHASE
+  SALE
+  CONSUMPTION
+  ADJUSTMENT
+}
+
+model InventoryTransaction {
+  id          String @id @default(uuid()) @db.Uuid
+  marketId    String @map("market_id") @db.Uuid
+  warehouseId String @map("warehouse_id") @db.Uuid // اسنپ‌شات از item.warehouseId در لحظهٔ ثبت
+  itemId      String @map("item_id") @db.Uuid
+
+  type InventoryTransactionType
+
+  // همیشه مثبت، به جز ADJUSTMENT که می‌تواند منفی باشد (اصلاح کاهشی)
+  quantity Decimal @db.Decimal(18, 4)
+
+  unitPrice       Decimal? @map("unit_price") @db.Decimal(18, 4) // فقط PURCHASE/SALE
+  totalAmount     Decimal  @map("total_amount") @db.Decimal(18, 4)
+  costOfGoodsSold Decimal? @map("cost_of_goods_sold") @db.Decimal(18, 4) // فقط SALE: qty × averageCost لحظهٔ فروش
+
+  accountId  String? @map("account_id") @db.Uuid // فقط PURCHASE/SALE
+  currencyId String  @map("currency_id") @db.Uuid // از item.currencyId گرفته می‌شود، نه از کلاینت
+
+  transactionDate DateTime @map("transaction_date") @db.Timestamptz(6)
+  notes           String?  @db.Text
+
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market    Market        @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  warehouse Warehouse     @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  item      InventoryItem @relation(fields: [itemId], references: [id], onDelete: Restrict)
+  account   Account?      @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency  Currency      @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy User?         @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  ledgerEntry LedgerEntry?
+
+  @@index([marketId])
+  @@index([itemId, transactionDate])
+  @@index([warehouseId])
+  @@map("inventory_transactions")
+}

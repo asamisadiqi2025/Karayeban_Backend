@@ -20,6 +20,9 @@ model Currency {
   lotteryPrizes       LotteryPrize[]
   contractSettlements ContractSettlement[]
   ledgerEntries       LedgerEntry[]
+
+  inventoryItems        InventoryItem[]
+  inventoryTransactions InventoryTransaction[]
 }
 
 // کاتالوگ Currency جهانی و بدون تکرار می‌ماند (کد/نام استاندارد ISO)؛ این جدول واسط

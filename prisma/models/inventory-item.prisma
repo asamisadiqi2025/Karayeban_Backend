@@ -1,0 +1,35 @@
+model InventoryItem {
+  id          String  @id @default(uuid()) @db.Uuid
+  marketId    String  @map("market_id") @db.Uuid
+  warehouseId String  @map("warehouse_id") @db.Uuid
+  categoryId  String? @map("category_id") @db.Uuid
+
+  name String @db.VarChar(200)
+  unit String @db.VarChar(50) // واحد شمارش، متن آزاد: عدد/بسته/کارتن
+
+  // موجودی جاری — جمع دائمیِ اتمیک، مثل Account.balance؛ فقط از طریق InventoryTransaction تغییر می‌کند.
+  quantity Decimal @default(0) @db.Decimal(18, 4)
+  // میانگین موزون قیمت خرید هر واحد؛ فقط با تراکنش PURCHASE تغییر می‌کند.
+  averageCost Decimal @default(0) @map("average_cost") @db.Decimal(18, 4)
+
+  currencyId String  @map("currency_id") @db.Uuid
+  details    String? @db.Text
+
+  isActive  Boolean  @default(true) @map("is_active")
+  isDeleted Boolean  @default(false) @map("is_deleted")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market             @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  warehouse Warehouse          @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  category  InventoryCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  currency  Currency           @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+
+  transactions InventoryTransaction[]
+
+  @@unique([warehouseId, name])
+  @@index([marketId])
+  @@index([warehouseId])
+  @@index([categoryId])
+  @@map("inventory_items")
+}

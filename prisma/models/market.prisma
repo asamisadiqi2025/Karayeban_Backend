@@ -42,6 +42,10 @@ model Market {
   expenseCategories       ExpenseCategory[]
   ledgerEntries           LedgerEntry[]
   guarantors              Guarantor[]
+  warehouses              Warehouse[]
+  inventoryCategories     InventoryCategory[]
+  inventoryItems          InventoryItem[]
+  inventoryTransactions   InventoryTransaction[]
 
   @@map("markets")
 }
