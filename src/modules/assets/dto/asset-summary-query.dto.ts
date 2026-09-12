@@ -1,0 +1,9 @@
+import { IsOptional, IsUUID } from 'class-validator';
+
+export class AssetSummaryQueryDto {
+  // فقط برای SUPER_ADMIN: محدود کردن مجموع ارزش به یک بازار مشخص؛ اگر ارسال نشود،
+  // SUPER_ADMIN مجموع همهٔ بازارها را می‌بیند. برای نقش‌های دیگر نادیده گرفته می‌شود.
+  @IsOptional()
+  @IsUUID()
+  marketId?: string;
+}

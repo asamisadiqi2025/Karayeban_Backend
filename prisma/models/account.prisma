@@ -35,6 +35,7 @@ model Account {
   electricityPayments     ElectricityPayment[]
   shareholderTransactions ShareholderTransaction[]
   collateralItems         CollateralItem[]
+  inventoryTransactions   InventoryTransaction[]
 
   transfersOut AccountTransfer[] @relation("TransferFrom")
   transfersIn  AccountTransfer[] @relation("TransferTo")
