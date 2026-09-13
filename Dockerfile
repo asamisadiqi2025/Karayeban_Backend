@@ -21,10 +21,12 @@ ENV DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/karayeban"
 RUN npm run build
 
 FROM node:22-alpine AS runner
-RUN apk add --no-cache openssl libc6-compat
+RUN apk add --no-cache openssl libc6-compat curl wget
 WORKDIR /app
 
 ENV NODE_ENV=production
+
+# Default value only. Coolify can override this.
 ENV PORT=4000
 
 COPY package.json package-lock.json ./
@@ -38,9 +40,10 @@ RUN chmod +x docker-entrypoint.sh && chown -R node:node /app
 
 USER node
 
-EXPOSE 4000
+# Documentation only. Runtime port comes from ENV.
+EXPOSE ${PORT}
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=25s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:4000/ >/dev/null || exit 1
+  CMD-SHELL wget -qO- http://127.0.0.1:${PORT}/ >/dev/null || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
