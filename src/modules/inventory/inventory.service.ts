@@ -128,7 +128,15 @@ export class InventoryService {
   async findOneCategory(currentUser: { id: string }, id: string) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
-    this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
+    // برخلاف update/remove: دسته‌بندی سراسری (marketId خالی) برای خواندن باز است —
+    // همان چیزی که در findAllCategories هم می‌بینند، فقط این‌جا هم باید یکسان باشد.
+    if (
+      actor.role !== 'SUPER_ADMIN' &&
+      category.marketId !== null &&
+      category.marketId !== actor.marketId
+    ) {
+      throw new ForbiddenException('دسترسی به این دسته‌بندی مجاز نیست');
+    }
     return category;
   }
 
