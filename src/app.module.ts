@@ -16,6 +16,9 @@ import { ShareholdersModule } from './modules/shareholders/shareholders.module';
 import { AssetsModule } from './modules/assets/assets.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { ExpensesModule } from './modules/expenses/expenses.module';
+import { RentModule } from './modules/rent/rent.module';
+import { ContractsModule } from './modules/contracts/contracts.module';
+import { ElectricityModule } from './modules/electricity/electricity.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 
 @Module({
@@ -37,6 +40,9 @@ import { PrismaModule } from './database/prisma/prisma.module';
     AssetsModule,
     InventoryModule,
     ExpensesModule,
+    RentModule,
+    ContractsModule,
+    ElectricityModule,
   ],
   controllers: [AppController],
 })

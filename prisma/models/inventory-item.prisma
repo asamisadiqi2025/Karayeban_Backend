@@ -5,12 +5,10 @@ model InventoryItem {
   categoryId  String? @map("category_id") @db.Uuid
 
   name String @db.VarChar(200)
-  unit String @db.VarChar(50) // واحد شمارش، متن آزاد: عدد/بسته/کارتن
+  unit String @db.VarChar(50)  
 
-  // موجودی جاری — جمع دائمیِ اتمیک، مثل Account.balance؛ فقط از طریق InventoryTransaction تغییر می‌کند.
-  quantity Decimal @default(0) @db.Decimal(18, 4)
-  // میانگین موزون قیمت خرید هر واحد؛ فقط با تراکنش PURCHASE تغییر می‌کند.
-  averageCost Decimal @default(0) @map("average_cost") @db.Decimal(18, 4)
+   quantity Decimal @default(0) @db.Decimal(18, 4)
+   averageCost Decimal @default(0) @map("average_cost") @db.Decimal(18, 4)
 
   currencyId String  @map("currency_id") @db.Uuid
   details    String? @db.Text

@@ -1,18 +1,24 @@
+enum PaymentSourceType {
+  BANK
+  SECURITY_DEPOSIT
+}
+
 model RentPayment {
   id            String        @id @default(uuid()) @db.Uuid
   marketId      String        @map("market_id") @db.Uuid
   contractId    String        @map("contract_id") @db.Uuid
   tenantId      String        @map("tenant_id") @db.Uuid
   shopId        String        @map("shop_id") @db.Uuid
-  // month/year بر مبنای تقویم هجری‌شمسی‌اند (month: 1=حمل ... 12=حوت، year: سال شمسی)، نه میلادی.
-  month         Int
+   month         Int
   year          Int
   amount        Decimal       @db.Decimal(18, 4)
   currencyId    String        @map("currency_id") @db.Uuid
   usdEquivalent Decimal?      @map("usd_equivalent") @db.Decimal(18, 4)
   paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
   paymentMethod PaymentMethod @map("payment_method")
-  accountId     String        @map("account_id") @db.Uuid
+   accountId      String?           @map("account_id") @db.Uuid
+  source         PaymentSourceType @default(BANK)
+   isOpeningEntry Boolean           @default(false) @map("is_opening_entry")
   collectedById String        @map("collected_by_id") @db.Uuid
   notes         String?       @db.Text
   isPartial     Boolean       @default(false) @map("is_partial")
@@ -23,13 +29,11 @@ model RentPayment {
   contract    Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
   tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
-  account     Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  account     Account? @relation(fields: [accountId], references: [id], onDelete: Restrict)
   currency    Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
   collectedBy User     @relation("RentCollectedBy", fields: [collectedById], references: [id], onDelete: Restrict)
 
-  // این پرداخت (یک رسید فیزیکی واحد) می‌تواند بین چند فاکتور/ماه تقسیم شود —
-  // مثلاً ۱۰۰۰ افغانی که بخشی بدهی ماه قبل و بخشی ماه جاری را می‌پوشاند.
-  allocations RentPaymentAllocation[]
+   allocations RentPaymentAllocation[]
   ledgerEntry LedgerEntry?
 
   @@index([marketId])
@@ -39,9 +43,7 @@ model RentPayment {
   @@index([year, month])
   @@map("rent_payments")
 }
-
-// تخصیص یک پرداخت به یک یا چند فاکتور کرایه (چندبه‌چند).
-// سرویس هنگام ثبت پرداخت، مبلغ را ابتدا به قدیمی‌ترین فاکتور بازِ مستاجر (بر اساس periodStart) تخصیص می‌دهد.
+ 
 model RentPaymentAllocation {
   id           String   @id @default(uuid()) @db.Uuid
   paymentId    String   @map("payment_id") @db.Uuid

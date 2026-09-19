@@ -1,17 +1,12 @@
 model ElectricityMeter {
   id              String      @id @default(uuid()) @db.Uuid
   marketId        String      @map("market_id") @db.Uuid
-  // شمارهٔ نمایشی کنتور — هنگام ساخت برابر shopNumber مقداردهی می‌شود (شمارهٔ کنتور = شمارهٔ دوکان).
-  meterNumber     String?     @map("meter_number")
+   meterNumber     String?     @map("meter_number")
   serialNumber    String?     @map("serial_number") // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
-  // shopId «خانهٔ اصلی و ثابت» کنتور است و هنگام ادغام/تفکیک دوکان‌ها هرگز تغییر نمی‌کند؛
-  // فقط status عوض می‌شود (فعال/غیرفعال). دوکان فعلاً‌فعال یک گروه از ShopGroup.primaryMeterId معلوم می‌شود.
-  shopId          String?     @map("shop_id") @db.Uuid
+   shopId          String?     @map("shop_id") @db.Uuid
   status          MeterStatus @default(active)
   location        String?     @db.VarChar(255)
-  // آخرین درجه/رقمی که هنگام ثبت یا آخرین بازدید روی کنتور خوانده شده — مستقل از
-  // previousReading/currentReading خودِ هر بل که مربوط به یک دورهٔ مشخص است.
-  lastReading     Decimal?    @map("last_reading") @db.Decimal(12, 2)
+   lastReading     Decimal?    @map("last_reading") @db.Decimal(12, 2)
   lastReadingDate DateTime?   @map("last_reading_date") @db.Timestamptz(6)
   createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -37,9 +32,7 @@ enum ElectricityBillStatus {
   CANCELED
 }
 
-// بل برق دوره‌ای (هر دو ماه)؛ جمع‌آوری همچنان هفته‌وار و قسطی است — همان الگوی RentCharges.
-// وقتی paidAmount به totalAmount برسد، سرویس status را PAID می‌کند و دوره «بسته» تلقی می‌شود.
-model ElectricityBill {
+ model ElectricityBill {
   id       String  @id @default(uuid()) @db.Uuid
   marketId String  @map("market_id") @db.Uuid
   shopId   String  @map("shop_id") @db.Uuid
@@ -57,8 +50,7 @@ model ElectricityBill {
 
   currencyId     String                @map("currency_id") @db.Uuid
   status         ElectricityBillStatus @default(PENDING)
-  // برای بل‌هایی که از کتابچهٔ کاغذی مهاجرت شده‌اند (ن.ک. حالت پرخطر ۵ در گزارش)
-  isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
+   isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
 
   notes       String? @db.Text
   createdById String? @map("created_by_id") @db.Uuid
@@ -83,7 +75,7 @@ model ElectricityBill {
   @@map("electricity_bills")
 }
 
-// خلاصهٔ زندهٔ بدهی برق هر مستأجر — دقیقاً هم‌الگو با RentDebt.
+ 
 model ElectricityDebt {
   id       String @id @default(uuid()) @db.Uuid
   tenantId String @unique @map("tenant_id") @db.Uuid
@@ -101,9 +93,7 @@ model ElectricityDebt {
   @@map("electricity_debts")
 }
 
-// یک پرداخت فیزیکی (یک رسید) برای برق؛ می‌تواند بین چند بل تقسیم شود (ن.ک. ElectricityPaymentAllocation) —
-// دقیقاً همان قانونی که برای کرایه خواستید: هر پرداخت اول بدهی قدیمی‌تر را می‌پوشاند.
-model ElectricityPayment {
+ model ElectricityPayment {
   id            String        @id @default(uuid()) @db.Uuid
   marketId      String        @map("market_id") @db.Uuid
   shopId        String        @map("shop_id") @db.Uuid
@@ -113,6 +103,8 @@ model ElectricityPayment {
   paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
   paymentMethod PaymentMethod @map("payment_method")
   accountId     String?       @map("account_id") @db.Uuid
+  source         PaymentSourceType @default(BANK)
+  isOpeningEntry Boolean           @default(false) @map("is_opening_entry")
   collectedById String?       @map("collected_by_id") @db.Uuid
   receiptNumber String?       @map("receipt_number") @db.VarChar(100)
   notes         String?       @db.Text
@@ -150,12 +142,7 @@ model ElectricityPaymentAllocation {
   @@map("electricity_payment_allocations")
 }
 
-// مدل ShareholderTransaction به prisma/models/shareholder.prisma منتقل شد
-// (کنار Shareholder و ShareholderEquity، چون دیگر یک ردیف اسکلتی نیست).
 
-// ==========================================
-// ✅ اصلاح‌شده: اضافه کردن رابطه با Asset
-// ==========================================
 model DepreciationEvent {
   id                 String   @id @default(uuid()) @db.Uuid
   assetId            String   @map("asset_id") @db.Uuid // 👈 اضافه شد
@@ -167,7 +154,7 @@ model DepreciationEvent {
   appliedById        String?  @map("applied_by_id") @db.Uuid
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  // 👇 رابطه با Asset (کلید اصلی)
+   
   asset     Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
   appliedBy User? @relation("DepreciationAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
 
