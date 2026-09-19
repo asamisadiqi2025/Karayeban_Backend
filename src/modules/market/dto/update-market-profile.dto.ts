@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsPositive, IsString, MaxLength } from 'class-validator';
 
 export class UpdateMarketProfileDto {
   @IsOptional()
@@ -30,4 +30,11 @@ export class UpdateMarketProfileDto {
   @IsOptional()
   @IsString()
   details?: string;
+
+  // نرخ برق (به‌ازای هر واحد مصرف) — همهٔ بل‌های تولیدشده از دورهٔ میترخوانیِ دسته‌جمعی
+  // همین عدد را استفاده می‌کنند تا هر بار مجبور نباشید وارد کنید.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  electricityRatePerUnit?: number;
 }
