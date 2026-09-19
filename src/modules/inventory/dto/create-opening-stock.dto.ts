@@ -1,4 +1,10 @@
-import { IsDateString, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 // موجودی افتتاحیهٔ کالا — برای وقتی که کالا از قبل به تعداد و ارزش مشخصی موجود است
 // (نه یک خرید تازه از حساب بانکی) و می‌خواهید همان لحظهٔ ساخت کالا ثبتش کنید،

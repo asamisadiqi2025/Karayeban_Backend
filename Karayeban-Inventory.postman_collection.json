@@ -5,19 +5,94 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
-    { "key": "identifier", "value": "adminmilicenter20" },
-    { "key": "password", "value": "almas@12345" },
-    { "key": "token", "value": "" },
-    { "key": "currencyId", "value": "e9508cc0-ccd4-4258-bf6c-70b52faa0266", "description": "AFN — از قبل باید برای بازار فعال باشد" },
-    { "key": "accountId", "value": "f07a4005-dba2-4a1d-ac3a-2f78648b7917", "description": "حساب/بانکی که پول ازش کم/زیاد می‌شود؛ باید هم‌ارز با currencyId باشد" },
-    { "key": "warehouseId", "value": "" },
-    { "key": "categoryId", "value": "" },
-    { "key": "itemId", "value": "", "description": "مارکر — کالای مصرفی، برایش CONSUMPTION هم می‌زنیم" },
-    { "key": "whiteboardItemId", "value": "", "description": "تخته — کالای غیرمصرفی، ساخته می‌شود با موجودی افتتاحیه و دیگر هیچ‌وقت CONSUMPTION نمی‌خورد" },
-    { "key": "transactionId", "value": "" },
-    { "key": "throwawayWarehouseId", "value": "" },
-    { "key": "throwawayCategoryId", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1"
+    },
+    {
+      "key": "identifier",
+      "value": "adminmilicenter20"
+    },
+    {
+      "key": "password",
+      "value": "almas@12345"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "currencyId",
+      "value": "e9508cc0-ccd4-4258-bf6c-70b52faa0266",
+      "description": "AFN — از قبل باید برای بازار فعال باشد"
+    },
+    {
+      "key": "accountId",
+      "value": "f07a4005-dba2-4a1d-ac3a-2f78648b7917",
+      "description": "حساب/بانکی که پول ازش کم/زیاد می‌شود؛ باید هم‌ارز با currencyId باشد"
+    },
+    {
+      "key": "warehouseId",
+      "value": ""
+    },
+    {
+      "key": "categoryId",
+      "value": ""
+    },
+    {
+      "key": "itemId",
+      "value": "",
+      "description": "مارکر — کالای مصرفی، برایش CONSUMPTION هم می‌زنیم"
+    },
+    {
+      "key": "whiteboardItemId",
+      "value": "",
+      "description": "تخته — کالای غیرمصرفی، ساخته می‌شود با موجودی افتتاحیه و دیگر هیچ‌وقت CONSUMPTION نمی‌خورد"
+    },
+    {
+      "key": "transactionId",
+      "value": ""
+    },
+    {
+      "key": "throwawayWarehouseId",
+      "value": ""
+    },
+    {
+      "key": "throwawayCategoryId",
+      "value": ""
+    },
+    {
+      "key": "stockDay1",
+      "value": ""
+    },
+    {
+      "key": "stockDay2",
+      "value": ""
+    },
+    {
+      "key": "stockDay3",
+      "value": ""
+    },
+    {
+      "key": "stockDay4",
+      "value": ""
+    },
+    {
+      "key": "stockDay5",
+      "value": ""
+    },
+    {
+      "key": "stockToday",
+      "value": ""
+    },
+    {
+      "key": "stockWarehouseId",
+      "value": ""
+    },
+    {
+      "key": "stockItemId",
+      "value": ""
+    }
   ],
   "item": [
     {
@@ -27,30 +102,63 @@
           "name": "Login",
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "function fmt(d) { return d.toISOString().slice(0, 10); }",
+                  "const today = new Date();",
+                  "function daysAgo(n) { return new Date(today.getTime() - n * 24 * 60 * 60 * 1000); }",
+                  "pm.collectionVariables.set('stockDay1', fmt(daysAgo(120)));",
+                  "pm.collectionVariables.set('stockDay2', fmt(daysAgo(90)));",
+                  "pm.collectionVariables.set('stockDay3', fmt(daysAgo(60)));",
+                  "pm.collectionVariables.set('stockDay4', fmt(daysAgo(45)));",
+                  "pm.collectionVariables.set('stockDay5', fmt(daysAgo(30)));",
+                  "pm.collectionVariables.set('stockToday', fmt(today));"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('200 و accessToken دارد', function () {",
-                  "  pm.response.to.have.status(200);",
+                  "pm.test('200/201 و accessToken دارد', function () {",
+                  "  pm.expect([200, 201]).to.include(pm.response.code);",
                   "  pm.expect(pm.response.json()).to.have.property('accessToken');",
                   "});",
-                  "if (pm.response.code === 200) {",
-                  "  pm.collectionVariables.set('token', pm.response.json().accessToken);",
-                  "}"
+                  "if (pm.response.code < 300) { pm.collectionVariables.set('token', pm.response.json().accessToken); }"
                 ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"password\": \"{{password}}\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
           }
         }
       ]
@@ -75,23 +183,55 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"گدام مرکزی\",\n  \"location\": \"طبقه همکف\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/warehouses", "host": ["{{baseUrl}}"], "path": ["warehouses"] }
+            "url": {
+              "raw": "{{baseUrl}}/warehouses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses"
+              ]
+            }
           }
         },
         {
           "name": "دریافت یک گدام",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/warehouses/{{warehouseId}}", "host": ["{{baseUrl}}"], "path": ["warehouses", "{{warehouseId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/warehouses/{{warehouseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses",
+                "{{warehouseId}}"
+              ]
+            }
           }
         },
         {
@@ -99,23 +239,64 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"location\": \"طبقه اول - اتاق ۳\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/warehouses/{{warehouseId}}", "host": ["{{baseUrl}}"], "path": ["warehouses", "{{warehouseId}}"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": \"طبقه اول - اتاق ۳\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/warehouses/{{warehouseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses",
+                "{{warehouseId}}"
+              ]
+            }
           }
         },
         {
           "name": "فهرست گدام‌ها",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/warehouses?page=1&limit=20",
-              "host": ["{{baseUrl}}"],
-              "path": ["warehouses"],
-              "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
             }
           }
         },
@@ -124,35 +305,110 @@
           "event": [
             {
               "listen": "test",
-              "script": { "type": "text/javascript", "exec": ["if (pm.response.json().id) { pm.collectionVariables.set('throwawayWarehouseId', pm.response.json().id); }"] }
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('throwawayWarehouseId', pm.response.json().id); }"
+                ]
+              }
             }
           ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"گدام تستی حذف\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/warehouses", "host": ["{{baseUrl}}"], "path": ["warehouses"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"گدام تستی حذف\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/warehouses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses"
+              ]
+            }
           }
         },
         {
           "name": "حذف گدام خالی (باید 200 بدهد)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', function () { pm.response.to.have.status(200); });"] } }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/warehouses/{{throwawayWarehouseId}}", "host": ["{{baseUrl}}"], "path": ["warehouses", "{{throwawayWarehouseId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/warehouses/{{throwawayWarehouseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses",
+                "{{throwawayWarehouseId}}"
+              ]
+            }
           }
         },
         {
           "name": "حذف گدامِ دارای کالا (باید 409 بدهد)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('409 Conflict', function () { pm.response.to.have.status(409); });"] } }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409 Conflict', function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/warehouses/{{warehouseId}}", "host": ["{{baseUrl}}"], "path": ["warehouses", "{{warehouseId}}"] },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/warehouses/{{warehouseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses",
+                "{{warehouseId}}"
+              ]
+            },
             "description": "فقط بعد از ساخت حداقل یک کالا در همین گدام اجرا کنید تا 409 بگیرید."
           }
         }
@@ -166,25 +422,68 @@
           "event": [
             {
               "listen": "test",
-              "script": { "type": "text/javascript", "exec": ["if (pm.response.json().id) { pm.collectionVariables.set('categoryId', pm.response.json().id); }"] }
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('categoryId', pm.response.json().id); }"
+                ]
+              }
             }
           ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"لوازم اداری\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/categories", "host": ["{{baseUrl}}"], "path": ["inventory", "categories"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"لوازم اداری\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "categories"
+              ]
+            }
           }
         },
         {
           "name": "دریافت یک دسته‌بندی",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "categories", "{{categoryId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
           }
         },
         {
@@ -192,19 +491,57 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"isActive\": true\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "categories", "{{categoryId}}"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/categories/{{categoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "categories",
+                "{{categoryId}}"
+              ]
+            }
           }
         },
         {
           "name": "فهرست دسته‌بندی‌ها",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/categories", "host": ["{{baseUrl}}"], "path": ["inventory", "categories"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "categories"
+              ]
+            }
           }
         },
         {
@@ -212,26 +549,79 @@
           "event": [
             {
               "listen": "test",
-              "script": { "type": "text/javascript", "exec": ["if (pm.response.json().id) { pm.collectionVariables.set('throwawayCategoryId', pm.response.json().id); }"] }
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('throwawayCategoryId', pm.response.json().id); }"
+                ]
+              }
             }
           ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"دسته تستی حذف\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/categories", "host": ["{{baseUrl}}"], "path": ["inventory", "categories"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"دسته تستی حذف\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "categories"
+              ]
+            }
           }
         },
         {
           "name": "حذف دستهٔ خالی (باید 200 بدهد)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200 OK', function () { pm.response.to.have.status(200); });"] } }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/categories/{{throwawayCategoryId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "categories", "{{throwawayCategoryId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/categories/{{throwawayCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "categories",
+                "{{throwawayCategoryId}}"
+              ]
+            }
           }
         }
       ]
@@ -256,15 +646,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"مارکر وایت‌برد\",\n  \"unit\": \"عدد\",\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"categoryId\": \"{{categoryId}}\",\n  \"currencyId\": \"{{currencyId}}\",\n  \"details\": \"مارکر آبی برای وایت‌برد دفتر\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/inventory/items", "host": ["{{baseUrl}}"], "path": ["inventory", "items"] }
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items"
+              ]
+            }
           }
         },
         {
@@ -288,15 +697,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"تخته وایت‌برد\",\n  \"unit\": \"عدد\",\n  \"warehouseId\": \"{{warehouseId}}\",\n  \"categoryId\": \"{{categoryId}}\",\n  \"currencyId\": \"{{currencyId}}\",\n  \"details\": \"تخته‌های نصب‌شده در دفتر - غیرمصرفی\",\n  \"openingStock\": {\n    \"quantity\": 3,\n    \"unitCost\": 800,\n    \"notes\": \"شمارش اولیهٔ موجودی\"\n  }\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/inventory/items", "host": ["{{baseUrl}}"], "path": ["inventory", "items"] },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items"
+              ]
+            },
             "description": "برای اجناسی که از قبل موجودند و می‌خواهید در یک مرحله (بدون تراکنش جدا) هم تعداد هم ارزش‌شان ثبت شود. یک رویداد ADJUSTMENT خودکار برای تاریخچه ساخته می‌شود، بدون کم‌شدن پول از هیچ حسابی."
           }
         },
@@ -304,16 +732,46 @@
           "name": "دریافت کالا (تخته) — تأیید رویداد ADJUSTMENT افتتاحیه",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/items/{{whiteboardItemId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "items", "{{whiteboardItemId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items/{{whiteboardItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items",
+                "{{whiteboardItemId}}"
+              ]
+            }
           }
         },
         {
           "name": "دریافت یک کالا (با تاریخچهٔ تراکنش)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/items/{{itemId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "items", "{{itemId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items",
+                "{{itemId}}"
+              ]
+            }
           }
         },
         {
@@ -321,23 +779,62 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"details\": \"مارکر آبی وایت‌برد - برند پایلوت\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/items/{{itemId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "items", "{{itemId}}"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"details\": \"مارکر آبی وایت‌برد - برند پایلوت\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items",
+                "{{itemId}}"
+              ]
+            }
           }
         },
         {
           "name": "فهرست کالاها (با فیلتر گدام)",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/inventory/items?warehouseId={{warehouseId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["inventory", "items"],
-              "query": [{ "key": "warehouseId", "value": "{{warehouseId}}" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items"
+              ],
+              "query": [
+                {
+                  "key": "warehouseId",
+                  "value": "{{warehouseId}}"
+                }
+              ]
             }
           }
         },
@@ -345,17 +842,57 @@
           "name": "مجموع ارزش انبار (summary) — مارکر و تخته هر دو باید دیده شوند",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/items/summary", "host": ["{{baseUrl}}"], "path": ["inventory", "items", "summary"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items",
+                "summary"
+              ]
+            }
           }
         },
         {
           "name": "حذف کالای دارای موجودی (باید 409 بدهد)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('409 Conflict', function () { pm.response.to.have.status(409); });"] } }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409 Conflict', function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/items/{{whiteboardItemId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "items", "{{whiteboardItemId}}"] },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items/{{whiteboardItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items",
+                "{{whiteboardItemId}}"
+              ]
+            },
             "description": "تخته quantity=3 دارد، پس حذفش باید 409 بدهد."
           }
         }
@@ -385,15 +922,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"PURCHASE\",\n  \"quantity\": 100,\n  \"unitPrice\": 2,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"خرید اول مارکر\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] }
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
           }
         },
         {
@@ -416,15 +972,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"PURCHASE\",\n  \"quantity\": 50,\n  \"unitPrice\": 5,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"خرید دوم با قیمت بالاتر\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] }
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
           }
         },
         {
@@ -447,29 +1022,81 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"itemId\": \"{{whiteboardItemId}}\",\n  \"type\": \"PURCHASE\",\n  \"quantity\": 2,\n  \"unitPrice\": 850,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"خرید تخته اضافه برای اتاق جدید\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            },
             "description": "نشان می‌دهد خرید جنسِ غیرمصرفی (تخته) هم دقیقاً همان‌طور پول را از حساب کم می‌کند — فرقی با مارکر ندارد."
           }
         },
         {
           "name": "SALE (مارکر) - فروش بیشتر از موجودی (باید 409 بدهد)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('409 Conflict', function () { pm.response.to.have.status(409); });"] } }],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409 Conflict', function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"SALE\",\n  \"quantity\": 500,\n  \"unitPrice\": 6,\n  \"accountId\": \"{{accountId}}\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"SALE\",\n  \"quantity\": 500,\n  \"unitPrice\": 6,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
           }
         },
         {
@@ -492,15 +1119,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"SALE\",\n  \"quantity\": 40,\n  \"unitPrice\": 6,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"فروش به دوکاندار\"\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] }
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
           }
         },
         {
@@ -523,11 +1169,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"CONSUMPTION\",\n  \"quantity\": 10,\n  \"notes\": \"مصرف داخلی در دفتر - مارکر تمام شد\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"CONSUMPTION\",\n  \"quantity\": 10,\n  \"notes\": \"مصرف داخلی در دفتر - مارکر تمام شد\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            },
             "description": "مارکر مصرفی است، هفته‌ای که تمام شد این‌طور از موجودی خارج می‌شود. تخته چون مصرف‌شدنی نیست هیچ‌وقت این تراکنش را نمی‌خورد."
           }
         },
@@ -536,11 +1205,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"ADJUSTMENT\",\n  \"quantity\": -5,\n  \"notes\": \"کسری شمارش فیزیکی\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"ADJUSTMENT\",\n  \"quantity\": -5,\n  \"notes\": \"کسری شمارش فیزیکی\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
           }
         },
         {
@@ -548,23 +1240,65 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{token}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"ADJUSTMENT\",\n  \"quantity\": 3,\n  \"notes\": \"اضافی شمارش فیزیکی\"\n}", "options": { "raw": { "language": "json" } } },
-            "url": { "raw": "{{baseUrl}}/inventory/transactions", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"type\": \"ADJUSTMENT\",\n  \"quantity\": 3,\n  \"notes\": \"اضافی شمارش فیزیکی\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
           }
         },
         {
           "name": "فهرست تراکنش‌های یک کالا",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/inventory/transactions?itemId={{itemId}}&limit=20",
-              "host": ["{{baseUrl}}"],
-              "path": ["inventory", "transactions"],
-              "query": [{ "key": "itemId", "value": "{{itemId}}" }, { "key": "limit", "value": "20" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "itemId",
+                  "value": "{{itemId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
             }
           }
         },
@@ -572,8 +1306,639 @@
           "name": "دریافت یک تراکنش",
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": { "raw": "{{baseUrl}}/inventory/transactions/{{transactionId}}", "host": ["{{baseUrl}}"], "path": ["inventory", "transactions", "{{transactionId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions/{{transactionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions",
+                "{{transactionId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. گزارش دورهٔ موجودی (Stock Statement) — برای فرانت",
+      "description": "این چهار route همان «استاک بلانس» است. دو تای اول (items/:id و items/summary) موجودیِ همین لحظه را می‌دهند؛ دو تای بعدی (stock-statement و transactions با فیلتر تاریخ) موجودیِ یک بازهٔ تاریخیِ خاص را می‌دهند. بقیهٔ درخواست‌های این پوشه فقط برای ساختن دادهٔ تستی‌اند تا این چهار route را روی داده‌های واقعی ببینید.",
+      "item": [
+        {
+          "name": "[دادهٔ تستی] گدام تستیِ این سناریو",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('stockWarehouseId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"گدام تست Stock Statement {{$timestamp}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/warehouses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "warehouses"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[دادهٔ تستی] کالای تستی (بدون موجودی افتتاحیه)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('quantity=0 در شروع', function () { pm.expect(pm.response.json().quantity).to.eql('0'); });",
+                  "if (pm.response.json().id) { pm.collectionVariables.set('stockItemId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"برنج تست\",\n  \"unit\": \"کیلو\",\n  \"warehouseId\": \"{{stockWarehouseId}}\",\n  \"currencyId\": \"{{currencyId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[دادهٔ تستی] خرید ۱: ۱۰۰ واحد @۱۰ ({{stockDay1}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{stockItemId}}\",\n  \"type\": \"PURCHASE\",\n  \"quantity\": 100,\n  \"unitPrice\": 10,\n  \"accountId\": \"{{accountId}}\",\n  \"transactionDate\": \"{{stockDay1}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "ثبت یک رویداد خرید — همین که این را می‌زنید، quantity کالا خودکار +۱۰۰ می‌شود و averageCost هم دوباره حساب می‌شود. warehouseId لازم نیست بدهید چون از روی itemId خودش می‌فهمد.",
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[دادهٔ تستی] خرید ۲: ۵۰ واحد @۱۲ ({{stockDay2}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{stockItemId}}\",\n  \"type\": \"PURCHASE\",\n  \"quantity\": 50,\n  \"unitPrice\": 12,\n  \"accountId\": \"{{accountId}}\",\n  \"transactionDate\": \"{{stockDay2}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "خرید دوم با قیمت متفاوت — برای این‌که averageCost واقعاً میانگین‌گیری شود، نه فقط آخرین قیمت.",
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[دادهٔ تستی] فروش: ۳۰ واحد @۲۰ ({{stockDay3}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{stockItemId}}\",\n  \"type\": \"SALE\",\n  \"quantity\": 30,\n  \"unitPrice\": 20,\n  \"accountId\": \"{{accountId}}\",\n  \"transactionDate\": \"{{stockDay3}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "فروش — quantity کم می‌شود، پول به حساب اضافه می‌شود، و بهای تمام‌شده (COGS) از averageCost لحظهٔ فروش محاسبه می‌شود.",
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[دادهٔ تستی] مصرف: ۱۰ واحد ({{stockDay4}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{stockItemId}}\",\n  \"type\": \"CONSUMPTION\",\n  \"quantity\": 10,\n  \"transactionDate\": \"{{stockDay4}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "مصرف داخلی — نه فروش. quantity کم می‌شود ولی هیچ پولی جابه‌جا نمی‌شود، پس accountId هم لازم نیست.",
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "[دادهٔ تستی] اصلاح کاهشی: -۵ ({{stockDay5}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{stockItemId}}\",\n  \"type\": \"ADJUSTMENT\",\n  \"quantity\": -5,\n  \"transactionDate\": \"{{stockDay5}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "اصلاح موجودی بعد از شمارش فیزیکی — می‌تواند منفی (کسری) یا مثبت (اضافی) باشد. مثل CONSUMPTION، پولی جابه‌جا نمی‌شود.",
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "① موجودیِ همین لحظه — GET /inventory/items/:id",
+          "description": "برای فرانت: این‌جا استفاده کنید هر وقت فقط بخواهید «همین الان این کالا چقدر موجودی دارد» را نشان بدهید (مثلاً در صفحهٔ لیست کالاها یا جزئیات یک کالا). فیلد quantity همیشه زنده و آپدیت‌شده است، خودتان چیزی جمع نمی‌زنید. averageCost هم میانگین قیمت خرید است.\n\nنمونه پاسخ: { \"quantity\": \"105\", \"averageCost\": \"10.6667\" }",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('quantity=105', function () { pm.expect(pm.response.json().quantity).to.eql('105'); });",
+                  "pm.test('averageCost=10.6667 (میانگین موزون دو خرید)', function () { pm.expect(pm.response.json().averageCost).to.eql('10.6667'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/items/{{stockItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "items",
+                "{{stockItemId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "② موجودی یک کالا در یک بازهٔ تاریخ — GET /inventory/stock-statement?itemId=",
+          "description": "برای فرانت: این‌جا استفاده کنید برای صفحهٔ «گزارش موجودی» وقتی کاربر یک کالا و یک بازهٔ تاریخ (از/تا) انتخاب می‌کند. پارامترها: itemId (کدام کالا)، from و to (بازهٔ تاریخ، فرمت YYYY-MM-DD).\n\nپاسخ یک آبجکت «item» می‌دهد با: openingBalance (موجودی اول دوره)، purchased/sold/consumed/adjusted (هرکدام quantity+amount همان بازه)، و closingBalance (موجودی آخر دوره). نیازی به جمع‌زدن دستی نیست — همه‌چیز آماده است.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const it = pm.response.json().item;",
+                  "pm.test('opening=100', function () { pm.expect(it.openingBalance).to.eql('100'); });",
+                  "pm.test('purchased.quantity=50', function () { pm.expect(it.purchased.quantity).to.eql('50'); });",
+                  "pm.test('sold.quantity=30', function () { pm.expect(it.sold.quantity).to.eql('30'); });",
+                  "pm.test('consumed.quantity=10', function () { pm.expect(it.consumed.quantity).to.eql('10'); });",
+                  "pm.test('adjusted.quantity=0 (روز۵ بیرون این بازه است)', function () { pm.expect(it.adjusted.quantity).to.eql('0'); });",
+                  "pm.test('closing=110', function () { pm.expect(it.closingBalance).to.eql('110'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/stock-statement?itemId={{stockItemId}}&from={{stockDay2}}&to={{stockDay4}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "stock-statement"
+              ],
+              "query": [
+                {
+                  "key": "itemId",
+                  "value": "{{stockItemId}}"
+                },
+                {
+                  "key": "from",
+                  "value": "{{stockDay2}}"
+                },
+                {
+                  "key": "to",
+                  "value": "{{stockDay4}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "② همان گزارش، بازهٔ کامل‌تر — closing باید با موجودی زندهٔ ① یکی باشد",
+          "description": "همان route بالا، فقط بازهٔ تاریخ را از اول تا امروز گرفتیم. نکتهٔ مهم برای تست: اگر «to» تا امروز باشد، closingBalance این گزارش باید دقیقاً با quantity در route ① یکی باشد — این یک چک خوب برای مطمئن‌شدن از درستیِ فرانت است.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const it = pm.response.json().item;",
+                  "pm.test('opening=0', function () { pm.expect(it.openingBalance).to.eql('0'); });",
+                  "pm.test('purchased.quantity=150 (۱۰۰+۵۰)', function () { pm.expect(it.purchased.quantity).to.eql('150'); });",
+                  "pm.test('adjusted.quantity=-5', function () { pm.expect(it.adjusted.quantity).to.eql('-5'); });",
+                  "pm.test('closing=105 == موجودی زندهٔ کالا', function () { pm.expect(it.closingBalance).to.eql('105'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/stock-statement?itemId={{stockItemId}}&from={{stockDay1}}&to={{stockToday}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "stock-statement"
+              ],
+              "query": [
+                {
+                  "key": "itemId",
+                  "value": "{{stockItemId}}"
+                },
+                {
+                  "key": "from",
+                  "value": "{{stockDay1}}"
+                },
+                {
+                  "key": "to",
+                  "value": "{{stockToday}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "③ موجودی همهٔ کالاهای یک گدام در یک بازه — GET /inventory/stock-statement?warehouseId=",
+          "description": "برای فرانت: عیناً همان ② است، فقط به‌جای itemId، warehouseId می‌دهید — دقیقاً یکی از این دو را بدهید، هردو یا هیچ‌کدام خطا می‌دهد. پاسخ به‌جای یک \"item\"، یک آرایهٔ \"items\" می‌دهد — هر عضوِ آرایه همان ساختار ② را دارد، یکی برای هر کالای فعالِ آن گدام. برای صفحهٔ «گزارش کلیِ یک گدام» از این استفاده کنید.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const items = pm.response.json().items;",
+                  "pm.test('همان کالا در لیست گدام هم هست، closing=105', function () {",
+                  "  const it = items.find(x => x.itemId === pm.collectionVariables.get('stockItemId'));",
+                  "  pm.expect(it.closingBalance).to.eql('105');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/stock-statement?warehouseId={{stockWarehouseId}}&from={{stockDay1}}&to={{stockToday}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "stock-statement"
+              ],
+              "query": [
+                {
+                  "key": "warehouseId",
+                  "value": "{{stockWarehouseId}}"
+                },
+                {
+                  "key": "from",
+                  "value": "{{stockDay1}}"
+                },
+                {
+                  "key": "to",
+                  "value": "{{stockToday}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[خطا] تاریخ پایان قبل از شروع → 400",
+          "description": "برای فرانت: این خطا یعنی فرم را اشتباه پر کرده‌اید (to زودتر از from است) — پیام فارسیِ خطا مستقیم قابل‌نمایش به کاربر است.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/stock-statement?itemId={{stockItemId}}&from={{stockToday}}&to={{stockDay1}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "stock-statement"
+              ],
+              "query": [
+                {
+                  "key": "itemId",
+                  "value": "{{stockItemId}}"
+                },
+                {
+                  "key": "from",
+                  "value": "{{stockToday}}"
+                },
+                {
+                  "key": "to",
+                  "value": "{{stockDay1}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "[خطا] نه itemId نه warehouseId → 422",
+          "description": "برای فرانت: یعنی هیچ‌کدام از این دو پارامتر ارسال نشده — فرم باید همیشه یکی از این دو را قبل از ارسال چک کند.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('422', function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/stock-statement?from={{stockDay1}}&to={{stockToday}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "stock-statement"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "{{stockDay1}}"
+                },
+                {
+                  "key": "to",
+                  "value": "{{stockToday}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "④ ریز تراکنش‌های یک بازهٔ تاریخ — GET /inventory/transactions?transactionDateFrom=&transactionDateTo=",
+          "description": "برای فرانت: این فرق دارد با ②/③ — آن‌ها فقط «جمعِ» یک بازه را می‌دهند، این یکی خودِ ردیف‌ها را (پرداخت‌شده/صفحه‌بندی‌شده) می‌دهد. وقتی کاربر روی خلاصهٔ ② کلیک کرد و خواست «دقیق ببینم کدام تراکنش‌ها بودند»، همین را با همان itemId و همان بازهٔ تاریخ صدا بزنید.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('۳ تراکنش در این بازه', function () { pm.expect(pm.response.json().meta.total).to.eql(3); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/inventory/transactions?itemId={{stockItemId}}&transactionDateFrom={{stockDay2}}&transactionDateTo={{stockDay4}}&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inventory",
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "itemId",
+                  "value": "{{stockItemId}}"
+                },
+                {
+                  "key": "transactionDateFrom",
+                  "value": "{{stockDay2}}"
+                },
+                {
+                  "key": "transactionDateTo",
+                  "value": "{{stockDay4}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
           }
         }
       ]

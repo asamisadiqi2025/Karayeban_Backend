@@ -41,7 +41,11 @@ export class WarehousesController {
 
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
-  update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateWarehouseDto) {
+  update(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: UpdateWarehouseDto,
+  ) {
     return this.warehousesService.update(req.user, id, dto);
   }
 

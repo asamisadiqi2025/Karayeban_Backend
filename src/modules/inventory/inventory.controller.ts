@@ -20,6 +20,7 @@ import { InventoryItemQueryDto } from './dto/inventory-item-query.dto';
 import { InventoryItemSummaryQueryDto } from './dto/inventory-item-summary-query.dto';
 import { CreateInventoryTransactionDto } from './dto/create-inventory-transaction.dto';
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
+import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -29,7 +30,7 @@ import { Roles } from '../../common/decorators/roles.decorator';
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
-  // ---------- دسته‌بندی‌ها ----------
+  // ---------- Category ----------
 
   @Post('categories')
   @Roles('SUPER_ADMIN', 'ADMIN')
@@ -38,7 +39,10 @@ export class InventoryController {
   }
 
   @Get('categories')
-  findAllCategories(@Req() req: any, @Query() query: InventoryCategoryQueryDto) {
+  findAllCategories(
+    @Req() req: any,
+    @Query() query: InventoryCategoryQueryDto,
+  ) {
     return this.inventoryService.findAllCategories(req.user, query);
   }
 
@@ -63,7 +67,7 @@ export class InventoryController {
     return this.inventoryService.removeCategory(req.user, id);
   }
 
-  // ---------- کالاها ----------
+  // ---------- Items ----------
 
   @Post('items')
   @Roles('SUPER_ADMIN', 'ADMIN')
@@ -71,10 +75,21 @@ export class InventoryController {
     return this.inventoryService.createItem(req.user, dto);
   }
 
-  // باید قبل از @Get('items/:id') ثبت شود، وگرنه Nest کلمهٔ "summary" را :id تفسیر می‌کند.
-  @Get('items/summary')
-  getItemsSummary(@Req() req: any, @Query() query: InventoryItemSummaryQueryDto) {
+  // ------- Current Summary Items
+
+   @Get('items/summary')
+  getItemsSummary(
+    @Req() req: any,
+    @Query() query: InventoryItemSummaryQueryDto,
+  ) {
     return this.inventoryService.getItemsSummary(req.user, query);
+  }
+
+  // گزارش دورهٔ موجودی (موجودی اول دوره + خرید/فروش/مصرف/اصلاح همان بازه + موجودی آخر
+  // دوره) — یا با itemId برای یک کالا، یا با warehouseId برای همهٔ کالاهای آن گدام.
+  @Get('stock-statement')
+  getStockStatement(@Req() req: any, @Query() query: StockStatementQueryDto) {
+    return this.inventoryService.getStockStatement(req.user, query);
   }
 
   @Get('items')
@@ -89,7 +104,11 @@ export class InventoryController {
 
   @Patch('items/:id')
   @Roles('SUPER_ADMIN', 'ADMIN')
-  updateItem(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateInventoryItemDto) {
+  updateItem(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: UpdateInventoryItemDto,
+  ) {
     return this.inventoryService.updateItem(req.user, id, dto);
   }
 
@@ -99,16 +118,22 @@ export class InventoryController {
     return this.inventoryService.removeItem(req.user, id);
   }
 
-  // ---------- تراکنش‌های خرید/فروش/مصرف/اصلاح ----------
+  // ----------  Transaction (PURCHAGE, SALE, ADJUSTMENT, CONSUMPTION---------
 
   @Post('transactions')
   @Roles('SUPER_ADMIN', 'ADMIN')
-  createTransaction(@Req() req: any, @Body() dto: CreateInventoryTransactionDto) {
+  createTransaction(
+    @Req() req: any,
+    @Body() dto: CreateInventoryTransactionDto,
+  ) {
     return this.inventoryService.createTransaction(req.user, dto);
   }
 
   @Get('transactions')
-  findAllTransactions(@Req() req: any, @Query() query: InventoryTransactionQueryDto) {
+  findAllTransactions(
+    @Req() req: any,
+    @Query() query: InventoryTransactionQueryDto,
+  ) {
     return this.inventoryService.findAllTransactions(req.user, query);
   }
 
