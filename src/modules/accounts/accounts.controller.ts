@@ -16,6 +16,7 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
 import { AccountQueryDto } from './dto/account-query.dto';
 import { TransferQueryDto } from './dto/transfer-query.dto';
+import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -51,6 +52,15 @@ export class AccountsController {
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.accountsService.findOne(req.user, id);
+  }
+
+  @Get(':id/statement')
+  getStatement(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Query() query: AccountStatementQueryDto,
+  ) {
+    return this.accountsService.getStatement(req.user, id, query);
   }
 
   @Patch(':id')

@@ -12,6 +12,7 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
 import { AccountQueryDto } from './dto/account-query.dto';
 import { TransferQueryDto } from './dto/transfer-query.dto';
+import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
@@ -465,5 +466,80 @@ export class AccountsService {
         createdBy: { select: { id: true, fullName: true } },
       },
     });
+  }
+
+  // صورت‌حساب یک دوره برای یک حساب، مثل صورت‌حساب بانکی: موجودی اول دوره
+  // (جمع اثرِ همهٔ ledger entryهای قبل از from) + لیست تراکنش‌های [from, to] با موجودیِ
+  // تجمیعی محاسبه‌شده به ترتیبِ entryDate — نه balanceAfter ذخیره‌شده، چون آن بر اساس
+  // ترتیب ساخته‌شدنِ ردیف‌هاست و entryDate می‌تواند گذشته‌نگر (backdated) باشد.
+  async getStatement(
+    currentUser: { id: string },
+    id: string,
+    query: AccountStatementQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const account = await this.prisma.account.findUnique({ where: { id } });
+    if (!account) throw new NotFoundException('حساب یافت نشد');
+    this.ensureAccess(actor, account.marketId);
+
+    const from = new Date(query.from);
+    const to = new Date(query.to);
+    if (to < from) {
+      throw new BadRequestException(
+        'تاریخ پایان باید بعد یا برابر تاریخ شروع باشد',
+      );
+    }
+    // «to» یعنی تا آخرِ همان روز، نه نیمه‌شبِ اولش — وگرنه تراکنش‌های همان روز جا می‌مانند.
+    const toExclusive = new Date(to);
+    toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+
+    const openingAgg = await this.prisma.ledgerEntry.groupBy({
+      by: ['direction'],
+      where: { accountId: id, entryDate: { lt: from } },
+      _sum: { amount: true },
+    });
+    const zero = new Prisma.Decimal(0);
+    const sumOf = (direction: 'IN' | 'OUT') =>
+      openingAgg.find((g) => g.direction === direction)?._sum.amount ?? zero;
+    const openingBalance = sumOf('IN').sub(sumOf('OUT'));
+
+    const entries = await this.prisma.ledgerEntry.findMany({
+      where: { accountId: id, entryDate: { gte: from, lt: toExclusive } },
+      orderBy: [{ entryDate: 'asc' }, { createdAt: 'asc' }],
+    });
+
+    let runningBalance = openingBalance;
+    let totalIn = zero;
+    let totalOut = zero;
+    const transactions = entries.map((entry) => {
+      if (entry.direction === 'IN') {
+        runningBalance = runningBalance.add(entry.amount);
+        totalIn = totalIn.add(entry.amount);
+      } else {
+        runningBalance = runningBalance.sub(entry.amount);
+        totalOut = totalOut.add(entry.amount);
+      }
+      return {
+        id: entry.id,
+        entryDate: entry.entryDate,
+        description: entry.description,
+        direction: entry.direction,
+        amount: entry.amount,
+        balance: runningBalance,
+      };
+    });
+
+    return {
+      accountId: account.id,
+      accountName: account.name,
+      currencyId: account.currencyId,
+      from: query.from,
+      to: query.to,
+      openingBalance,
+      totalIn,
+      totalOut,
+      closingBalance: runningBalance,
+      transactions,
+    };
   }
 }
