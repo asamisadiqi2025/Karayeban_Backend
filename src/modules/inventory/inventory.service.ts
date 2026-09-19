@@ -9,7 +9,11 @@ import { Account, InventoryTransactionType, Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
-import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
+import {
+  paginate,
+  resolveSort,
+  buildSearchWhere,
+} from '../../common/utils/pagination';
 import { CreateInventoryCategoryDto } from './dto/create-inventory-category.dto';
 import { UpdateInventoryCategoryDto } from './dto/update-inventory-category.dto';
 import { InventoryCategoryQueryDto } from './dto/inventory-category-query.dto';
@@ -19,6 +23,7 @@ import { InventoryItemQueryDto } from './dto/inventory-item-query.dto';
 import { InventoryItemSummaryQueryDto } from './dto/inventory-item-summary-query.dto';
 import { CreateInventoryTransactionDto } from './dto/create-inventory-transaction.dto';
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
+import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -35,9 +40,17 @@ const MONEY_TYPES: InventoryTransactionType[] = [
 export class InventoryService {
   private static readonly CATEGORY_SORT_FIELDS = ['name', 'createdAt'] as const;
   private static readonly CATEGORY_SEARCH_FIELDS = ['name'] as const;
-  private static readonly ITEM_SORT_FIELDS = ['name', 'quantity', 'averageCost', 'createdAt'] as const;
+  private static readonly ITEM_SORT_FIELDS = [
+    'name',
+    'quantity',
+    'averageCost',
+    'createdAt',
+  ] as const;
   private static readonly ITEM_SEARCH_FIELDS = ['name'] as const;
-  private static readonly TRANSACTION_SORT_FIELDS = ['transactionDate', 'createdAt'] as const;
+  private static readonly TRANSACTION_SORT_FIELDS = [
+    'transactionDate',
+    'createdAt',
+  ] as const;
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -53,14 +66,21 @@ export class InventoryService {
 
   // entityMarketId خالی = مورد سراسری (فقط دسته‌بندی چنین حالتی دارد) — فقط SUPER_ADMIN
   // به آن دسترسی دارد.
-  private ensureAccess(actor: Actor, entityMarketId: string | null, message: string) {
+  private ensureAccess(
+    actor: Actor,
+    entityMarketId: string | null,
+    message: string,
+  ) {
     if (actor.role === 'SUPER_ADMIN') return;
     if (entityMarketId === null || actor.marketId !== entityMarketId) {
       throw new ForbiddenException(message);
     }
   }
 
-  private resolveMarketId(actor: Actor, providedMarketId: string | undefined): string {
+  private resolveMarketId(
+    actor: Actor,
+    providedMarketId: string | undefined,
+  ): string {
     if (actor.role === 'SUPER_ADMIN') {
       if (!providedMarketId) {
         throw new BadRequestException('برای سوپر ادمین، marketId الزامی است');
@@ -81,14 +101,20 @@ export class InventoryService {
   // ==========================================================================
 
   private async findCategoryOrThrow(id: string) {
-    const category = await this.prisma.inventoryCategory.findUnique({ where: { id } });
+    const category = await this.prisma.inventoryCategory.findUnique({
+      where: { id },
+    });
     if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
     return category;
   }
 
-  async createCategory(currentUser: { id: string }, dto: CreateInventoryCategoryDto) {
+  async createCategory(
+    currentUser: { id: string },
+    dto: CreateInventoryCategoryDto,
+  ) {
     const actor = await this.getActor(currentUser);
-    const marketId = actor.role === 'SUPER_ADMIN' ? (dto.marketId ?? null) : actor.marketId;
+    const marketId =
+      actor.role === 'SUPER_ADMIN' ? (dto.marketId ?? null) : actor.marketId;
     if (marketId === null && actor.role !== 'SUPER_ADMIN') {
       throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
     }
@@ -98,7 +124,10 @@ export class InventoryService {
     });
   }
 
-  async findAllCategories(currentUser: { id: string }, query: InventoryCategoryQueryDto) {
+  async findAllCategories(
+    currentUser: { id: string },
+    query: InventoryCategoryQueryDto,
+  ) {
     const actor = await this.getActor(currentUser);
     const where: any =
       actor.role === 'SUPER_ADMIN'
@@ -107,7 +136,10 @@ export class InventoryService {
 
     if (query.isActive !== undefined) where.isActive = query.isActive;
 
-    const searchWhere = buildSearchWhere(InventoryService.CATEGORY_SEARCH_FIELDS, query.search);
+    const searchWhere = buildSearchWhere(
+      InventoryService.CATEGORY_SEARCH_FIELDS,
+      query.search,
+    );
     if (searchWhere) where.AND = [searchWhere];
 
     const orderBy = resolveSort(
@@ -140,10 +172,18 @@ export class InventoryService {
     return category;
   }
 
-  async updateCategory(currentUser: { id: string }, id: string, dto: UpdateInventoryCategoryDto) {
+  async updateCategory(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateInventoryCategoryDto,
+  ) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
-    this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
+    this.ensureAccess(
+      actor,
+      category.marketId,
+      'دسترسی به این دسته‌بندی مجاز نیست',
+    );
 
     const data: Record<string, unknown> = {};
     if (dto.name !== undefined) data.name = dto.name.trim();
@@ -155,7 +195,11 @@ export class InventoryService {
   async removeCategory(currentUser: { id: string }, id: string) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
-    this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
+    this.ensureAccess(
+      actor,
+      category.marketId,
+      'دسترسی به این دسته‌بندی مجاز نیست',
+    );
 
     const itemsCount = await this.prisma.inventoryItem.count({
       where: { categoryId: id, isDeleted: false },
@@ -188,8 +232,11 @@ export class InventoryService {
 
     await ensureMarketSetupComplete(this.prisma, marketId);
 
-    const warehouse = await this.prisma.warehouse.findUnique({ where: { id: dto.warehouseId } });
-    if (!warehouse || warehouse.isDeleted) throw new NotFoundException('گدام یافت نشد');
+    const warehouse = await this.prisma.warehouse.findUnique({
+      where: { id: dto.warehouseId },
+    });
+    if (!warehouse || warehouse.isDeleted)
+      throw new NotFoundException('گدام یافت نشد');
     if (warehouse.marketId !== marketId) {
       throw new BadRequestException('گدام باید متعلق به همان بازار باشد');
     }
@@ -200,11 +247,15 @@ export class InventoryService {
       });
       if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
       if (category.marketId !== null && category.marketId !== marketId) {
-        throw new BadRequestException('دسته‌بندی باید سراسری یا متعلق به همان بازار باشد');
+        throw new BadRequestException(
+          'دسته‌بندی باید سراسری یا متعلق به همان بازار باشد',
+        );
       }
     }
 
-    const currency = await this.prisma.currency.findUnique({ where: { id: dto.currencyId } });
+    const currency = await this.prisma.currency.findUnique({
+      where: { id: dto.currencyId },
+    });
     if (!currency) throw new NotFoundException('ارز مورد نظر یافت نشد');
     await ensureCurrencyEnabledForMarket(this.prisma, marketId, dto.currencyId);
 
@@ -214,7 +265,9 @@ export class InventoryService {
     const openingUnitCost = dto.openingStock
       ? new Prisma.Decimal(dto.openingStock.unitCost)
       : new Prisma.Decimal(0);
-    const openingDate = dto.openingStock?.date ? new Date(dto.openingStock.date) : new Date();
+    const openingDate = dto.openingStock?.date
+      ? new Date(dto.openingStock.date)
+      : new Date();
 
     try {
       return await this.prisma.$transaction(async (tx) => {
@@ -256,13 +309,18 @@ export class InventoryService {
       });
     } catch (e: any) {
       if (e.code === 'P2002') {
-        throw new ConflictException('کالایی با همین نام در این گدام قبلاً ثبت شده است');
+        throw new ConflictException(
+          'کالایی با همین نام در این گدام قبلاً ثبت شده است',
+        );
       }
       throw e;
     }
   }
 
-  async findAllItems(currentUser: { id: string }, query: InventoryItemQueryDto) {
+  async findAllItems(
+    currentUser: { id: string },
+    query: InventoryItemQueryDto,
+  ) {
     const actor = await this.getActor(currentUser);
     if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
       throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
@@ -277,12 +335,20 @@ export class InventoryService {
     if (query.currencyId !== undefined) where.currencyId = query.currencyId;
     if (query.isActive !== undefined) where.isActive = query.isActive;
 
-    const searchWhere = buildSearchWhere(InventoryService.ITEM_SEARCH_FIELDS, query.search);
+    const searchWhere = buildSearchWhere(
+      InventoryService.ITEM_SEARCH_FIELDS,
+      query.search,
+    );
     if (searchWhere) where.AND = [searchWhere];
 
-    const orderBy = resolveSort(query.sortBy, query.sortOrder, InventoryService.ITEM_SORT_FIELDS, {
-      name: 'asc',
-    });
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      InventoryService.ITEM_SORT_FIELDS,
+      {
+        name: 'asc',
+      },
+    );
 
     return paginate(this.prisma.inventoryItem, {
       where,
@@ -313,7 +379,11 @@ export class InventoryService {
     });
   }
 
-  async updateItem(currentUser: { id: string }, id: string, dto: UpdateInventoryItemDto) {
+  async updateItem(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateInventoryItemDto,
+  ) {
     const actor = await this.getActor(currentUser);
     const item = await this.findItemActiveOrThrow(id);
     this.ensureAccess(actor, item.marketId, 'دسترسی به این کالا مجاز نیست');
@@ -322,9 +392,12 @@ export class InventoryService {
       const warehouse = await this.prisma.warehouse.findUnique({
         where: { id: dto.warehouseId },
       });
-      if (!warehouse || warehouse.isDeleted) throw new NotFoundException('گدام یافت نشد');
+      if (!warehouse || warehouse.isDeleted)
+        throw new NotFoundException('گدام یافت نشد');
       if (warehouse.marketId !== item.marketId) {
-        throw new BadRequestException('گدام باید متعلق به همان بازارِ کالا باشد');
+        throw new BadRequestException(
+          'گدام باید متعلق به همان بازارِ کالا باشد',
+        );
       }
     }
 
@@ -334,7 +407,9 @@ export class InventoryService {
       });
       if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
       if (category.marketId !== null && category.marketId !== item.marketId) {
-        throw new BadRequestException('دسته‌بندی باید سراسری یا متعلق به همان بازارِ کالا باشد');
+        throw new BadRequestException(
+          'دسته‌بندی باید سراسری یا متعلق به همان بازارِ کالا باشد',
+        );
       }
     }
 
@@ -350,7 +425,9 @@ export class InventoryService {
       return await this.prisma.inventoryItem.update({ where: { id }, data });
     } catch (e: any) {
       if (e.code === 'P2002') {
-        throw new ConflictException('کالایی با همین نام در این گدام قبلاً ثبت شده است');
+        throw new ConflictException(
+          'کالایی با همین نام در این گدام قبلاً ثبت شده است',
+        );
       }
       throw e;
     }
@@ -367,13 +444,19 @@ export class InventoryService {
       );
     }
 
-    await this.prisma.inventoryItem.update({ where: { id }, data: { isDeleted: true } });
+    await this.prisma.inventoryItem.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
     return { message: `کالای «${item.name}» حذف شد` };
   }
 
   // مجموع ارزش موجودی — جدا برای هر ارز و هر گدام (چون qty×averageCost در سطح دیتابیس
   // با groupBy._sum قابل جمع نیست، ردیف‌ها خوانده و در همین سرویس جمع می‌شوند).
-  async getItemsSummary(currentUser: { id: string }, query: InventoryItemSummaryQueryDto) {
+  async getItemsSummary(
+    currentUser: { id: string },
+    query: InventoryItemSummaryQueryDto,
+  ) {
     const actor = await this.getActor(currentUser);
 
     let marketId: string | undefined;
@@ -394,7 +477,12 @@ export class InventoryService {
 
     const items = await this.prisma.inventoryItem.findMany({
       where,
-      select: { quantity: true, averageCost: true, currencyId: true, warehouseId: true },
+      select: {
+        quantity: true,
+        averageCost: true,
+        currencyId: true,
+        warehouseId: true,
+      },
     });
 
     const currencies = await this.prisma.currency.findMany({
@@ -405,7 +493,12 @@ export class InventoryService {
 
     const groups = new Map<
       string,
-      { currencyId: string; warehouseId: string; itemCount: number; totalValue: Prisma.Decimal }
+      {
+        currencyId: string;
+        warehouseId: string;
+        itemCount: number;
+        totalValue: Prisma.Decimal;
+      }
     >();
     for (const item of items) {
       const key = `${item.currencyId}:${item.warehouseId}`;
@@ -438,6 +531,149 @@ export class InventoryService {
     };
   }
 
+  // مؤثرترین علامت هر نوع تراکنش روی موجودی: PURCHASE مثبت، ADJUSTMENT از قبل با علامت
+  // درست ذخیره شده (مثبت/منفی)، SALE/CONSUMPTION در دیتابیس مثبت ذخیره می‌شوند ولی اثرشان
+  // منفی است — دقیقاً همان قانونی که createTransaction برای افزایش/کاهش quantity دارد.
+  private effectOfType(
+    type: InventoryTransactionType,
+    qty: Prisma.Decimal,
+  ): Prisma.Decimal {
+    if (
+      type === InventoryTransactionType.SALE ||
+      type === InventoryTransactionType.CONSUMPTION
+    ) {
+      return qty.neg();
+    }
+    return qty;
+  }
+
+  // موجودی اول دوره (جمع اثرِ همهٔ تراکنش‌های قبل از from) + جمع هر نوع تراکنش در [from, to]
+  // + موجودی آخر دوره. فقط خواندنی و تجمیعی (groupBy در سطح دیتابیس) — هیچ ردیفی خوانده
+  // یا تغییر داده نمی‌شود، پس نمی‌تواند روی بخش‌های دیگر (خرید/فروش/مصرف/اصلاح) اثر بگذارد.
+  private async computeItemStatement(
+    item: { id: string; name: string; unit: string; currencyId: string },
+    from: Date,
+    toExclusive: Date,
+  ) {
+    const openingAgg = await this.prisma.inventoryTransaction.groupBy({
+      by: ['type'],
+      where: { itemId: item.id, transactionDate: { lt: from } },
+      _sum: { quantity: true },
+    });
+    const openingBalance = openingAgg.reduce(
+      (sum, g) =>
+        sum.add(
+          this.effectOfType(g.type, g._sum.quantity ?? new Prisma.Decimal(0)),
+        ),
+      new Prisma.Decimal(0),
+    );
+
+    const periodAgg = await this.prisma.inventoryTransaction.groupBy({
+      by: ['type'],
+      where: {
+        itemId: item.id,
+        transactionDate: { gte: from, lt: toExclusive },
+      },
+      _sum: { quantity: true, totalAmount: true, costOfGoodsSold: true },
+    });
+
+    const zero = new Prisma.Decimal(0);
+    const byType = (type: InventoryTransactionType) => {
+      const g = periodAgg.find((x) => x.type === type);
+      return {
+        quantity: g?._sum.quantity ?? zero,
+        amount: g?._sum.totalAmount ?? zero,
+        costOfGoodsSold: g?._sum.costOfGoodsSold ?? zero,
+      };
+    };
+
+    const purchased = byType(InventoryTransactionType.PURCHASE);
+    const sold = byType(InventoryTransactionType.SALE);
+    const consumed = byType(InventoryTransactionType.CONSUMPTION);
+    const adjusted = byType(InventoryTransactionType.ADJUSTMENT);
+
+    const netEffect = purchased.quantity
+      .sub(sold.quantity)
+      .sub(consumed.quantity)
+      .add(adjusted.quantity); // adjusted.quantity از قبل با علامت درست است
+
+    return {
+      itemId: item.id,
+      itemName: item.name,
+      unit: item.unit,
+      currencyId: item.currencyId,
+      openingBalance,
+      purchased: { quantity: purchased.quantity, amount: purchased.amount },
+      sold: {
+        quantity: sold.quantity,
+        amount: sold.amount,
+        costOfGoodsSold: sold.costOfGoodsSold,
+      },
+      consumed: { quantity: consumed.quantity, amount: consumed.amount },
+      adjusted: { quantity: adjusted.quantity, amount: adjusted.amount },
+      closingBalance: openingBalance.add(netEffect),
+    };
+  }
+
+  // گزارش دورهٔ موجودی، مثل صورت‌حساب بانکی — یا برای یک کالای مشخص (itemId)، یا برای
+  // همهٔ کالاهای فعالِ یک گدام یک‌جا (warehouseId). دقیقاً یکی از این دو باید داده شود
+  // (در DTO چک می‌شود).
+  async getStockStatement(
+    currentUser: { id: string },
+    query: StockStatementQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+
+    const from = new Date(query.from);
+    const to = new Date(query.to);
+    if (to < from) {
+      throw new BadRequestException(
+        'تاریخ پایان باید بعد یا برابر تاریخ شروع باشد',
+      );
+    }
+    // «to» یعنی تا آخرِ همان روز، نه نیمه‌شبِ اولش — وگرنه تراکنش‌های همان روز جا می‌مانند.
+    const toExclusive = new Date(to);
+    toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+
+    if (query.itemId) {
+      const item = await this.findItemActiveOrThrow(query.itemId);
+      this.ensureAccess(actor, item.marketId, 'دسترسی به این کالا مجاز نیست');
+      return {
+        from: query.from,
+        to: query.to,
+        item: await this.computeItemStatement(item, from, toExclusive),
+      };
+    }
+
+    const warehouse = await this.prisma.warehouse.findUnique({
+      where: { id: query.warehouseId! },
+    });
+    if (!warehouse || warehouse.isDeleted)
+      throw new NotFoundException('گدام یافت نشد');
+    this.ensureAccess(
+      actor,
+      warehouse.marketId,
+      'دسترسی به این گدام مجاز نیست',
+    );
+
+    const items = await this.prisma.inventoryItem.findMany({
+      where: { warehouseId: warehouse.id, isDeleted: false },
+      select: { id: true, name: true, unit: true, currencyId: true },
+    });
+
+    const statements = await Promise.all(
+      items.map((item) => this.computeItemStatement(item, from, toExclusive)),
+    );
+
+    return {
+      from: query.from,
+      to: query.to,
+      warehouseId: warehouse.id,
+      warehouseName: warehouse.name,
+      items: statements,
+    };
+  }
+
   // ==========================================================================
   // تراکنش‌های خرید/فروش/مصرف/اصلاح (InventoryTransaction)
   // خرید/فروش دقیقاً همان الگوی atomic و ledger-محورِ ShareholdersService.createTransaction:
@@ -445,10 +681,15 @@ export class InventoryService {
   // LedgerEntry متناظر ساخته می‌شود.
   // ==========================================================================
 
-  async createTransaction(currentUser: { id: string }, dto: CreateInventoryTransactionDto) {
+  async createTransaction(
+    currentUser: { id: string },
+    dto: CreateInventoryTransactionDto,
+  ) {
     const actor = await this.getActor(currentUser);
 
-    const item = await this.prisma.inventoryItem.findUnique({ where: { id: dto.itemId } });
+    const item = await this.prisma.inventoryItem.findUnique({
+      where: { id: dto.itemId },
+    });
     if (!item || item.isDeleted) throw new NotFoundException('کالا یافت نشد');
     this.ensureAccess(actor, item.marketId, 'دسترسی به این کالا مجاز نیست');
     if (!item.isActive) {
@@ -459,19 +700,28 @@ export class InventoryService {
     if (quantity.isZero()) {
       throw new BadRequestException('مقدار نمی‌تواند صفر باشد');
     }
-    if (dto.type !== InventoryTransactionType.ADJUSTMENT && quantity.isNegative()) {
+    if (
+      dto.type !== InventoryTransactionType.ADJUSTMENT &&
+      quantity.isNegative()
+    ) {
       throw new BadRequestException('مقدار باید مثبت باشد');
     }
 
-    const transactionDate = dto.transactionDate ? new Date(dto.transactionDate) : new Date();
+    const transactionDate = dto.transactionDate
+      ? new Date(dto.transactionDate)
+      : new Date();
     const isMoneyType = MONEY_TYPES.includes(dto.type);
 
     let account: Account | null = null;
     if (isMoneyType) {
-      account = await this.prisma.account.findUnique({ where: { id: dto.accountId! } });
+      account = await this.prisma.account.findUnique({
+        where: { id: dto.accountId! },
+      });
       if (!account) throw new NotFoundException('حساب یافت نشد');
       if (account.marketId !== item.marketId) {
-        throw new BadRequestException('حساب باید متعلق به همان بازارِ کالا باشد');
+        throw new BadRequestException(
+          'حساب باید متعلق به همان بازارِ کالا باشد',
+        );
       }
       if (account.currencyId !== item.currencyId) {
         throw new BadRequestException(
@@ -499,7 +749,11 @@ export class InventoryService {
         // averageCost عددی محاسبه‌شده است (نه یک دلتای خالص)، پس به‌جای increment ساده
         // از یک قفل خوش‌بینانه (CAS) روی کل ردیف استفاده می‌شود.
         const applied = await tx.inventoryItem.updateMany({
-          where: { id: item.id, quantity: item.quantity, averageCost: item.averageCost },
+          where: {
+            id: item.id,
+            quantity: item.quantity,
+            averageCost: item.averageCost,
+          },
           data: { quantity: newQuantity, averageCost: newAverageCost },
         });
         if (applied.count === 0) {
@@ -515,9 +769,13 @@ export class InventoryService {
           data: { balance: { decrement: totalAmount } },
         });
         if (debited.count === 0) {
-          throw new ConflictException(`موجودی حساب «${account!.name}» برای این خرید کافی نیست`);
+          throw new ConflictException(
+            `موجودی حساب «${account!.name}» برای این خرید کافی نیست`,
+          );
         }
-        updatedAccount = await tx.account.findUniqueOrThrow({ where: { id: account!.id } });
+        updatedAccount = await tx.account.findUniqueOrThrow({
+          where: { id: account!.id },
+        });
       } else if (dto.type === InventoryTransactionType.SALE) {
         const unitPrice = new Prisma.Decimal(dto.unitPrice!);
         costOfGoodsSold = item.averageCost.mul(quantity);
@@ -574,7 +832,10 @@ export class InventoryService {
           itemId: item.id,
           type: dto.type,
           quantity,
-          unitPrice: dto.unitPrice !== undefined ? new Prisma.Decimal(dto.unitPrice) : null,
+          unitPrice:
+            dto.unitPrice !== undefined
+              ? new Prisma.Decimal(dto.unitPrice)
+              : null,
           totalAmount,
           costOfGoodsSold,
           accountId: account?.id ?? null,
@@ -591,7 +852,8 @@ export class InventoryService {
             marketId: item.marketId,
             accountId: account.id,
             currencyId: account.currencyId,
-            direction: dto.type === InventoryTransactionType.PURCHASE ? 'OUT' : 'IN',
+            direction:
+              dto.type === InventoryTransactionType.PURCHASE ? 'OUT' : 'IN',
             amount: totalAmount,
             balanceAfter: updatedAccount.balance,
             entryDate: transactionDate,
@@ -605,12 +867,17 @@ export class InventoryService {
         });
       }
 
-      const updatedItem = await tx.inventoryItem.findUniqueOrThrow({ where: { id: item.id } });
+      const updatedItem = await tx.inventoryItem.findUniqueOrThrow({
+        where: { id: item.id },
+      });
       return { transaction, item: updatedItem, account: updatedAccount };
     });
   }
 
-  async findAllTransactions(currentUser: { id: string }, query: InventoryTransactionQueryDto) {
+  async findAllTransactions(
+    currentUser: { id: string },
+    query: InventoryTransactionQueryDto,
+  ) {
     const actor = await this.getActor(currentUser);
     if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
       throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
@@ -623,6 +890,19 @@ export class InventoryService {
     if (query.warehouseId !== undefined) where.warehouseId = query.warehouseId;
     if (query.accountId !== undefined) where.accountId = query.accountId;
     if (query.type !== undefined) where.type = query.type;
+    if (
+      query.transactionDateFrom !== undefined ||
+      query.transactionDateTo !== undefined
+    ) {
+      where.transactionDate = {
+        ...(query.transactionDateFrom !== undefined
+          ? { gte: new Date(query.transactionDateFrom) }
+          : {}),
+        ...(query.transactionDateTo !== undefined
+          ? { lte: new Date(query.transactionDateTo) }
+          : {}),
+      };
+    }
 
     const orderBy = resolveSort(
       query.sortBy,
@@ -655,7 +935,11 @@ export class InventoryService {
       },
     });
     if (!transaction) throw new NotFoundException('تراکنش یافت نشد');
-    this.ensureAccess(actor, transaction.marketId, 'دسترسی به این تراکنش مجاز نیست');
+    this.ensureAccess(
+      actor,
+      transaction.marketId,
+      'دسترسی به این تراکنش مجاز نیست',
+    );
     return transaction;
   }
 }

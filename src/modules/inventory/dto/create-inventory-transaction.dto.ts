@@ -29,13 +29,17 @@ export class CreateInventoryTransactionDto {
   quantity: number;
 
   // فقط PURCHASE/SALE — قیمت واحد که مبلغ کل و (برای SALE) بهای تمام‌شدهٔ فروش از آن حساب می‌شود.
-  @ValidateIf((dto: CreateInventoryTransactionDto) => MONEY_TYPES.includes(dto.type))
+  @ValidateIf((dto: CreateInventoryTransactionDto) =>
+    MONEY_TYPES.includes(dto.type),
+  )
   @IsNumber()
   @IsPositive()
   unitPrice?: number;
 
   // فقط PURCHASE/SALE — حسابی که پول از/به آن جابه‌جا می‌شود.
-  @ValidateIf((dto: CreateInventoryTransactionDto) => MONEY_TYPES.includes(dto.type))
+  @ValidateIf((dto: CreateInventoryTransactionDto) =>
+    MONEY_TYPES.includes(dto.type),
+  )
   @IsUUID()
   accountId?: string;
 
