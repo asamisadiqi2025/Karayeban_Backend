@@ -7,7 +7,11 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
-import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
+import {
+  paginate,
+  resolveSort,
+  buildSearchWhere,
+} from '../../common/utils/pagination';
 import { CreateWarehouseDto } from './dto/create-warehouse.dto';
 import { UpdateWarehouseDto } from './dto/update-warehouse.dto';
 import { WarehouseQueryDto } from './dto/warehouse-query.dto';
@@ -38,7 +42,10 @@ export class WarehousesService {
     }
   }
 
-  private resolveMarketId(actor: Actor, providedMarketId: string | undefined): string {
+  private resolveMarketId(
+    actor: Actor,
+    providedMarketId: string | undefined,
+  ): string {
     if (actor.role === 'SUPER_ADMIN') {
       if (!providedMarketId) {
         throw new BadRequestException('برای سوپر ادمین، marketId الزامی است');
@@ -53,7 +60,8 @@ export class WarehousesService {
 
   private async findActiveOrThrow(id: string) {
     const warehouse = await this.prisma.warehouse.findUnique({ where: { id } });
-    if (!warehouse || warehouse.isDeleted) throw new NotFoundException('گدام یافت نشد');
+    if (!warehouse || warehouse.isDeleted)
+      throw new NotFoundException('گدام یافت نشد');
     return warehouse;
   }
 
@@ -74,7 +82,9 @@ export class WarehousesService {
       });
     } catch (e: any) {
       if (e.code === 'P2002') {
-        throw new ConflictException('گدامی با همین نام در این بازار قبلاً ثبت شده است');
+        throw new ConflictException(
+          'گدامی با همین نام در این بازار قبلاً ثبت شده است',
+        );
       }
       throw e;
     }
@@ -92,12 +102,20 @@ export class WarehousesService {
 
     if (query.isActive !== undefined) where.isActive = query.isActive;
 
-    const searchWhere = buildSearchWhere(WarehousesService.SEARCH_FIELDS, query.search);
+    const searchWhere = buildSearchWhere(
+      WarehousesService.SEARCH_FIELDS,
+      query.search,
+    );
     if (searchWhere) where.AND = [searchWhere];
 
-    const orderBy = resolveSort(query.sortBy, query.sortOrder, WarehousesService.SORT_FIELDS, {
-      name: 'asc',
-    });
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      WarehousesService.SORT_FIELDS,
+      {
+        name: 'asc',
+      },
+    );
 
     return paginate(this.prisma.warehouse, {
       where,
@@ -114,14 +132,19 @@ export class WarehousesService {
     return warehouse;
   }
 
-  async update(currentUser: { id: string }, id: string, dto: UpdateWarehouseDto) {
+  async update(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateWarehouseDto,
+  ) {
     const actor = await this.getActor(currentUser);
     const warehouse = await this.findActiveOrThrow(id);
     this.ensureAccess(actor, warehouse.marketId);
 
     const data: Record<string, unknown> = {};
     if (dto.name !== undefined) data.name = dto.name.trim();
-    if (dto.location !== undefined) data.location = dto.location?.trim() || null;
+    if (dto.location !== undefined)
+      data.location = dto.location?.trim() || null;
     if (dto.details !== undefined) data.details = dto.details?.trim() || null;
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
@@ -129,7 +152,9 @@ export class WarehousesService {
       return await this.prisma.warehouse.update({ where: { id }, data });
     } catch (e: any) {
       if (e.code === 'P2002') {
-        throw new ConflictException('گدامی با همین نام در این بازار قبلاً ثبت شده است');
+        throw new ConflictException(
+          'گدامی با همین نام در این بازار قبلاً ثبت شده است',
+        );
       }
       throw e;
     }
@@ -149,7 +174,10 @@ export class WarehousesService {
       );
     }
 
-    await this.prisma.warehouse.update({ where: { id }, data: { isDeleted: true } });
+    await this.prisma.warehouse.update({
+      where: { id },
+      data: { isDeleted: true },
+    });
     return { message: `گدام «${warehouse.name}» حذف شد` };
   }
 }

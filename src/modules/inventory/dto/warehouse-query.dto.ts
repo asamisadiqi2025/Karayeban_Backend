@@ -4,7 +4,9 @@ import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
 
 export class WarehouseQueryDto extends PaginationQueryDto {
   @IsOptional()
-  @Transform(({ value }) => (value === 'true' ? true : value === 'false' ? false : value))
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
   @IsBoolean()
   isActive?: boolean;
 }
