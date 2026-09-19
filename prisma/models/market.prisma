@@ -9,6 +9,9 @@ model Market {
   details         String?  @db.Text
   baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
   isSetupComplete Boolean  @default(false)
+  // نرخ برق (پول به‌ازای هر واحد مصرف) — یک عدد ثابت برای کل مارکت، همهٔ کنتورها از همین
+  // استفاده می‌کنند؛ فقط از پروفایل مارکت قابل تغییر است (نیازی به وارد کردنش هر بار نیست).
+  electricityRatePerUnit Decimal @default(18.5) @map("electricity_rate_per_unit") @db.Decimal(18, 4)
   createdAt       DateTime @default(now()) @db.Timestamp(6)
   updatedAt       DateTime @updatedAt @db.Timestamp(6)
 
