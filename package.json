@@ -38,6 +38,8 @@
     "currency-codes": "^2.2.0",
     "currency-symbol-map": "^5.1.0",
     "dotenv": "^17.4.2",
+    "express-basic-auth": "^1.2.1",
+    "jalaali-js": "^2.0.1",
     "passport-jwt": "^4.0.1",
     "pg": "^8.23.0",
     "reflect-metadata": "^0.2.2",
