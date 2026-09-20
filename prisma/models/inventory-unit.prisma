@@ -1,0 +1,22 @@
+
+// marketId خالی = واحد سراسری (قابل‌استفاده برای همهٔ بازارها)، دقیقاً مثل InventoryCategory.
+// فقط SUPER_ADMIN می‌تواند واحد سراسری بسازد/ویرایش کند؛ ADMIN هر بازار فقط واحد اختصاصی
+// بازار خودش را می‌سازد/ویرایش/حذف می‌کند، بدون اثر روی بازارهای دیگر.
+model InventoryUnit {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String? @map("market_id") @db.Uuid
+
+  name     String  @db.VarChar(50)
+  symbol   String? @db.VarChar(20)
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market?         @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  items  InventoryItem[]
+
+  @@unique([marketId, name])
+  @@index([marketId])
+  @@map("inventory_units")
+}

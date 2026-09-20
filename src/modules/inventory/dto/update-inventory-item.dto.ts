@@ -14,9 +14,8 @@ export class UpdateInventoryItemDto {
   name?: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(50)
-  unit?: string;
+  @IsUUID()
+  unitId?: string;
 
   @IsOptional()
   @IsUUID()

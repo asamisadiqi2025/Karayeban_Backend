@@ -47,6 +47,7 @@ model Market {
   guarantors              Guarantor[]
   warehouses              Warehouse[]
   inventoryCategories     InventoryCategory[]
+  inventoryUnits          InventoryUnit[]
   inventoryItems          InventoryItem[]
   inventoryTransactions   InventoryTransaction[]
 

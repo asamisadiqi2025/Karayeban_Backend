@@ -60,6 +60,45 @@ async function main() {
     console.log('✅ سوپرادمین قبلاً وجود دارد.');
   }
 
+  // واحدهای سراسری اندازه‌گیری کالا (marketId خالی) — برخلاف ارز/بانک/نرخ ارز که مخصوص
+  // هر بازار است و باید از فلوی واقعی برنامه اضافه شود، این‌ها یک لیست پایهٔ مشترک بین
+  // همهٔ بازارهاست؛ هر بازار در کنار این‌ها می‌تواند واحد اختصاصی خودش را هم بسازد.
+  const existingGlobalUnit = await prisma.inventoryUnit.findFirst({
+    where: { marketId: null },
+  });
+
+  if (!existingGlobalUnit) {
+    const defaultUnits: { name: string; symbol?: string }[] = [
+      { name: 'عدد', symbol: 'pcs' },
+      { name: 'جوره' },
+      { name: 'دسته' },
+      { name: 'دوجین' },
+      { name: 'کارتن' },
+      { name: 'بسته' },
+      { name: 'گونی' },
+      { name: 'صندوق' },
+      { name: 'گرم', symbol: 'g' },
+      { name: 'کیلوگرم', symbol: 'kg' },
+      { name: 'تن', symbol: 't' },
+      { name: 'میلی‌لیتر', symbol: 'ml' },
+      { name: 'لیتر', symbol: 'L' },
+      { name: 'گالن' },
+      { name: 'سانتی‌متر', symbol: 'cm' },
+      { name: 'متر', symbol: 'm' },
+    ];
+
+    await prisma.inventoryUnit.createMany({
+      data: defaultUnits.map((u) => ({
+        marketId: null,
+        name: u.name,
+        symbol: u.symbol ?? null,
+      })),
+    });
+    console.log(`✅ ${defaultUnits.length} واحد سراسری ایجاد شد.`);
+  } else {
+    console.log('✅ واحدهای سراسری قبلاً وجود دارند.');
+  }
+
   console.log('✅ Seed completed successfully!');
 }
 
