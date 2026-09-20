@@ -36,6 +36,7 @@ model Market {
   shareholders            Shareholder[]
   shareholderTransactions ShareholderTransaction[]
   accountTransfers        AccountTransfer[]
+  accountTransactions     AccountTransaction[]
   electricityBills        ElectricityBill[]
   electricityPayments     ElectricityPayment[]
   electricityMeters       ElectricityMeter[]

@@ -14,8 +14,10 @@ import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
+import { CreateAccountTransactionDto } from './dto/create-account-transaction.dto';
 import { AccountQueryDto } from './dto/account-query.dto';
 import { TransferQueryDto } from './dto/transfer-query.dto';
+import { AccountTransactionQueryDto } from './dto/account-transaction-query.dto';
 import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -38,6 +40,16 @@ export class AccountsController {
     return this.accountsService.transfer(req.user, dto);
   }
 
+  @Post(':id/transactions')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  createAccountTransaction(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: CreateAccountTransactionDto,
+  ) {
+    return this.accountsService.createAccountTransaction(req.user, id, dto);
+  }
+
   @Get()
   findAll(@Req() req: any, @Query() query: AccountQueryDto) {
     return this.accountsService.findAll(req.user, query);
@@ -47,6 +59,15 @@ export class AccountsController {
   @Get('transfer')
   findAllTransfers(@Req() req: any, @Query() query: TransferQueryDto) {
     return this.accountsService.findAllTransfers(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "transactions" را به‌عنوان :id تطبیق می‌دهد.
+  @Get('transactions')
+  findAllAccountTransactions(
+    @Req() req: any,
+    @Query() query: AccountTransactionQueryDto,
+  ) {
+    return this.accountsService.findAllAccountTransactions(req.user, query);
   }
 
   @Get(':id')

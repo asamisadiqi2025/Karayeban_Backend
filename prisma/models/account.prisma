@@ -41,6 +41,8 @@ model Account {
   transfersOut AccountTransfer[] @relation("TransferFrom")
   transfersIn  AccountTransfer[] @relation("TransferTo")
 
+  accountTransactions AccountTransaction[]
+
   ledgerEntries LedgerEntry[]
 
   @@unique([marketId, name])

@@ -39,6 +39,7 @@ model User {
   shareholderTransactions      ShareholderTransaction[] @relation("ShareholderTransactionCreatedBy")
   shareholderEquityChanges     ShareholderEquity[]
   accountTransfers             AccountTransfer[]
+  accountTransactions          AccountTransaction[]
   openingBalances              OpeningBalance[]
   createdElectricityBills      ElectricityBill[]        @relation("ElectricityBillCreator")
   collectedElectricityPayments ElectricityPayment[]     @relation("ElectricityCollectedBy")
