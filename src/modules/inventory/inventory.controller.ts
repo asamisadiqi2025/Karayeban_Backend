@@ -19,6 +19,7 @@ import { UpdateInventoryItemDto } from './dto/update-inventory-item.dto';
 import { InventoryItemQueryDto } from './dto/inventory-item-query.dto';
 import { InventoryItemSummaryQueryDto } from './dto/inventory-item-summary-query.dto';
 import { CreateInventoryTransactionDto } from './dto/create-inventory-transaction.dto';
+import { CreateInventoryTransferDto } from './dto/create-inventory-transfer.dto';
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
 import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -127,6 +128,12 @@ export class InventoryController {
     @Body() dto: CreateInventoryTransactionDto,
   ) {
     return this.inventoryService.createTransaction(req.user, dto);
+  }
+
+  @Post('transactions/transfer')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  createTransfer(@Req() req: any, @Body() dto: CreateInventoryTransferDto) {
+    return this.inventoryService.createTransfer(req.user, dto);
   }
 
   @Get('transactions')
