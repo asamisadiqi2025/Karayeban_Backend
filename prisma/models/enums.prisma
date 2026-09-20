@@ -64,3 +64,13 @@ enum AuditAction {
   TERMINATE
   RENEW
 }
+
+
+enum InventoryTransactionType {
+  PURCHASE
+  SALE
+  CONSUMPTION
+  ADJUSTMENT
+  TRANSFER_OUT // برای ثبت خروج جنس از گدام مبدأ (همیشه منفی)
+  TRANSFER_IN  // برای ثبت ورود جنس به گدام مقصد (همیشه مثبت)
+}
