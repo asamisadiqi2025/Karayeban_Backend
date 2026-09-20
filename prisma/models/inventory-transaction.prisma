@@ -1,13 +1,6 @@
 // PURCHASE/SALE پول را از/به یک Account (دفتر همان مارکت) جابه‌جا می‌کنند و یک LedgerEntry می‌سازند.
 // CONSUMPTION (مصرف داخلی، نه فروش) و ADJUSTMENT (اصلاح موجودی بعد از شمارش فیزیکی) فقط
 // موجودی را تغییر می‌دهند؛ accountId ندارند و LedgerEntry نمی‌سازند.
-enum InventoryTransactionType {
-  PURCHASE
-  SALE
-  CONSUMPTION
-  ADJUSTMENT
-}
-
 model InventoryTransaction {
   id          String @id @default(uuid()) @db.Uuid
   marketId    String @map("market_id") @db.Uuid
@@ -29,6 +22,8 @@ model InventoryTransaction {
   transactionDate DateTime @map("transaction_date") @db.Timestamptz(6)
   notes           String?  @db.Text
 
+  transferGroupId String? @map("transfer_group_id") @db.Uuid // گروه‌گذاریِ خروج/ورودِ یک انتقال
+
   createdById String?  @map("created_by_id") @db.Uuid
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
@@ -42,6 +37,7 @@ model InventoryTransaction {
   ledgerEntry LedgerEntry?
 
   @@index([marketId])
+  @@index([transferGroupId])
   @@index([itemId, transactionDate])
   @@index([warehouseId])
   @@map("inventory_transactions")

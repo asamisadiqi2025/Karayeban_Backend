@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import {
   BadRequestException,
   ConflictException,
@@ -22,6 +23,7 @@ import { UpdateInventoryItemDto } from './dto/update-inventory-item.dto';
 import { InventoryItemQueryDto } from './dto/inventory-item-query.dto';
 import { InventoryItemSummaryQueryDto } from './dto/inventory-item-summary-query.dto';
 import { CreateInventoryTransactionDto } from './dto/create-inventory-transaction.dto';
+import { CreateInventoryTransferDto } from './dto/create-inventory-transfer.dto';
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
 import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
 
@@ -540,7 +542,8 @@ export class InventoryService {
   ): Prisma.Decimal {
     if (
       type === InventoryTransactionType.SALE ||
-      type === InventoryTransactionType.CONSUMPTION
+      type === InventoryTransactionType.CONSUMPTION ||
+      type === InventoryTransactionType.TRANSFER_OUT
     ) {
       return qty.neg();
     }
@@ -549,7 +552,7 @@ export class InventoryService {
 
   // موجودی اول دوره (جمع اثرِ همهٔ تراکنش‌های قبل از from) + جمع هر نوع تراکنش در [from, to]
   // + موجودی آخر دوره. فقط خواندنی و تجمیعی (groupBy در سطح دیتابیس) — هیچ ردیفی خوانده
-  // یا تغییر داده نمی‌شود، پس نمی‌تواند روی بخش‌های دیگر (خرید/فروش/مصرف/اصلاح) اثر بگذارد.
+  // یا تغییر داده نمی‌شود، پس نمی‌تواند روی بخش‌های دیگر (خرید/فروش/مصرف/اصلاح/انتقال) اثر بگذارد.
   private async computeItemStatement(
     item: { id: string; name: string; unit: string; currencyId: string },
     from: Date,
@@ -591,11 +594,14 @@ export class InventoryService {
     const sold = byType(InventoryTransactionType.SALE);
     const consumed = byType(InventoryTransactionType.CONSUMPTION);
     const adjusted = byType(InventoryTransactionType.ADJUSTMENT);
-
+    const transferredOut = byType(InventoryTransactionType.TRANSFER_OUT);
+    const transferredIn = byType(InventoryTransactionType.TRANSFER_IN);
     const netEffect = purchased.quantity
       .sub(sold.quantity)
       .sub(consumed.quantity)
-      .add(adjusted.quantity); // adjusted.quantity از قبل با علامت درست است
+      .add(adjusted.quantity)
+      .sub(transferredOut.quantity)
+      .add(transferredIn.quantity);
 
     return {
       itemId: item.id,
@@ -611,6 +617,14 @@ export class InventoryService {
       },
       consumed: { quantity: consumed.quantity, amount: consumed.amount },
       adjusted: { quantity: adjusted.quantity, amount: adjusted.amount },
+      transferredOut: {
+        quantity: transferredOut.quantity,
+        amount: transferredOut.amount,
+      },
+      transferredIn: {
+        quantity: transferredIn.quantity,
+        amount: transferredIn.amount,
+      },
       closingBalance: openingBalance.add(netEffect),
     };
   }
@@ -686,6 +700,15 @@ export class InventoryService {
     dto: CreateInventoryTransactionDto,
   ) {
     const actor = await this.getActor(currentUser);
+
+    if (
+      dto.type === InventoryTransactionType.TRANSFER_IN ||
+      dto.type === InventoryTransactionType.TRANSFER_OUT
+    ) {
+      throw new BadRequestException(
+        'برای ثبت انتقال کالا باید از endpoint اختصاصی انتقال استفاده کنید',
+      );
+    }
 
     const item = await this.prisma.inventoryItem.findUnique({
       where: { id: dto.itemId },
@@ -872,6 +895,194 @@ export class InventoryService {
       });
       return { transaction, item: updatedItem, account: updatedAccount };
     });
+  }
+
+  async createTransfer(
+    currentUser: { id: string },
+    dto: CreateInventoryTransferDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+
+    const sourceWarehouse = await this.prisma.warehouse.findUnique({
+      where: { id: dto.fromWarehouseId },
+    });
+    if (!sourceWarehouse || sourceWarehouse.isDeleted) {
+      throw new NotFoundException('گدام مبدا یافت نشد');
+    }
+    this.ensureAccess(
+      actor,
+      sourceWarehouse.marketId,
+      'دسترسی به گدام مبدا مجاز نیست',
+    );
+
+    const targetWarehouse = await this.prisma.warehouse.findUnique({
+      where: { id: dto.toWarehouseId },
+    });
+    if (!targetWarehouse || targetWarehouse.isDeleted) {
+      throw new NotFoundException('گدام مقصد یافت نشد');
+    }
+    this.ensureAccess(
+      actor,
+      targetWarehouse.marketId,
+      'دسترسی به گدام مقصد مجاز نیست',
+    );
+
+    const item = await this.prisma.inventoryItem.findUnique({
+      where: { id: dto.itemId },
+    });
+    if (!item || item.isDeleted) throw new NotFoundException('کالا یافت نشد');
+    this.ensureAccess(actor, item.marketId, 'دسترسی به این کالا مجاز نیست');
+
+    if (item.warehouseId !== sourceWarehouse.id) {
+      throw new BadRequestException(
+        'کالا باید متعلق به گدام مبدا باشد و فقط کالاهای همان گدام در لیست نمایش داده می‌شوند',
+      );
+    }
+
+    if (!item.isActive) {
+      throw new ConflictException('کالای غیرفعال قابل انتقال نیست');
+    }
+    if (sourceWarehouse.id === targetWarehouse.id) {
+      throw new BadRequestException(
+        'گدام مبدا و مقصد نمی‌توانند یکی باشند',
+      );
+    }
+    if (sourceWarehouse.marketId !== targetWarehouse.marketId) {
+      throw new BadRequestException(
+        'گدام مبدا و مقصد باید متعلق به همان بازار باشند',
+      );
+    }
+
+    const quantity = new Prisma.Decimal(dto.quantity);
+    if (quantity.lte(0)) {
+      throw new BadRequestException('مقدار انتقال باید بزرگتر از صفر باشد');
+    }
+
+    const transactionDate = dto.transactionDate
+      ? new Date(dto.transactionDate)
+      : new Date();
+    const totalAmount = quantity.mul(item.averageCost);
+    const transferGroupId = randomUUID();
+
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        const sourceApplied = await tx.inventoryItem.updateMany({
+          where: { id: item.id, quantity: { gte: quantity } },
+          data: { quantity: { decrement: quantity } },
+        });
+        if (sourceApplied.count === 0) {
+          throw new ConflictException('موجودی کالا برای این انتقال کافی نیست');
+        }
+
+        let targetItem = await tx.inventoryItem.findFirst({
+          where: {
+            warehouseId: targetWarehouse.id,
+            name: item.name,
+            isDeleted: false,
+          },
+        });
+
+        if (targetItem && targetItem.currencyId !== item.currencyId) {
+          throw new ConflictException(
+            'کالای هم‌نام در گدام مقصد با ارز دیگری ثبت شده است؛ انتقال ممکن نیست',
+          );
+        }
+
+        if (!targetItem) {
+          targetItem = await tx.inventoryItem.create({
+            data: {
+              marketId: item.marketId,
+              warehouseId: targetWarehouse.id,
+              categoryId: item.categoryId ?? null,
+              name: item.name,
+              unit: item.unit,
+              currencyId: item.currencyId,
+              quantity,
+              averageCost: item.averageCost,
+              details: item.details,
+              isActive: item.isActive,
+            },
+          });
+        } else {
+          const newQuantity = targetItem.quantity.add(quantity);
+          const newAverageCost = targetItem.quantity
+            .mul(targetItem.averageCost)
+            .add(quantity.mul(item.averageCost))
+            .div(newQuantity);
+
+          const targetApplied = await tx.inventoryItem.updateMany({
+            where: {
+              id: targetItem.id,
+              quantity: targetItem.quantity,
+              averageCost: targetItem.averageCost,
+            },
+            data: { quantity: newQuantity, averageCost: newAverageCost },
+          });
+          if (targetApplied.count === 0) {
+            throw new ConflictException(
+              'موجودی کالا در گدام مقصد هم‌زمان تغییر کرد؛ دوباره تلاش کنید',
+            );
+          }
+
+          targetItem = await tx.inventoryItem.findUniqueOrThrow({
+            where: { id: targetItem.id },
+          });
+        }
+
+        const transferOut = await tx.inventoryTransaction.create({
+          data: {
+            marketId: item.marketId,
+            warehouseId: sourceWarehouse.id,
+            itemId: item.id,
+            type: InventoryTransactionType.TRANSFER_OUT,
+            quantity,
+            totalAmount,
+            currencyId: item.currencyId,
+            transactionDate,
+            notes: dto.notes?.trim() || null,
+            createdById: actor.id,
+            transferGroupId,
+          },
+        });
+
+        const transferIn = await tx.inventoryTransaction.create({
+          data: {
+            marketId: item.marketId,
+            warehouseId: targetWarehouse.id,
+            itemId: targetItem.id,
+            type: InventoryTransactionType.TRANSFER_IN,
+            quantity,
+            totalAmount,
+            currencyId: item.currencyId,
+            transactionDate,
+            notes: dto.notes?.trim() || null,
+            createdById: actor.id,
+            transferGroupId,
+          },
+        });
+
+        const updatedSourceItem = await tx.inventoryItem.findUniqueOrThrow({
+          where: { id: item.id },
+        });
+        const updatedTargetItem = await tx.inventoryItem.findUniqueOrThrow({
+          where: { id: targetItem.id },
+        });
+
+        return {
+          sourceItem: updatedSourceItem,
+          targetItem: updatedTargetItem,
+          transferOut,
+          transferIn,
+        };
+      });
+    } catch (e: any) {
+      if (e.code === 'P2002') {
+        throw new ConflictException(
+          'کالایی با همین نام در گدام مقصد قبلاً ثبت شده است',
+        );
+      }
+      throw e;
+    }
   }
 
   async findAllTransactions(
