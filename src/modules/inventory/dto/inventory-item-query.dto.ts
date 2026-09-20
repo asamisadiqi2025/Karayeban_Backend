@@ -13,6 +13,10 @@ export class InventoryItemQueryDto extends PaginationQueryDto {
 
   @IsOptional()
   @IsUUID()
+  unitId?: string;
+
+  @IsOptional()
+  @IsUUID()
   currencyId?: string;
 
   @IsOptional()

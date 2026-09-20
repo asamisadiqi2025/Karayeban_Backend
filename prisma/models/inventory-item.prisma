@@ -4,8 +4,8 @@ model InventoryItem {
   warehouseId String  @map("warehouse_id") @db.Uuid
   categoryId  String? @map("category_id") @db.Uuid
 
-  name String @db.VarChar(200)
-  unit String @db.VarChar(50)  
+  name   String @db.VarChar(200)
+  unitId String @map("unit_id") @db.Uuid
 
    quantity Decimal @default(0) @db.Decimal(18, 4)
    averageCost Decimal @default(0) @map("average_cost") @db.Decimal(18, 4)
@@ -21,6 +21,7 @@ model InventoryItem {
   market    Market             @relation(fields: [marketId], references: [id], onDelete: Cascade)
   warehouse Warehouse          @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
   category  InventoryCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  unit      InventoryUnit      @relation(fields: [unitId], references: [id], onDelete: Restrict)
   currency  Currency           @relation(fields: [currencyId], references: [id], onDelete: Restrict)
 
   transactions InventoryTransaction[]
@@ -29,5 +30,6 @@ model InventoryItem {
   @@index([marketId])
   @@index([warehouseId])
   @@index([categoryId])
+  @@index([unitId])
   @@map("inventory_items")
 }
