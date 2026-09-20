@@ -1,0 +1,35 @@
+enum AccountTransactionType {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+// واریز/برداشت مستقیم به یک حساب (نقدی یا بانکی) — بدون اینکه از حساب دیگری بیاید یا به
+// حساب دیگری برود (آن حالت AccountTransfer است) و بدون اینکه به سهام‌دار خاصی وصل باشد
+// (آن حالت ShareholderTransaction است). دقیقاً همان الگوی atomic و ledger-محورِ آن دو.
+model AccountTransaction {
+  id              String                 @id @default(uuid()) @db.Uuid
+  marketId        String                 @map("market_id") @db.Uuid
+  accountId       String                 @map("account_id") @db.Uuid
+  type            AccountTransactionType
+  amount          Decimal                @db.Decimal(18, 4)
+  transactionDate DateTime               @map("transaction_date") @db.Timestamptz(6)
+
+  // اسنپ‌شاتِ اختیاریِ معادلِ ارز پایه در همان لحظه — دقیقاً مثل OpeningBalance، چون نرخ
+  // ارز روزبه‌روز عوض می‌شود و باید همان لحظه ثبت شود، نه بعداً با نرخ روزِ گزارش دوباره حساب شود.
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
+  details         String?                @db.Text
+  createdById     String?                @map("created_by_id") @db.Uuid
+  createdAt       DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  ledgerEntry LedgerEntry?
+
+  @@index([marketId])
+  @@index([accountId])
+  @@map("account_transactions")
+}

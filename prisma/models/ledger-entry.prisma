@@ -31,6 +31,7 @@ model LedgerEntry {
   openingBalanceId         String? @unique @map("opening_balance_id") @db.Uuid
   collateralItemId         String? @unique @map("collateral_item_id") @db.Uuid
   inventoryTransactionId   String? @unique @map("inventory_transaction_id") @db.Uuid
+  accountTransactionId     String? @unique @map("account_transaction_id") @db.Uuid
 
   createdById String?  @map("created_by_id") @db.Uuid
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -49,6 +50,7 @@ model LedgerEntry {
   openingBalance         OpeningBalance?         @relation(fields: [openingBalanceId], references: [id], onDelete: Cascade)
   collateralItem         CollateralItem?         @relation(fields: [collateralItemId], references: [id], onDelete: Cascade)
   inventoryTransaction   InventoryTransaction?   @relation(fields: [inventoryTransactionId], references: [id], onDelete: Cascade)
+  accountTransaction     AccountTransaction?     @relation(fields: [accountTransactionId], references: [id], onDelete: Cascade)
 
   @@index([marketId])
   @@index([accountId, entryDate])
