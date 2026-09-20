@@ -14,6 +14,9 @@ import { InventoryService } from './inventory.service';
 import { CreateInventoryCategoryDto } from './dto/create-inventory-category.dto';
 import { UpdateInventoryCategoryDto } from './dto/update-inventory-category.dto';
 import { InventoryCategoryQueryDto } from './dto/inventory-category-query.dto';
+import { CreateInventoryUnitDto } from './dto/create-inventory-unit.dto';
+import { UpdateInventoryUnitDto } from './dto/update-inventory-unit.dto';
+import { InventoryUnitQueryDto } from './dto/inventory-unit-query.dto';
 import { CreateInventoryItemDto } from './dto/create-inventory-item.dto';
 import { UpdateInventoryItemDto } from './dto/update-inventory-item.dto';
 import { InventoryItemQueryDto } from './dto/inventory-item-query.dto';
@@ -66,6 +69,40 @@ export class InventoryController {
   @Roles('SUPER_ADMIN', 'ADMIN')
   removeCategory(@Req() req: any, @Param('id') id: string) {
     return this.inventoryService.removeCategory(req.user, id);
+  }
+
+  // ---------- Unit ----------
+
+  @Post('units')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  createUnit(@Req() req: any, @Body() dto: CreateInventoryUnitDto) {
+    return this.inventoryService.createUnit(req.user, dto);
+  }
+
+  @Get('units')
+  findAllUnits(@Req() req: any, @Query() query: InventoryUnitQueryDto) {
+    return this.inventoryService.findAllUnits(req.user, query);
+  }
+
+  @Get('units/:id')
+  findOneUnit(@Req() req: any, @Param('id') id: string) {
+    return this.inventoryService.findOneUnit(req.user, id);
+  }
+
+  @Patch('units/:id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  updateUnit(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: UpdateInventoryUnitDto,
+  ) {
+    return this.inventoryService.updateUnit(req.user, id, dto);
+  }
+
+  @Delete('units/:id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  removeUnit(@Req() req: any, @Param('id') id: string) {
+    return this.inventoryService.removeUnit(req.user, id);
   }
 
   // ---------- Items ----------

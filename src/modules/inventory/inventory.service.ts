@@ -18,6 +18,9 @@ import {
 import { CreateInventoryCategoryDto } from './dto/create-inventory-category.dto';
 import { UpdateInventoryCategoryDto } from './dto/update-inventory-category.dto';
 import { InventoryCategoryQueryDto } from './dto/inventory-category-query.dto';
+import { CreateInventoryUnitDto } from './dto/create-inventory-unit.dto';
+import { UpdateInventoryUnitDto } from './dto/update-inventory-unit.dto';
+import { InventoryUnitQueryDto } from './dto/inventory-unit-query.dto';
 import { CreateInventoryItemDto } from './dto/create-inventory-item.dto';
 import { UpdateInventoryItemDto } from './dto/update-inventory-item.dto';
 import { InventoryItemQueryDto } from './dto/inventory-item-query.dto';
@@ -42,6 +45,8 @@ const MONEY_TYPES: InventoryTransactionType[] = [
 export class InventoryService {
   private static readonly CATEGORY_SORT_FIELDS = ['name', 'createdAt'] as const;
   private static readonly CATEGORY_SEARCH_FIELDS = ['name'] as const;
+  private static readonly UNIT_SORT_FIELDS = ['name', 'createdAt'] as const;
+  private static readonly UNIT_SEARCH_FIELDS = ['name'] as const;
   private static readonly ITEM_SORT_FIELDS = [
     'name',
     'quantity',
@@ -217,13 +222,141 @@ export class InventoryService {
   }
 
   // ==========================================================================
+  // واحدهای اندازه‌گیری کالا (InventoryUnit)
+  // دقیقاً همان الگوی InventoryCategory: marketId خالی = واحد سراسری (قابل‌استفاده برای
+  // همهٔ بازارها). فقط SUPER_ADMIN می‌تواند واحد سراسری بسازد/ویرایش کند؛ نقش‌های دیگر
+  // همیشه واحدِ مخصوص بازار خودشان را می‌سازند و فقط همان‌ها (+ سراسری‌ها) را می‌بینند.
+  // ==========================================================================
+
+  private async findUnitOrThrow(id: string) {
+    const unit = await this.prisma.inventoryUnit.findUnique({ where: { id } });
+    if (!unit) throw new NotFoundException('واحد یافت نشد');
+    return unit;
+  }
+
+  async createUnit(currentUser: { id: string }, dto: CreateInventoryUnitDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId =
+      actor.role === 'SUPER_ADMIN' ? (dto.marketId ?? null) : actor.marketId;
+    if (marketId === null && actor.role !== 'SUPER_ADMIN') {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+
+    try {
+      return await this.prisma.inventoryUnit.create({
+        data: {
+          marketId,
+          name: dto.name.trim(),
+          symbol: dto.symbol?.trim() || null,
+        },
+      });
+    } catch (e: any) {
+      if (e.code === 'P2002') {
+        throw new ConflictException('واحدی با همین نام قبلاً ثبت شده است');
+      }
+      throw e;
+    }
+  }
+
+  async findAllUnits(
+    currentUser: { id: string },
+    query: InventoryUnitQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const where: any =
+      actor.role === 'SUPER_ADMIN'
+        ? {}
+        : { OR: [{ marketId: null }, { marketId: actor.marketId }] };
+
+    if (query.isActive !== undefined) where.isActive = query.isActive;
+
+    const searchWhere = buildSearchWhere(
+      InventoryService.UNIT_SEARCH_FIELDS,
+      query.search,
+    );
+    if (searchWhere) where.AND = [searchWhere];
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      InventoryService.UNIT_SORT_FIELDS,
+      { name: 'asc' },
+    );
+
+    return paginate(this.prisma.inventoryUnit, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+    });
+  }
+
+  async findOneUnit(currentUser: { id: string }, id: string) {
+    const actor = await this.getActor(currentUser);
+    const unit = await this.findUnitOrThrow(id);
+    if (
+      actor.role !== 'SUPER_ADMIN' &&
+      unit.marketId !== null &&
+      unit.marketId !== actor.marketId
+    ) {
+      throw new ForbiddenException('دسترسی به این واحد مجاز نیست');
+    }
+    return unit;
+  }
+
+  async updateUnit(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateInventoryUnitDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const unit = await this.findUnitOrThrow(id);
+    this.ensureAccess(actor, unit.marketId, 'دسترسی به این واحد مجاز نیست');
+
+    const data: Record<string, unknown> = {};
+    if (dto.name !== undefined) data.name = dto.name.trim();
+    if (dto.symbol !== undefined) data.symbol = dto.symbol?.trim() || null;
+    if (dto.isActive !== undefined) data.isActive = dto.isActive;
+
+    try {
+      return await this.prisma.inventoryUnit.update({ where: { id }, data });
+    } catch (e: any) {
+      if (e.code === 'P2002') {
+        throw new ConflictException('واحدی با همین نام قبلاً ثبت شده است');
+      }
+      throw e;
+    }
+  }
+
+  async removeUnit(currentUser: { id: string }, id: string) {
+    const actor = await this.getActor(currentUser);
+    const unit = await this.findUnitOrThrow(id);
+    this.ensureAccess(actor, unit.marketId, 'دسترسی به این واحد مجاز نیست');
+
+    const itemsCount = await this.prisma.inventoryItem.count({
+      where: { unitId: id, isDeleted: false },
+    });
+    if (itemsCount > 0) {
+      throw new ConflictException(
+        'این واحد برای کالای ثبت‌شده استفاده شده و قابل حذف نیست؛ می‌توانید آن را غیرفعال کنید',
+      );
+    }
+
+    await this.prisma.inventoryUnit.delete({ where: { id } });
+    return { message: `واحد «${unit.name}» حذف شد` };
+  }
+
+  // ==========================================================================
   // کالاهای گدام (InventoryItem)
   // quantity/averageCost جمع دائمیِ اتمیک هستند (مثل Account.balance) — فقط از طریق
   // createTransaction تغییر می‌کنند، هیچ‌وقت مستقیم از updateItem.
   // ==========================================================================
 
   private async findItemActiveOrThrow(id: string) {
-    const item = await this.prisma.inventoryItem.findUnique({ where: { id } });
+    const item = await this.prisma.inventoryItem.findUnique({
+      where: { id },
+      include: { unit: { select: { id: true, name: true, symbol: true } } },
+    });
     if (!item || item.isDeleted) throw new NotFoundException('کالا یافت نشد');
     return item;
   }
@@ -255,6 +388,16 @@ export class InventoryService {
       }
     }
 
+    const unit = await this.prisma.inventoryUnit.findUnique({
+      where: { id: dto.unitId },
+    });
+    if (!unit) throw new NotFoundException('واحد یافت نشد');
+    if (unit.marketId !== null && unit.marketId !== marketId) {
+      throw new BadRequestException(
+        'واحد باید سراسری یا متعلق به همان بازار باشد',
+      );
+    }
+
     const currency = await this.prisma.currency.findUnique({
       where: { id: dto.currencyId },
     });
@@ -279,7 +422,7 @@ export class InventoryService {
             warehouseId: dto.warehouseId,
             categoryId: dto.categoryId ?? null,
             name: dto.name.trim(),
-            unit: dto.unit.trim(),
+            unitId: dto.unitId,
             currencyId: dto.currencyId,
             details: dto.details?.trim() || null,
             quantity: openingQuantity,
@@ -334,6 +477,7 @@ export class InventoryService {
 
     if (query.warehouseId !== undefined) where.warehouseId = query.warehouseId;
     if (query.categoryId !== undefined) where.categoryId = query.categoryId;
+    if (query.unitId !== undefined) where.unitId = query.unitId;
     if (query.currencyId !== undefined) where.currencyId = query.currencyId;
     if (query.isActive !== undefined) where.isActive = query.isActive;
 
@@ -360,6 +504,7 @@ export class InventoryService {
       include: {
         warehouse: { select: { id: true, name: true } },
         category: { select: { id: true, name: true } },
+        unit: { select: { id: true, name: true, symbol: true } },
         currency: { select: { id: true, code: true, name: true } },
       },
     });
@@ -375,6 +520,7 @@ export class InventoryService {
       include: {
         warehouse: { select: { id: true, name: true } },
         category: { select: { id: true, name: true } },
+        unit: { select: { id: true, name: true, symbol: true } },
         currency: { select: { id: true, code: true, name: true } },
         transactions: { orderBy: { transactionDate: 'desc' }, take: 20 },
       },
@@ -415,9 +561,21 @@ export class InventoryService {
       }
     }
 
+    if (dto.unitId !== undefined && dto.unitId !== item.unitId) {
+      const unit = await this.prisma.inventoryUnit.findUnique({
+        where: { id: dto.unitId },
+      });
+      if (!unit) throw new NotFoundException('واحد یافت نشد');
+      if (unit.marketId !== null && unit.marketId !== item.marketId) {
+        throw new BadRequestException(
+          'واحد باید سراسری یا متعلق به همان بازارِ کالا باشد',
+        );
+      }
+    }
+
     const data: Record<string, unknown> = {};
     if (dto.name !== undefined) data.name = dto.name.trim();
-    if (dto.unit !== undefined) data.unit = dto.unit.trim();
+    if (dto.unitId !== undefined) data.unitId = dto.unitId;
     if (dto.warehouseId !== undefined) data.warehouseId = dto.warehouseId;
     if (dto.categoryId !== undefined) data.categoryId = dto.categoryId;
     if (dto.details !== undefined) data.details = dto.details?.trim() || null;
@@ -554,7 +712,13 @@ export class InventoryService {
   // + موجودی آخر دوره. فقط خواندنی و تجمیعی (groupBy در سطح دیتابیس) — هیچ ردیفی خوانده
   // یا تغییر داده نمی‌شود، پس نمی‌تواند روی بخش‌های دیگر (خرید/فروش/مصرف/اصلاح/انتقال) اثر بگذارد.
   private async computeItemStatement(
-    item: { id: string; name: string; unit: string; currencyId: string },
+    item: {
+      id: string;
+      name: string;
+      unitId: string;
+      unit: { name: string; symbol: string | null };
+      currencyId: string;
+    },
     from: Date,
     toExclusive: Date,
   ) {
@@ -606,6 +770,7 @@ export class InventoryService {
     return {
       itemId: item.id,
       itemName: item.name,
+      unitId: item.unitId,
       unit: item.unit,
       currencyId: item.currencyId,
       openingBalance,
@@ -672,7 +837,13 @@ export class InventoryService {
 
     const items = await this.prisma.inventoryItem.findMany({
       where: { warehouseId: warehouse.id, isDeleted: false },
-      select: { id: true, name: true, unit: true, currencyId: true },
+      select: {
+        id: true,
+        name: true,
+        unitId: true,
+        unit: { select: { name: true, symbol: true } },
+        currencyId: true,
+      },
     });
 
     const statements = await Promise.all(
@@ -987,6 +1158,11 @@ export class InventoryService {
             'کالای هم‌نام در گدام مقصد با ارز دیگری ثبت شده است؛ انتقال ممکن نیست',
           );
         }
+        if (targetItem && targetItem.unitId !== item.unitId) {
+          throw new ConflictException(
+            'کالای هم‌نام در گدام مقصد با واحد دیگری ثبت شده است؛ انتقال ممکن نیست',
+          );
+        }
 
         if (!targetItem) {
           targetItem = await tx.inventoryItem.create({
@@ -995,7 +1171,7 @@ export class InventoryService {
               warehouseId: targetWarehouse.id,
               categoryId: item.categoryId ?? null,
               name: item.name,
-              unit: item.unit,
+              unitId: item.unitId,
               currencyId: item.currencyId,
               quantity,
               averageCost: item.averageCost,
@@ -1128,7 +1304,13 @@ export class InventoryService {
       page: query.page,
       limit: query.limit,
       include: {
-        item: { select: { id: true, name: true, unit: true } },
+        item: {
+          select: {
+            id: true,
+            name: true,
+            unit: { select: { id: true, name: true, symbol: true } },
+          },
+        },
         warehouse: { select: { id: true, name: true } },
         account: { select: { id: true, name: true } },
       },
@@ -1140,7 +1322,13 @@ export class InventoryService {
     const transaction = await this.prisma.inventoryTransaction.findUnique({
       where: { id },
       include: {
-        item: { select: { id: true, name: true, unit: true } },
+        item: {
+          select: {
+            id: true,
+            name: true,
+            unit: { select: { id: true, name: true, symbol: true } },
+          },
+        },
         warehouse: { select: { id: true, name: true } },
         account: { select: { id: true, name: true } },
       },

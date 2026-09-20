@@ -15,10 +15,8 @@ export class CreateInventoryItemDto {
   @MaxLength(200)
   name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  unit: string;
+  @IsUUID()
+  unitId: string;
 
   @IsUUID()
   warehouseId: string;
