@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   ContractStatus,
   Prisma,
@@ -564,7 +565,43 @@ export class ContractsService {
       );
     }
 
-    const rent = dto.rent ? new Prisma.Decimal(dto.rent) : contract.rent;
+    // اگر shopId داده شود، همین عملیات مستأجر را به دوکانِ دیگری هم منتقل می‌کند —
+    // دوکانِ قدیمی (چون مستأجر واقعاً دارد می‌رود) آزاد می‌شود، دوکانِ جدید اشغال.
+    // اگر ندهید، دقیقاً همان دوکانِ قبلی ادامه پیدا می‌کند (بدون خالی‌شدنِ لحظه‌ای).
+    const newShopId = dto.shopId ?? contract.shopId!;
+    const isShopChanging = newShopId !== contract.shopId;
+    if (isShopChanging) {
+      const newShop = await this.prisma.shop.findUnique({
+        where: { id: newShopId },
+      });
+      if (!newShop) throw new NotFoundException('دوکانِ جدید یافت نشد');
+      if (newShop.marketId !== contract.marketId) {
+        throw new BadRequestException(
+          'دوکانِ جدید باید متعلق به همان بازار باشد',
+        );
+      }
+      const activeOnNewShop = await this.prisma.contract.findFirst({
+        where: {
+          shopId: newShopId,
+          status: { in: [ContractStatus.active, ContractStatus.suspended] },
+        },
+      });
+      if (activeOnNewShop) {
+        throw new ConflictException('دوکانِ جدید از قبل یک قرارداد فعال دارد');
+      }
+    }
+
+    // اگر کرایه در تمدید داده نشود، به‌جای contract.rent (رقم اصلیِ امضاشده که با
+    // adjust-rent دیگر لزوماً نرخ واقعی نیست)، آخرین فاکتورِ همین قرارداد را می‌خوانیم —
+    // یعنی نرخی که همین الان واقعاً جاری است. این‌طور اگر حسابدار حین تمدید فراموش کند
+    // دوباره تخفیف را بگوید، تخفیف قبلی بی‌سروصدا از بین نمی‌رود، خودکار ادامه پیدا می‌کند.
+    const lastCharge = await this.prisma.rentCharges.findFirst({
+      where: { contractId: id },
+      orderBy: { periodStart: 'desc' },
+      select: { netAmount: true },
+    });
+    const effectiveRent = lastCharge?.netAmount ?? contract.rent;
+    const rent = dto.rent ? new Prisma.Decimal(dto.rent) : effectiveRent;
     const carriedDeposit =
       contract.securityDepositRemaining ?? new Prisma.Decimal(0);
 
@@ -587,7 +624,7 @@ export class ContractsService {
       const newContract = await tx.contract.create({
         data: {
           marketId: contract.marketId,
-          shopId: contract.shopId,
+          shopId: newShopId,
           tenantId: contract.tenantId,
           guarantorId: dto.guarantorId ?? contract.guarantorId,
           startDate: newStartDate,
@@ -606,7 +643,7 @@ export class ContractsService {
       await this.rentService.generateChargesForContract(tx, {
         id: newContract.id,
         marketId: contract.marketId,
-        shopId: contract.shopId!,
+        shopId: newShopId,
         tenantId: contract.tenantId!,
         startDate: newStartDate,
         endDate: newEndDate,
@@ -614,14 +651,29 @@ export class ContractsService {
         currencyId: contract.currencyId!,
       });
 
-      await tx.shop.update({
-        where: { id: contract.shopId! },
-        data: {
-          status: 'rented',
-          currentContractId: newContract.id,
-          currentTenantId: contract.tenantId,
-        },
-      });
+      if (isShopChanging) {
+        await tx.shop.update({
+          where: { id: contract.shopId! },
+          data: { status: 'empty', currentContractId: null, currentTenantId: null },
+        });
+        await tx.shop.update({
+          where: { id: newShopId },
+          data: {
+            status: 'rented',
+            currentContractId: newContract.id,
+            currentTenantId: contract.tenantId,
+          },
+        });
+      } else {
+        await tx.shop.update({
+          where: { id: newShopId },
+          data: {
+            status: 'rented',
+            currentContractId: newContract.id,
+            currentTenantId: contract.tenantId,
+          },
+        });
+      }
 
       return tx.contract.findUniqueOrThrow({ where: { id: newContract.id } });
     });
@@ -788,6 +840,19 @@ export class ContractsService {
           settledAt,
         },
       });
+    });
+  }
+
+  // هر شب: قراردادهایی که endDate‌شان گذشته و هیچ‌کس نه تمدید نه فسخ کرده، فقط برچسبِ
+  // status را «expired» می‌کند — دقیقاً مثل flagOverdueCharges در RentService. عمداً به
+  // دوکان یا مستأجرِ فعلی دست نمی‌زند (چون معلوم نیست مستأجر واقعاً رفته یا فقط کاغذبازیِ
+  // تمدید عقب افتاده)؛ فقط این‌طور در GET /contracts?status=active دیگر دیده نمی‌شود و
+  // در status=expired قابل پیگیری می‌ماند تا کسی تصمیم بگیرد تمدید یا فسخ کند.
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async flagExpiredContracts() {
+    await this.prisma.contract.updateMany({
+      where: { status: ContractStatus.active, endDate: { lt: new Date() } },
+      data: { status: ContractStatus.expired },
     });
   }
 }

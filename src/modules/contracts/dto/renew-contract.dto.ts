@@ -20,6 +20,12 @@ export class RenewContractDto {
   @IsPositive()
   rent?: number;
 
+  // اگر بدهید، مستأجر را در همین عملیات به دوکانِ دیگری منتقل می‌کند — دوکانِ قدیمی
+  // آزاد می‌شود، دوکانِ جدید اشغال. اگر ندهید، دقیقاً همان دوکانِ قبلی ادامه پیدا می‌کند.
+  @IsOptional()
+  @IsUUID()
+  shopId?: string;
+
   @IsOptional()
   @IsUUID()
   guarantorId?: string;
