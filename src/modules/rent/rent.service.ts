@@ -231,15 +231,17 @@ export class RentService {
       .filter((c) => c.periodEnd < now)
       .reduce((s, c) => s.add(c.remainingAmount), new Prisma.Decimal(0));
 
-    // آخرین قرارداد مستأجر برای مقیاسِ «چند ماه بدهکار است» — عمداً به status=active محدود
-    // نیست: وگرنه بعد از فسخ/پایان قرارداد (که خودِ همین تابع باید بدهی‌اش را بسنجد) هیچ
-    // قراردادی پیدا نمی‌شد و severity همیشه به LOW سقوط می‌کرد، درست همان لحظه‌ای که مهم‌تر است.
-    const latestContract = await tx.contract.findFirst({
-      where: { tenantId },
-      orderBy: { createdAt: 'desc' },
-      select: { rent: true },
-    });
-    const monthlyRent = latestContract?.rent ?? null;
+    // مقیاسِ «چند ماه بدهکار است» — به‌جای Contract.rent (که بعد از adjust-rent دیگر نرخ
+    // واقعی نیست و همیشه همان رقم امضاشدهٔ اصلی می‌ماند)، از netAmount آخرین فاکتورِ بازِ
+    // همین مستأجر استفاده می‌شود — این همیشه نرخِ واقعاً در حال اعمال است، حتی اگر تخفیف
+    // خورده باشد. یک عارضهٔ کوچک: اگر آخرین فاکتور به‌خاطر فسخ زودهنگام کوتاه شده باشد،
+    // مقیاس کمی کوچک‌تر از یک ماه کامل می‌شود — قابل قبول چون این فقط یک برچسبِ شدت است،
+    // نه مبلغ واقعیِ بدهی (که همیشه دقیق می‌ماند). این تغییر یک query کامل (roundtrip به
+    // جدول contracts) را هم حذف می‌کند — سریع‌تر، بدون هیچ کوئری اضافه.
+    const lastCharge = openCharges.sort(
+      (a, b) => b.periodStart.getTime() - a.periodStart.getTime(),
+    )[0];
+    const monthlyRent = lastCharge?.netAmount ?? null;
 
     let status: DebtStatus = DebtStatus.CLEAN;
     if (
@@ -255,10 +257,6 @@ export class RentService {
     } else if (overdueDebt.greaterThan(0)) {
       status = DebtStatus.LOW;
     }
-
-    const lastCharge = openCharges.sort(
-      (a, b) => b.periodStart.getTime() - a.periodStart.getTime(),
-    )[0];
 
     await tx.rentDebt.upsert({
       where: { tenantId },
@@ -653,6 +651,90 @@ export class RentService {
       }
 
       return updated;
+    });
+  }
+
+  // ==========================================================================
+  // بخشیدنِ یک مبلغِ مشخص از بدهیِ موجودِ یک قرارداد — روی قدیمی‌ترین فاکتورهای باز
+  // (PENDING/PARTIAL/OVERDUE) به همان ترتیبِ FIFOیی که allocateToCharges برای پرداخت
+  // واقعی استفاده می‌کند، فقط این‌جا به‌جای paidAmount، discountAmount بالا می‌رود و هیچ
+  // پولی/حساب/دفترداری‌ای دست نمی‌خورد. برخلاف adjustFutureRent، عمداً فاکتورهای PARTIAL
+  // را هم شامل می‌شود — چون این یک بخششِ یک‌بارهٔ مبلغ است، نه تغییرِ نرخِ آینده.
+  // ==========================================================================
+  async discountDebt(
+    currentUser: { id: string },
+    contractId: string,
+    dto: { amount: number; reason?: string },
+  ) {
+    const actor = await this.getActor(currentUser);
+    const contract = await this.prisma.contract.findUnique({
+      where: { id: contractId },
+    });
+    if (!contract) throw new NotFoundException('قرارداد یافت نشد');
+    this.ensureAccess(
+      actor,
+      contract.marketId,
+      'دسترسی به این قرارداد مجاز نیست',
+    );
+    if (!contract.tenantId) {
+      throw new BadRequestException('قرارداد ناقص است');
+    }
+
+    const amount = new Prisma.Decimal(dto.amount);
+    const note = `بخشش بدهی: ${amount.toString()}${dto.reason ? ` — ${dto.reason}` : ''}`;
+
+    return this.prisma.$transaction(async (tx) => {
+      const openCharges = await tx.rentCharges.findMany({
+        where: { contractId, status: { in: OPEN_STATUSES } },
+        orderBy: { periodStart: 'asc' },
+      });
+
+      const totalOutstanding = openCharges.reduce(
+        (sum, c) => sum.add(c.remainingAmount),
+        new Prisma.Decimal(0),
+      );
+      if (amount.greaterThan(totalOutstanding)) {
+        throw new BadRequestException(
+          `مبلغِ بخشش (${amount.toString()}) از مجموع بدهیِ بازِ این قرارداد (${totalOutstanding.toString()}) بیشتر است`,
+        );
+      }
+
+      let remaining = amount;
+      const affected: Prisma.RentChargesGetPayload<Record<string, never>>[] = [];
+
+      for (const charge of openCharges) {
+        if (remaining.isZero()) break;
+        const applyAmount = Prisma.Decimal.min(remaining, charge.remainingAmount);
+
+        const newNetAmount = charge.netAmount.sub(applyAmount);
+        const newDiscountAmount = charge.discountAmount.add(applyAmount);
+        const newRemaining = charge.remainingAmount.sub(applyAmount);
+
+        const result = await tx.rentCharges.update({
+          where: { id: charge.id },
+          data: {
+            discountAmount: newDiscountAmount,
+            netAmount: newNetAmount,
+            remainingAmount: newRemaining,
+            status: newRemaining.lessThanOrEqualTo(0)
+              ? RentChargeStatus.PAID
+              : charge.paidAmount.greaterThan(0)
+                ? RentChargeStatus.PARTIAL
+                : RentChargeStatus.PENDING,
+            notes: charge.notes ? `${charge.notes}\n${note}` : note,
+          },
+        });
+        affected.push(result);
+        remaining = remaining.sub(applyAmount);
+      }
+
+      await this.recomputeRentDebt(tx, contract.tenantId!);
+
+      return {
+        contractId,
+        totalDiscounted: amount.toString(),
+        affectedCharges: affected,
+      };
     });
   }
 
