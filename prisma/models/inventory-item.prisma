@@ -7,8 +7,8 @@ model InventoryItem {
   name   String @db.VarChar(200)
   unitId String @map("unit_id") @db.Uuid
 
-   quantity Decimal @default(0) @db.Decimal(18, 4)
-   averageCost Decimal @default(0) @map("average_cost") @db.Decimal(18, 4)
+  quantity    Decimal @default(0) @db.Decimal(18, 4)
+  averageCost Decimal @default(0) @map("average_cost") @db.Decimal(18, 4)
 
   currencyId String  @map("currency_id") @db.Uuid
   details    String? @db.Text

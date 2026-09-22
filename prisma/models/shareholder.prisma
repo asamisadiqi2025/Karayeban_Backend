@@ -1,4 +1,3 @@
-
 model Shareholder {
   id        String   @id @default(uuid()) @db.Uuid
   marketId  String   @map("market_id") @db.Uuid
@@ -13,12 +12,11 @@ model Shareholder {
   equityHistory ShareholderEquity[]
   transactions  ShareholderTransaction[]
 
-   @@unique([marketId, idNumber])
+  @@unique([marketId, idNumber])
   @@index([marketId])
   @@map("shareholders")
 }
 
- 
 model ShareholderEquity {
   id            String   @id @default(uuid()) @db.Uuid
   shareholderId String   @map("shareholder_id") @db.Uuid
