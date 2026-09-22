@@ -17,6 +17,7 @@ import { ExpenseCategoryQueryDto } from './dto/expense-category-query.dto';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseQueryDto } from './dto/expense-query.dto';
+import { ExpenseSummaryQueryDto } from './dto/expense-summary-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -67,6 +68,12 @@ export class ExpensesController {
   @Get()
   findAllExpenses(@Req() req: any, @Query() query: ExpenseQueryDto) {
     return this.expensesService.findAllExpenses(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "summary" را به‌عنوان :id تطبیق می‌دهد.
+  @Get('summary')
+  getExpenseSummary(@Req() req: any, @Query() query: ExpenseSummaryQueryDto) {
+    return this.expensesService.getExpenseSummary(req.user, query);
   }
 
   @Get(':id')
