@@ -5,12 +5,16 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantQueryDto } from './dto/tenant-query.dto';
+import { TenantStatementQueryDto } from './dto/tenant-statement-query.dto';
+import { RENT_OPEN_STATUSES } from '../rent/rent.service';
+import { ELECTRICITY_OPEN_STATUSES } from '../electricity/electricity.service';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -220,5 +224,235 @@ export class TenantsService {
 
     await this.prisma.tenant.delete({ where: { id } });
     return { message: `مستأجر «${tenant.fullName}» حذف شد` };
+  }
+
+  // ==========================================================================
+  // استیتمنتِ کاملِ مستأجر — کرایه + برقِ همهٔ قراردادهایش (نه فقط یکی) با هم، به‌ترتیبِ
+  // تاریخ، با موجودیِ تجمیعی. دقیقاً مثل AccountsService.getStatement (همان اصلِ «موجودی
+  // را خودمان از رویدادهای خام، به‌ترتیبِ تاریخ، بازمحاسبه می‌کنیم، نه از یک فیلدِ
+  // ذخیره‌شده» — چون تاریخِ فاکتور/پرداخت می‌تواند گذشته‌نگر باشد).
+  //
+  // کارایی: ۱۲ کوئری، همه مستقل و در Promise.all موازی (نه توالی)؛ موجودیِ اولِ دوره با
+  // aggregate (فقط SUM، بدون خواندنِ ردیف‌ها) حساب می‌شود؛ بدهیِ بازِ هر قرارداد با
+  // groupBy (یک کوئری برای همهٔ قراردادها، نه یک کوئری به‌ازای هرکدام — از N+1 جلوگیری
+  // می‌کند). حجم دادهٔ هر ردیف هم فقط با select محدود شده، نه include کامل.
+  async getStatement(
+    currentUser: { id: string },
+    tenantId: string,
+    query: TenantStatementQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const tenant = await this.prisma.tenant.findUnique({
+      where: { id: tenantId },
+      select: { id: true, fullName: true, marketId: true },
+    });
+    if (!tenant) throw new NotFoundException('مستأجر یافت نشد');
+    this.ensureAccess(actor, tenant.marketId);
+
+    const from = new Date(query.from);
+    const to = new Date(query.to);
+    if (to < from) {
+      throw new BadRequestException(
+        'تاریخ پایان باید بعد یا برابر تاریخ شروع باشد',
+      );
+    }
+    const toExclusive = new Date(to);
+    toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+
+    const zero = new Prisma.Decimal(0);
+    const sumOf = (v: Prisma.Decimal | null | undefined) => v ?? zero;
+
+    const [
+      contracts,
+      rentOpeningAgg,
+      rentPaidOpeningAgg,
+      electricityOpeningAgg,
+      electricityPaidOpeningAgg,
+      rentOpenByContract,
+      electricityOpenByContract,
+      rentCharges,
+      rentPayments,
+      electricityBills,
+      electricityPayments,
+    ] = await Promise.all([
+      this.prisma.contract.findMany({
+        where: { tenantId },
+        select: {
+          id: true,
+          status: true,
+          securityDepositRemaining: true,
+          shop: { select: { id: true, shopNumber: true } },
+        },
+        orderBy: { createdAt: 'asc' },
+      }),
+      this.prisma.rentCharges.aggregate({
+        where: { tenantId, periodStart: { lt: from } },
+        _sum: { netAmount: true },
+      }),
+      this.prisma.rentPayment.aggregate({
+        where: { tenantId, paymentDate: { lt: from } },
+        _sum: { amount: true },
+      }),
+      this.prisma.electricityBill.aggregate({
+        where: { tenantId, periodStart: { lt: from } },
+        _sum: { totalAmount: true },
+      }),
+      this.prisma.electricityPayment.aggregate({
+        where: { tenantId, paymentDate: { lt: from } },
+        _sum: { amount: true },
+      }),
+      this.prisma.rentCharges.groupBy({
+        by: ['contractId'],
+        where: { tenantId, status: { in: RENT_OPEN_STATUSES } },
+        _sum: { remainingAmount: true },
+      }),
+      this.prisma.electricityBill.groupBy({
+        by: ['contractId'],
+        where: {
+          tenantId,
+          contractId: { not: null },
+          status: { in: ELECTRICITY_OPEN_STATUSES },
+        },
+        _sum: { remainingAmount: true },
+      }),
+      this.prisma.rentCharges.findMany({
+        where: { tenantId, periodStart: { gte: from, lt: toExclusive } },
+        select: {
+          contractId: true,
+          periodStart: true,
+          netAmount: true,
+          shop: { select: { shopNumber: true } },
+        },
+      }),
+      this.prisma.rentPayment.findMany({
+        where: { tenantId, paymentDate: { gte: from, lt: toExclusive } },
+        select: {
+          contractId: true,
+          paymentDate: true,
+          amount: true,
+          receiptNumber: true,
+          shop: { select: { shopNumber: true } },
+        },
+      }),
+      this.prisma.electricityBill.findMany({
+        where: { tenantId, periodStart: { gte: from, lt: toExclusive } },
+        select: {
+          contractId: true,
+          periodStart: true,
+          periodNumber: true,
+          totalAmount: true,
+          shop: { select: { shopNumber: true } },
+        },
+      }),
+      this.prisma.electricityPayment.findMany({
+        where: { tenantId, paymentDate: { gte: from, lt: toExclusive } },
+        select: {
+          paymentDate: true,
+          amount: true,
+          receiptNumber: true,
+          shop: { select: { shopNumber: true } },
+        },
+      }),
+    ]);
+
+    const openingBalance = sumOf(rentOpeningAgg._sum.netAmount)
+      .sub(sumOf(rentPaidOpeningAgg._sum.amount))
+      .add(sumOf(electricityOpeningAgg._sum.totalAmount))
+      .sub(sumOf(electricityPaidOpeningAgg._sum.amount));
+
+    const rentOpenMap = new Map(
+      rentOpenByContract.map((g) => [g.contractId, sumOf(g._sum.remainingAmount)]),
+    );
+    const electricityOpenMap = new Map(
+      electricityOpenByContract.map((g) => [
+        g.contractId as string,
+        sumOf(g._sum.remainingAmount),
+      ]),
+    );
+
+    const contractsSummary = contracts.map((c) => ({
+      contractId: c.id,
+      shopNumber: c.shop?.shopNumber ?? null,
+      status: c.status,
+      rentOpenDebt: rentOpenMap.get(c.id) ?? zero,
+      electricityOpenDebt: electricityOpenMap.get(c.id) ?? zero,
+      securityDepositRemaining: sumOf(c.securityDepositRemaining),
+    }));
+
+    type Event = {
+      date: Date;
+      type: 'RENT_CHARGE' | 'RENT_PAYMENT' | 'ELECTRICITY_BILL' | 'ELECTRICITY_PAYMENT';
+      description: string;
+      shopNumber: string | null;
+      contractId: string | null;
+      amount: Prisma.Decimal;
+      direction: 'DEBIT' | 'CREDIT';
+    };
+
+    const events: Event[] = [
+      ...rentCharges.map((c): Event => ({
+        date: c.periodStart,
+        type: 'RENT_CHARGE',
+        description: `فاکتور کرایه — دوکان ${c.shop.shopNumber}`,
+        shopNumber: c.shop.shopNumber,
+        contractId: c.contractId,
+        amount: c.netAmount,
+        direction: 'DEBIT',
+      })),
+      ...rentPayments.map((p): Event => ({
+        date: p.paymentDate,
+        type: 'RENT_PAYMENT',
+        description: `پرداخت کرایه — دوکان ${p.shop.shopNumber}${p.receiptNumber ? ` (رسید ${p.receiptNumber})` : ''}`,
+        shopNumber: p.shop.shopNumber,
+        contractId: p.contractId,
+        amount: p.amount,
+        direction: 'CREDIT',
+      })),
+      ...electricityBills.map((b): Event => ({
+        date: b.periodStart,
+        type: 'ELECTRICITY_BILL',
+        description: `بل برق${b.periodNumber ? ` دورهٔ ${b.periodNumber}` : ''} — دوکان ${b.shop.shopNumber}`,
+        shopNumber: b.shop.shopNumber,
+        contractId: b.contractId,
+        amount: b.totalAmount,
+        direction: 'DEBIT',
+      })),
+      ...electricityPayments.map((p): Event => ({
+        date: p.paymentDate,
+        type: 'ELECTRICITY_PAYMENT',
+        description: `پرداخت برق — دوکان ${p.shop.shopNumber}${p.receiptNumber ? ` (رسید ${p.receiptNumber})` : ''}`,
+        shopNumber: p.shop.shopNumber,
+        contractId: null,
+        amount: p.amount,
+        direction: 'CREDIT',
+      })),
+    ].sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    let runningBalance = openingBalance;
+    let totalCharged = zero;
+    let totalPaid = zero;
+    const transactions = events.map((e) => {
+      if (e.direction === 'DEBIT') {
+        runningBalance = runningBalance.add(e.amount);
+        totalCharged = totalCharged.add(e.amount);
+      } else {
+        runningBalance = runningBalance.sub(e.amount);
+        totalPaid = totalPaid.add(e.amount);
+      }
+      return { ...e, balance: runningBalance };
+    });
+
+    return {
+      tenantId: tenant.id,
+      tenantName: tenant.fullName,
+      from: query.from,
+      to: query.to,
+      openingBalance,
+      closingBalance: runningBalance,
+      totalCharged,
+      totalPaid,
+      contracts: contractsSummary,
+      transactions,
+    };
   }
 }

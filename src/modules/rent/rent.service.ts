@@ -37,11 +37,14 @@ type ContractForCharges = {
   currencyId: string;
 };
 
-const OPEN_STATUSES: RentChargeStatus[] = [
+// export می‌شود چون TenantsService هم برای گزارشِ خلاصهٔ بدهیِ باز هر قرارداد (استیتمنتِ
+// مستأجر) به همین لیست وضعیت‌ها نیاز دارد.
+export const RENT_OPEN_STATUSES: RentChargeStatus[] = [
   RentChargeStatus.PENDING,
   RentChargeStatus.PARTIAL,
   RentChargeStatus.OVERDUE,
 ];
+const OPEN_STATUSES = RENT_OPEN_STATUSES;
 
 // موتور مرکزی کرایه: تولید فاکتورهای یک قرارداد + تخصیص پرداخت روی آن‌ها (FIFO) + بازمحاسبهٔ
 // بدهیِ رولینگِ هر مستأجر. هم از این سرویس مستقیم (پرداخت روزمره) و هم از ContractsService
