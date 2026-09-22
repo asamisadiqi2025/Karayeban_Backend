@@ -19,13 +19,13 @@ model AccountTransaction {
   exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
   baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
 
-  details         String?                @db.Text
-  createdById     String?                @map("created_by_id") @db.Uuid
-  createdAt       DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  details     String?  @db.Text
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  account   Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
-  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  market    Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  createdBy User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
 
   ledgerEntry LedgerEntry?
 

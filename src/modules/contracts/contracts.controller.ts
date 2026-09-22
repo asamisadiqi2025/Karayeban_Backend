@@ -20,6 +20,7 @@ import { CancelContractDto } from './dto/cancel-contract.dto';
 import { RenewContractDto } from './dto/renew-contract.dto';
 import { AdjustContractRentDto } from './dto/adjust-contract-rent.dto';
 import { DiscountDebtDto } from './dto/discount-debt.dto';
+import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -116,5 +117,15 @@ export class ContractsController {
     @Body() dto: SettleContractDto,
   ) {
     return this.contractsService.settle(req.user, id, dto);
+  }
+
+  @Post(':id/pay-debt')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  payDebt(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: PayContractDebtDto,
+  ) {
+    return this.contractsService.payDebt(req.user, id, dto);
   }
 }

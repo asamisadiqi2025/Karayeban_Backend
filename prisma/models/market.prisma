@@ -1,56 +1,57 @@
 model Market {
-  id              String   @id @default(uuid()) @db.Uuid
-  name            String   @db.VarChar(200)
-  subdomain       String   @unique @db.VarChar(63)
-  logo            String?  @db.Text
-  address         String?  @db.Text
-  phone           String?  @db.VarChar(30)
-  email           String?  @db.VarChar(255)
-  details         String?  @db.Text
-  baseCurrencyId  String?  @map("base_currency_id") @db.Uuid
-  isSetupComplete Boolean  @default(false)
+  id                     String   @id @default(uuid()) @db.Uuid
+  name                   String   @db.VarChar(200)
+  subdomain              String   @unique @db.VarChar(63)
+  logo                   String?  @db.Text
+  address                String?  @db.Text
+  phone                  String?  @db.VarChar(30)
+  email                  String?  @db.VarChar(255)
+  details                String?  @db.Text
+  baseCurrencyId         String?  @map("base_currency_id") @db.Uuid
+  isSetupComplete        Boolean  @default(false)
   // نرخ برق (پول به‌ازای هر واحد مصرف) — یک عدد ثابت برای کل مارکت، همهٔ کنتورها از همین
   // استفاده می‌کنند؛ فقط از پروفایل مارکت قابل تغییر است (نیازی به وارد کردنش هر بار نیست).
-  electricityRatePerUnit Decimal @default(18.5) @map("electricity_rate_per_unit") @db.Decimal(18, 4)
-  createdAt       DateTime @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime @updatedAt @db.Timestamp(6)
+  electricityRatePerUnit Decimal  @default(18.5) @map("electricity_rate_per_unit") @db.Decimal(18, 4)
+  createdAt              DateTime @default(now()) @db.Timestamp(6)
+  updatedAt              DateTime @updatedAt @db.Timestamp(6)
 
   baseCurrency Currency? @relation(fields: [baseCurrencyId], references: [id], onDelete: SetNull)
 
-  customRoles             CustomRole[]
-  marketCurrencies        MarketCurrency[]
-  users                   User[]
-  accounts                Account[]
-  auditLogs               AuditLog[]
-  contracts               Contract[]
-  expenses                Expense[]
-  floors                  Floor[]
-  miscellaneousIncome     MiscellaneousIncome[]
-  openingBalances         OpeningBalance[]
-  rentCharges             RentCharges[]
-  rentPayments            RentPayment[]
-  shopGroups              ShopGroup[]
-  shops                   Shop[]
-  tenants                 Tenant[]
-  assets                  Asset[]
-  shareholders            Shareholder[]
-  shareholderTransactions ShareholderTransaction[]
-  accountTransfers        AccountTransfer[]
-  accountTransactions     AccountTransaction[]
-  electricityBills        ElectricityBill[]
-  electricityPayments     ElectricityPayment[]
-  electricityMeters       ElectricityMeter[]
-  collateralItems         CollateralItem[]
-  lotteryDraws            LotteryDraw[]
-  exchangeRates           ExchangeRate[]
-  expenseCategories       ExpenseCategory[]
-  ledgerEntries           LedgerEntry[]
-  guarantors              Guarantor[]
-  warehouses              Warehouse[]
-  inventoryCategories     InventoryCategory[]
-  inventoryUnits          InventoryUnit[]
-  inventoryItems          InventoryItem[]
-  inventoryTransactions   InventoryTransaction[]
+  customRoles              CustomRole[]
+  marketCurrencies         MarketCurrency[]
+  users                    User[]
+  accounts                 Account[]
+  auditLogs                AuditLog[]
+  contracts                Contract[]
+  expenses                 Expense[]
+  floors                   Floor[]
+  miscellaneousIncome      MiscellaneousIncome[]
+  openingBalances          OpeningBalance[]
+  rentCharges              RentCharges[]
+  rentPayments             RentPayment[]
+  shopGroups               ShopGroup[]
+  shops                    Shop[]
+  tenants                  Tenant[]
+  assets                   Asset[]
+  shareholders             Shareholder[]
+  shareholderTransactions  ShareholderTransaction[]
+  accountTransfers         AccountTransfer[]
+  accountTransactions      AccountTransaction[]
+  electricityBills         ElectricityBill[]
+  electricityPayments      ElectricityPayment[]
+  electricityMeters        ElectricityMeter[]
+  electricityBillingCycles ElectricityBillingCycle[]
+  collateralItems          CollateralItem[]
+  lotteryDraws             LotteryDraw[]
+  exchangeRates            ExchangeRate[]
+  expenseCategories        ExpenseCategory[]
+  ledgerEntries            LedgerEntry[]
+  guarantors               Guarantor[]
+  warehouses               Warehouse[]
+  inventoryCategories      InventoryCategory[]
+  inventoryUnits           InventoryUnit[]
+  inventoryItems           InventoryItem[]
+  inventoryTransactions    InventoryTransaction[]
 
   @@map("markets")
 }

@@ -28,14 +28,14 @@ model Account {
 
   openingBalances OpeningBalance[]
 
-  expenses                Expense[]
-  rentPayments            RentPayment[]
-  rentCharges             RentCharges[]
-  miscellaneousIncome     MiscellaneousIncome[]
-  electricityPayments     ElectricityPayment[]
-  shareholderTransactions ShareholderTransaction[]
-  collateralItems         CollateralItem[]
-  inventoryTransactions   InventoryTransaction[]
+  expenses                 Expense[]
+  rentPayments             RentPayment[]
+  rentCharges              RentCharges[]
+  miscellaneousIncome      MiscellaneousIncome[]
+  electricityPayments      ElectricityPayment[]
+  shareholderTransactions  ShareholderTransaction[]
+  collateralItems          CollateralItem[]
+  inventoryTransactions    InventoryTransaction[]
   securityDepositContracts Contract[]
 
   transfersOut AccountTransfer[] @relation("TransferFrom")
@@ -66,7 +66,7 @@ model AccountTransfer {
 
   receivedAmount Decimal @map("received_amount") @db.Decimal(18, 4)
 
-   exchangeRate Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  exchangeRate Decimal? @map("exchange_rate") @db.Decimal(24, 10)
 
   transferDate DateTime @map("transfer_date") @db.Timestamptz(6)
   notes        String?  @db.Text
@@ -79,7 +79,7 @@ model AccountTransfer {
   toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id], onDelete: Restrict)
   createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
 
-   ledgerEntries LedgerEntry[]
+  ledgerEntries LedgerEntry[]
 
   @@index([marketId])
   @@index([fromAccountId])
