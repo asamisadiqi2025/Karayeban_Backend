@@ -14,6 +14,7 @@ import { TenantsService } from './tenants.service';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantQueryDto } from './dto/tenant-query.dto';
+import { TenantStatementQueryDto } from './dto/tenant-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -37,6 +38,15 @@ export class TenantsController {
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.tenantsService.findOne(req.user, id);
+  }
+
+  @Get(':id/statement')
+  getStatement(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Query() query: TenantStatementQueryDto,
+  ) {
+    return this.tenantsService.getStatement(req.user, id, query);
   }
 
   @Patch(':id')
