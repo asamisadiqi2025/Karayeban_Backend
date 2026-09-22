@@ -48,4 +48,10 @@ export class CreateElectricityPaymentDto {
   @IsOptional()
   @IsString()
   receiptNumber?: string;
+
+  // اگر بفرستید، پرداخت فقط روی همین یک بل (یک دوره) می‌نشیند — نه FIFO خودکار روی همهٔ
+  // بل‌های بازِ مستأجر. برای وقتی از اکانت مستأجر دقیقاً یک دوره را انتخاب می‌کنید.
+  @IsOptional()
+  @IsUUID()
+  billId?: string;
 }

@@ -32,12 +32,40 @@ enum ElectricityBillStatus {
   CANCELED
 }
 
+// دورهٔ میترخوانی هر بازار در هر سال شمسی: هر ۱ ماه (۱۲ دوره) یا هر ۲ ماه (۶ دوره) یا هر
+// طول دیگری که ۱۲ را بدون باقی‌مانده تقسیم کند. یک رکورد per (marketId, year) — تصمیمِ
+// «امسال چند دوره داریم» مستقل برای هر بازار و هر سال است و سال‌های گذشته را تغییر نمی‌دهد.
+// دورهٔ شمارهٔ N شامل ماه‌های شمسیِ [(N-1)*monthsPerPeriod+1 .. N*monthsPerPeriod] است
+// (حمل=۱) — periodStart/periodEnd هر ElectricityBill از همین‌جا محاسبه می‌شود، نه آزاد.
+model ElectricityBillingCycle {
+  id              String @id @default(uuid()) @db.Uuid
+  marketId        String @map("market_id") @db.Uuid
+  year            Int
+  monthsPerPeriod Int    @map("months_per_period")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  bills  ElectricityBill[]
+
+  @@unique([marketId, year])
+  @@map("electricity_billing_cycles")
+}
+
 model ElectricityBill {
-  id       String  @id @default(uuid()) @db.Uuid
-  marketId String  @map("market_id") @db.Uuid
-  shopId   String  @map("shop_id") @db.Uuid
-  meterId  String? @map("meter_id") @db.Uuid
-  tenantId String? @map("tenant_id") @db.Uuid
+  id         String  @id @default(uuid()) @db.Uuid
+  marketId   String  @map("market_id") @db.Uuid
+  shopId     String  @map("shop_id") @db.Uuid
+  meterId    String? @map("meter_id") @db.Uuid
+  tenantId   String? @map("tenant_id") @db.Uuid
+  contractId String? @map("contract_id") @db.Uuid
+
+  // سال شمسی + شمارهٔ دوره (طبق ElectricityBillingCycle همان بازار/سال) — منبع حقیقتِ
+  // periodStart/periodEnd زیر؛ nullable فقط برای سازگاری با بل‌های دستیِ قدیمی‌تر.
+  billingCycleId String? @map("billing_cycle_id") @db.Uuid
+  year           Int?
+  periodNumber   Int?    @map("period_number")
 
   periodStart     DateTime @map("period_start") @db.Timestamptz(6)
   periodEnd       DateTime @map("period_end") @db.Timestamptz(6)
@@ -58,18 +86,24 @@ model ElectricityBill {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  market    Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  shop      Shop              @relation(fields: [shopId], references: [id], onDelete: Restrict)
-  meter     ElectricityMeter? @relation(fields: [meterId], references: [id], onDelete: SetNull)
-  tenant    Tenant?           @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  currency  Currency          @relation(fields: [currencyId], references: [id], onDelete: Restrict)
-  createdBy User?             @relation("ElectricityBillCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  market       Market                   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop         Shop                     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  meter        ElectricityMeter?        @relation(fields: [meterId], references: [id], onDelete: SetNull)
+  tenant       Tenant?                  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  contract     Contract?                @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  billingCycle ElectricityBillingCycle? @relation(fields: [billingCycleId], references: [id], onDelete: SetNull)
+  currency     Currency                 @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy    User?                    @relation("ElectricityBillCreator", fields: [createdById], references: [id], onDelete: SetNull)
 
   allocations ElectricityPaymentAllocation[]
 
+  // یک بیل به‌ازای هر (قرارداد، سال، شمارهٔ دوره) — nullable بودن contractId/year/periodNumber
+  // یعنی این قید فقط روی بل‌های جدیدِ مبتنی‌بر دوره اعمال می‌شود، نه بل‌های دستیِ قدیمی.
+  @@unique([contractId, year, periodNumber])
   @@index([marketId])
   @@index([shopId])
   @@index([tenantId])
+  @@index([contractId])
   @@index([status])
   @@index([periodStart, periodEnd])
   @@map("electricity_bills")

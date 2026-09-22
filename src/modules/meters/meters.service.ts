@@ -14,7 +14,17 @@ import { MeterQueryDto } from './dto/meter-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
-const SHOP_SELECT = { id: true, shopNumber: true, type: true, status: true } as const;
+// currentTenant/currentContractId اضافه شدند تا لیست کنتورها مستقیماً برای برگهٔ
+// میترخوانی (نام مستأجر) و برای ساختن payload بل (contractId) کافی باشد — بدون رفت‌وبرگشتِ
+// اضافه به /tenants یا /contracts.
+const SHOP_SELECT = {
+  id: true,
+  shopNumber: true,
+  type: true,
+  status: true,
+  currentContractId: true,
+  currentTenant: { select: { id: true, fullName: true } },
+} as const;
 
 @Injectable()
 export class MetersService {
