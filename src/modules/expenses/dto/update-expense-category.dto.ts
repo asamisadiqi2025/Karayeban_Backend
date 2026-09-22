@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength, ValidateIf } from 'class-validator';
 
 export class UpdateExpenseCategoryDto {
   @IsOptional()
@@ -11,4 +11,11 @@ export class UpdateExpenseCategoryDto {
   @Transform(({ value }) => (value === 'true' ? true : value === 'false' ? false : value))
   @IsBoolean()
   isActive?: boolean;
+
+  // undefined = دست‌نخورده؛ یک UUID = والدِ جدید (تبدیل به/جابه‌جاییِ سب‌کتگوری)؛
+  // null = جدا کردن از والد (تبدیل به کتگوریِ مادرِ مستقل).
+  @ValidateIf((o: UpdateExpenseCategoryDto) => o.parentId !== null)
+  @IsOptional()
+  @IsUUID()
+  parentId?: string | null;
 }

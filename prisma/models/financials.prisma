@@ -1,12 +1,12 @@
 model ElectricityMeter {
   id              String      @id @default(uuid()) @db.Uuid
   marketId        String      @map("market_id") @db.Uuid
-   meterNumber     String?     @map("meter_number")
+  meterNumber     String?     @map("meter_number")
   serialNumber    String?     @map("serial_number") // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
-   shopId          String?     @map("shop_id") @db.Uuid
+  shopId          String?     @map("shop_id") @db.Uuid
   status          MeterStatus @default(active)
   location        String?     @db.VarChar(255)
-   lastReading     Decimal?    @map("last_reading") @db.Decimal(12, 2)
+  lastReading     Decimal?    @map("last_reading") @db.Decimal(12, 2)
   lastReadingDate DateTime?   @map("last_reading_date") @db.Timestamptz(6)
   createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -32,7 +32,7 @@ enum ElectricityBillStatus {
   CANCELED
 }
 
- model ElectricityBill {
+model ElectricityBill {
   id       String  @id @default(uuid()) @db.Uuid
   marketId String  @map("market_id") @db.Uuid
   shopId   String  @map("shop_id") @db.Uuid
@@ -50,7 +50,7 @@ enum ElectricityBillStatus {
 
   currencyId     String                @map("currency_id") @db.Uuid
   status         ElectricityBillStatus @default(PENDING)
-   isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
+  isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
 
   notes       String? @db.Text
   createdById String? @map("created_by_id") @db.Uuid
@@ -75,7 +75,6 @@ enum ElectricityBillStatus {
   @@map("electricity_bills")
 }
 
- 
 model ElectricityDebt {
   id       String @id @default(uuid()) @db.Uuid
   tenantId String @unique @map("tenant_id") @db.Uuid
@@ -93,22 +92,22 @@ model ElectricityDebt {
   @@map("electricity_debts")
 }
 
- model ElectricityPayment {
-  id            String        @id @default(uuid()) @db.Uuid
-  marketId      String        @map("market_id") @db.Uuid
-  shopId        String        @map("shop_id") @db.Uuid
-  tenantId      String        @map("tenant_id") @db.Uuid
-  amount        Decimal       @db.Decimal(18, 4)
-  currencyId    String        @map("currency_id") @db.Uuid
-  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
-  paymentMethod PaymentMethod @map("payment_method")
-  accountId     String?       @map("account_id") @db.Uuid
+model ElectricityPayment {
+  id             String            @id @default(uuid()) @db.Uuid
+  marketId       String            @map("market_id") @db.Uuid
+  shopId         String            @map("shop_id") @db.Uuid
+  tenantId       String            @map("tenant_id") @db.Uuid
+  amount         Decimal           @db.Decimal(18, 4)
+  currencyId     String            @map("currency_id") @db.Uuid
+  paymentDate    DateTime          @map("payment_date") @db.Timestamptz(6)
+  paymentMethod  PaymentMethod     @map("payment_method")
+  accountId      String?           @map("account_id") @db.Uuid
   source         PaymentSourceType @default(BANK)
   isOpeningEntry Boolean           @default(false) @map("is_opening_entry")
-  collectedById String?       @map("collected_by_id") @db.Uuid
-  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
-  notes         String?       @db.Text
-  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  collectedById  String?           @map("collected_by_id") @db.Uuid
+  receiptNumber  String?           @map("receipt_number") @db.VarChar(100)
+  notes          String?           @db.Text
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
 
   market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
   shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
@@ -142,7 +141,6 @@ model ElectricityPaymentAllocation {
   @@map("electricity_payment_allocations")
 }
 
-
 model DepreciationEvent {
   id                 String   @id @default(uuid()) @db.Uuid
   assetId            String   @map("asset_id") @db.Uuid // 👈 اضافه شد
@@ -154,7 +152,6 @@ model DepreciationEvent {
   appliedById        String?  @map("applied_by_id") @db.Uuid
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-   
   asset     Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
   appliedBy User? @relation("DepreciationAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
 

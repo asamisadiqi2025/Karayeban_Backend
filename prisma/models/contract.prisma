@@ -1,10 +1,10 @@
 model Contract {
-  id          String  @id @default(uuid()) @db.Uuid
-  marketId    String  @map("market_id") @db.Uuid
-  
+  id       String @id @default(uuid()) @db.Uuid
+  marketId String @map("market_id") @db.Uuid
+
   shopId      String? @map("shop_id") @db.Uuid
   tenantId    String? @map("tenant_id") @db.Uuid
-   guarantorId String? @map("guarantor_id") @db.Uuid
+  guarantorId String? @map("guarantor_id") @db.Uuid
 
   startDate  DateTime?      @map("start_date")
   endDate    DateTime?      @map("end_date")
@@ -34,11 +34,11 @@ model Contract {
 
   currentShop Shop? @relation("CurrentShopContract")
 
-   contractShops   ContractShop[]
-   shopGroups      ShopGroup[]
+  contractShops   ContractShop[]
+  shopGroups      ShopGroup[]
   collateralItems CollateralItem[]
 
-   renewedFromContractId String?   @unique @map("renewed_from_contract_id") @db.Uuid
+  renewedFromContractId String?   @unique @map("renewed_from_contract_id") @db.Uuid
   renewedFromContract   Contract? @relation("ContractRenewal", fields: [renewedFromContractId], references: [id], onDelete: SetNull)
   renewedToContract     Contract? @relation("ContractRenewal")
 
@@ -51,7 +51,7 @@ model Contract {
   @@map("contracts")
 }
 
- model ContractShop {
+model ContractShop {
   id         String    @id @default(uuid()) @db.Uuid
   contractId String    @map("contract_id") @db.Uuid
   shopId     String    @map("shop_id") @db.Uuid
