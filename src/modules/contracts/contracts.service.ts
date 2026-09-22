@@ -15,7 +15,10 @@ import {
 } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { RentService } from '../rent/rent.service';
-import { ElectricityService } from '../electricity/electricity.service';
+import {
+  ElectricityService,
+  ELECTRICITY_OPEN_STATUSES,
+} from '../electricity/electricity.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import {
@@ -30,6 +33,7 @@ import { TerminateContractDto } from './dto/terminate-contract.dto';
 import { SettleContractDto } from './dto/settle-contract.dto';
 import { CancelContractDto } from './dto/cancel-contract.dto';
 import { RenewContractDto } from './dto/renew-contract.dto';
+import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -840,6 +844,123 @@ export class ContractsService {
           settledAt,
         },
       });
+    });
+  }
+
+  // پرداخت ترکیبیِ کرایه + برق، از یک حساب، در یک تراکنش — برای وقتی که مستأجر یک پرداخت
+  // نقدی می‌آورد که هم کرایه و هم برق را پوشش می‌دهد؛ به‌جای دو بار مراجعه به
+  // POST /rent/payments و POST /electricity/payments جدا. rentAmount با ارزِ خودِ قرارداد
+  // پرداخت می‌شود؛ electricityAmount با ارزِ بل‌های بازِ همین مستأجر (ممکن است با ارز
+  // قرارداد فرق کند) — اگر یک accountId نتواند هر دو ارز را پوشش دهد، خطای واضح می‌دهد
+  // تا آن بخش را جدا (از /electricity/payments) پرداخت کنند.
+  async payDebt(
+    currentUser: { id: string },
+    id: string,
+    dto: PayContractDebtDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const contract = await this.findOrThrow(id);
+    this.ensureAccess(
+      actor,
+      contract.marketId,
+      'دسترسی به این قرارداد مجاز نیست',
+    );
+    if (!contract.tenantId || !contract.shopId || !contract.currencyId) {
+      throw new BadRequestException('قرارداد ناقص است');
+    }
+
+    const rentAmount = new Prisma.Decimal(dto.rentAmount ?? 0);
+    const electricityAmount = new Prisma.Decimal(dto.electricityAmount ?? 0);
+    if (
+      rentAmount.lessThanOrEqualTo(0) &&
+      electricityAmount.lessThanOrEqualTo(0)
+    ) {
+      throw new BadRequestException(
+        'حداقل یکی از rentAmount یا electricityAmount باید بزرگ‌تر از صفر باشد',
+      );
+    }
+
+    const account = await this.prisma.account.findUnique({
+      where: { id: dto.accountId },
+    });
+    if (!account) throw new NotFoundException('حساب یافت نشد');
+    if (account.marketId !== contract.marketId) {
+      throw new BadRequestException('حساب باید متعلق به همان بازار باشد');
+    }
+    if (
+      rentAmount.greaterThan(0) &&
+      account.currencyId !== contract.currencyId
+    ) {
+      throw new BadRequestException(
+        'ارز حساب باید با ارز قرارداد یکی باشد (برای بخشِ کرایه)',
+      );
+    }
+
+    const paymentDate = dto.paymentDate ? new Date(dto.paymentDate) : new Date();
+    const paymentMethod = dto.paymentMethod ?? 'cash';
+
+    return this.prisma.$transaction(async (tx) => {
+      const result: {
+        rentPayment: Awaited<ReturnType<RentService['recordPayment']>> | null;
+        electricityPayment:
+          | Awaited<ReturnType<ElectricityService['recordPayment']>>
+          | null;
+      } = { rentPayment: null, electricityPayment: null };
+
+      if (rentAmount.greaterThan(0)) {
+        result.rentPayment = await this.rentService.recordPayment(tx, actor, {
+          contract: {
+            id: contract.id,
+            marketId: contract.marketId,
+            tenantId: contract.tenantId!,
+            shopId: contract.shopId!,
+            currencyId: contract.currencyId!,
+            securityDepositRemaining: contract.securityDepositRemaining,
+          },
+          amount: rentAmount,
+          paymentDate,
+          paymentMethod,
+          source: PaymentSourceType.BANK,
+          accountId: dto.accountId,
+          isOpeningEntry: false,
+          notes: dto.notes,
+          receiptNumber: dto.receiptNumber,
+        });
+      }
+
+      if (electricityAmount.greaterThan(0)) {
+        const openBill = await tx.electricityBill.findFirst({
+          where: {
+            tenantId: contract.tenantId!,
+            status: { in: ELECTRICITY_OPEN_STATUSES },
+          },
+        });
+        const electricityCurrencyId =
+          openBill?.currencyId ?? contract.currencyId!;
+        if (account.currencyId !== electricityCurrencyId) {
+          throw new BadRequestException(
+            'ارز حساب باید با ارز بل‌های بازِ برق یکی باشد (برای بخشِ برق) — این بخش را جدا پرداخت کنید',
+          );
+        }
+
+        result.electricityPayment =
+          await this.electricityService.recordPayment(tx, actor, {
+            marketId: contract.marketId,
+            shopId: contract.shopId!,
+            tenantId: contract.tenantId!,
+            currencyId: electricityCurrencyId,
+            amount: electricityAmount,
+            paymentDate,
+            paymentMethod,
+            source: PaymentSourceType.BANK,
+            accountId: dto.accountId,
+            isOpeningEntry: false,
+            notes: dto.notes,
+            receiptNumber: dto.receiptNumber,
+          });
+      }
+
+      return result;
     });
   }
 

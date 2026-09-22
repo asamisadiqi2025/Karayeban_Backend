@@ -15,19 +15,27 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { paginate, resolveSort } from '../../common/utils/pagination';
+import { jalaliMonthStart, jalaliMonthEnd } from '../../common/utils/jalali-date';
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
 import { ElectricityBillQueryDto } from './dto/electricity-bill-query.dto';
 import { CreateElectricityPaymentDto } from './dto/create-electricity-payment.dto';
 import { ElectricityPaymentQueryDto } from './dto/electricity-payment-query.dto';
 import { ElectricityDebtQueryDto } from './dto/electricity-debt-query.dto';
+import { CreateElectricityBillingCycleDto } from './dto/create-electricity-billing-cycle.dto';
+import { ElectricityBillingCycleQueryDto } from './dto/electricity-billing-cycle-query.dto';
+import { CreateElectricityBillsBulkDto } from './dto/create-electricity-bills-bulk.dto';
+import { CreateElectricityPaymentsBulkDto } from './dto/create-electricity-payments-bulk.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
-const OPEN_STATUSES: ElectricityBillStatus[] = [
+// export می‌شود چون ContractsService هم برای پیدا کردن ارزِ بل‌های بازِ یک مستأجر
+// (پرداخت ترکیبی کرایه+برق) به همین لیست وضعیت‌ها نیاز دارد.
+export const ELECTRICITY_OPEN_STATUSES: ElectricityBillStatus[] = [
   ElectricityBillStatus.PENDING,
   ElectricityBillStatus.PARTIAL,
   ElectricityBillStatus.OVERDUE,
 ];
+const OPEN_STATUSES = ELECTRICITY_OPEN_STATUSES;
 
 // همان موتور FIFO که برای کرایه ساختیم (src/modules/rent/rent.service.ts)، فقط بدون تابع
 // تولید فاکتور — چون بل برق فرمول ثابت ندارد و همیشه دستی (بر مبنای قرائت کنتور) ثبت می‌شود.
@@ -77,39 +85,140 @@ export class ElectricityService {
   }
 
   // ==========================================================================
-  // بل‌ها — ثبت دستی (نه تولید خودکار).
+  // دوره‌بندی میترخوانی — هر بازار/سال شمسی مستقل تنظیم می‌شود (۱۲/monthsPerPeriod دوره).
   // ==========================================================================
-  async createBill(currentUser: { id: string }, dto: CreateElectricityBillDto) {
+  async setBillingCycle(
+    currentUser: { id: string },
+    dto: CreateElectricityBillingCycleDto,
+  ) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
     await ensureMarketSetupComplete(this.prisma, marketId);
 
-    const shop = await this.prisma.shop.findUnique({
-      where: { id: dto.shopId },
+    const existing = await this.prisma.electricityBillingCycle.findUnique({
+      where: { marketId_year: { marketId, year: dto.year } },
     });
-    if (!shop) throw new NotFoundException('دوکان یافت نشد');
-    if (shop.marketId !== marketId) {
-      throw new BadRequestException('دوکان باید متعلق به همان بازار باشد');
-    }
 
-    if (dto.tenantId) {
-      const tenant = await this.prisma.tenant.findUnique({
-        where: { id: dto.tenantId },
+    if (existing && existing.monthsPerPeriod !== dto.monthsPerPeriod) {
+      const billCount = await this.prisma.electricityBill.count({
+        where: { billingCycleId: existing.id },
       });
-      if (!tenant) throw new NotFoundException('مستأجر یافت نشد');
-      if (tenant.marketId !== marketId) {
-        throw new BadRequestException('مستأجر باید متعلق به همان بازار باشد');
+      if (billCount > 0) {
+        throw new ConflictException(
+          `برای سال ${dto.year} این بازار قبلاً ${billCount} بل ثبت شده؛ چون تغییر طول دوره دوره‌های موجود را نامعتبر می‌کند، ابتدا باید آن بل‌ها بررسی شوند`,
+        );
       }
     }
 
+    return this.prisma.electricityBillingCycle.upsert({
+      where: { marketId_year: { marketId, year: dto.year } },
+      create: {
+        marketId,
+        year: dto.year,
+        monthsPerPeriod: dto.monthsPerPeriod,
+      },
+      update: { monthsPerPeriod: dto.monthsPerPeriod },
+    });
+  }
+
+  async findBillingCycles(
+    currentUser: { id: string },
+    query: ElectricityBillingCycleQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+    const where: any = {
+      ...(actor.role === 'SUPER_ADMIN'
+        ? query.marketId
+          ? { marketId: query.marketId }
+          : {}
+        : { marketId: actor.marketId! }),
+    };
+    if (query.year !== undefined) where.year = query.year;
+
+    return this.prisma.electricityBillingCycle.findMany({
+      where,
+      orderBy: { year: 'desc' },
+    });
+  }
+
+  // periodStart/periodEnd هر بل از اینجا محاسبه می‌شود، نه آزاد از فرانت — طبق
+  // ElectricityBillingCycle تنظیم‌شدهٔ همان بازار/سال. اگر هنوز تنظیم نشده، خطای واضح می‌دهد
+  // تا حسابدار اول setBillingCycle را صدا بزند.
+  private async resolvePeriod(marketId: string, year: number, periodNumber: number) {
+    const cycle = await this.prisma.electricityBillingCycle.findUnique({
+      where: { marketId_year: { marketId, year } },
+    });
+    if (!cycle) {
+      throw new BadRequestException(
+        `دوره‌بندی میترخوانی سال ${year} برای این بازار هنوز تنظیم نشده؛ ابتدا آن را تنظیم کنید`,
+      );
+    }
+
+    const periodsPerYear = 12 / cycle.monthsPerPeriod;
+    if (periodNumber < 1 || periodNumber > periodsPerYear) {
+      throw new BadRequestException(
+        `شمارهٔ دوره باید بین ۱ و ${periodsPerYear} باشد (این بازار در سال ${year}، ${periodsPerYear} دوره دارد)`,
+      );
+    }
+
+    const startMonth = (periodNumber - 1) * cycle.monthsPerPeriod + 1;
+    const endMonth = periodNumber * cycle.monthsPerPeriod;
+
+    return {
+      cycle,
+      periodStart: jalaliMonthStart(year, startMonth),
+      periodEnd: jalaliMonthEnd(year, endMonth),
+    };
+  }
+
+  // ==========================================================================
+  // بل‌ها — ثبت دستی (نه تولید خودکار)، همیشه بر مبنای دوره‌ی محاسبه‌شدهٔ قرارداد.
+  // ==========================================================================
+  async createBill(currentUser: { id: string }, dto: CreateElectricityBillDto) {
+    const actor = await this.getActor(currentUser);
+
+    const contract = await this.prisma.contract.findUnique({
+      where: { id: dto.contractId },
+    });
+    if (!contract) throw new NotFoundException('قرارداد یافت نشد');
+    if (!contract.shopId || !contract.tenantId) {
+      throw new BadRequestException(
+        'این قرارداد دوکان یا مستأجر مشخصی ندارد و نمی‌تواند بل برق داشته باشد',
+      );
+    }
+    this.ensureAccess(actor, contract.marketId, 'دسترسی به این قرارداد مجاز نیست');
+    const marketId = contract.marketId;
+
+    await ensureMarketSetupComplete(this.prisma, marketId);
+
+    const isOpeningEntry = dto.isOpeningEntry ?? false;
+
+    // برای بل‌های زنده، کنتور اجباری است — درجهٔ قبلی از meter.lastReading خوانده می‌شود
+    // (نه از ورودی آزاد کاربر) تا مبلغ همیشه از روی مصرفِ واقعی محاسبه شود، نه تایپِ دستی.
+    let meter: {
+      id: string;
+      marketId: string;
+      lastReading: Prisma.Decimal | null;
+    } | null = null;
     if (dto.meterId) {
-      const meter = await this.prisma.electricityMeter.findUnique({
+      meter = await this.prisma.electricityMeter.findUnique({
         where: { id: dto.meterId },
       });
       if (!meter) throw new NotFoundException('کنتور یافت نشد');
       if (meter.marketId !== marketId) {
         throw new BadRequestException('کنتور باید متعلق به همان بازار باشد');
       }
+    } else if (!isOpeningEntry) {
+      throw new BadRequestException(
+        'meterId برای بل‌های زنده الزامی است (درجهٔ قبلی از روی آن خوانده می‌شود)',
+      );
+    }
+
+    if (!isOpeningEntry && dto.currentReading === undefined) {
+      throw new BadRequestException('currentReading برای بل‌های زنده الزامی است');
     }
 
     const currency = await this.prisma.currency.findUnique({
@@ -118,28 +227,149 @@ export class ElectricityService {
     if (!currency) throw new NotFoundException('ارز مورد نظر یافت نشد');
     await ensureCurrencyEnabledForMarket(this.prisma, marketId, dto.currencyId);
 
-    const totalAmount = new Prisma.Decimal(dto.totalAmount);
+    if (dto.paidAmount !== undefined && !isOpeningEntry) {
+      throw new BadRequestException(
+        'paidAmount فقط برای بل‌های مهاجرت‌شده (isOpeningEntry) قابل تنظیم است؛ برای بل‌های زنده از ثبت پرداخت استفاده کنید',
+      );
+    }
 
-    return this.prisma.electricityBill.create({
-      data: {
-        marketId,
-        shopId: dto.shopId,
-        tenantId: dto.tenantId ?? null,
-        meterId: dto.meterId ?? null,
-        periodStart: new Date(dto.periodStart),
-        periodEnd: new Date(dto.periodEnd),
-        previousReading: dto.previousReading ?? null,
-        currentReading: dto.currentReading ?? null,
-        totalAmount,
-        paidAmount: 0,
-        remainingAmount: totalAmount,
-        currencyId: dto.currencyId,
-        status: ElectricityBillStatus.PENDING,
-        isOpeningEntry: dto.isOpeningEntry ?? false,
-        notes: dto.notes?.trim() || null,
-        createdById: actor.id,
-      },
-    });
+    const {
+      cycle,
+      periodStart,
+      periodEnd: naturalPeriodEnd,
+    } = await this.resolvePeriod(marketId, dto.year, dto.periodNumber);
+
+    // readingDate: برای قرائتِ نهاییِ روزِ فسخ/تحویل دوکان — بل دقیقاً تا همین تاریخ
+    // بسته می‌شود، نه تا پایانِ طبیعیِ دوره. باید داخل خودِ دوره باشد، نه قبل/بعدش.
+    let periodEnd = naturalPeriodEnd;
+    if (dto.readingDate !== undefined) {
+      const readingDate = new Date(dto.readingDate);
+      if (readingDate < periodStart || readingDate > naturalPeriodEnd) {
+        throw new BadRequestException(
+          `readingDate باید داخل دورهٔ ${dto.periodNumber} (بین ${periodStart.toISOString().slice(0, 10)} و ${naturalPeriodEnd.toISOString().slice(0, 10)}) باشد`,
+        );
+      }
+      periodEnd = readingDate;
+    }
+
+    // previousReading: override دستی اگر فرستاده شده، وگرنه از خودِ کنتور.
+    let previousReading: Prisma.Decimal | null =
+      dto.previousReading !== undefined
+        ? new Prisma.Decimal(dto.previousReading)
+        : (meter?.lastReading ?? null);
+    let currentReading: Prisma.Decimal | null =
+      dto.currentReading !== undefined ? new Prisma.Decimal(dto.currentReading) : null;
+
+    let totalAmount: Prisma.Decimal;
+    if (dto.totalAmount !== undefined) {
+      // override دستی — همیشه مجاز (تخفیف خاص، توافق دستی، یا isOpeningEntry).
+      totalAmount = new Prisma.Decimal(dto.totalAmount);
+    } else {
+      if (isOpeningEntry) {
+        throw new BadRequestException(
+          'totalAmount برای بل‌های تاریخی (isOpeningEntry) الزامی است',
+        );
+      }
+      if (!previousReading) previousReading = new Prisma.Decimal(0);
+      if (currentReading!.lessThan(previousReading)) {
+        throw new BadRequestException(
+          `درجهٔ فعلی (${currentReading!.toString()}) نمی‌تواند از درجهٔ قبلی (${previousReading.toString()}) کمتر باشد — اگر کنتور تعویض شده، اول از merge کنتور استفاده کنید`,
+        );
+      }
+      const market = await this.prisma.market.findUnique({
+        where: { id: marketId },
+        select: { electricityRatePerUnit: true },
+      });
+      const consumption = currentReading!.sub(previousReading);
+      totalAmount = consumption.mul(market!.electricityRatePerUnit);
+    }
+
+    const paidAmount = new Prisma.Decimal(dto.paidAmount ?? 0);
+    if (paidAmount.greaterThan(totalAmount)) {
+      throw new BadRequestException('paidAmount نمی‌تواند از totalAmount بیشتر باشد');
+    }
+    const remainingAmount = totalAmount.sub(paidAmount);
+    const status = remainingAmount.lessThanOrEqualTo(0)
+      ? ElectricityBillStatus.PAID
+      : paidAmount.greaterThan(0)
+        ? ElectricityBillStatus.PARTIAL
+        : ElectricityBillStatus.PENDING;
+
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        const bill = await tx.electricityBill.create({
+          data: {
+            marketId,
+            shopId: contract.shopId!,
+            tenantId: contract.tenantId!,
+            contractId: contract.id,
+            meterId: dto.meterId ?? null,
+            billingCycleId: cycle.id,
+            year: dto.year,
+            periodNumber: dto.periodNumber,
+            periodStart,
+            periodEnd,
+            previousReading,
+            currentReading,
+            totalAmount,
+            paidAmount,
+            remainingAmount,
+            currencyId: dto.currencyId,
+            status,
+            isOpeningEntry,
+            notes: dto.notes?.trim() || null,
+            createdById: actor.id,
+          },
+        });
+
+        // کنتور همیشه باید درجهٔ آخرین چیزی که ثبت شده را نشان دهد — چه بل زنده چه
+        // opening-entryِ تاریخی‌ای که رقم واقعی کنتور را هم داشته (تا وقتی به اولین بل
+        // زنده می‌رسیم، previousReading درست باشد). فقط رو به جلو حرکت می‌کند — یک
+        // opening-entry که نامرتب/عقب‌تر وارد شود، رقم جدیدتر را عقب نمی‌برد.
+        if (
+          meter &&
+          currentReading &&
+          (!meter.lastReading || currentReading.greaterThan(meter.lastReading))
+        ) {
+          await tx.electricityMeter.update({
+            where: { id: meter.id },
+            data: { lastReading: currentReading, lastReadingDate: periodEnd },
+          });
+        }
+
+        await this.recomputeElectricityDebt(tx, contract.tenantId!);
+
+        return bill;
+      });
+    } catch (e: any) {
+      if (e.code === 'P2002') {
+        throw new ConflictException(
+          `برای این قرارداد، سال ${dto.year} و دورهٔ ${dto.periodNumber} قبلاً بل ثبت شده است`,
+        );
+      }
+      throw e;
+    }
+  }
+
+  // یک دور میترخوانی که چند دوکان را پوشش می‌دهد — هر آیتم با تراکنش خودش (createBill)
+  // مستقل پردازش می‌شود تا خطای یک دوکان (مثلاً دورهٔ تکراری) بقیه را متوقف نکند؛ حسابدار
+  // فقط همان یکی را در failed می‌بیند و دوباره می‌فرستد.
+  async createBillsBulk(
+    currentUser: { id: string },
+    dto: CreateElectricityBillsBulkDto,
+  ) {
+    const created: Awaited<ReturnType<ElectricityService['createBill']>>[] = [];
+    const failed: { index: number; error: string }[] = [];
+
+    for (let i = 0; i < dto.bills.length; i++) {
+      try {
+        created.push(await this.createBill(currentUser, dto.bills[i]));
+      } catch (e: any) {
+        failed.push({ index: i, error: e?.message ?? 'خطای ناشناخته' });
+      }
+    }
+
+    return { created, failed };
   }
 
   async findAllBills(
@@ -172,6 +402,7 @@ export class ElectricityService {
       include: {
         shop: { select: { id: true, shopNumber: true } },
         tenant: { select: { id: true, fullName: true } },
+        meter: { select: { id: true, meterNumber: true, serialNumber: true } },
       },
     });
   }
@@ -179,14 +410,18 @@ export class ElectricityService {
   // ==========================================================================
   // تخصیص FIFO روی قدیمی‌ترین بل‌های بازِ یک مستأجر — عیناً الگوی RentService.
   // ==========================================================================
+  // مقیدشده به (tenantId, shopId) — نه فقط tenantId — چون یک مستأجر می‌تواند چند قرارداد/
+  // دوکان داشته باشد؛ پرداختِ ثبت‌شده برای یک دوکان نباید بدهیِ دوکان دیگرِ همان مستأجر را
+  // لمس کند. (getOpenDebtForShop از قبل همین‌طور بود؛ اینجا قبلاً هماهنگ نبود.)
   private async allocateToBills(
     tx: Prisma.TransactionClient,
     tenantId: string,
+    shopId: string,
     paymentId: string,
     amount: Prisma.Decimal,
   ) {
     const openBills = await tx.electricityBill.findMany({
-      where: { tenantId, status: { in: OPEN_STATUSES } },
+      where: { tenantId, shopId, status: { in: OPEN_STATUSES } },
       orderBy: { periodStart: 'asc' },
     });
 
@@ -196,7 +431,7 @@ export class ElectricityService {
     );
     if (amount.greaterThan(totalOutstanding)) {
       throw new BadRequestException(
-        `مبلغ (${amount.toString()}) از مجموع بدهیِ بازِ برق این مستأجر (${totalOutstanding.toString()}) بیشتر است`,
+        `مبلغ (${amount.toString()}) از مجموع بدهیِ بازِ برقِ این دوکان (${totalOutstanding.toString()}) بیشتر است`,
       );
     }
 
@@ -224,6 +459,43 @@ export class ElectricityService {
 
       remaining = remaining.sub(applyAmount);
     }
+  }
+
+  // تخصیصِ هدفمند روی یک بلِ مشخص — برای وقتی حسابدار از داخل اکانت مستأجر یک دورهٔ
+  // به‌خصوص را انتخاب می‌کند (نه FIFO خودکار). عمداً سرریز نمی‌کند: اگر مبلغ از باقی‌ماندهٔ
+  // همین بل بیشتر باشد رد می‌شود، تا معلوم باشد اضافه‌اش قرار است کجا برود.
+  private async allocateToSpecificBill(
+    tx: Prisma.TransactionClient,
+    bill: {
+      id: string;
+      paidAmount: Prisma.Decimal;
+      remainingAmount: Prisma.Decimal;
+    },
+    paymentId: string,
+    amount: Prisma.Decimal,
+  ) {
+    if (amount.greaterThan(bill.remainingAmount)) {
+      throw new BadRequestException(
+        `مبلغ (${amount.toString()}) از باقی‌ماندهٔ همین بل (${bill.remainingAmount.toString()}) بیشتر است — برای پرداخت روی چند دوره، billId را خالی بگذارید تا خودکار (FIFO) تقسیم شود`,
+      );
+    }
+
+    await tx.electricityPaymentAllocation.create({
+      data: { paymentId, billId: bill.id, amount },
+    });
+
+    const newPaid = bill.paidAmount.add(amount);
+    const newRemaining = bill.remainingAmount.sub(amount);
+    await tx.electricityBill.update({
+      where: { id: bill.id },
+      data: {
+        paidAmount: newPaid,
+        remainingAmount: newRemaining,
+        status: newRemaining.lessThanOrEqualTo(0)
+          ? ElectricityBillStatus.PAID
+          : ElectricityBillStatus.PARTIAL,
+      },
+    });
   }
 
   // مجموع بدهی بازِ برق یک مستأجر روی یک دوکان مشخص — برای تسویهٔ قرارداد (ContractsService.settle)
@@ -329,6 +601,8 @@ export class ElectricityService {
         contractId: string;
         remaining: Prisma.Decimal;
       } | null;
+      // اگر داده شود، پرداخت فقط روی همین یک بل می‌نشیند (نه FIFO روی همهٔ بل‌های باز).
+      billId?: string | null;
     },
   ) {
     let accountBalanceAfter: Prisma.Decimal | null = null;
@@ -383,7 +657,29 @@ export class ElectricityService {
       },
     });
 
-    await this.allocateToBills(tx, params.tenantId, payment.id, params.amount);
+    if (params.billId) {
+      const bill = await tx.electricityBill.findUnique({
+        where: { id: params.billId },
+      });
+      if (!bill) throw new NotFoundException('بل یافت نشد');
+      if (bill.tenantId !== params.tenantId) {
+        throw new BadRequestException('این بل متعلق به این مستأجر نیست');
+      }
+      if (!OPEN_STATUSES.includes(bill.status)) {
+        throw new BadRequestException(
+          'این بل قبلاً کامل پرداخت شده یا لغو شده است',
+        );
+      }
+      await this.allocateToSpecificBill(tx, bill, payment.id, params.amount);
+    } else {
+      await this.allocateToBills(
+        tx,
+        params.tenantId,
+        params.shopId,
+        payment.id,
+        params.amount,
+      );
+    }
 
     if (
       params.source === PaymentSourceType.BANK &&
@@ -431,13 +727,36 @@ export class ElectricityService {
       throw new BadRequestException('مستأجر باید متعلق به همان بازار باشد');
     }
 
-    const openBills = await this.prisma.electricityBill.findMany({
-      where: { tenantId: dto.tenantId, status: { in: OPEN_STATUSES } },
-      take: 1,
-    });
-    const currencyId = openBills[0]?.currencyId;
-    if (!currencyId) {
-      throw new BadRequestException('هیچ بل بازی برای این مستأجر وجود ندارد');
+    let currencyId: string;
+    if (dto.billId) {
+      const targetBill = await this.prisma.electricityBill.findUnique({
+        where: { id: dto.billId },
+      });
+      if (!targetBill) throw new NotFoundException('بل یافت نشد');
+      if (targetBill.tenantId !== dto.tenantId || targetBill.shopId !== dto.shopId) {
+        throw new BadRequestException('این بل متعلق به این مستأجر/دوکان نیست');
+      }
+      if (!OPEN_STATUSES.includes(targetBill.status)) {
+        throw new BadRequestException(
+          'این بل قبلاً کامل پرداخت شده یا لغو شده است',
+        );
+      }
+      currencyId = targetBill.currencyId;
+    } else {
+      // مقیدشده به همین دوکان هم — وگرنه اگر مستأجر چند دوکان داشته باشد، ممکن است ارزِ
+      // یک بلِ باز از دوکان دیگرش برداشته شود.
+      const openBills = await this.prisma.electricityBill.findMany({
+        where: {
+          tenantId: dto.tenantId,
+          shopId: dto.shopId,
+          status: { in: OPEN_STATUSES },
+        },
+        take: 1,
+      });
+      if (!openBills[0]) {
+        throw new BadRequestException('هیچ بل بازی برای این دوکان وجود ندارد');
+      }
+      currencyId = openBills[0].currencyId;
     }
 
     const source = dto.source ?? PaymentSourceType.BANK;
@@ -488,6 +807,7 @@ export class ElectricityService {
         paymentMethod: dto.paymentMethod ?? 'cash',
         source,
         accountId: dto.accountId,
+        billId: dto.billId,
         notes: dto.notes,
         receiptNumber: dto.receiptNumber,
         isOpeningEntry: false,
@@ -500,6 +820,27 @@ export class ElectricityService {
           : null,
       });
     });
+  }
+
+  // روز جمع‌آوری نقدی که چند رسید یک‌جا وارد می‌شود — همان الگوی createBillsBulk:
+  // هر پرداخت مستقل (createPayment) پردازش می‌شود، یک خطا بقیه را متوقف نمی‌کند.
+  async createPaymentsBulk(
+    currentUser: { id: string },
+    dto: CreateElectricityPaymentsBulkDto,
+  ) {
+    const created: Awaited<ReturnType<ElectricityService['createPayment']>>[] =
+      [];
+    const failed: { index: number; error: string }[] = [];
+
+    for (let i = 0; i < dto.payments.length; i++) {
+      try {
+        created.push(await this.createPayment(currentUser, dto.payments[i]));
+      } catch (e: any) {
+        failed.push({ index: i, error: e?.message ?? 'خطای ناشناخته' });
+      }
+    }
+
+    return { created, failed };
   }
 
   async findAllPayments(

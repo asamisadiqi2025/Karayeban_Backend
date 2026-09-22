@@ -4,26 +4,26 @@ enum PaymentSourceType {
 }
 
 model RentPayment {
-  id            String        @id @default(uuid()) @db.Uuid
-  marketId      String        @map("market_id") @db.Uuid
-  contractId    String        @map("contract_id") @db.Uuid
-  tenantId      String        @map("tenant_id") @db.Uuid
-  shopId        String        @map("shop_id") @db.Uuid
-   month         Int
-  year          Int
-  amount        Decimal       @db.Decimal(18, 4)
-  currencyId    String        @map("currency_id") @db.Uuid
-  usdEquivalent Decimal?      @map("usd_equivalent") @db.Decimal(18, 4)
-  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
-  paymentMethod PaymentMethod @map("payment_method")
-   accountId      String?           @map("account_id") @db.Uuid
+  id             String            @id @default(uuid()) @db.Uuid
+  marketId       String            @map("market_id") @db.Uuid
+  contractId     String            @map("contract_id") @db.Uuid
+  tenantId       String            @map("tenant_id") @db.Uuid
+  shopId         String            @map("shop_id") @db.Uuid
+  month          Int
+  year           Int
+  amount         Decimal           @db.Decimal(18, 4)
+  currencyId     String            @map("currency_id") @db.Uuid
+  usdEquivalent  Decimal?          @map("usd_equivalent") @db.Decimal(18, 4)
+  paymentDate    DateTime          @map("payment_date") @db.Timestamptz(6)
+  paymentMethod  PaymentMethod     @map("payment_method")
+  accountId      String?           @map("account_id") @db.Uuid
   source         PaymentSourceType @default(BANK)
-   isOpeningEntry Boolean           @default(false) @map("is_opening_entry")
-  collectedById String        @map("collected_by_id") @db.Uuid
-  notes         String?       @db.Text
-  isPartial     Boolean       @default(false) @map("is_partial")
-  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
-  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  isOpeningEntry Boolean           @default(false) @map("is_opening_entry")
+  collectedById  String            @map("collected_by_id") @db.Uuid
+  notes          String?           @db.Text
+  isPartial      Boolean           @default(false) @map("is_partial")
+  receiptNumber  String?           @map("receipt_number") @db.VarChar(100)
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
 
   market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
   contract    Contract @relation(fields: [contractId], references: [id], onDelete: Restrict)
@@ -33,7 +33,7 @@ model RentPayment {
   currency    Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
   collectedBy User     @relation("RentCollectedBy", fields: [collectedById], references: [id], onDelete: Restrict)
 
-   allocations RentPaymentAllocation[]
+  allocations RentPaymentAllocation[]
   ledgerEntry LedgerEntry?
 
   @@index([marketId])
@@ -43,7 +43,7 @@ model RentPayment {
   @@index([year, month])
   @@map("rent_payments")
 }
- 
+
 model RentPaymentAllocation {
   id           String   @id @default(uuid()) @db.Uuid
   paymentId    String   @map("payment_id") @db.Uuid

@@ -1,4 +1,4 @@
-import { toJalaali } from 'jalaali-js';
+import { toJalaali, toGregorian, jalaaliMonthLength } from 'jalaali-js';
 
 // تبدیل میلادی به هجری‌شمسی — روی کتابخانهٔ تست‌شدهٔ jalaali-js (نه پیاده‌سازی دستی).
 // عمداً از اجزای UTC (نه Date محلی) استفاده می‌شود تا نتیجه به تایم‌زون سرور بستگی نداشته
@@ -28,3 +28,17 @@ export const AFGHAN_SOLAR_MONTHS = [
   'دلو',
   'حوت',
 ] as const;
+
+// اولین روز یک ماه شمسی (میلادی، UTC نیمه‌شب) — برای مرز شروعِ دوره‌های میترخوانی.
+export function jalaliMonthStart(year: number, month: number): Date {
+  const { gy, gm, gd } = toGregorian(year, month, 1);
+  return new Date(Date.UTC(gy, gm - 1, gd));
+}
+
+// آخرین روز یک ماه شمسی (میلادی، UTC نیمه‌شب) — طول ماه (۲۹ تا ۳۱ روز، با قاعدهٔ کبیسه
+// برای حوت) را jalaali-js حساب می‌کند، دستی حدس زده نمی‌شود.
+export function jalaliMonthEnd(year: number, month: number): Date {
+  const day = jalaaliMonthLength(year, month);
+  const { gy, gm, gd } = toGregorian(year, month, day);
+  return new Date(Date.UTC(gy, gm - 1, gd));
+}
