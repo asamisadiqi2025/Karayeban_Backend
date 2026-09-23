@@ -34,6 +34,7 @@ import { SettleContractDto } from './dto/settle-contract.dto';
 import { CancelContractDto } from './dto/cancel-contract.dto';
 import { RenewContractDto } from './dto/renew-contract.dto';
 import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
+import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -306,6 +307,39 @@ export class ContractsService {
       include: {
         shop: { select: { id: true, shopNumber: true } },
         tenant: { select: { id: true, fullName: true } },
+      },
+    });
+  }
+
+  // قراردادهای فعالی که در withinDays روزِ آینده منقضی می‌شوند — برای برنامه‌ریزیِ تمدید.
+  // فقط status=active بررسی می‌شود، نه draft/suspended (چون هنوز شروع نشده یا موقتاً
+  // متوقف است) و نه early_terminated/expired/cancelled (چون از قبل تمام شده‌اند) — این‌ها
+  // «قراردادهایی که همین الان دارند اجاره می‌کِشند و به‌زودی سررسیدشان می‌رسد» را می‌خواهد.
+  async getExpiryForecast(
+    currentUser: { id: string },
+    query: ContractExpiryForecastQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const now = new Date();
+    const until = new Date(now);
+    until.setUTCDate(until.getUTCDate() + query.withinDays!);
+
+    const where: Prisma.ContractWhereInput = {
+      marketId,
+      status: ContractStatus.active,
+      endDate: { gte: now, lte: until },
+    };
+
+    return paginate(this.prisma.contract, {
+      where,
+      orderBy: { endDate: 'asc' },
+      page: query.page,
+      limit: query.limit,
+      include: {
+        shop: { select: { id: true, shopNumber: true } },
+        tenant: { select: { id: true, fullName: true, contact: true } },
       },
     });
   }
