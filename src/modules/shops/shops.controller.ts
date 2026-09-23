@@ -14,6 +14,7 @@ import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
 import { ShopQueryDto } from './dto/shop-query.dto';
+import { ShopOccupancyQueryDto } from './dto/shop-occupancy-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -32,6 +33,12 @@ export class ShopsController {
   @Get()
   findAll(@Req() req: any, @Query() query: ShopQueryDto) {
     return this.shopsService.findAll(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "occupancy-summary" را به‌عنوان :id تطبیق می‌دهد.
+  @Get('occupancy-summary')
+  getOccupancySummary(@Req() req: any, @Query() query: ShopOccupancyQueryDto) {
+    return this.shopsService.getOccupancySummary(req.user, query);
   }
 
   @Get(':id')
