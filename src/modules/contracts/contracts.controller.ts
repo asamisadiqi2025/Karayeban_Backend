@@ -21,6 +21,7 @@ import { RenewContractDto } from './dto/renew-contract.dto';
 import { AdjustContractRentDto } from './dto/adjust-contract-rent.dto';
 import { DiscountDebtDto } from './dto/discount-debt.dto';
 import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
+import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -42,6 +43,12 @@ export class ContractsController {
   @Get()
   findAll(@Req() req: any, @Query() query: ContractQueryDto) {
     return this.contractsService.findAll(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "expiry-forecast" را به‌عنوان :id تطبیق می‌دهد.
+  @Get('expiry-forecast')
+  getExpiryForecast(@Req() req: any, @Query() query: ContractExpiryForecastQueryDto) {
+    return this.contractsService.getExpiryForecast(req.user, query);
   }
 
   @Get(':id')

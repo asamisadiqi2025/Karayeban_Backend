@@ -29,6 +29,7 @@ import { CreateInventoryTransactionDto } from './dto/create-inventory-transactio
 import { CreateInventoryTransferDto } from './dto/create-inventory-transfer.dto';
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
 import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
+import { InventoryMovementSummaryQueryDto } from './dto/inventory-movement-summary-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -856,6 +857,110 @@ export class InventoryService {
       warehouseId: warehouse.id,
       warehouseName: warehouse.name,
       items: statements,
+    };
+  }
+
+  // خلاصهٔ حرکتِ انبار در سطحِ کلِ بازار — مکملِ getStockStatement است، نه جایگزینش:
+  // آن یکی می‌گوید «این جنس/گدام چه سرگذشتی داشت»، این می‌گوید «کلِ بازار این بازه چقدر
+  // خرید/فروش/مصرف/اصلاح داشت». برخلافِ getItemsSummary (که مجبور بود qty×averageCost را
+  // در حافظه ضرب کند، چون آن یک ارزشِ لحظه‌ای/محاسبه‌شده است)، این‌جا totalAmount و
+  // costOfGoodsSold از قبل ستون‌های ثابتِ خودِ InventoryTransaction هستند (هر تراکنش وقتِ
+  // ثبت، مبلغش را یک‌بار برای همیشه ذخیره کرده) — پس یک groupBy سادهٔ در سطحِ دیتابیس کافی
+  // است، بدون خواندن هیچ ردیفِ خام یا جمعِ دستی.
+  async getMovementSummary(
+    currentUser: { id: string },
+    query: InventoryMovementSummaryQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    if (query.warehouseId) {
+      const warehouse = await this.prisma.warehouse.findUnique({
+        where: { id: query.warehouseId },
+        select: { marketId: true, isDeleted: true },
+      });
+      if (!warehouse || warehouse.isDeleted || warehouse.marketId !== marketId) {
+        throw new NotFoundException('گدام یافت نشد');
+      }
+    }
+
+    const from = new Date(query.from);
+    const to = new Date(query.to);
+    if (to < from) {
+      throw new BadRequestException(
+        'تاریخ پایان باید بعد یا برابر تاریخ شروع باشد',
+      );
+    }
+    // «to» یعنی تا آخرِ همان روز، نه نیمه‌شبِ اولش.
+    const toExclusive = new Date(to);
+    toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+
+    const grouped = await this.prisma.inventoryTransaction.groupBy({
+      by: ['type', 'currencyId'],
+      where: {
+        marketId,
+        transactionDate: { gte: from, lt: toExclusive },
+        ...(query.warehouseId ? { warehouseId: query.warehouseId } : {}),
+      },
+      _sum: { quantity: true, totalAmount: true, costOfGoodsSold: true },
+      _count: true,
+    });
+
+    const currencyIds = [...new Set(grouped.map((g) => g.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    const zero = new Prisma.Decimal(0);
+    const zeroByType = () =>
+      Object.fromEntries(
+        Object.values(InventoryTransactionType).map((t) => [
+          t,
+          { quantity: zero, amount: zero, costOfGoodsSold: zero, count: 0 },
+        ]),
+      ) as Record<
+        InventoryTransactionType,
+        { quantity: Prisma.Decimal; amount: Prisma.Decimal; costOfGoodsSold: Prisma.Decimal; count: number }
+      >;
+
+    const byCurrency = new Map<
+      string,
+      { currencyId: string; currencyCode: string | null; byType: ReturnType<typeof zeroByType> }
+    >();
+
+    for (const row of grouped) {
+      const bucket = byCurrency.get(row.currencyId) ?? {
+        currencyId: row.currencyId,
+        currencyCode: currencyCodeById.get(row.currencyId) ?? null,
+        byType: zeroByType(),
+      };
+      bucket.byType[row.type] = {
+        quantity: row._sum.quantity ?? zero,
+        amount: row._sum.totalAmount ?? zero,
+        costOfGoodsSold: row._sum.costOfGoodsSold ?? zero,
+        count: row._count,
+      };
+      byCurrency.set(row.currencyId, bucket);
+    }
+
+    return {
+      marketId,
+      warehouseId: query.warehouseId ?? null,
+      from: query.from,
+      to: query.to,
+      byCurrency: [...byCurrency.values()].map((c) => ({
+        ...c,
+        // سود ناخالصِ فروش = مبلغِ فروش − بهای تمام‌شدهٔ همان فروش. چیزی که در گزارشِ
+        // P&Lِ نقدی (reports/financials/summary) اصلاً دیده نمی‌شود، چون آن فقط جریانِ
+        // پول است، نه اینکه جنسِ فروخته‌شده خودش چقدر برایمان تمام شده بود.
+        grossProfitFromSales: c.byType[InventoryTransactionType.SALE].amount.sub(
+          c.byType[InventoryTransactionType.SALE].costOfGoodsSold,
+        ),
+      })),
     };
   }
 

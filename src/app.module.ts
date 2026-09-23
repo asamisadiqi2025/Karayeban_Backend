@@ -20,6 +20,7 @@ import { RentModule } from './modules/rent/rent.module';
 import { ContractsModule } from './modules/contracts/contracts.module';
 import { ElectricityModule } from './modules/electricity/electricity.module';
 import { UploadsModule } from './modules/uploads/uploads.module';
+import { ReportsModule } from './modules/reports/reports.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 
 @Module({
@@ -45,6 +46,7 @@ import { PrismaModule } from './database/prisma/prisma.module';
     ContractsModule,
     ElectricityModule,
     UploadsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
 })

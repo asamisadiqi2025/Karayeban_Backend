@@ -5,12 +5,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ShopStatus } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
 import { ShopQueryDto } from './dto/shop-query.dto';
+import { ShopOccupancyQueryDto } from './dto/shop-occupancy-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -38,6 +40,19 @@ export class ShopsService {
     if (actor.marketId !== shopMarketId) {
       throw new ForbiddenException('دسترسی به این دوکان مجاز نیست');
     }
+  }
+
+  private resolveMarketId(actor: Actor, providedMarketId: string | undefined): string {
+    if (actor.role === 'SUPER_ADMIN') {
+      if (!providedMarketId) {
+        throw new BadRequestException('برای سوپر ادمین، marketId الزامی است');
+      }
+      return providedMarketId;
+    }
+    if (!actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+    return actor.marketId;
   }
 
 //  Pervent connect a shop to another floor not belong
@@ -126,6 +141,67 @@ export class ShopsService {
       limit: query.limit,
       include: { floor: { select: FLOOR_SELECT } },
     });
+  }
+
+  // اسنپ‌شاتِ همین‌الانِ اشغال/خالی‌بودنِ دوکان‌ها، به تفکیکِ طبقه — یک groupBy روی
+  // (status, floorId) در سطح دیتابیس، نه fetch+reduce روی همهٔ دوکان‌ها. آرشیوشده‌ها
+  // (isActive=false) عمداً حساب نمی‌شوند، چون دیگر بخشی از فضای قابل‌اجارهٔ واقعی نیستند.
+  // occupancyRate فقط از status=rented حساب می‌شود — تنها مقداری که بدون ابهام «اجاره‌داده‌شده»
+  // است؛ active/inactive وضعیتِ باز/بستهٔ روزمره‌اند و empty/pending هنوز مستأجر ندارند.
+  async getOccupancySummary(currentUser: { id: string }, query: ShopOccupancyQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const grouped = await this.prisma.shop.groupBy({
+      by: ['floorId', 'status'],
+      where: { marketId, isActive: true },
+      _count: true,
+    });
+
+    const floorIds = [...new Set(grouped.map((g) => g.floorId).filter((id): id is string => id !== null))];
+    const floors = floorIds.length
+      ? await this.prisma.floor.findMany({
+          where: { id: { in: floorIds } },
+          select: FLOOR_SELECT,
+        })
+      : [];
+    const floorById = new Map(floors.map((f) => [f.id, f]));
+
+    const zeroByStatus = () =>
+      Object.fromEntries(Object.values(ShopStatus).map((s) => [s, 0])) as Record<ShopStatus, number>;
+
+    const byFloor = new Map<
+      string,
+      { floorId: string | null; floorNumber: number | null; floorName: string | null; total: number; byStatus: Record<ShopStatus, number> }
+    >();
+    const marketTotals = { total: 0, byStatus: zeroByStatus() };
+
+    for (const row of grouped) {
+      const key = row.floorId ?? '__unassigned__';
+      const floor = row.floorId ? floorById.get(row.floorId) : undefined;
+      const bucket = byFloor.get(key) ?? {
+        floorId: row.floorId,
+        floorNumber: floor?.floorNumber ?? null,
+        floorName: floor?.name ?? null,
+        total: 0,
+        byStatus: zeroByStatus(),
+      };
+      bucket.byStatus[row.status] += row._count;
+      bucket.total += row._count;
+      byFloor.set(key, bucket);
+
+      marketTotals.byStatus[row.status] += row._count;
+      marketTotals.total += row._count;
+    }
+
+    return {
+      marketId,
+      byFloor: [...byFloor.values()].sort((a, b) => (a.floorNumber ?? Infinity) - (b.floorNumber ?? Infinity)),
+      totals: {
+        ...marketTotals,
+        occupancyRate: marketTotals.total === 0 ? null : marketTotals.byStatus.rented / marketTotals.total,
+      },
+    };
   }
 
   async findOne(currentUser: { id: string }, id: string) {

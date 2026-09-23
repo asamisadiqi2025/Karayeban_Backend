@@ -15,8 +15,17 @@ import { ShareholderQueryDto } from './dto/shareholder-query.dto';
 import { SetShareholderEquityDto } from './dto/set-equity.dto';
 import { CreateShareholderTransactionDto } from './dto/create-shareholder-transaction.dto';
 import { ShareholderTransactionQueryDto } from './dto/shareholder-transaction-query.dto';
+import { ShareholderEquitySummaryQueryDto } from './dto/shareholder-equity-summary-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
+
+type CurrencyTotals = {
+  currencyId: string;
+  currencyCode: string | null;
+  totalDeposits: Prisma.Decimal;
+  totalWithdrawals: Prisma.Decimal;
+  netAmount: Prisma.Decimal;
+};
 
 @Injectable()
 export class ShareholdersService {
@@ -387,5 +396,151 @@ export class ShareholdersService {
         account: { select: { id: true, name: true, type: true } },
       },
     });
+  }
+
+  // ==========================================================================
+  // خلاصهٔ سهام‌داران — همهٔ سهام‌داران یک بازار یک‌جا، به‌جای اینکه یکی‌یکی findOne بزنی.
+  // برخلاف enrich() (که برای هر سهام‌دار دو کوئریِ جدا می‌زند: یکی برای آخرین درصدِ سهم،
+  // یکی برای مجموع واریز/برداشت — قابل‌قبول برای یک صفحهٔ ۲۰تایی، ولی N+1 واقعی برای
+  // «همهٔ سهام‌داران»)، این‌جا برای هر دو، فقط یک کوئریِ batched روی همهٔ شناسه‌ها با هم
+  // زده می‌شود؛ تعداد کوئری‌ها دیگر به تعدادِ سهام‌داران وابسته نیست.
+  //
+  // چرا جمع‌بندیِ تراکنش‌ها در حافظه، نه groupBy: ShareholderTransaction خودش ستونِ
+  // currencyId ندارد — ارز از رویِ Account متصل معلوم می‌شود، و Prisma نمی‌تواند در سطحِ
+  // groupBy روی فیلدِ یک رابطه (account.currencyId) گروه بزند. چون تعدادِ تراکنش‌های
+  // سرمایه‌ایِ سهام‌داران (واریز/برداشتِ سرمایه) طبیعتاً کم و پراکنده است — نه هر روز مثل
+  // کرایه —، خواندن و جمع در حافظه کاملاً امن و مقیاس‌پذیر می‌ماند.
+  async getEquitySummary(currentUser: { id: string }, query: ShareholderEquitySummaryQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const shareholders = await this.prisma.shareholder.findMany({
+      where: { marketId },
+      select: { id: true, fullName: true, isActive: true },
+      orderBy: { fullName: 'asc' },
+    });
+    const shareholderIds = shareholders.map((s) => s.id);
+
+    if (shareholderIds.length === 0) {
+      return {
+        marketId,
+        fromDate: query.fromDate ?? null,
+        toDate: query.toDate ?? null,
+        equityPercentageSum: new Prisma.Decimal(0),
+        isBalanced: true,
+        grandTotalsByCurrency: [] as CurrencyTotals[],
+        shareholders: [],
+      };
+    }
+
+    const transactionWhere: Prisma.ShareholderTransactionWhereInput = {
+      shareholderId: { in: shareholderIds },
+    };
+    if (query.fromDate !== undefined || query.toDate !== undefined) {
+      transactionWhere.transactionDate = {
+        ...(query.fromDate !== undefined ? { gte: new Date(query.fromDate) } : {}),
+        ...(query.toDate !== undefined ? { lte: new Date(query.toDate) } : {}),
+      };
+    }
+
+    const [equityHistory, transactions] = await Promise.all([
+      this.prisma.shareholderEquity.findMany({
+        where: { shareholderId: { in: shareholderIds } },
+        orderBy: [{ effectiveFrom: 'asc' }, { createdAt: 'asc' }],
+        select: { shareholderId: true, percentage: true },
+      }),
+      this.prisma.shareholderTransaction.findMany({
+        where: transactionWhere,
+        select: {
+          shareholderId: true,
+          type: true,
+          amount: true,
+          account: { select: { currencyId: true } },
+        },
+      }),
+    ]);
+
+    // چون equityHistory صعودی (effectiveFrom, createdAt) مرتب شده، آخرین ردیفی که برای
+    // هر shareholderId می‌بینیم همان جدیدترینِ اوست — یک پیمایشِ خطی، بدون کوئریِ جدا.
+    const latestPercentageByShareholder = new Map<string, Prisma.Decimal>();
+    for (const row of equityHistory) {
+      latestPercentageByShareholder.set(row.shareholderId, row.percentage);
+    }
+
+    const currencyIds = [...new Set(transactions.map((t) => t.account.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    // shareholderId → currencyId → {deposits, withdrawals}
+    const totalsByShareholder = new Map<string, Map<string, { deposits: Prisma.Decimal; withdrawals: Prisma.Decimal }>>();
+    const grandByCurrency = new Map<string, { deposits: Prisma.Decimal; withdrawals: Prisma.Decimal }>();
+    const zero = new Prisma.Decimal(0);
+
+    for (const tx of transactions) {
+      const currencyId = tx.account.currencyId;
+      const byCurrency = totalsByShareholder.get(tx.shareholderId) ?? new Map();
+      const cell = byCurrency.get(currencyId) ?? { deposits: zero, withdrawals: zero };
+      const grandCell = grandByCurrency.get(currencyId) ?? { deposits: zero, withdrawals: zero };
+
+      if (tx.type === 'DEPOSIT') {
+        cell.deposits = cell.deposits.add(tx.amount);
+        grandCell.deposits = grandCell.deposits.add(tx.amount);
+      } else {
+        cell.withdrawals = cell.withdrawals.add(tx.amount);
+        grandCell.withdrawals = grandCell.withdrawals.add(tx.amount);
+      }
+
+      byCurrency.set(currencyId, cell);
+      totalsByShareholder.set(tx.shareholderId, byCurrency);
+      grandByCurrency.set(currencyId, grandCell);
+    }
+
+    const toCurrencyTotals = (
+      byCurrency: Map<string, { deposits: Prisma.Decimal; withdrawals: Prisma.Decimal }>,
+    ): CurrencyTotals[] =>
+      [...byCurrency.entries()].map(([currencyId, v]) => ({
+        currencyId,
+        currencyCode: currencyCodeById.get(currencyId) ?? null,
+        totalDeposits: v.deposits,
+        totalWithdrawals: v.withdrawals,
+        netAmount: v.deposits.sub(v.withdrawals),
+      }));
+
+    let equityPercentageSum = new Prisma.Decimal(0);
+    const shareholderRows = shareholders.map((s) => {
+      const currentPercentage = latestPercentageByShareholder.get(s.id) ?? zero;
+      equityPercentageSum = equityPercentageSum.add(currentPercentage);
+      return {
+        shareholderId: s.id,
+        fullName: s.fullName,
+        isActive: s.isActive,
+        currentPercentage,
+        byCurrency: toCurrencyTotals(totalsByShareholder.get(s.id) ?? new Map()),
+      };
+    });
+
+    return {
+      marketId,
+      fromDate: query.fromDate ?? null,
+      toDate: query.toDate ?? null,
+      // اینکه جمعِ درصدها دقیقاً ۱۰۰ است یا نه — تا حالا فقط وظیفهٔ دستیِ حساب‌دار بود
+      // (ن.ک. کامنتِ setEquity)؛ این گزارش برای اولین‌بار آن را قابل‌مشاهده می‌کند.
+      // (این دو مستقل از fromDate/toDate‌اند — همیشه اسنپ‌شاتِ همین‌الان.)
+      equityPercentageSum,
+      isBalanced: equityPercentageSum.equals(100),
+      grandTotalsByCurrency: [...grandByCurrency.entries()].map(([currencyId, v]) => ({
+        currencyId,
+        currencyCode: currencyCodeById.get(currencyId) ?? null,
+        totalDeposits: v.deposits,
+        totalWithdrawals: v.withdrawals,
+        netAmount: v.deposits.sub(v.withdrawals),
+      })),
+      shareholders: shareholderRows,
+    };
   }
 }
