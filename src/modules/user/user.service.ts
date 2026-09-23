@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQueryDto } from './dto/user-query.dto';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import * as bcrypt from 'bcrypt';
+import { UploadsService } from '../uploads/uploads.service';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -13,7 +14,10 @@ export class UserService {
   private static readonly SORT_FIELDS = ['fullName', 'createdAt'] as const;
   private static readonly SEARCH_FIELDS = ['fullName', 'username', 'email'] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند (ن.ک. jwt.strategy.ts)، پس همیشه از دیتابیس
   // تازه خوانده می‌شود تا نقش/بازار واقعی کاربر معلوم باشد — قبل از این fix، findAll برای
@@ -62,6 +66,10 @@ export class UserService {
 
     if (dto.isSuperAdmin && currentUser.role !== 'SUPER_ADMIN') {
       throw new ForbiddenException('Only super admin can set isSuperAdmin');
+    }
+
+    if (dto.profilePhoto !== undefined && dto.profilePhoto !== user.profilePhoto) {
+      await this.uploadsService.deleteByUrl(user.profilePhoto);
     }
 
     const updated = await this.prisma.user.update({

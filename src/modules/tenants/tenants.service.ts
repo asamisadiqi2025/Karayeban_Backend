@@ -15,6 +15,7 @@ import { TenantQueryDto } from './dto/tenant-query.dto';
 import { TenantStatementQueryDto } from './dto/tenant-statement-query.dto';
 import { RENT_OPEN_STATUSES } from '../rent/rent.service';
 import { ELECTRICITY_OPEN_STATUSES } from '../electricity/electricity.service';
+import { UploadsService } from '../uploads/uploads.service';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -29,7 +30,10 @@ export class TenantsService {
     'contact',
   ] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadsService: UploadsService,
+  ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند، پس همیشه از دیتابیس تازه خوانده می‌شود.
   private async getActor(currentUser: { id: string }): Promise<Actor> {
@@ -170,7 +174,13 @@ export class TenantsService {
     if (dto.contact !== undefined) data.contact = dto.contact?.trim() || null;
     if (dto.gender !== undefined) data.gender = dto.gender;
     if (dto.details !== undefined) data.details = dto.details?.trim() || null;
-    if (dto.photo !== undefined) data.photo = dto.photo?.trim() || null;
+    if (dto.photo !== undefined) {
+      const newPhoto = dto.photo?.trim() || null;
+      if (newPhoto !== tenant.photo) {
+        await this.uploadsService.deleteByUrl(tenant.photo);
+      }
+      data.photo = newPhoto;
+    }
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     try {
@@ -223,6 +233,7 @@ export class TenantsService {
     }
 
     await this.prisma.tenant.delete({ where: { id } });
+    await this.uploadsService.deleteByUrl(tenant.photo);
     return { message: `مستأجر «${tenant.fullName}» حذف شد` };
   }
 

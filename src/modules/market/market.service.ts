@@ -11,6 +11,7 @@ import { UpdateMarketProfileDto } from './dto/update-market-profile.dto';
 import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 import { ConfigService } from '@nestjs/config';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { UploadsService } from '../uploads/uploads.service';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -19,6 +20,7 @@ export class MarketService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
+    private readonly uploadsService: UploadsService,
   ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند (ن.ک. jwt.strategy.ts)، پس همیشه از دیتابیس
@@ -118,6 +120,11 @@ export class MarketService {
 
     const { baseCurrency, ...rest } = dto as any;
     const updateData: any = { ...rest };
+
+    if (dto.logo !== undefined && dto.logo !== market.logo) {
+      await this.uploadsService.deleteByUrl(market.logo);
+    }
+
     if (baseCurrency) {
       if (market.baseCurrencyId) {
         throw new ConflictException(
