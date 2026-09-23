@@ -424,10 +424,22 @@ export class ShareholdersService {
     if (shareholderIds.length === 0) {
       return {
         marketId,
+        fromDate: query.fromDate ?? null,
+        toDate: query.toDate ?? null,
         equityPercentageSum: new Prisma.Decimal(0),
         isBalanced: true,
         grandTotalsByCurrency: [] as CurrencyTotals[],
         shareholders: [],
+      };
+    }
+
+    const transactionWhere: Prisma.ShareholderTransactionWhereInput = {
+      shareholderId: { in: shareholderIds },
+    };
+    if (query.fromDate !== undefined || query.toDate !== undefined) {
+      transactionWhere.transactionDate = {
+        ...(query.fromDate !== undefined ? { gte: new Date(query.fromDate) } : {}),
+        ...(query.toDate !== undefined ? { lte: new Date(query.toDate) } : {}),
       };
     }
 
@@ -438,7 +450,7 @@ export class ShareholdersService {
         select: { shareholderId: true, percentage: true },
       }),
       this.prisma.shareholderTransaction.findMany({
-        where: { shareholderId: { in: shareholderIds } },
+        where: transactionWhere,
         select: {
           shareholderId: true,
           type: true,
@@ -514,8 +526,11 @@ export class ShareholdersService {
 
     return {
       marketId,
+      fromDate: query.fromDate ?? null,
+      toDate: query.toDate ?? null,
       // اینکه جمعِ درصدها دقیقاً ۱۰۰ است یا نه — تا حالا فقط وظیفهٔ دستیِ حساب‌دار بود
       // (ن.ک. کامنتِ setEquity)؛ این گزارش برای اولین‌بار آن را قابل‌مشاهده می‌کند.
+      // (این دو مستقل از fromDate/toDate‌اند — همیشه اسنپ‌شاتِ همین‌الان.)
       equityPercentageSum,
       isBalanced: equityPercentageSum.equals(100),
       grandTotalsByCurrency: [...grandByCurrency.entries()].map(([currencyId, v]) => ({

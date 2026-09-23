@@ -1,10 +1,19 @@
-import { IsOptional, IsUUID } from 'class-validator';
+import { IsDateString, IsOptional, IsUUID } from 'class-validator';
 
-// اسنپ‌شاتِ همین‌الانِ سهمِ همهٔ سهام‌داران یک بازار + مجموعِ واریز/برداشتِ هرکدام —
-// درصدِ سهم یک تاریخچه است (ShareholderEquity)، پس همیشه آخرین ردیفِ هر سهام‌دار مبنا
-// قرار می‌گیرد؛ تاریخ ورودی لازم نیست.
+// currentPercentage/isBalanced همیشه اسنپ‌شاتِ همین‌الان‌اند (آخرین ردیفِ ShareholderEquity)
+// و تاریخ رویشان اثر ندارد. اما واریز/برداشت رویدادِ واقعی با تاریخ‌اند — اگر fromDate/toDate
+// داده شود، فقط جمع‌بندیِ آن‌ها (byCurrency, grandTotalsByCurrency) به همان بازه محدود
+// می‌شود؛ بدون آن‌ها، مثل قبل all-time می‌ماند.
 export class ShareholderEquitySummaryQueryDto {
   @IsOptional()
   @IsUUID()
   marketId?: string;
+
+  @IsOptional()
+  @IsDateString()
+  fromDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  toDate?: string;
 }
