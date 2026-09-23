@@ -17,6 +17,7 @@ import { ShareholderQueryDto } from './dto/shareholder-query.dto';
 import { SetShareholderEquityDto } from './dto/set-equity.dto';
 import { CreateShareholderTransactionDto } from './dto/create-shareholder-transaction.dto';
 import { ShareholderTransactionQueryDto } from './dto/shareholder-transaction-query.dto';
+import { ShareholderEquitySummaryQueryDto } from './dto/shareholder-equity-summary-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -36,6 +37,12 @@ export class ShareholdersController {
   @Get('transactions')
   findAllTransactions(@Req() req: any, @Query() query: ShareholderTransactionQueryDto) {
     return this.shareholdersService.findAllTransactions(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "equity-summary" را :id تفسیر می‌کند.
+  @Get('equity-summary')
+  getEquitySummary(@Req() req: any, @Query() query: ShareholderEquitySummaryQueryDto) {
+    return this.shareholdersService.getEquitySummary(req.user, query);
   }
 
   @Get()

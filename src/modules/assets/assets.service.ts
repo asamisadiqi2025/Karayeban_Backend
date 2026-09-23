@@ -15,6 +15,7 @@ import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { AssetQueryDto } from './dto/asset-query.dto';
 import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
+import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summary-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -243,6 +244,90 @@ export class AssetsService {
         count: g._count._all,
         totalPurchasePrice: g._sum.purchasePrice ?? new Prisma.Decimal(0),
         totalCurrentBookValue: g._sum.currentBookValue ?? new Prisma.Decimal(0),
+      })),
+    };
+  }
+
+  // هزینهٔ استهلاکِ شناسایی‌شده در یک بازه — چیزی که در گزارشِ P&Lِ نقدی
+  // (reports/financials/summary) اصلاً دیده نمی‌شود، چون استهلاک هیچ پولی جابه‌جا نمی‌کند
+  // (فقط ارزشِ دفتری کم می‌شود) و LedgerEntry هم برایش ردیفی نمی‌سازد. برای تصویرِ واقعی‌ترِ
+  // سود، این باید کنارِ نقد و COGS (ن.ک. InventoryService.getMovementSummary) دیده شود.
+  //
+  // چرا appliedAt، نه year: فیلدِ year روی DepreciationEvent شمارندهٔ «سالِ چندمِ عمرِ همین
+  // دارایی» است (۱، ۲، ۳...)، نه سالِ تقویمی — پس برای فیلترِ «در بازهٔ تقویمیِ X» باید
+  // appliedAt (لحظهٔ واقعی‌ای که cron آن را ثبت کرده) استفاده شود.
+  //
+  // چرا fetch+groupBy در حافظه، نه groupBy در دیتابیس: DepreciationEvent نه marketId دارد
+  // نه currencyId — این‌ها فقط از طریقِ رابطهٔ Asset معلوم می‌شوند، و Prisma نمی‌تواند در
+  // سطحِ groupBy روی فیلدِ یک رابطه گروه بزند. چون استهلاک حداکثر یک‌بار در سال به‌ازای هر
+  // دارایی ثبت می‌شود (نه هر روز مثل کرایه)، تعدادِ رویدادها همیشه به‌شدت محدود و کوچک است.
+  async getDepreciationSummary(
+    currentUser: { id: string },
+    query: AssetDepreciationSummaryQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const from = new Date(query.from);
+    const to = new Date(query.to);
+    if (to < from) {
+      throw new BadRequestException('تاریخ پایان باید بعد یا برابر تاریخ شروع باشد');
+    }
+    const toExclusive = new Date(to);
+    toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+
+    const events = await this.prisma.depreciationEvent.findMany({
+      where: {
+        appliedAt: { gte: from, lt: toExclusive },
+        asset: { marketId, isDeleted: false },
+      },
+      select: {
+        assetId: true,
+        depreciationAmount: true,
+        asset: { select: { currencyId: true } },
+      },
+    });
+
+    const currencyIds = [...new Set(events.map((e) => e.asset.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    const zero = new Prisma.Decimal(0);
+    const byCurrency = new Map<
+      string,
+      { currencyId: string; currencyCode: string | null; totalDepreciation: Prisma.Decimal; eventCount: number; assetIds: Set<string> }
+    >();
+
+    for (const e of events) {
+      const currencyId = e.asset.currencyId;
+      const bucket = byCurrency.get(currencyId) ?? {
+        currencyId,
+        currencyCode: currencyCodeById.get(currencyId) ?? null,
+        totalDepreciation: zero,
+        eventCount: 0,
+        assetIds: new Set<string>(),
+      };
+      bucket.totalDepreciation = bucket.totalDepreciation.add(e.depreciationAmount);
+      bucket.eventCount += 1;
+      bucket.assetIds.add(e.assetId);
+      byCurrency.set(currencyId, bucket);
+    }
+
+    return {
+      marketId,
+      from: query.from,
+      to: query.to,
+      byCurrency: [...byCurrency.values()].map((b) => ({
+        currencyId: b.currencyId,
+        currencyCode: b.currencyCode,
+        totalDepreciation: b.totalDepreciation,
+        eventCount: b.eventCount,
+        assetCount: b.assetIds.size,
       })),
     };
   }

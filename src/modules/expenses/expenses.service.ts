@@ -17,8 +17,16 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseQueryDto } from './dto/expense-query.dto';
 import { ExpenseSummaryQueryDto } from './dto/expense-summary-query.dto';
+import { ExpenseBreakdownQueryDto } from './dto/expense-breakdown-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
+
+type CurrencyAmount = {
+  currencyId: string;
+  currencyCode: string | null;
+  amount: Prisma.Decimal;
+  count: number;
+};
 
 // دسته‌بندی مصرف + خودِ مصرف در یک فایل، دقیقاً مثل ShareholdersService (سهام‌دار +
 // سهم + تراکنش یک‌جا) — نه چند فایل جدا برای هر بخش کوچک.
@@ -416,6 +424,129 @@ export class ExpensesService {
         totalAmount: g._sum.amount ?? new Prisma.Decimal(0),
         count: g._count,
       })),
+    };
+  }
+
+  // خلاصهٔ همهٔ کتگوری‌ها یک‌جا — برخلاف getExpenseSummary که فقط یک کتگوری را می‌گیرد،
+  // این یک groupBy روی (categoryId, currencyId) برای کلِ مصارفِ بازار در یک بازه است، بعد
+  // در همین سرویس روی درختِ ۲‌سطحیِ کتگوری‌ها جمع می‌شود (مصرفِ مستقیمِ هر مادر + مصرفِ
+  // مستقیمِ هر زیرشاخه‌اش = totalِ همان مادر) — چون Prisma نمی‌تواند parent/child را در سطحِ
+  // دیتابیس خودش جمع بزند. حجمِ کتگوری‌ها همیشه کوچک است (ده‌ها ردیف، نه هزاران)، پس این
+  // جمعِ درون‌حافظه‌ای هیچ ریسکِ کارایی‌ای ندارد؛ چیزی که ریسک دارد (خودِ مصارف) همچنان
+  // با groupBy در دیتابیس جمع می‌شود، نه با خواندن تک‌تک ردیف‌های Expense.
+  async getExpenseBreakdown(currentUser: { id: string }, query: ExpenseBreakdownQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const where: any = { marketId };
+    if (query.fromDate !== undefined || query.toDate !== undefined) {
+      where.expenseDate = {
+        ...(query.fromDate !== undefined ? { gte: new Date(query.fromDate) } : {}),
+        ...(query.toDate !== undefined ? { lte: new Date(query.toDate) } : {}),
+      };
+    }
+
+    const [categories, grouped] = await Promise.all([
+      this.prisma.expenseCategory.findMany({
+        where: { OR: [{ marketId: null }, { marketId }] },
+        select: { id: true, name: true, parentId: true },
+      }),
+      this.prisma.expense.groupBy({
+        by: ['categoryId', 'currencyId'],
+        where,
+        _sum: { amount: true },
+        _count: true,
+      }),
+    ]);
+
+    const currencyIds = [...new Set(grouped.map((g) => g.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    // categoryId → currencyId → {amount, count} — فقط مصرفِ مستقیمِ بسته‌شده به همان کتگوری.
+    const directByCategory = new Map<string, Map<string, { amount: Prisma.Decimal; count: number }>>();
+    for (const row of grouped) {
+      const byCurrency = directByCategory.get(row.categoryId) ?? new Map();
+      byCurrency.set(row.currencyId, {
+        amount: row._sum.amount ?? new Prisma.Decimal(0),
+        count: row._count,
+      });
+      directByCategory.set(row.categoryId, byCurrency);
+    }
+
+    const toCurrencyAmounts = (byCurrency: Map<string, { amount: Prisma.Decimal; count: number }>): CurrencyAmount[] =>
+      [...byCurrency.entries()]
+        .map(([currencyId, v]) => ({
+          currencyId,
+          currencyCode: currencyCodeById.get(currencyId) ?? null,
+          amount: v.amount,
+          count: v.count,
+        }))
+        .sort((a, b) => (a.currencyCode ?? '').localeCompare(b.currencyCode ?? ''));
+
+    const childrenByParent = new Map<string, { id: string; name: string }[]>();
+    for (const c of categories) {
+      if (c.parentId) {
+        const list = childrenByParent.get(c.parentId) ?? [];
+        list.push({ id: c.id, name: c.name });
+        childrenByParent.set(c.parentId, list);
+      }
+    }
+
+    const grandTotal = new Map<string, { amount: Prisma.Decimal; count: number }>();
+    for (const row of grouped) {
+      const entry = grandTotal.get(row.currencyId) ?? { amount: new Prisma.Decimal(0), count: 0 };
+      entry.amount = entry.amount.add(row._sum.amount ?? new Prisma.Decimal(0));
+      entry.count += row._count;
+      grandTotal.set(row.currencyId, entry);
+    }
+
+    const parents = categories.filter((c) => c.parentId === null);
+    const result = parents
+      .map((parent) => {
+        const children = (childrenByParent.get(parent.id) ?? []).map((child) => ({
+          categoryId: child.id,
+          name: child.name,
+          direct: toCurrencyAmounts(directByCategory.get(child.id) ?? new Map()),
+        }));
+
+        const totalByCurrency = new Map<string, { amount: Prisma.Decimal; count: number }>();
+        const addToTotal = (byCurrency: Map<string, { amount: Prisma.Decimal; count: number }>) => {
+          for (const [currencyId, v] of byCurrency) {
+            const entry = totalByCurrency.get(currencyId) ?? { amount: new Prisma.Decimal(0), count: 0 };
+            entry.amount = entry.amount.add(v.amount);
+            entry.count += v.count;
+            totalByCurrency.set(currencyId, entry);
+          }
+        };
+        addToTotal(directByCategory.get(parent.id) ?? new Map());
+        for (const child of childrenByParent.get(parent.id) ?? []) {
+          addToTotal(directByCategory.get(child.id) ?? new Map());
+        }
+
+        return {
+          categoryId: parent.id,
+          name: parent.name,
+          direct: toCurrencyAmounts(directByCategory.get(parent.id) ?? new Map()),
+          total: toCurrencyAmounts(totalByCurrency),
+          children,
+        };
+      })
+      // کتگوری‌های بدون هیچ مصرفی (نه خودشان، نه زیرشاخه‌هایشان) در این بازه حذف می‌شوند
+      // تا خروجی فقط چیزی را نشان دهد که واقعاً اتفاق افتاده — نه لیستِ کاملِ کتگوری‌های تعریف‌شده.
+      .filter((p) => p.total.length > 0);
+
+    return {
+      marketId,
+      fromDate: query.fromDate ?? null,
+      toDate: query.toDate ?? null,
+      grandTotal: toCurrencyAmounts(grandTotal),
+      categories: result,
     };
   }
 

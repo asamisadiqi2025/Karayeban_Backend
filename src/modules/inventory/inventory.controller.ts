@@ -25,6 +25,7 @@ import { CreateInventoryTransactionDto } from './dto/create-inventory-transactio
 import { CreateInventoryTransferDto } from './dto/create-inventory-transfer.dto';
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
 import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
+import { InventoryMovementSummaryQueryDto } from './dto/inventory-movement-summary-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -128,6 +129,16 @@ export class InventoryController {
   @Get('stock-statement')
   getStockStatement(@Req() req: any, @Query() query: StockStatementQueryDto) {
     return this.inventoryService.getStockStatement(req.user, query);
+  }
+
+  // خلاصهٔ حرکتِ انبار در سطحِ کلِ بازار (نه یک جنس، نه یک گدام) — جمعِ خرید/فروش/مصرف/
+  // اصلاح/انتقال برای یک بازه.
+  @Get('movement-summary')
+  getMovementSummary(
+    @Req() req: any,
+    @Query() query: InventoryMovementSummaryQueryDto,
+  ) {
+    return this.inventoryService.getMovementSummary(req.user, query);
   }
 
   @Get('items')

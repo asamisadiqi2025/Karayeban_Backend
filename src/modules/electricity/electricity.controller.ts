@@ -18,6 +18,7 @@ import { CreateElectricityBillingCycleDto } from './dto/create-electricity-billi
 import { ElectricityBillingCycleQueryDto } from './dto/electricity-billing-cycle-query.dto';
 import { CreateElectricityBillsBulkDto } from './dto/create-electricity-bills-bulk.dto';
 import { CreateElectricityPaymentsBulkDto } from './dto/create-electricity-payments-bulk.dto';
+import { ElectricityDebtAgingQueryDto } from './dto/electricity-debt-aging-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -84,6 +85,12 @@ export class ElectricityController {
   @Get('debts')
   findAllDebts(@Req() req: any, @Query() query: ElectricityDebtQueryDto) {
     return this.electricityService.findAllDebts(req.user, query);
+  }
+
+  // باید قبل از @Get('debts/:tenantId') ثبت شود، وگرنه Nest کلمهٔ "aging" را به‌عنوان tenantId تطبیق می‌دهد.
+  @Get('debts/aging')
+  getDebtAging(@Req() req: any, @Query() query: ElectricityDebtAgingQueryDto) {
+    return this.electricityService.getDebtAging(req.user, query);
   }
 
   @Get('debts/:tenantId')

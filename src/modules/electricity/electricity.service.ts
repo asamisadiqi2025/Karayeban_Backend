@@ -25,6 +25,7 @@ import { CreateElectricityBillingCycleDto } from './dto/create-electricity-billi
 import { ElectricityBillingCycleQueryDto } from './dto/electricity-billing-cycle-query.dto';
 import { CreateElectricityBillsBulkDto } from './dto/create-electricity-bills-bulk.dto';
 import { CreateElectricityPaymentsBulkDto } from './dto/create-electricity-payments-bulk.dto';
+import { ElectricityDebtAgingQueryDto } from './dto/electricity-debt-aging-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -915,6 +916,92 @@ export class ElectricityService {
         tenant: { select: { id: true, fullName: true, marketId: true } },
       },
     });
+  }
+
+  private static readonly AGING_BUCKETS = ['current', 'd1_30', 'd31_60', 'd61_90', 'd90_plus'] as const;
+
+  private static bucketForPeriodEnd(
+    periodEnd: Date,
+    now: Date,
+  ): (typeof ElectricityService.AGING_BUCKETS)[number] {
+    if (periodEnd >= now) return 'current';
+    const daysOverdue = Math.floor((now.getTime() - periodEnd.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysOverdue <= 30) return 'd1_30';
+    if (daysOverdue <= 60) return 'd31_60';
+    if (daysOverdue <= 90) return 'd61_90';
+    return 'd90_plus';
+  }
+
+  // رده‌بندیِ سنیِ بدهیِ بازِ برق — عیناً همان الگوی RentService.getDebtAging (فقط روی
+  // ElectricityBill به‌جای RentCharges): findAllDebts می‌گوید «کدام مستأجر چقدر بدهکار
+  // است»، این می‌گوید «بدهیِ کل بازار از نظرِ قدمت چطور پخش شده».
+  //
+  // چرا fetch+bucket در حافظه، نه groupBy در دیتابیس: Prisma نمی‌تواند «امروز منهای
+  // periodEnd» را در سطحِ خودِ groupBy دسته‌بندی کند (نه CASE، نه date-diff). راهِ جایگزین
+  // یک $queryRaw با CASE WHEN بود، اما آن هم برای همین حجمِ داده سودی نداشت — مقیاس‌پذیریِ
+  // این کوئری وابسته به تعدادِ کلِ رویدادهای مالیِ گذشته نیست (که می‌تواند خیلی بزرگ شود)،
+  // بلکه فقط به تعدادِ بل‌های همین‌الان بازِ یک بازار (status IN PENDING/PARTIAL/OVERDUE)
+  // بستگی دارد — که به‌طورِ طبیعی به تعدادِ دوکان‌های آن بازار محدود است (چون هر دوکان در
+  // هر دوره حداکثر یک بلِ باز دارد)، نه به کلِ تاریخچه. برای صدها/چندهزار دوکان هم این
+  // fetch سبک می‌ماند؛ اگر یک‌روز این فرض عوض شود (مثلاً بازارهای خیلی بزرگ‌تر)، اول قدم
+  // اضافه‌کردنِ یک ایندکس روی (marketId, status) است، نه بازنویسیِ کل منطق.
+  async getDebtAging(currentUser: { id: string }, query: ElectricityDebtAgingQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const openBills = await this.prisma.electricityBill.findMany({
+      where: { marketId, status: { in: OPEN_STATUSES }, remainingAmount: { gt: 0 } },
+      select: { remainingAmount: true, currencyId: true, periodEnd: true },
+    });
+
+    const currencyIds = [...new Set(openBills.map((b) => b.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    const now = new Date();
+    const zero = new Prisma.Decimal(0);
+    const zeroBuckets = () =>
+      Object.fromEntries(
+        ElectricityService.AGING_BUCKETS.map((b) => [b, { amount: zero, count: 0 }]),
+      ) as Record<(typeof ElectricityService.AGING_BUCKETS)[number], { amount: Prisma.Decimal; count: number }>;
+
+    const byCurrency = new Map<
+      string,
+      {
+        currencyId: string;
+        currencyCode: string | null;
+        buckets: ReturnType<typeof zeroBuckets>;
+        totalAmount: Prisma.Decimal;
+        totalCount: number;
+      }
+    >();
+
+    for (const bill of openBills) {
+      const bucket = ElectricityService.bucketForPeriodEnd(bill.periodEnd, now);
+      const entry = byCurrency.get(bill.currencyId) ?? {
+        currencyId: bill.currencyId,
+        currencyCode: currencyCodeById.get(bill.currencyId) ?? null,
+        buckets: zeroBuckets(),
+        totalAmount: zero,
+        totalCount: 0,
+      };
+      entry.buckets[bucket].amount = entry.buckets[bucket].amount.add(bill.remainingAmount);
+      entry.buckets[bucket].count += 1;
+      entry.totalAmount = entry.totalAmount.add(bill.remainingAmount);
+      entry.totalCount += 1;
+      byCurrency.set(bill.currencyId, entry);
+    }
+
+    return {
+      marketId,
+      asOf: now.toISOString(),
+      byCurrency: [...byCurrency.values()],
+    };
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_1AM)
