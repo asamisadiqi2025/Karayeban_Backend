@@ -26,6 +26,10 @@ import { ElectricityBillingCycleQueryDto } from './dto/electricity-billing-cycle
 import { CreateElectricityBillsBulkDto } from './dto/create-electricity-bills-bulk.dto';
 import { CreateElectricityPaymentsBulkDto } from './dto/create-electricity-payments-bulk.dto';
 import { ElectricityDebtAgingQueryDto } from './dto/electricity-debt-aging-query.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
+
+const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -51,7 +55,10 @@ export class ElectricityService {
     'createdAt',
   ] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
@@ -178,7 +185,11 @@ export class ElectricityService {
   // ==========================================================================
   // بل‌ها — ثبت دستی (نه تولید خودکار)، همیشه بر مبنای دوره‌ی محاسبه‌شدهٔ قرارداد.
   // ==========================================================================
-  async createBill(currentUser: { id: string }, dto: CreateElectricityBillDto) {
+  async createBill(
+    currentUser: { id: string },
+    dto: CreateElectricityBillDto,
+    meta: RequestMeta = NO_REQUEST_META,
+  ) {
     const actor = await this.getActor(currentUser);
 
     const contract = await this.prisma.contract.findUnique({
@@ -340,6 +351,18 @@ export class ElectricityService {
 
         await this.recomputeElectricityDebt(tx, contract.tenantId!);
 
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'ElectricityBill',
+          entityId: bill.id,
+          marketId,
+          userId: actor.id,
+          newData: bill,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+
         return bill;
       });
     } catch (e: any) {
@@ -358,13 +381,14 @@ export class ElectricityService {
   async createBillsBulk(
     currentUser: { id: string },
     dto: CreateElectricityBillsBulkDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const created: Awaited<ReturnType<ElectricityService['createBill']>>[] = [];
     const failed: { index: number; error: string }[] = [];
 
     for (let i = 0; i < dto.bills.length; i++) {
       try {
-        created.push(await this.createBill(currentUser, dto.bills[i]));
+        created.push(await this.createBill(currentUser, dto.bills[i], meta));
       } catch (e: any) {
         failed.push({ index: i, error: e?.message ?? 'خطای ناشناخته' });
       }
@@ -605,6 +629,7 @@ export class ElectricityService {
       // اگر داده شود، پرداخت فقط روی همین یک بل می‌نشیند (نه FIFO روی همهٔ بل‌های باز).
       billId?: string | null;
     },
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     let accountBalanceAfter: Prisma.Decimal | null = null;
 
@@ -705,12 +730,25 @@ export class ElectricityService {
 
     await this.recomputeElectricityDebt(tx, params.tenantId);
 
+    await this.auditLog.record({
+      tx,
+      action: 'CREATE',
+      entityType: 'ElectricityPayment',
+      entityId: payment.id,
+      marketId: params.marketId,
+      userId: actor.id,
+      newData: payment,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return payment;
   }
 
   async createPayment(
     currentUser: { id: string },
     dto: CreateElectricityPaymentDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
 
@@ -798,28 +836,33 @@ export class ElectricityService {
       : new Date();
 
     return this.prisma.$transaction(async (tx) => {
-      return this.recordPayment(tx, actor, {
-        marketId: shop.marketId,
-        shopId: dto.shopId,
-        tenantId: dto.tenantId,
-        currencyId,
-        amount,
-        paymentDate,
-        paymentMethod: dto.paymentMethod ?? 'cash',
-        source,
-        accountId: dto.accountId,
-        billId: dto.billId,
-        notes: dto.notes,
-        receiptNumber: dto.receiptNumber,
-        isOpeningEntry: false,
-        securityDeposit: contract
-          ? {
-              contractId: contract.id,
-              remaining:
-                contract.securityDepositRemaining ?? new Prisma.Decimal(0),
-            }
-          : null,
-      });
+      return this.recordPayment(
+        tx,
+        actor,
+        {
+          marketId: shop.marketId,
+          shopId: dto.shopId,
+          tenantId: dto.tenantId,
+          currencyId,
+          amount,
+          paymentDate,
+          paymentMethod: dto.paymentMethod ?? 'cash',
+          source,
+          accountId: dto.accountId,
+          billId: dto.billId,
+          notes: dto.notes,
+          receiptNumber: dto.receiptNumber,
+          isOpeningEntry: false,
+          securityDeposit: contract
+            ? {
+                contractId: contract.id,
+                remaining:
+                  contract.securityDepositRemaining ?? new Prisma.Decimal(0),
+              }
+            : null,
+        },
+        meta,
+      );
     });
   }
 
@@ -828,6 +871,7 @@ export class ElectricityService {
   async createPaymentsBulk(
     currentUser: { id: string },
     dto: CreateElectricityPaymentsBulkDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const created: Awaited<ReturnType<ElectricityService['createPayment']>>[] =
       [];
@@ -835,7 +879,7 @@ export class ElectricityService {
 
     for (let i = 0; i < dto.payments.length; i++) {
       try {
-        created.push(await this.createPayment(currentUser, dto.payments[i]));
+        created.push(await this.createPayment(currentUser, dto.payments[i], meta));
       } catch (e: any) {
         failed.push({ index: i, error: e?.message ?? 'خطای ناشناخته' });
       }

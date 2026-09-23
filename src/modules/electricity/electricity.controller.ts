@@ -22,6 +22,7 @@ import { ElectricityDebtAgingQueryDto } from './dto/electricity-debt-aging-query
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('electricity')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -48,13 +49,13 @@ export class ElectricityController {
   @Post('bills')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createBill(@Req() req: any, @Body() dto: CreateElectricityBillDto) {
-    return this.electricityService.createBill(req.user, dto);
+    return this.electricityService.createBill(req.user, dto, extractRequestMeta(req));
   }
 
   @Post('bills/bulk')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createBillsBulk(@Req() req: any, @Body() dto: CreateElectricityBillsBulkDto) {
-    return this.electricityService.createBillsBulk(req.user, dto);
+    return this.electricityService.createBillsBulk(req.user, dto, extractRequestMeta(req));
   }
 
   @Get('bills')
@@ -65,7 +66,7 @@ export class ElectricityController {
   @Post('payments')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createPayment(@Req() req: any, @Body() dto: CreateElectricityPaymentDto) {
-    return this.electricityService.createPayment(req.user, dto);
+    return this.electricityService.createPayment(req.user, dto, extractRequestMeta(req));
   }
 
   @Post('payments/bulk')
@@ -74,7 +75,11 @@ export class ElectricityController {
     @Req() req: any,
     @Body() dto: CreateElectricityPaymentsBulkDto,
   ) {
-    return this.electricityService.createPaymentsBulk(req.user, dto);
+    return this.electricityService.createPaymentsBulk(
+      req.user,
+      dto,
+      extractRequestMeta(req),
+    );
   }
 
   @Get('payments')

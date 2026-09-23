@@ -10,7 +10,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-
+import { Logger as PinoLogger } from 'nestjs-pino';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { setupSwagger } from './config/swagger.setup';
@@ -21,7 +21,12 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   try {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    // bufferLogs: تا app.useLogger واقعاً وصل شود، هر لاگِ بین این نقطه و آن نقطه
+    // (مثلاً لاگ‌های خودِ Nest حین ساختن ماژول‌ها) بافر می‌شود و گم نمی‌رود.
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+      bufferLogs: true,
+    });
+    app.useLogger(app.get(PinoLogger));
 
     // عمداً بیرون از app.setGlobalPrefix('api') — فایلِ استاتیک، بخشی از API نیست، پس
     // ورژن‌بندی (v1/v2) هم برایش معنی ندارد؛ آدرسش همیشه ثابت می‌ماند حتی اگر نسخهٔ API

@@ -22,6 +22,7 @@ import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('accounts')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -31,13 +32,13 @@ export class AccountsController {
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   create(@Req() req: any, @Body() dto: CreateAccountDto) {
-    return this.accountsService.create(req.user, dto);
+    return this.accountsService.create(req.user, dto, extractRequestMeta(req));
   }
 
   @Post('transfer')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   transfer(@Req() req: any, @Body() dto: TransferFundsDto) {
-    return this.accountsService.transfer(req.user, dto);
+    return this.accountsService.transfer(req.user, dto, extractRequestMeta(req));
   }
 
   @Post(':id/transactions')
@@ -47,7 +48,12 @@ export class AccountsController {
     @Param('id') id: string,
     @Body() dto: CreateAccountTransactionDto,
   ) {
-    return this.accountsService.createAccountTransaction(req.user, id, dto);
+    return this.accountsService.createAccountTransaction(
+      req.user,
+      id,
+      dto,
+      extractRequestMeta(req),
+    );
   }
 
   @Get()
@@ -91,12 +97,12 @@ export class AccountsController {
     @Param('id') id: string,
     @Body() dto: UpdateAccountDto,
   ) {
-    return this.accountsService.update(req.user, id, dto);
+    return this.accountsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {
-    return this.accountsService.remove(req.user, id);
+    return this.accountsService.remove(req.user, id, extractRequestMeta(req));
   }
 }

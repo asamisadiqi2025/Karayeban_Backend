@@ -12,6 +12,8 @@ import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 import { ConfigService } from '@nestjs/config';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { UploadsService } from '../uploads/uploads.service';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -21,6 +23,7 @@ export class MarketService {
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
     private readonly uploadsService: UploadsService,
+    private readonly auditLog: AuditLogService,
   ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند (ن.ک. jwt.strategy.ts)، پس همیشه از دیتابیس
@@ -173,6 +176,7 @@ export class MarketService {
     currentUser: { id: string },
     marketId: string,
     dto: UpdateExchangeRateDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const market = await this.prisma.market.findUnique({
@@ -203,14 +207,21 @@ export class MarketService {
       : new Date();
     effectiveDate.setUTCHours(0, 0, 0, 0);
 
-    return this.prisma.exchangeRate.upsert({
-      where: {
-        marketId_currencyId_effectiveDate: {
-          marketId,
-          currencyId: dto.currencyId,
-          effectiveDate,
-        },
+    const whereKey = {
+      marketId_currencyId_effectiveDate: {
+        marketId,
+        currencyId: dto.currencyId,
+        effectiveDate,
       },
+    };
+
+    // قبل از upsert چک می‌شود تا در audit دقیقاً بدانیم این نرخ اولین‌بار ثبت شده
+    // (CREATE) یا نرخِ همان روز جایگزین شده (UPDATE) — نرخ ارز مستقیم روی همهٔ
+    // محاسبات تبدیلِ مارکت اثر می‌گذارد، پس باید دقیقاً معلوم باشد قبلش چه بوده.
+    const existing = await this.prisma.exchangeRate.findUnique({ where: whereKey });
+
+    const rate = await this.prisma.exchangeRate.upsert({
+      where: whereKey,
       create: {
         marketId,
         currencyId: dto.currencyId,
@@ -224,6 +235,20 @@ export class MarketService {
       },
       include: { currency: true },
     });
+
+    await this.auditLog.record({
+      action: existing ? 'UPDATE' : 'CREATE',
+      entityType: 'ExchangeRate',
+      entityId: rate.id,
+      marketId,
+      userId: actor.id,
+      oldData: existing ?? undefined,
+      newData: rate,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return rate;
   }
 
   // آخرین نرخ ثبت‌شده برای هر ارز (به‌جز ارز پایه که نرخش همیشه ۱ است).

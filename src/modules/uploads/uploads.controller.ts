@@ -5,6 +5,8 @@ import {
   ParseFilePipeBuilder,
   Post,
   Query,
+  Req,
+  UseGuards,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -12,12 +14,20 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { UploadsService } from './uploads.service';
 import { ABSOLUTE_MAX_UPLOAD_BYTES } from './upload-categories';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
-// JWT روی همهٔ روت‌ها به‌صورت سراسری در main.ts فعال است (app.useGlobalGuards) — نیازی
-// به @UseGuards تکراری اینجا نیست. محدودیتِ واقعیِ «کی اجازه دارد» جای دیگری اعمال
-// می‌شود: همان endpointـی که از URLِ برگشتی استفاده می‌کند (مثلاً PATCH /market/profile
-// که خودش @Roles دارد) — نه اینجا. این endpoint فقط «فایل را بگیر، URL بده».
+// JWT روی همهٔ روت‌ها به‌صورت سراسری در main.ts فعال است (app.useGlobalGuards)، ولی
+// RolesGuard سراسری نیست — باید اینجا هم مثل بقیهٔ کنترلرها صریح اضافه شود. قبلاً این‌جا
+// هیچ محدودیت نقشی نبود (هر کاربرِ لاگین‌شده، حتی STAFF، می‌توانست فایل هر کسی را پاک
+// کند)؛ چون تنها مصرف‌کننده‌های واقعیِ uploads (رسید هزینه، لوگوی مارکت، عکس پروفایل
+// کاربرِ دیگر) همیشه از مسیرهایی می‌آیند که خودشان به SUPER_ADMIN/ADMIN/ACCOUNTANT
+// محدودند، همین سه نقش این‌جا هم اعمال شده — نه سخت‌گیرانه‌تر از چیزی که همین الان
+// عملاً استفاده می‌شود.
 @Controller('uploads')
+@UseGuards(RolesGuard)
+@Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
@@ -44,7 +54,7 @@ export class UploadsController {
   }
 
   @Delete()
-  remove(@Query('key') storageKey: string) {
-    return this.uploadsService.deleteFile(storageKey);
+  remove(@Req() req: any, @Query('key') storageKey: string) {
+    return this.uploadsService.deleteFile(storageKey, req.user, extractRequestMeta(req));
   }
 }

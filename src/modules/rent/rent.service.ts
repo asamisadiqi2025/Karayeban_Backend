@@ -24,6 +24,10 @@ import { RentChargeQueryDto } from './dto/rent-charge-query.dto';
 import { RentPaymentQueryDto } from './dto/rent-payment-query.dto';
 import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
 import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
+
+const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -57,7 +61,10 @@ export class RentService {
     'createdAt',
   ] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
@@ -324,6 +331,7 @@ export class RentService {
       receiptNumber?: string | null;
       isOpeningEntry: boolean;
     },
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     let accountBalanceAfter: Prisma.Decimal | null = null;
 
@@ -406,6 +414,18 @@ export class RentService {
 
     await this.recomputeRentDebt(tx, params.contract.tenantId);
 
+    await this.auditLog.record({
+      tx,
+      action: 'CREATE',
+      entityType: 'RentPayment',
+      entityId: payment.id,
+      marketId: params.contract.marketId,
+      userId: actor.id,
+      newData: payment,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return payment;
   }
 
@@ -413,7 +433,7 @@ export class RentService {
   // API عمومی
   // ==========================================================================
 
-  async createPayment(currentUser: { id: string }, dto: CreateRentPaymentDto) {
+  async createPayment(currentUser: { id: string }, dto: CreateRentPaymentDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const contract = await this.prisma.contract.findUnique({
       where: { id: dto.contractId },
@@ -444,24 +464,29 @@ export class RentService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      return this.recordPayment(tx, actor, {
-        contract: {
-          id: contract.id,
-          marketId: contract.marketId,
-          tenantId: contract.tenantId!,
-          shopId: contract.shopId!,
-          currencyId: contract.currencyId!,
-          securityDepositRemaining: contract.securityDepositRemaining,
+      return this.recordPayment(
+        tx,
+        actor,
+        {
+          contract: {
+            id: contract.id,
+            marketId: contract.marketId,
+            tenantId: contract.tenantId!,
+            shopId: contract.shopId!,
+            currencyId: contract.currencyId!,
+            securityDepositRemaining: contract.securityDepositRemaining,
+          },
+          amount: new Prisma.Decimal(dto.amount),
+          paymentDate: dto.paymentDate ? new Date(dto.paymentDate) : new Date(),
+          paymentMethod: dto.paymentMethod ?? 'cash',
+          source,
+          accountId: dto.accountId,
+          notes: dto.notes,
+          receiptNumber: dto.receiptNumber,
+          isOpeningEntry: false,
         },
-        amount: new Prisma.Decimal(dto.amount),
-        paymentDate: dto.paymentDate ? new Date(dto.paymentDate) : new Date(),
-        paymentMethod: dto.paymentMethod ?? 'cash',
-        source,
-        accountId: dto.accountId,
-        notes: dto.notes,
-        receiptNumber: dto.receiptNumber,
-        isOpeningEntry: false,
-      });
+        meta,
+      );
     });
   }
 
@@ -670,6 +695,7 @@ export class RentService {
     currentUser: { id: string },
     contractId: string,
     dto: { newRent: number; effectiveFrom: string; reason?: string },
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.prisma.contract.findUnique({
@@ -738,6 +764,19 @@ export class RentService {
         await this.recomputeRentDebt(tx, contract.tenantId);
       }
 
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'Contract',
+        entityId: contractId,
+        marketId: contract.marketId,
+        userId: actor.id,
+        oldData: { rent: contract.rent, effectiveFrom: dto.effectiveFrom },
+        newData: { newRent: dto.newRent, reason: dto.reason ?? null, affectedCharges: updated },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
       return updated;
     });
   }
@@ -753,6 +792,7 @@ export class RentService {
     currentUser: { id: string },
     contractId: string,
     dto: { amount: number; reason?: string },
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.prisma.contract.findUnique({
@@ -817,6 +857,22 @@ export class RentService {
       }
 
       await this.recomputeRentDebt(tx, contract.tenantId!);
+
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'Contract',
+        entityId: contractId,
+        marketId: contract.marketId,
+        userId: actor.id,
+        newData: {
+          totalDiscounted: amount.toString(),
+          reason: dto.reason ?? null,
+          affectedCharges: affected,
+        },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
 
       return {
         contractId,
