@@ -1,4 +1,5 @@
 import { NestFactory, Reflector } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import {
   Logger,
@@ -10,12 +11,20 @@ import {
 } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { UPLOAD_ROOT } from './modules/uploads/storage/local-disk-storage.service';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   try {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+    // عمداً بیرون از app.setGlobalPrefix('api') — فایلِ استاتیک، بخشی از API نیست، پس
+    // ورژن‌بندی (v1/v2) هم برایش معنی ندارد؛ آدرسش همیشه ثابت می‌ماند حتی اگر نسخهٔ API
+    // عوض شود. توجه: هیچ Guardـی روی static assets اعمال نمی‌شود — یعنی هرکسی که URL
+    // دقیقِ فایل را بداند می‌تواند ببیندش (مناسبِ لوگو/عکس پروفایل که اصلاً محرمانه
+    // نیستند؛ برای فایلِ محرمانه این مسیر مناسب نیست).
+    app.useStaticAssets(UPLOAD_ROOT, { prefix: '/uploads' });
 
      
     app.setGlobalPrefix('api', {

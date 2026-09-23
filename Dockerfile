@@ -33,7 +33,7 @@ COPY docker-entrypoint.sh ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-RUN chmod +x docker-entrypoint.sh && chown -R node:node /app
+RUN mkdir -p /app/uploads && chmod +x docker-entrypoint.sh && chown -R node:node /app
 
 USER node
 
