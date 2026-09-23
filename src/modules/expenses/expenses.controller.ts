@@ -18,6 +18,7 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseQueryDto } from './dto/expense-query.dto';
 import { ExpenseSummaryQueryDto } from './dto/expense-summary-query.dto';
+import { ExpenseBreakdownQueryDto } from './dto/expense-breakdown-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -74,6 +75,12 @@ export class ExpensesController {
   @Get('summary')
   getExpenseSummary(@Req() req: any, @Query() query: ExpenseSummaryQueryDto) {
     return this.expensesService.getExpenseSummary(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "breakdown" را به‌عنوان :id تطبیق می‌دهد.
+  @Get('breakdown')
+  getExpenseBreakdown(@Req() req: any, @Query() query: ExpenseBreakdownQueryDto) {
+    return this.expensesService.getExpenseBreakdown(req.user, query);
   }
 
   @Get(':id')
