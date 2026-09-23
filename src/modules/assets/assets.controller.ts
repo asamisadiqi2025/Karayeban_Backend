@@ -15,6 +15,7 @@ import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { AssetQueryDto } from './dto/asset-query.dto';
 import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
+import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summary-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -34,6 +35,12 @@ export class AssetsController {
   @Get('summary')
   getSummary(@Req() req: any, @Query() query: AssetSummaryQueryDto) {
     return this.assetsService.getSummary(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "depreciation-summary" را :id تفسیر می‌کند.
+  @Get('depreciation-summary')
+  getDepreciationSummary(@Req() req: any, @Query() query: AssetDepreciationSummaryQueryDto) {
+    return this.assetsService.getDepreciationSummary(req.user, query);
   }
 
   @Get()
