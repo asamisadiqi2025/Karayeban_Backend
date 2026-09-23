@@ -25,6 +25,7 @@ import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-q
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('contracts')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -37,7 +38,7 @@ export class ContractsController {
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateContractDto) {
-    return this.contractsService.create(req.user, dto);
+    return this.contractsService.create(req.user, dto, extractRequestMeta(req));
   }
 
   @Get()
@@ -63,7 +64,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: UpdateContractDto,
   ) {
-    return this.contractsService.update(req.user, id, dto);
+    return this.contractsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/cancel')
@@ -73,7 +74,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: CancelContractDto,
   ) {
-    return this.contractsService.cancel(req.user, id, dto);
+    return this.contractsService.cancel(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/renew')
@@ -83,7 +84,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: RenewContractDto,
   ) {
-    return this.contractsService.renew(req.user, id, dto);
+    return this.contractsService.renew(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/adjust-rent')
@@ -93,7 +94,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: AdjustContractRentDto,
   ) {
-    return this.rentService.adjustFutureRent(req.user, id, dto);
+    return this.rentService.adjustFutureRent(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/discount-debt')
@@ -103,7 +104,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: DiscountDebtDto,
   ) {
-    return this.rentService.discountDebt(req.user, id, dto);
+    return this.rentService.discountDebt(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/terminate')
@@ -113,7 +114,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: TerminateContractDto,
   ) {
-    return this.contractsService.terminate(req.user, id, dto);
+    return this.contractsService.terminate(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/settle')
@@ -123,7 +124,7 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: SettleContractDto,
   ) {
-    return this.contractsService.settle(req.user, id, dto);
+    return this.contractsService.settle(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Post(':id/pay-debt')
@@ -133,6 +134,6 @@ export class ContractsController {
     @Param('id') id: string,
     @Body() dto: PayContractDebtDto,
   ) {
-    return this.contractsService.payDebt(req.user, id, dto);
+    return this.contractsService.payDebt(req.user, id, dto, extractRequestMeta(req));
   }
 }

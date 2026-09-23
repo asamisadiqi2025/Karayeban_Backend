@@ -6,6 +6,7 @@ import { UserQueryDto } from './dto/user-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -15,13 +16,13 @@ export class UserController {
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   async create(@Req() req: any, @Body() dto: CreateUserDto) {
-    return this.userService.create(req.user, dto);
+    return this.userService.create(req.user, dto, extractRequestMeta(req));
   }
 
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   async update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateUserDto) {
-    return this.userService.update(req.user, id, dto);
+    return this.userService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Get('me')

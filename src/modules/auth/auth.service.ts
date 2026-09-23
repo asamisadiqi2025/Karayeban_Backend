@@ -6,6 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { RegisterSuperAdminDto } from './dto/register-super-admin.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +15,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly auditLog: AuditLogService,
   ) {}
 
   async validateUser(identifier: string, password: string) {
@@ -26,13 +29,37 @@ export class AuthService {
     return rest;
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, meta: RequestMeta) {
     const user = await this.prisma.user.findFirst({
       where: { OR: [{ email: dto.identifier }, { username: dto.identifier }] },
     });
-    if (!user) throw new UnauthorizedException('Invalid credentials');
-     const match = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!match) throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      // identifier نادرست است — کاربری برای گره‌زدنِ entityId وجود ندارد، ولی خودِ
+      // تلاشِ لاگینِ ناموفق (با آی‌پی/زمان) برای تشخیصِ حملهٔ brute-force ثبت می‌شود.
+      await this.auditLog.record({
+        action: 'LOGIN_FAILED',
+        entityType: 'User',
+        newData: { identifier: dto.identifier, reason: 'user_not_found' },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const match = await bcrypt.compare(dto.password, user.passwordHash);
+    if (!match) {
+      await this.auditLog.record({
+        action: 'LOGIN_FAILED',
+        entityType: 'User',
+        entityId: user.id,
+        marketId: user.marketId,
+        userId: user.id,
+        newData: { identifier: dto.identifier, reason: 'wrong_password' },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
     const payload = { sub: user.id, id: user.id, email: user.email, role: user.role };
     const accessToken = this.jwt.sign(payload);
@@ -48,6 +75,16 @@ export class AuthService {
         expiresAt,
         revoked: false,
       },
+    });
+
+    await this.auditLog.record({
+      action: 'LOGIN',
+      entityType: 'User',
+      entityId: user.id,
+      marketId: user.marketId,
+      userId: user.id,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
     });
 
     const { passwordHash, ...userWithoutPassword } = user;
@@ -90,14 +127,26 @@ export class AuthService {
     return { accessToken, refreshToken, expiresIn: this.config.get<string>('JWT_EXPIRES_IN') };
   }
 
-  async logout(token: string) {
+  async logout(token: string, meta: RequestMeta) {
     const rt = await this.prisma.refreshToken.findUnique({ where: { token } });
     if (!rt) throw new NotFoundException('Refresh token not found');
     await this.prisma.refreshToken.update({ where: { id: rt.id }, data: { revoked: true } });
+
+    const user = await this.prisma.user.findUnique({ where: { id: rt.userId } });
+    await this.auditLog.record({
+      action: 'LOGOUT',
+      entityType: 'User',
+      entityId: rt.userId,
+      marketId: user?.marketId,
+      userId: rt.userId,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { success: true };
   }
 
-  async registerSuperAdmin(dto: RegisterSuperAdminDto) {
+  async registerSuperAdmin(dto: RegisterSuperAdminDto, meta: RequestMeta) {
     const secret = this.config.get<string>('SUPER_ADMIN_REGISTRATION_SECRET');
     if (!secret || secret !== dto.secret) throw new UnauthorizedException('Invalid registration secret');
 
@@ -119,6 +168,20 @@ export class AuthService {
     });
 
     const { passwordHash, ...rest } = user as any;
+
+    // حساس‌ترین عملیاتِ ممکن در کل سیستم — ساختِ اولین سوپرادمین. عاملی جز خودِ کاربرِ
+    // تازه‌ساخته‌شده وجود ندارد (این مسیر عمداً بدون لاگین است، پشتِ یک secret مشترک)،
+    // پس userId هم خودِ همین رکورد است.
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'User',
+      entityId: user.id,
+      userId: user.id,
+      newData: rest,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return rest;
   }
 }

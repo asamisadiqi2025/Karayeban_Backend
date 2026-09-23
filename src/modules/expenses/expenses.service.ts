@@ -10,6 +10,8 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 import { CreateExpenseCategoryDto } from './dto/create-expense-category.dto';
 import { UpdateExpenseCategoryDto } from './dto/update-expense-category.dto';
 import { ExpenseCategoryQueryDto } from './dto/expense-category-query.dto';
@@ -37,7 +39,10 @@ export class ExpensesService {
   private static readonly EXPENSE_SORT_FIELDS = ['amount', 'expenseDate', 'createdAt'] as const;
   private static readonly EXPENSE_SEARCH_FIELDS = ['description'] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
@@ -93,7 +98,11 @@ export class ExpensesService {
     return parent;
   }
 
-  async createCategory(currentUser: { id: string }, dto: CreateExpenseCategoryDto) {
+  async createCategory(
+    currentUser: { id: string },
+    dto: CreateExpenseCategoryDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
 
     let marketId: string | null;
@@ -112,9 +121,22 @@ export class ExpensesService {
       }
     }
 
-    return this.prisma.expenseCategory.create({
+    const category = await this.prisma.expenseCategory.create({
       data: { marketId, name: dto.name.trim(), parentId: parent?.id ?? null },
     });
+
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'ExpenseCategory',
+      entityId: category.id,
+      marketId,
+      userId: actor.id,
+      newData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return category;
   }
 
   async findAllCategories(currentUser: { id: string }, query: ExpenseCategoryQueryDto) {
@@ -167,7 +189,12 @@ export class ExpensesService {
     return category;
   }
 
-  async updateCategory(currentUser: { id: string }, id: string, dto: UpdateExpenseCategoryDto) {
+  async updateCategory(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateExpenseCategoryDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
     this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
@@ -198,10 +225,24 @@ export class ExpensesService {
       }
     }
 
-    return this.prisma.expenseCategory.update({ where: { id }, data });
+    const updated = await this.prisma.expenseCategory.update({ where: { id }, data });
+
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'ExpenseCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      newData: updated,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return updated;
   }
 
-  async removeCategory(currentUser: { id: string }, id: string) {
+  async removeCategory(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
     this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
@@ -222,6 +263,18 @@ export class ExpensesService {
     }
 
     await this.prisma.expenseCategory.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'ExpenseCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `دسته‌بندی «${category.name}» حذف شد` };
   }
 
@@ -260,7 +313,7 @@ export class ExpensesService {
     return account;
   }
 
-  async createExpense(currentUser: { id: string }, dto: CreateExpenseDto) {
+  async createExpense(currentUser: { id: string }, dto: CreateExpenseDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
@@ -310,6 +363,20 @@ export class ExpensesService {
           expenseId: expense.id,
           createdById: actor.id,
         },
+      });
+
+      // داخلِ همین تراکنش: اگر audit insert شکست بخورد، کلِ مصرف/تغییرِ حساب هم
+      // rollback می‌شود — یک برداشتِ مالی بدون ردِ پای audit نباید commit شود.
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'Expense',
+        entityId: expense.id,
+        marketId,
+        userId: actor.id,
+        newData: expense,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
       });
 
       return expense;
@@ -572,7 +639,12 @@ export class ExpensesService {
     });
   }
 
-  async updateExpense(currentUser: { id: string }, id: string, dto: UpdateExpenseDto) {
+  async updateExpense(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateExpenseDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const expense = await this.findExpenseOrThrow(id);
     this.ensureAccess(actor, expense.marketId, 'دسترسی به این مصرف مجاز نیست');
@@ -602,7 +674,24 @@ export class ExpensesService {
     if (dto.receiptImage !== undefined) data.receiptImage = dto.receiptImage?.trim() || null;
 
     if (!moneyChanged) {
-      return this.prisma.expense.update({ where: { id }, data });
+      return this.prisma.$transaction(async (tx) => {
+        const updated = await tx.expense.update({ where: { id }, data });
+
+        await this.auditLog.record({
+          tx,
+          action: 'UPDATE',
+          entityType: 'Expense',
+          entityId: id,
+          marketId: expense.marketId,
+          userId: actor.id,
+          oldData: expense,
+          newData: updated,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+
+        return updated;
+      });
     }
 
     // مبلغ/حساب/ارز عوض شده: اول اثر قبلی برگردانده می‌شود، بعد اثر جدید اعمال می‌شود —
@@ -639,11 +728,24 @@ export class ExpensesService {
         },
       });
 
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'Expense',
+        entityId: id,
+        marketId: expense.marketId,
+        userId: actor.id,
+        oldData: expense,
+        newData: updatedExpense,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
       return updatedExpense;
     });
   }
 
-  async removeExpense(currentUser: { id: string }, id: string) {
+  async removeExpense(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const expense = await this.findExpenseOrThrow(id);
     this.ensureAccess(actor, expense.marketId, 'دسترسی به این مصرف مجاز نیست');
@@ -655,6 +757,18 @@ export class ExpensesService {
       });
       // LedgerEntry مرتبط به‌خاطر onDelete: Cascade خودش پاک می‌شود.
       await tx.expense.delete({ where: { id } });
+
+      await this.auditLog.record({
+        tx,
+        action: 'DELETE',
+        entityType: 'Expense',
+        entityId: id,
+        marketId: expense.marketId,
+        userId: actor.id,
+        oldData: expense,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
     });
 
     return { message: 'مصرف حذف شد و مبلغش به حساب برگشت' };

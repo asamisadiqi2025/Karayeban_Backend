@@ -19,6 +19,7 @@ import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summa
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('assets')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -28,7 +29,7 @@ export class AssetsController {
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateAssetDto) {
-    return this.assetsService.create(req.user, dto);
+    return this.assetsService.create(req.user, dto, extractRequestMeta(req));
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "summary" را :id تفسیر می‌کند.
@@ -56,12 +57,12 @@ export class AssetsController {
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateAssetDto) {
-    return this.assetsService.update(req.user, id, dto);
+    return this.assetsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {
-    return this.assetsService.remove(req.user, id);
+    return this.assetsService.remove(req.user, id, extractRequestMeta(req));
   }
 }

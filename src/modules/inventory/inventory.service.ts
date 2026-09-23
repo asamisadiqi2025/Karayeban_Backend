@@ -30,6 +30,8 @@ import { CreateInventoryTransferDto } from './dto/create-inventory-transfer.dto'
 import { InventoryTransactionQueryDto } from './dto/inventory-transaction-query.dto';
 import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
 import { InventoryMovementSummaryQueryDto } from './dto/inventory-movement-summary-query.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -60,7 +62,10 @@ export class InventoryService {
     'createdAt',
   ] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند، پس همیشه از دیتابیس تازه خوانده می‌شود.
   private async getActor(currentUser: { id: string }): Promise<Actor> {
@@ -119,6 +124,7 @@ export class InventoryService {
   async createCategory(
     currentUser: { id: string },
     dto: CreateInventoryCategoryDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const marketId =
@@ -127,9 +133,22 @@ export class InventoryService {
       throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
     }
 
-    return this.prisma.inventoryCategory.create({
+    const category = await this.prisma.inventoryCategory.create({
       data: { marketId, name: dto.name.trim() },
     });
+
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'InventoryCategory',
+      entityId: category.id,
+      marketId,
+      userId: actor.id,
+      newData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return category;
   }
 
   async findAllCategories(
@@ -184,6 +203,7 @@ export class InventoryService {
     currentUser: { id: string },
     id: string,
     dto: UpdateInventoryCategoryDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
@@ -197,10 +217,24 @@ export class InventoryService {
     if (dto.name !== undefined) data.name = dto.name.trim();
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
-    return this.prisma.inventoryCategory.update({ where: { id }, data });
+    const updated = await this.prisma.inventoryCategory.update({ where: { id }, data });
+
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'InventoryCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      newData: updated,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return updated;
   }
 
-  async removeCategory(currentUser: { id: string }, id: string) {
+  async removeCategory(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const category = await this.findCategoryOrThrow(id);
     this.ensureAccess(
@@ -219,6 +253,18 @@ export class InventoryService {
     }
 
     await this.prisma.inventoryCategory.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'InventoryCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `دسته‌بندی «${category.name}» حذف شد` };
   }
 
@@ -235,7 +281,7 @@ export class InventoryService {
     return unit;
   }
 
-  async createUnit(currentUser: { id: string }, dto: CreateInventoryUnitDto) {
+  async createUnit(currentUser: { id: string }, dto: CreateInventoryUnitDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const marketId =
       actor.role === 'SUPER_ADMIN' ? (dto.marketId ?? null) : actor.marketId;
@@ -244,13 +290,26 @@ export class InventoryService {
     }
 
     try {
-      return await this.prisma.inventoryUnit.create({
+      const unit = await this.prisma.inventoryUnit.create({
         data: {
           marketId,
           name: dto.name.trim(),
           symbol: dto.symbol?.trim() || null,
         },
       });
+
+      await this.auditLog.record({
+        action: 'CREATE',
+        entityType: 'InventoryUnit',
+        entityId: unit.id,
+        marketId,
+        userId: actor.id,
+        newData: unit,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return unit;
     } catch (e: any) {
       if (e.code === 'P2002') {
         throw new ConflictException('واحدی با همین نام قبلاً ثبت شده است');
@@ -309,6 +368,7 @@ export class InventoryService {
     currentUser: { id: string },
     id: string,
     dto: UpdateInventoryUnitDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const unit = await this.findUnitOrThrow(id);
@@ -320,7 +380,21 @@ export class InventoryService {
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     try {
-      return await this.prisma.inventoryUnit.update({ where: { id }, data });
+      const updated = await this.prisma.inventoryUnit.update({ where: { id }, data });
+
+      await this.auditLog.record({
+        action: 'UPDATE',
+        entityType: 'InventoryUnit',
+        entityId: id,
+        marketId: unit.marketId,
+        userId: actor.id,
+        oldData: unit,
+        newData: updated,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return updated;
     } catch (e: any) {
       if (e.code === 'P2002') {
         throw new ConflictException('واحدی با همین نام قبلاً ثبت شده است');
@@ -329,7 +403,7 @@ export class InventoryService {
     }
   }
 
-  async removeUnit(currentUser: { id: string }, id: string) {
+  async removeUnit(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const unit = await this.findUnitOrThrow(id);
     this.ensureAccess(actor, unit.marketId, 'دسترسی به این واحد مجاز نیست');
@@ -344,6 +418,18 @@ export class InventoryService {
     }
 
     await this.prisma.inventoryUnit.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'InventoryUnit',
+      entityId: id,
+      marketId: unit.marketId,
+      userId: actor.id,
+      oldData: unit,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `واحد «${unit.name}» حذف شد` };
   }
 
@@ -362,7 +448,11 @@ export class InventoryService {
     return item;
   }
 
-  async createItem(currentUser: { id: string }, dto: CreateInventoryItemDto) {
+  async createItem(
+    currentUser: { id: string },
+    dto: CreateInventoryItemDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
@@ -451,6 +541,18 @@ export class InventoryService {
           });
         }
 
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'InventoryItem',
+          entityId: item.id,
+          marketId,
+          userId: actor.id,
+          newData: item,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+
         return item;
       });
     } catch (e: any) {
@@ -532,6 +634,7 @@ export class InventoryService {
     currentUser: { id: string },
     id: string,
     dto: UpdateInventoryItemDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const item = await this.findItemActiveOrThrow(id);
@@ -583,7 +686,21 @@ export class InventoryService {
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     try {
-      return await this.prisma.inventoryItem.update({ where: { id }, data });
+      const updated = await this.prisma.inventoryItem.update({ where: { id }, data });
+
+      await this.auditLog.record({
+        action: 'UPDATE',
+        entityType: 'InventoryItem',
+        entityId: id,
+        marketId: item.marketId,
+        userId: actor.id,
+        oldData: item,
+        newData: updated,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return updated;
     } catch (e: any) {
       if (e.code === 'P2002') {
         throw new ConflictException(
@@ -594,7 +711,7 @@ export class InventoryService {
     }
   }
 
-  async removeItem(currentUser: { id: string }, id: string) {
+  async removeItem(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const item = await this.findItemActiveOrThrow(id);
     this.ensureAccess(actor, item.marketId, 'دسترسی به این کالا مجاز نیست');
@@ -609,6 +726,18 @@ export class InventoryService {
       where: { id },
       data: { isDeleted: true },
     });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'InventoryItem',
+      entityId: id,
+      marketId: item.marketId,
+      userId: actor.id,
+      oldData: item,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `کالای «${item.name}» حذف شد` };
   }
 
@@ -974,6 +1103,7 @@ export class InventoryService {
   async createTransaction(
     currentUser: { id: string },
     dto: CreateInventoryTransactionDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
 
@@ -1169,6 +1299,19 @@ export class InventoryService {
       const updatedItem = await tx.inventoryItem.findUniqueOrThrow({
         where: { id: item.id },
       });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'InventoryTransaction',
+        entityId: transaction.id,
+        marketId: item.marketId,
+        userId: actor.id,
+        newData: transaction,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
       return { transaction, item: updatedItem, account: updatedAccount };
     });
   }
@@ -1176,6 +1319,7 @@ export class InventoryService {
   async createTransfer(
     currentUser: { id: string },
     dto: CreateInventoryTransferDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
 
@@ -1347,6 +1491,18 @@ export class InventoryService {
         });
         const updatedTargetItem = await tx.inventoryItem.findUniqueOrThrow({
           where: { id: targetItem.id },
+        });
+
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'InventoryTransfer',
+          entityId: transferGroupId,
+          marketId: item.marketId,
+          userId: actor.id,
+          newData: { transferOut, transferIn },
+          ip: meta.ip,
+          userAgent: meta.userAgent,
         });
 
         return {

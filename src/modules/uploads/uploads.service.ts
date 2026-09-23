@@ -2,10 +2,15 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { StorageService } from './storage/storage.service';
 import { detectMimeFromBuffer, MIME_EXTENSIONS } from './file-signature.util';
 import { UPLOAD_CATEGORIES, UploadCategory } from './upload-categories';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Injectable()
 export class UploadsService {
-  constructor(@Inject(StorageService) private readonly storage: StorageService) {}
+  constructor(
+    @Inject(StorageService) private readonly storage: StorageService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   // امضای واقعیِ فایل (magic bytes) منبع حقیقتِ نوعِ فایل است، نه mimetype ادعاشده توسط
   // کلاینت و نه پسوندِ نامِ اصلی — هر دو به‌راحتی قابل جعل‌اند. نامِ ذخیره‌شده هم همیشه
@@ -51,12 +56,28 @@ export class UploadsService {
   private static readonly STORAGE_KEY_PATTERN =
     /^([a-z-]+)\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(png|jpg|webp|pdf)$/;
 
-  async deleteFile(storageKey: string): Promise<{ message: string }> {
+  async deleteFile(
+    storageKey: string,
+    currentUser: { id: string },
+    meta: RequestMeta,
+  ): Promise<{ message: string }> {
     const match = storageKey.match(UploadsService.STORAGE_KEY_PATTERN);
     if (!match || !UPLOAD_CATEGORIES[match[1] as UploadCategory]) {
       throw new NotFoundException('فایل یافت نشد');
     }
     await this.storage.delete(storageKey);
+
+    // این فایل به هیچ رکورد دیتابیسی گره نخورده (marketId معلوم نیست)، پس با
+    // marketId خالی ثبت می‌شود — همان الگوی رویدادهای بدون بازار مثل LOGIN_FAILED.
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'UploadedFile',
+      userId: currentUser.id,
+      oldData: { storageKey },
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: 'فایل حذف شد' };
   }
 
