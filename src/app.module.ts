@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LoggerModule } from 'nestjs-pino';
+import { loggerConfig } from './config/logger.config';
 import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
@@ -22,12 +24,17 @@ import { ElectricityModule } from './modules/electricity/electricity.module';
 import { UploadsModule } from './modules/uploads/uploads.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { PrismaModule } from './database/prisma/prisma.module';
+import { AuditLogModule } from './common/audit-log/audit-log.module';
+import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    LoggerModule.forRoot(loggerConfig()),
     ScheduleModule.forRoot(),
     PrismaModule,
+    AuditLogModule,
+    AuditLogsModule,
     AuthModule,
     UserModule,
     MarketModule,

@@ -16,6 +16,8 @@ import { SetShareholderEquityDto } from './dto/set-equity.dto';
 import { CreateShareholderTransactionDto } from './dto/create-shareholder-transaction.dto';
 import { ShareholderTransactionQueryDto } from './dto/shareholder-transaction-query.dto';
 import { ShareholderEquitySummaryQueryDto } from './dto/shareholder-equity-summary-query.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -42,7 +44,10 @@ export class ShareholdersService {
     'shareholder.fullName',
   ] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند، پس همیشه از دیتابیس تازه خوانده می‌شود.
   private async getActor(currentUser: { id: string }): Promise<Actor> {
@@ -142,7 +147,7 @@ export class ShareholdersService {
     return { ...shareholder, currentPercentage, ...totals };
   }
 
-  async create(currentUser: { id: string }, dto: CreateShareholderDto) {
+  async create(currentUser: { id: string }, dto: CreateShareholderDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
@@ -151,7 +156,7 @@ export class ShareholdersService {
     const idNumber = dto.idNumber?.trim() || undefined;
 
     try {
-      return await this.prisma.shareholder.create({
+      const shareholder = await this.prisma.shareholder.create({
         data: {
           marketId,
           fullName: dto.fullName.trim(),
@@ -159,6 +164,19 @@ export class ShareholdersService {
           idNumber: idNumber ?? null,
         },
       });
+
+      await this.auditLog.record({
+        action: 'CREATE',
+        entityType: 'Shareholder',
+        entityId: shareholder.id,
+        marketId,
+        userId: actor.id,
+        newData: shareholder,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return shareholder;
     } catch (e: any) {
       if (e.code === 'P2002') {
         await this.handleIdNumberConflict(e, marketId, idNumber);
@@ -203,7 +221,12 @@ export class ShareholdersService {
     return this.enrich(shareholder);
   }
 
-  async update(currentUser: { id: string }, id: string, dto: UpdateShareholderDto) {
+  async update(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateShareholderDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const shareholder = await this.prisma.shareholder.findUnique({ where: { id } });
     if (!shareholder) throw new NotFoundException('سهام‌دار یافت نشد');
@@ -216,7 +239,21 @@ export class ShareholdersService {
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     try {
-      return await this.prisma.shareholder.update({ where: { id }, data });
+      const updated = await this.prisma.shareholder.update({ where: { id }, data });
+
+      await this.auditLog.record({
+        action: 'UPDATE',
+        entityType: 'Shareholder',
+        entityId: id,
+        marketId: shareholder.marketId,
+        userId: actor.id,
+        oldData: shareholder,
+        newData: updated,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return updated;
     } catch (e: any) {
       if (e.code === 'P2002') {
         await this.handleIdNumberConflict(e, shareholder.marketId, dto.idNumber?.trim());
@@ -225,7 +262,7 @@ export class ShareholdersService {
     }
   }
 
-  async remove(currentUser: { id: string }, id: string) {
+  async remove(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const shareholder = await this.prisma.shareholder.findUnique({ where: { id } });
     if (!shareholder) throw new NotFoundException('سهام‌دار یافت نشد');
@@ -243,13 +280,30 @@ export class ShareholdersService {
     }
 
     await this.prisma.shareholder.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'Shareholder',
+      entityId: id,
+      marketId: shareholder.marketId,
+      userId: actor.id,
+      oldData: shareholder,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `سهام‌دار «${shareholder.fullName}» حذف شد` };
   }
 
   // ثبت/آپدیت فیصد سهم یک سهام‌دار — بدون هیچ چک ریاضی‌ای رو بقیهٔ سهام‌داران؛ فقط یک
   // ردیف جدید در تاریخچه ثبت می‌شود (طبق همون قاعدهٔ همیشگی: هیچ ردیف قدیمی پاک/عوض نمی‌شود).
   // محاسبهٔ اینکه جمع همهٔ سهام‌داران باید ۱۰۰ باشد، فعلاً به‌عهدهٔ حساب‌دار است، نه سیستم.
-  async setEquity(currentUser: { id: string }, id: string, dto: SetShareholderEquityDto) {
+  async setEquity(
+    currentUser: { id: string },
+    id: string,
+    dto: SetShareholderEquityDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const shareholder = await this.prisma.shareholder.findUnique({ where: { id } });
     if (!shareholder) throw new NotFoundException('سهام‌دار یافت نشد');
@@ -257,7 +311,7 @@ export class ShareholdersService {
 
     const effectiveFrom = dto.effectiveFrom ? new Date(dto.effectiveFrom) : new Date();
 
-    await this.prisma.shareholderEquity.create({
+    const equity = await this.prisma.shareholderEquity.create({
       data: {
         shareholderId: id,
         percentage: dto.percentage,
@@ -265,6 +319,17 @@ export class ShareholdersService {
         notes: dto.notes?.trim() || null,
         createdById: actor.id,
       },
+    });
+
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'ShareholderEquity',
+      entityId: equity.id,
+      marketId: shareholder.marketId,
+      userId: actor.id,
+      newData: equity,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
     });
 
     return this.enrich(shareholder);
@@ -276,6 +341,7 @@ export class ShareholdersService {
     currentUser: { id: string },
     shareholderId: string,
     dto: CreateShareholderTransactionDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const shareholder = await this.prisma.shareholder.findUnique({
@@ -352,6 +418,18 @@ export class ShareholdersService {
           shareholderTransactionId: transaction.id,
           createdById: actor.id,
         },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'ShareholderTransaction',
+        entityId: transaction.id,
+        marketId: shareholder.marketId,
+        userId: actor.id,
+        newData: transaction,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
       });
 
       return { transaction, account: updatedAccount };

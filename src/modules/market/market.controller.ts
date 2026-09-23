@@ -15,6 +15,7 @@ import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('markets')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -54,7 +55,7 @@ export class MarketController {
     @Param('id') id: string,
     @Body() dto: UpdateExchangeRateDto,
   ) {
-    return this.marketService.setExchangeRate(req.user, id, dto);
+    return this.marketService.setExchangeRate(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Get(':id/exchange-rates')

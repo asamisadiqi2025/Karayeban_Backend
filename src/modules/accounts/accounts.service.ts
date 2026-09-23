@@ -18,6 +18,8 @@ import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -37,7 +39,10 @@ export class AccountsService {
     'createdAt',
   ] as const;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
   private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
@@ -100,7 +105,7 @@ export class AccountsService {
     return fromRate.div(toRate);
   }
 
-  async create(currentUser: { id: string }, dto: CreateAccountDto) {
+  async create(currentUser: { id: string }, dto: CreateAccountDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
 
     let marketId: string;
@@ -174,6 +179,18 @@ export class AccountsService {
           });
         }
 
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'Account',
+          entityId: account.id,
+          marketId,
+          userId: actor.id,
+          newData: account,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+
         return account;
       });
     } catch (e: any) {
@@ -219,7 +236,12 @@ export class AccountsService {
     return account;
   }
 
-  async update(currentUser: { id: string }, id: string, dto: UpdateAccountDto) {
+  async update(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateAccountDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const account = await this.prisma.account.findUnique({ where: { id } });
     if (!account) throw new NotFoundException('حساب یافت نشد');
@@ -234,7 +256,21 @@ export class AccountsService {
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     try {
-      return await this.prisma.account.update({ where: { id }, data });
+      const updated = await this.prisma.account.update({ where: { id }, data });
+
+      await this.auditLog.record({
+        action: 'UPDATE',
+        entityType: 'Account',
+        entityId: id,
+        marketId: account.marketId,
+        userId: actor.id,
+        oldData: account,
+        newData: updated,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return updated;
     } catch (e: any) {
       if (e.code === 'P2002') {
         throw new ConflictException(
@@ -245,7 +281,7 @@ export class AccountsService {
     }
   }
 
-  async remove(currentUser: { id: string }, id: string) {
+  async remove(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const account = await this.prisma.account.findUnique({ where: { id } });
     if (!account) throw new NotFoundException('حساب یافت نشد');
@@ -304,10 +340,22 @@ export class AccountsService {
     }
 
     await this.prisma.account.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'Account',
+      entityId: id,
+      marketId: account.marketId,
+      userId: actor.id,
+      oldData: account,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `حساب «${account.name}» حذف شد` };
   }
 
-  async transfer(currentUser: { id: string }, dto: TransferFundsDto) {
+  async transfer(currentUser: { id: string }, dto: TransferFundsDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
 
     if (dto.fromAccountId === dto.toAccountId) {
@@ -430,6 +478,18 @@ export class AccountsService {
         },
       });
 
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'AccountTransfer',
+        entityId: accountTransfer.id,
+        marketId: fromAccount.marketId,
+        userId: actor.id,
+        newData: accountTransfer,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
       return {
         transfer: accountTransfer,
         fromAccount: updatedFromAccount,
@@ -484,6 +544,7 @@ export class AccountsService {
     currentUser: { id: string },
     accountId: string,
     dto: CreateAccountTransactionDto,
+    meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
     const account = await this.prisma.account.findUnique({
@@ -586,6 +647,18 @@ export class AccountsService {
           accountTransactionId: transaction.id,
           createdById: actor.id,
         },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'AccountTransaction',
+        entityId: transaction.id,
+        marketId: account.marketId,
+        userId: actor.id,
+        newData: transaction,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
       });
 
       return { transaction, account: updatedAccount };

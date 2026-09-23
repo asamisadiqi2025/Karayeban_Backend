@@ -17,6 +17,7 @@ import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('rent')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -37,7 +38,7 @@ export class RentController {
   @Post('payments')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createPayment(@Req() req: any, @Body() dto: CreateRentPaymentDto) {
-    return this.rentService.createPayment(req.user, dto);
+    return this.rentService.createPayment(req.user, dto, extractRequestMeta(req));
   }
 
   @Get('payments')

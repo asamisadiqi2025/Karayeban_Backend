@@ -6,6 +6,8 @@ import { UserQueryDto } from './dto/user-query.dto';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import * as bcrypt from 'bcrypt';
 import { UploadsService } from '../uploads/uploads.service';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -17,6 +19,7 @@ export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadsService: UploadsService,
+    private readonly auditLog: AuditLogService,
   ) {}
 
   // JWT در حال حاضر marketId را حمل نمی‌کند (ن.ک. jwt.strategy.ts)، پس همیشه از دیتابیس
@@ -31,7 +34,7 @@ export class UserService {
     return user;
   }
 
-  async create(currentUser: any, dto: CreateUserDto) {
+  async create(currentUser: any, dto: CreateUserDto, meta: RequestMeta) {
     if (!currentUser || (currentUser.role !== 'SUPER_ADMIN' && currentUser.role !== 'ADMIN')) {
       throw new ForbiddenException('Not allowed');
     }
@@ -53,10 +56,23 @@ export class UserService {
       include: { market: true, customRole: true },
     });
     const { passwordHash: _hash, ...safeUser } = user as any;
+
+    // passwordHash عمداً حتی در audit هم ذخیره نمی‌شود — safeUser از قبل بدون آن است.
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'User',
+      entityId: user.id,
+      marketId: user.marketId,
+      userId: currentUser.id,
+      newData: safeUser,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return safeUser;
   }
 
-  async update(currentUser: any, id: string, dto: UpdateUserDto) {
+  async update(currentUser: any, id: string, dto: UpdateUserDto, meta: RequestMeta) {
     if (!currentUser || (currentUser.role !== 'SUPER_ADMIN' && currentUser.role !== 'ADMIN')) {
       throw new ForbiddenException('Not allowed');
     }
@@ -78,6 +94,23 @@ export class UserService {
       include: { market: true, customRole: true },
     });
     const { passwordHash, ...safeUser } = updated as any;
+    const { passwordHash: _oldHash, ...safeOldUser } = user as any;
+
+    // role/customRoleId/isSuperAdmin/marketId دقیقاً همان فیلدهایی‌اند که این متد
+    // می‌تواند تغییر دهد — یعنی هر تغییرِ نقش یا دسترسی از همین‌جا رد می‌شود و در
+    // audit ثبت می‌شود؛ بدون نیاز به یک مسیرِ جداگانه برای «تغییرِ نقش».
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'User',
+      entityId: id,
+      marketId: updated.marketId ?? user.marketId,
+      userId: currentUser.id,
+      oldData: safeOldUser,
+      newData: safeUser,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return safeUser;
   }
 

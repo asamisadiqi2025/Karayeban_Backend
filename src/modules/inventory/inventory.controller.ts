@@ -29,6 +29,7 @@ import { InventoryMovementSummaryQueryDto } from './dto/inventory-movement-summa
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('inventory')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,7 +41,7 @@ export class InventoryController {
   @Post('categories')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createCategory(@Req() req: any, @Body() dto: CreateInventoryCategoryDto) {
-    return this.inventoryService.createCategory(req.user, dto);
+    return this.inventoryService.createCategory(req.user, dto, extractRequestMeta(req));
   }
 
   @Get('categories')
@@ -63,13 +64,13 @@ export class InventoryController {
     @Param('id') id: string,
     @Body() dto: UpdateInventoryCategoryDto,
   ) {
-    return this.inventoryService.updateCategory(req.user, id, dto);
+    return this.inventoryService.updateCategory(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete('categories/:id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   removeCategory(@Req() req: any, @Param('id') id: string) {
-    return this.inventoryService.removeCategory(req.user, id);
+    return this.inventoryService.removeCategory(req.user, id, extractRequestMeta(req));
   }
 
   // ---------- Unit ----------
@@ -77,7 +78,7 @@ export class InventoryController {
   @Post('units')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createUnit(@Req() req: any, @Body() dto: CreateInventoryUnitDto) {
-    return this.inventoryService.createUnit(req.user, dto);
+    return this.inventoryService.createUnit(req.user, dto, extractRequestMeta(req));
   }
 
   @Get('units')
@@ -97,13 +98,13 @@ export class InventoryController {
     @Param('id') id: string,
     @Body() dto: UpdateInventoryUnitDto,
   ) {
-    return this.inventoryService.updateUnit(req.user, id, dto);
+    return this.inventoryService.updateUnit(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete('units/:id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   removeUnit(@Req() req: any, @Param('id') id: string) {
-    return this.inventoryService.removeUnit(req.user, id);
+    return this.inventoryService.removeUnit(req.user, id, extractRequestMeta(req));
   }
 
   // ---------- Items ----------
@@ -111,7 +112,7 @@ export class InventoryController {
   @Post('items')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createItem(@Req() req: any, @Body() dto: CreateInventoryItemDto) {
-    return this.inventoryService.createItem(req.user, dto);
+    return this.inventoryService.createItem(req.user, dto, extractRequestMeta(req));
   }
 
   // ------- Current Summary Items
@@ -158,13 +159,13 @@ export class InventoryController {
     @Param('id') id: string,
     @Body() dto: UpdateInventoryItemDto,
   ) {
-    return this.inventoryService.updateItem(req.user, id, dto);
+    return this.inventoryService.updateItem(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete('items/:id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   removeItem(@Req() req: any, @Param('id') id: string) {
-    return this.inventoryService.removeItem(req.user, id);
+    return this.inventoryService.removeItem(req.user, id, extractRequestMeta(req));
   }
 
   // ----------  Transaction (PURCHAGE, SALE, ADJUSTMENT, CONSUMPTION---------
@@ -175,13 +176,13 @@ export class InventoryController {
     @Req() req: any,
     @Body() dto: CreateInventoryTransactionDto,
   ) {
-    return this.inventoryService.createTransaction(req.user, dto);
+    return this.inventoryService.createTransaction(req.user, dto, extractRequestMeta(req));
   }
 
   @Post('transactions/transfer')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createTransfer(@Req() req: any, @Body() dto: CreateInventoryTransferDto) {
-    return this.inventoryService.createTransfer(req.user, dto);
+    return this.inventoryService.createTransfer(req.user, dto, extractRequestMeta(req));
   }
 
   @Get('transactions')

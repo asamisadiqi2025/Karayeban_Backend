@@ -16,6 +16,10 @@ import { UpdateAssetDto } from './dto/update-asset.dto';
 import { AssetQueryDto } from './dto/asset-query.dto';
 import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
 import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summary-query.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
+
+const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -31,7 +35,10 @@ export class AssetsService {
   private static readonly SEARCH_FIELDS = ['name', 'category', 'details'] as const;
   private readonly logger = new Logger(AssetsService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
 
    private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
@@ -75,7 +82,7 @@ export class AssetsService {
     return asset;
   }
 
-  async create(currentUser: { id: string }, dto: CreateAssetDto) {
+  async create(currentUser: { id: string }, dto: CreateAssetDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
@@ -91,7 +98,7 @@ export class AssetsService {
     const annualDepreciation = this.calcAnnualDepreciation(purchasePrice, dto.lifespanYears);
     const purchaseDate = dto.purchaseDate ? new Date(dto.purchaseDate) : new Date();
 
-    return this.prisma.asset.create({
+    const asset = await this.prisma.asset.create({
       data: {
         marketId,
         name: dto.name.trim(),
@@ -105,6 +112,19 @@ export class AssetsService {
         details: dto.details?.trim() || null,
       },
     });
+
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'Asset',
+      entityId: asset.id,
+      marketId,
+      userId: actor.id,
+      newData: asset,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return asset;
   }
 
   async findAll(currentUser: { id: string }, query: AssetQueryDto) {
@@ -151,7 +171,12 @@ export class AssetsService {
     });
   }
 
-  async update(currentUser: { id: string }, id: string, dto: UpdateAssetDto) {
+  async update(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateAssetDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const asset = await this.findActiveOrThrow(id);
     this.ensureAccess(actor, asset.marketId);
@@ -188,15 +213,41 @@ export class AssetsService {
       }
     }
 
-    return this.prisma.asset.update({ where: { id }, data });
+    const updated = await this.prisma.asset.update({ where: { id }, data });
+
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'Asset',
+      entityId: id,
+      marketId: asset.marketId,
+      userId: actor.id,
+      oldData: asset,
+      newData: updated,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return updated;
   }
 
-   async remove(currentUser: { id: string }, id: string) {
+   async remove(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const asset = await this.findActiveOrThrow(id);
     this.ensureAccess(actor, asset.marketId);
 
     await this.prisma.asset.update({ where: { id }, data: { isDeleted: true } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'Asset',
+      entityId: id,
+      marketId: asset.marketId,
+      userId: actor.id,
+      oldData: asset,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `دارایی «${asset.name}» حذف شد` };
   }
 
@@ -358,7 +409,7 @@ export class AssetsService {
           : Prisma.Decimal.min(asset.annualDepreciation, bookValueBefore);
       const bookValueAfter = bookValueBefore.sub(depreciationAmount);
 
-      await tx.depreciationEvent.create({
+      const event = await tx.depreciationEvent.create({
         data: {
           assetId,
           year: appliedYears + 1,
@@ -371,6 +422,19 @@ export class AssetsService {
       await tx.asset.update({
         where: { id: assetId },
         data: { currentBookValue: bookValueAfter },
+      });
+
+      // این رویداد از کرون شبانه می‌آید، نه یک کاربر — userId/ip/UA عمداً خالی می‌مانند؛
+      // خودِ اکشن (تغییرِ ارزشِ دفتری) هنوز باید در audit trail باشد چون روی صورت‌های
+      // مالی اثر می‌گذارد.
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'Asset',
+        entityId: assetId,
+        marketId: asset.marketId,
+        newData: { depreciationEvent: event, currentBookValue: bookValueAfter },
+        ...NO_REQUEST_META,
       });
 
       return true;

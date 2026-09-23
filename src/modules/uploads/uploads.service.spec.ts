@@ -3,13 +3,15 @@ import { UploadsService } from './uploads.service';
 describe('UploadsService', () => {
   let service: UploadsService;
   let storage: { delete: jest.Mock; save: jest.Mock };
+  let auditLog: { record: jest.Mock };
 
   beforeEach(() => {
     storage = {
       delete: jest.fn().mockResolvedValue(undefined),
       save: jest.fn(),
     };
-    service = new UploadsService(storage as any);
+    auditLog = { record: jest.fn().mockResolvedValue(undefined) };
+    service = new UploadsService(storage as any, auditLog as any);
   });
 
   it('deletes the previous upload when a valid upload URL is provided', async () => {

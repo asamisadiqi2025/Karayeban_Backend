@@ -35,6 +35,10 @@ import { CancelContractDto } from './dto/cancel-contract.dto';
 import { RenewContractDto } from './dto/renew-contract.dto';
 import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
 import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
+
+const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -60,6 +64,7 @@ export class ContractsService {
     private readonly prisma: PrismaService,
     private readonly rentService: RentService,
     private readonly electricityService: ElectricityService,
+    private readonly auditLog: AuditLogService,
   ) {}
 
   private async getActor(currentUser: { id: string }): Promise<Actor> {
@@ -105,7 +110,11 @@ export class ContractsService {
   // قبل (مثلاً ۵ ماه) در حال جریان است. تفاوتشان فقط startDate و openingRentPaid است؛
   // بقیهٔ منطق (تولید فاکتور، FIFO) دقیقاً یکسان است.
   // ==========================================================================
-  async create(currentUser: { id: string }, dto: CreateContractDto) {
+  async create(
+    currentUser: { id: string },
+    dto: CreateContractDto,
+    meta: RequestMeta = NO_REQUEST_META,
+  ) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
@@ -250,25 +259,46 @@ export class ContractsService {
       }
 
       if (dto.openingRentPaid) {
-        await this.rentService.recordPayment(tx, actor, {
-          contract: {
-            id: contract.id,
-            marketId,
-            tenantId: dto.tenantId,
-            shopId: dto.shopId,
-            currencyId: dto.currencyId,
-            securityDepositRemaining: contract.securityDepositRemaining,
+        await this.rentService.recordPayment(
+          tx,
+          actor,
+          {
+            contract: {
+              id: contract.id,
+              marketId,
+              tenantId: dto.tenantId,
+              shopId: dto.shopId,
+              currencyId: dto.currencyId,
+              securityDepositRemaining: contract.securityDepositRemaining,
+            },
+            amount: new Prisma.Decimal(dto.openingRentPaid),
+            paymentDate: now,
+            paymentMethod: 'cash',
+            source: PaymentSourceType.BANK,
+            isOpeningEntry: true,
+            notes: 'پرداخت‌های کرایه قبل از راه‌اندازی سیستم',
           },
-          amount: new Prisma.Decimal(dto.openingRentPaid),
-          paymentDate: now,
-          paymentMethod: 'cash',
-          source: PaymentSourceType.BANK,
-          isOpeningEntry: true,
-          notes: 'پرداخت‌های کرایه قبل از راه‌اندازی سیستم',
-        });
+          meta,
+        );
       }
 
-      return tx.contract.findUniqueOrThrow({ where: { id: contract.id } });
+      const finalContract = await tx.contract.findUniqueOrThrow({
+        where: { id: contract.id },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'Contract',
+        entityId: contract.id,
+        marketId,
+        userId: actor.id,
+        newData: finalContract,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return finalContract;
     });
   }
 
@@ -368,6 +398,7 @@ export class ContractsService {
     currentUser: { id: string },
     id: string,
     dto: UpdateContractDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
@@ -381,7 +412,21 @@ export class ContractsService {
     if (dto.guarantorId !== undefined) data.guarantorId = dto.guarantorId;
     if (dto.notes !== undefined) data.notes = dto.notes?.trim() || null;
 
-    return this.prisma.contract.update({ where: { id }, data });
+    const updated = await this.prisma.contract.update({ where: { id }, data });
+
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'Contract',
+      entityId: id,
+      marketId: contract.marketId,
+      userId: actor.id,
+      oldData: contract,
+      newData: updated,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return updated;
   }
 
   // ==========================================================================
@@ -392,6 +437,7 @@ export class ContractsService {
     currentUser: { id: string },
     id: string,
     dto: TerminateContractDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
@@ -489,7 +535,22 @@ export class ContractsService {
         await this.rentService.recomputeRentDebt(tx, contract.tenantId);
       }
 
-      return tx.contract.findUniqueOrThrow({ where: { id } });
+      const finalContract = await tx.contract.findUniqueOrThrow({ where: { id } });
+
+      await this.auditLog.record({
+        tx,
+        action: 'TERMINATE',
+        entityType: 'Contract',
+        entityId: id,
+        marketId: contract.marketId,
+        userId: actor.id,
+        oldData: contract,
+        newData: finalContract,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return finalContract;
     });
   }
 
@@ -503,6 +564,7 @@ export class ContractsService {
     currentUser: { id: string },
     id: string,
     dto: CancelContractDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
@@ -550,6 +612,19 @@ export class ContractsService {
         });
       }
 
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'Contract',
+        entityId: id,
+        marketId: contract.marketId,
+        userId: actor.id,
+        oldData: contract,
+        newData: updatedContract,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
       return updatedContract;
     });
   }
@@ -561,7 +636,12 @@ export class ContractsService {
   // contractId) جمع می‌شوند — زیر قرارداد جدید هم خودکار همان بدهی دیده می‌شود.
   // امانت (securityDeposit) به قرارداد جدید منتقل می‌شود تا دوباره‌شمار نشود.
   // ==========================================================================
-  async renew(currentUser: { id: string }, id: string, dto: RenewContractDto) {
+  async renew(
+    currentUser: { id: string },
+    id: string,
+    dto: RenewContractDto,
+    meta: RequestMeta = NO_REQUEST_META,
+  ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
     this.ensureAccess(
@@ -713,7 +793,24 @@ export class ContractsService {
         });
       }
 
-      return tx.contract.findUniqueOrThrow({ where: { id: newContract.id } });
+      const finalNewContract = await tx.contract.findUniqueOrThrow({
+        where: { id: newContract.id },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'RENEW',
+        entityType: 'Contract',
+        entityId: id,
+        marketId: contract.marketId,
+        userId: actor.id,
+        oldData: contract,
+        newData: finalNewContract,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return finalNewContract;
     });
   }
 
@@ -727,6 +824,7 @@ export class ContractsService {
     currentUser: { id: string },
     id: string,
     dto: SettleContractDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
@@ -817,38 +915,48 @@ export class ContractsService {
       const cashForElectricity = cashAmount.sub(cashForRent);
 
       if (cashForRent.greaterThan(0)) {
-        await this.rentService.recordPayment(tx, actor, {
-          contract: {
-            id,
-            marketId: contract.marketId,
-            tenantId: contract.tenantId!,
-            shopId: contract.shopId!,
-            currencyId: contract.currencyId!,
-            securityDepositRemaining: null,
+        await this.rentService.recordPayment(
+          tx,
+          actor,
+          {
+            contract: {
+              id,
+              marketId: contract.marketId,
+              tenantId: contract.tenantId!,
+              shopId: contract.shopId!,
+              currencyId: contract.currencyId!,
+              securityDepositRemaining: null,
+            },
+            amount: cashForRent,
+            paymentDate: settledAt,
+            paymentMethod,
+            source: PaymentSourceType.BANK,
+            accountId: dto.accountId,
+            isOpeningEntry: false,
+            notes: 'دریافت نقد هنگام تسویهٔ نهایی قرارداد',
           },
-          amount: cashForRent,
-          paymentDate: settledAt,
-          paymentMethod,
-          source: PaymentSourceType.BANK,
-          accountId: dto.accountId,
-          isOpeningEntry: false,
-          notes: 'دریافت نقد هنگام تسویهٔ نهایی قرارداد',
-        });
+          meta,
+        );
       }
       if (cashForElectricity.greaterThan(0)) {
-        await this.electricityService.recordPayment(tx, actor, {
-          marketId: contract.marketId,
-          shopId: contract.shopId!,
-          tenantId: contract.tenantId!,
-          currencyId: contract.currencyId!,
-          amount: cashForElectricity,
-          paymentDate: settledAt,
-          paymentMethod,
-          source: PaymentSourceType.BANK,
-          accountId: dto.accountId,
-          isOpeningEntry: false,
-          notes: 'دریافت نقد هنگام تسویهٔ نهایی قرارداد',
-        });
+        await this.electricityService.recordPayment(
+          tx,
+          actor,
+          {
+            marketId: contract.marketId,
+            shopId: contract.shopId!,
+            tenantId: contract.tenantId!,
+            currencyId: contract.currencyId!,
+            amount: cashForElectricity,
+            paymentDate: settledAt,
+            paymentMethod,
+            source: PaymentSourceType.BANK,
+            accountId: dto.accountId,
+            isOpeningEntry: false,
+            notes: 'دریافت نقد هنگام تسویهٔ نهایی قرارداد',
+          },
+          meta,
+        );
       }
 
       const writeOffNote = `تسویهٔ نهاییِ قرارداد (${dto.settlementMethod})${dto.notes ? ` — ${dto.notes.trim()}` : ''}`;
@@ -865,7 +973,7 @@ export class ContractsService {
         writeOffNote,
       );
 
-      return tx.contractSettlement.create({
+      const settlement = await tx.contractSettlement.create({
         data: {
           contractId: id,
           finalRentDebt,
@@ -878,6 +986,20 @@ export class ContractsService {
           settledAt,
         },
       });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'ContractSettlement',
+        entityId: settlement.id,
+        marketId: contract.marketId,
+        userId: actor.id,
+        newData: settlement,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return settlement;
     });
   }
 
@@ -891,6 +1013,7 @@ export class ContractsService {
     currentUser: { id: string },
     id: string,
     dto: PayContractDebtDto,
+    meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
@@ -942,24 +1065,29 @@ export class ContractsService {
       } = { rentPayment: null, electricityPayment: null };
 
       if (rentAmount.greaterThan(0)) {
-        result.rentPayment = await this.rentService.recordPayment(tx, actor, {
-          contract: {
-            id: contract.id,
-            marketId: contract.marketId,
-            tenantId: contract.tenantId!,
-            shopId: contract.shopId!,
-            currencyId: contract.currencyId!,
-            securityDepositRemaining: contract.securityDepositRemaining,
+        result.rentPayment = await this.rentService.recordPayment(
+          tx,
+          actor,
+          {
+            contract: {
+              id: contract.id,
+              marketId: contract.marketId,
+              tenantId: contract.tenantId!,
+              shopId: contract.shopId!,
+              currencyId: contract.currencyId!,
+              securityDepositRemaining: contract.securityDepositRemaining,
+            },
+            amount: rentAmount,
+            paymentDate,
+            paymentMethod,
+            source: PaymentSourceType.BANK,
+            accountId: dto.accountId,
+            isOpeningEntry: false,
+            notes: dto.notes,
+            receiptNumber: dto.receiptNumber,
           },
-          amount: rentAmount,
-          paymentDate,
-          paymentMethod,
-          source: PaymentSourceType.BANK,
-          accountId: dto.accountId,
-          isOpeningEntry: false,
-          notes: dto.notes,
-          receiptNumber: dto.receiptNumber,
-        });
+          meta,
+        );
       }
 
       if (electricityAmount.greaterThan(0)) {
@@ -977,8 +1105,10 @@ export class ContractsService {
           );
         }
 
-        result.electricityPayment =
-          await this.electricityService.recordPayment(tx, actor, {
+        result.electricityPayment = await this.electricityService.recordPayment(
+          tx,
+          actor,
+          {
             marketId: contract.marketId,
             shopId: contract.shopId!,
             tenantId: contract.tenantId!,
@@ -991,7 +1121,9 @@ export class ContractsService {
             isOpeningEntry: false,
             notes: dto.notes,
             receiptNumber: dto.receiptNumber,
-          });
+          },
+          meta,
+        );
       }
 
       return result;
