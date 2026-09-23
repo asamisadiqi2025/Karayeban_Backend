@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sleep 20 && grep -i \"rent\\\\b\\\\|error\\\\|running on\\\\|Failed to start\" /tmp/server_boot7.log | grep -v \"RentModule dependencies\\\\|Contracts\\\\|prisma\")",
+      "Read(//tmp/**)"
+    ]
+  }
+}

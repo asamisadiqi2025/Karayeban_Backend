@@ -23,6 +23,7 @@ import { CreateRentPaymentDto } from './dto/create-rent-payment.dto';
 import { RentChargeQueryDto } from './dto/rent-charge-query.dto';
 import { RentPaymentQueryDto } from './dto/rent-payment-query.dto';
 import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
+import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -72,6 +73,19 @@ export class RentService {
     if (actor.marketId !== entityMarketId) {
       throw new ForbiddenException(message);
     }
+  }
+
+  private resolveMarketId(actor: Actor, providedMarketId: string | undefined): string {
+    if (actor.role === 'SUPER_ADMIN') {
+      if (!providedMarketId) {
+        throw new BadRequestException('برای سوپر ادمین، marketId الزامی است');
+      }
+      return providedMarketId;
+    }
+    if (!actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+    return actor.marketId;
   }
 
   // ==========================================================================
@@ -573,6 +587,77 @@ export class RentService {
         tenant: { select: { id: true, fullName: true, marketId: true } },
       },
     });
+  }
+
+  private static readonly AGING_BUCKETS = ['current', 'd1_30', 'd31_60', 'd61_90', 'd90_plus'] as const;
+
+  private static bucketForPeriodEnd(periodEnd: Date, now: Date): (typeof RentService.AGING_BUCKETS)[number] {
+    if (periodEnd >= now) return 'current';
+    const daysOverdue = Math.floor((now.getTime() - periodEnd.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysOverdue <= 30) return 'd1_30';
+    if (daysOverdue <= 60) return 'd31_60';
+    if (daysOverdue <= 90) return 'd61_90';
+    return 'd90_plus';
+  }
+
+  // رده‌بندیِ سنیِ بدهیِ باز کرایه — این گزارش مکملِ findAllDebts است، نه جایگزینش:
+  // findAllDebts می‌گوید «کدام مستأجر چقدر بدهکار است»، این می‌گوید «بدهیِ کل بازار از نظرِ
+  // قدمت چطور پخش شده» (چند درصدش تازه است، چند درصدش بیش از ۹۰ روز مانده). چون Prisma
+  // نمی‌تواند «امروز منهای periodEnd» را در سطحِ groupBy خودش دسته‌بندی کند، فاکتورهای بازِ
+  // این بازار خوانده و در همین سرویس دسته‌بندی می‌شوند — دقیقاً همان استثنایی که
+  // InventoryService.getItemsSummary هم برای qty×averageCost دارد؛ امن است چون تعدادِ
+  // فاکتورهای بازِ یک بازار همیشه محدود است (نه کلِ تاریخچهٔ تراکنش‌ها).
+  async getDebtAging(currentUser: { id: string }, query: RentDebtAgingQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const openCharges = await this.prisma.rentCharges.findMany({
+      where: { marketId, status: { in: OPEN_STATUSES }, remainingAmount: { gt: 0 } },
+      select: { remainingAmount: true, currencyId: true, periodEnd: true },
+    });
+
+    const currencyIds = [...new Set(openCharges.map((c) => c.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    const now = new Date();
+    const zero = new Prisma.Decimal(0);
+    const zeroBuckets = () =>
+      Object.fromEntries(
+        RentService.AGING_BUCKETS.map((b) => [b, { amount: zero, count: 0 }]),
+      ) as Record<(typeof RentService.AGING_BUCKETS)[number], { amount: Prisma.Decimal; count: number }>;
+
+    const byCurrency = new Map<
+      string,
+      { currencyId: string; currencyCode: string | null; buckets: ReturnType<typeof zeroBuckets>; totalAmount: Prisma.Decimal; totalCount: number }
+    >();
+
+    for (const charge of openCharges) {
+      const bucket = RentService.bucketForPeriodEnd(charge.periodEnd, now);
+      const entry = byCurrency.get(charge.currencyId) ?? {
+        currencyId: charge.currencyId,
+        currencyCode: currencyCodeById.get(charge.currencyId) ?? null,
+        buckets: zeroBuckets(),
+        totalAmount: zero,
+        totalCount: 0,
+      };
+      entry.buckets[bucket].amount = entry.buckets[bucket].amount.add(charge.remainingAmount);
+      entry.buckets[bucket].count += 1;
+      entry.totalAmount = entry.totalAmount.add(charge.remainingAmount);
+      entry.totalCount += 1;
+      byCurrency.set(charge.currencyId, entry);
+    }
+
+    return {
+      marketId,
+      asOf: now.toISOString(),
+      byCurrency: [...byCurrency.values()],
+    };
   }
 
   // ==========================================================================

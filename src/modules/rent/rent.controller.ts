@@ -13,6 +13,7 @@ import { CreateRentPaymentDto } from './dto/create-rent-payment.dto';
 import { RentChargeQueryDto } from './dto/rent-charge-query.dto';
 import { RentPaymentQueryDto } from './dto/rent-payment-query.dto';
 import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
+import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -47,6 +48,12 @@ export class RentController {
   @Get('debts')
   findAllDebts(@Req() req: any, @Query() query: RentDebtQueryDto) {
     return this.rentService.findAllDebts(req.user, query);
+  }
+
+  // باید قبل از @Get('debts/:tenantId') ثبت شود، وگرنه Nest کلمهٔ "aging" را به‌عنوان tenantId تطبیق می‌دهد.
+  @Get('debts/aging')
+  getDebtAging(@Req() req: any, @Query() query: RentDebtAgingQueryDto) {
+    return this.rentService.getDebtAging(req.user, query);
   }
 
   @Get('debts/:tenantId')
