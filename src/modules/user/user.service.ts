@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -34,22 +34,50 @@ export class UserService {
     return user;
   }
 
-  async create(currentUser: any, dto: CreateUserDto, meta: RequestMeta) {
-    if (!currentUser || (currentUser.role !== 'SUPER_ADMIN' && currentUser.role !== 'ADMIN')) {
+  async create(currentUser: { id: string }, dto: CreateUserDto, meta: RequestMeta) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
       throw new ForbiddenException('Not allowed');
     }
 
-    if (dto.isSuperAdmin && currentUser.role !== 'SUPER_ADMIN') {
+    if (dto.isSuperAdmin && actor.role !== 'SUPER_ADMIN') {
       throw new ForbiddenException('Only super admin can set isSuperAdmin');
     }
 
-    if (dto.marketId == null && dto.isSuperAdmin !== true && currentUser.role !== 'SUPER_ADMIN') {
-      throw new ForbiddenException('marketId required for non-super-admin');
+    // marketId همیشه از رویِ actor واقعی تعیین می‌شود، نه چیزی که ADMIN در بدنهٔ
+    // درخواست فرستاده — وگرنه یک ADMIن می‌توانست کاربر را داخل بازارِ دیگری بسازد.
+    let marketId: string | null;
+    if (actor.role === 'SUPER_ADMIN') {
+      if (dto.marketId == null && dto.isSuperAdmin !== true) {
+        throw new ForbiddenException('marketId required for non-super-admin');
+      }
+      marketId = dto.marketId ?? null;
+    } else {
+      if (!actor.marketId) {
+        throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+      }
+      marketId = actor.marketId;
     }
 
-    const { password, ...rest } = dto;
+    // تشدید امتیاز: ADMIN فقط می‌تواند ACCOUNTANT/STAFF بسازد — نه ADMIN، نه
+    // SUPER_ADMIN. ساختن ادمین کارِ SUPER_ADMIN است.
+    if (actor.role === 'ADMIN' && dto.role !== 'ACCOUNTANT' && dto.role !== 'STAFF') {
+      throw new ForbiddenException('ادمین فقط می‌تواند کاربرِ حسابدار یا کارمند بسازد');
+    }
+
+    if (dto.customRoleId) {
+      const customRole = await this.prisma.customRole.findUnique({
+        where: { id: dto.customRoleId },
+      });
+      if (!customRole) throw new NotFoundException('نقش سفارشی یافت نشد');
+      if (customRole.marketId !== marketId) {
+        throw new BadRequestException('نقش سفارشی باید متعلق به همان بازارِ کاربر باشد');
+      }
+    }
+
+    const { password, marketId: _ignoredMarketId, ...rest } = dto;
     const passwordHash = await bcrypt.hash(password, 10);
-    const data: any = { ...rest, passwordHash };
+    const data: any = { ...rest, marketId, passwordHash };
 
     const user = await this.prisma.user.create({
       data,
@@ -72,16 +100,41 @@ export class UserService {
     return safeUser;
   }
 
-  async update(currentUser: any, id: string, dto: UpdateUserDto, meta: RequestMeta) {
-    if (!currentUser || (currentUser.role !== 'SUPER_ADMIN' && currentUser.role !== 'ADMIN')) {
+  async update(currentUser: { id: string }, id: string, dto: UpdateUserDto, meta: RequestMeta) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
       throw new ForbiddenException('Not allowed');
     }
 
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User not found');
 
-    if (dto.isSuperAdmin && currentUser.role !== 'SUPER_ADMIN') {
+    if (actor.role === 'ADMIN') {
+      // ADMIN فقط کاربرانِ همان بازارِ خودش را می‌بیند/ویرایش می‌کند — نه هیچ بازار دیگری.
+      if (user.marketId !== actor.marketId) {
+        throw new ForbiddenException('دسترسی به این کاربر مجاز نیست');
+      }
+      if (dto.marketId !== undefined && dto.marketId !== actor.marketId) {
+        throw new ForbiddenException('ادمین نمی‌تواند کاربر را به بازارِ دیگری منتقل کند');
+      }
+      if (dto.role !== undefined && dto.role !== 'ACCOUNTANT' && dto.role !== 'STAFF') {
+        throw new ForbiddenException('ادمین فقط می‌تواند نقش را به حسابدار یا کارمند تغییر دهد');
+      }
+    }
+
+    if (dto.isSuperAdmin && actor.role !== 'SUPER_ADMIN') {
       throw new ForbiddenException('Only super admin can set isSuperAdmin');
+    }
+
+    if (dto.customRoleId) {
+      const effectiveMarketId = dto.marketId ?? user.marketId;
+      const customRole = await this.prisma.customRole.findUnique({
+        where: { id: dto.customRoleId },
+      });
+      if (!customRole) throw new NotFoundException('نقش سفارشی یافت نشد');
+      if (customRole.marketId !== effectiveMarketId) {
+        throw new BadRequestException('نقش سفارشی باید متعلق به همان بازارِ کاربر باشد');
+      }
     }
 
     if (dto.profilePhoto !== undefined && dto.profilePhoto !== user.profilePhoto) {

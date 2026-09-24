@@ -15,19 +15,20 @@ import { memoryStorage } from 'multer';
 import { UploadsService } from './uploads.service';
 import { ABSOLUTE_MAX_UPLOAD_BYTES } from './upload-categories';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 // JWT روی همهٔ روت‌ها به‌صورت سراسری در main.ts فعال است (app.useGlobalGuards)، ولی
 // RolesGuard سراسری نیست — باید اینجا هم مثل بقیهٔ کنترلرها صریح اضافه شود. قبلاً این‌جا
 // هیچ محدودیت نقشی نبود (هر کاربرِ لاگین‌شده، حتی STAFF، می‌توانست فایل هر کسی را پاک
-// کند)؛ چون تنها مصرف‌کننده‌های واقعیِ uploads (رسید هزینه، لوگوی مارکت، عکس پروفایل
-// کاربرِ دیگر) همیشه از مسیرهایی می‌آیند که خودشان به SUPER_ADMIN/ADMIN/ACCOUNTANT
-// محدودند، همین سه نقش این‌جا هم اعمال شده — نه سخت‌گیرانه‌تر از چیزی که همین الان
-// عملاً استفاده می‌شود.
+// کند). STAFF با permission «uploads.manage» هم اضافه شد — بدون آن، STAFF همچنان کاملاً
+// بی‌دسترسی است.
 @Controller('uploads')
-@UseGuards(RolesGuard)
-@Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+@UseGuards(RolesGuard, PermissionsGuard)
+@Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+@RequirePermissions('uploads.manage')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 

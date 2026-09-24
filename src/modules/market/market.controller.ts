@@ -15,10 +15,12 @@ import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('markets')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class MarketController {
   constructor(private readonly marketService: MarketService) {}
 
@@ -34,7 +36,8 @@ export class MarketController {
   }
 
   @Patch(':id/profile')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('market.manage')
   async updateProfile(
     @Req() req: any,
     @Param('id') id: string,
@@ -49,7 +52,8 @@ export class MarketController {
   }
 
   @Post(':id/exchange-rates')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('market.manage')
   async setExchangeRate(
     @Req() req: any,
     @Param('id') id: string,

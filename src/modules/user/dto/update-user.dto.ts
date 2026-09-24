@@ -1,6 +1,9 @@
 import {
+  ArrayUnique,
+  IsArray,
   IsEmail,
   IsEnum,
+  IsIn,
   IsOptional,
   IsString,
   IsUUID,
@@ -10,6 +13,7 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UserRole } from './create-user.dto';
+import { PERMISSIONS, PermissionKey } from '../../../common/permissions/permissions.constant';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -64,9 +68,11 @@ export class UpdateUserDto {
   @IsEnum(UserRole)
   role?: UserRole;
 
+  // null یعنی «نقش سفارشی را از این کاربر پس بگیر» — عمداً از string خالی جدا نگه
+  // داشته شده تا با «چیزی نفرستاده‌شده» (undefined) اشتباه گرفته نشود.
   @IsOptional()
   @IsUUID()
-  customRoleId?: string;
+  customRoleId?: string | null;
 
   @IsOptional()
   @IsUUID()
@@ -74,4 +80,18 @@ export class UpdateUserDto {
 
   @IsOptional()
   isSuperAdmin?: boolean;
+
+  // مثل CreateUserDto — یک permission خاص به همین یک کاربر بده/بگیر، جدا از
+  // CustomRole اش. فرستادنِ آرایهٔ خالی یعنی «همه را پاک کن»، undefined یعنی «دست نزن».
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsIn(PERMISSIONS, { each: true })
+  extraPermissions?: PermissionKey[];
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsIn(PERMISSIONS, { each: true })
+  deniedPermissions?: PermissionKey[];
 }

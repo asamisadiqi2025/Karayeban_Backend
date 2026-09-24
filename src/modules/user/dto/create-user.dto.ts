@@ -1,6 +1,9 @@
 import {
+  ArrayUnique,
+  IsArray,
   IsEmail,
   IsEnum,
+  IsIn,
   IsOptional,
   IsString,
   IsUUID,
@@ -9,6 +12,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { PERMISSIONS, PermissionKey } from '../../../common/permissions/permissions.constant';
 
 export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
@@ -82,4 +86,20 @@ export class CreateUserDto {
 
   @IsOptional()
   isSuperAdmin?: boolean;
+
+  // این دو فیلد فقط برای STAFF معنا دارند (PermissionsGuard فقط برای همان نقش چک
+  // می‌کند) — امکانِ دادن/گرفتنِ یک permission خاص به همین یک کاربر، جدا از
+  // CustomRole اش. مثال: کاربر CustomRole «حسابدار» دارد ولی می‌خواهی فقط همین یکی
+  // اضافه‌تر بتواند انتقال حساب هم بزند → آن یکی permission را در extraPermissions بگذار.
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsIn(PERMISSIONS, { each: true })
+  extraPermissions?: PermissionKey[];
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsIn(PERMISSIONS, { each: true })
+  deniedPermissions?: PermissionKey[];
 }

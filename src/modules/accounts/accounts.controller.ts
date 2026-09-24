@@ -21,28 +21,33 @@ import { AccountTransactionQueryDto } from './dto/account-transaction-query.dto'
 import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('accounts')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+  @RequirePermissions('accounts.manage')
   create(@Req() req: any, @Body() dto: CreateAccountDto) {
     return this.accountsService.create(req.user, dto, extractRequestMeta(req));
   }
 
   @Post('transfer')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+  @RequirePermissions('accounts.transfer')
   transfer(@Req() req: any, @Body() dto: TransferFundsDto) {
     return this.accountsService.transfer(req.user, dto, extractRequestMeta(req));
   }
 
   @Post(':id/transactions')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+  @RequirePermissions('accounts.transactions.create')
   createAccountTransaction(
     @Req() req: any,
     @Param('id') id: string,
@@ -91,7 +96,8 @@ export class AccountsController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+  @RequirePermissions('accounts.manage')
   update(
     @Req() req: any,
     @Param('id') id: string,
@@ -101,7 +107,8 @@ export class AccountsController {
   }
 
   @Delete(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('accounts.manage')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.accountsService.remove(req.user, id, extractRequestMeta(req));
   }

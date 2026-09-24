@@ -16,15 +16,18 @@ import { UpdateWarehouseDto } from './dto/update-warehouse.dto';
 import { WarehouseQueryDto } from './dto/warehouse-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 
 @Controller('warehouses')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class WarehousesController {
   constructor(private readonly warehousesService: WarehousesService) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('warehouses.manage')
   create(@Req() req: any, @Body() dto: CreateWarehouseDto) {
     return this.warehousesService.create(req.user, dto);
   }
@@ -40,7 +43,8 @@ export class WarehousesController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('warehouses.manage')
   update(
     @Req() req: any,
     @Param('id') id: string,
@@ -50,7 +54,8 @@ export class WarehousesController {
   }
 
   @Delete(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('warehouses.manage')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.warehousesService.remove(req.user, id);
   }

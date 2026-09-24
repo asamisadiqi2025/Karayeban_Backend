@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 import { loggerConfig } from './config/logger.config';
 import { AppController } from './app.controller';
@@ -26,15 +28,26 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { AuditLogModule } from './common/audit-log/audit-log.module';
 import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
+import { CustomRolesModule } from './modules/custom-roles/custom-roles.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     LoggerModule.forRoot(loggerConfig()),
     ScheduleModule.forRoot(),
+    // پیش‌فرضِ سراسری سخاوتمندانه است (برای استفادهٔ عادیِ اپ محدودیت ایجاد نکند)؛
+    // endpointهای حساس (لاگین) با @Throttle روی خودشان سخت‌گیرانه‌تر تنظیم می‌شوند.
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60_000,
+        limit: 100,
+      },
+    ]),
     PrismaModule,
     AuditLogModule,
     AuditLogsModule,
+    CustomRolesModule,
     AuthModule,
     UserModule,
     MarketModule,
@@ -56,5 +69,6 @@ import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
     ReportsModule,
   ],
   controllers: [AppController],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

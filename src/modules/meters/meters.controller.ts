@@ -16,15 +16,18 @@ import { UpdateMeterDto } from './dto/update-meter.dto';
 import { MeterQueryDto } from './dto/meter-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 
 @Controller('meters')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class MetersController {
   constructor(private readonly metersService: MetersService) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('meters.manage')
   create(@Req() req: any, @Body() dto: CreateMeterDto) {
     return this.metersService.create(req.user, dto);
   }
@@ -40,13 +43,15 @@ export class MetersController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('meters.manage')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateMeterDto) {
     return this.metersService.update(req.user, id, dto);
   }
 
   @Delete(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('meters.manage')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.metersService.remove(req.user, id);
   }

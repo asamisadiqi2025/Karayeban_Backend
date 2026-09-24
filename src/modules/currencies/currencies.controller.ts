@@ -13,24 +13,28 @@ import { CurrenciesService } from './currencies.service';
 import { CreateCurrencyDto } from './dto/create-currency.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 
 @Controller('currencies')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class CurrenciesController {
   constructor(private readonly currenciesService: CurrenciesService) {}
 
   // فهرست کامل کاتالوگ جهانی ISO — برای جست‌وجو موقع «افزودن ارز»، مستقل از هر مارکت.
   @Get('catalog')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('currencies.manage')
   getCatalog(@Query('search') search?: string) {
     return this.currenciesService.getCatalog(search);
   }
 
   // فقط ارزهایی که همین مارکتِ کاربر جاری فعال کرده (نه فهرست کل سیستم).
   @Get()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('currencies.manage')
   getAddedCurrencies(@Req() req: any, @Query() query: PaginationQueryDto) {
     return this.currenciesService.getAddedCurrencies(req.user, query);
   }
@@ -38,7 +42,8 @@ export class CurrenciesController {
   // فعال‌کردن یک ارز برای مارکت کاربر جاری. بدون خطا اگر آن ارز از قبل در کاتالوگ
   // جهانی بود (idempotent) — فقط لینک «فعال‌بودن» برای همین مارکت اضافه/تکرار می‌شود.
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('currencies.manage')
   addCurrency(@Req() req: any, @Body() dto: CreateCurrencyDto) {
     return this.currenciesService.addCurrency(req.user, dto);
   }
@@ -46,7 +51,8 @@ export class CurrenciesController {
   // غیرفعال‌کردن یک ارز فقط برای مارکت کاربر جاری — ارز همچنان در کاتالوگ جهانی و برای
   // مارکت‌های دیگر باقی می‌ماند. فقط با استفادهٔ همین مارکت از این ارز چک می‌شود.
   @Delete(':id/market')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('currencies.manage')
   removeCurrencyFromMarket(
     @Req() req: any,
     @Param('id') id: string,

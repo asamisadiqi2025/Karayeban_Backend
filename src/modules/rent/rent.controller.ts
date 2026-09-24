@@ -16,11 +16,13 @@ import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
 import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('rent')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class RentController {
   constructor(private readonly rentService: RentService) {}
 
@@ -36,7 +38,8 @@ export class RentController {
   }
 
   @Post('payments')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+  @RequirePermissions('rent.payments.create')
   createPayment(@Req() req: any, @Body() dto: CreateRentPaymentDto) {
     return this.rentService.createPayment(req.user, dto, extractRequestMeta(req));
   }

@@ -17,15 +17,18 @@ import { ShopQueryDto } from './dto/shop-query.dto';
 import { ShopOccupancyQueryDto } from './dto/shop-occupancy-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 
 @Controller('shops')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('shops.manage')
   create(@Req() req: any, @Body() dto: CreateShopDto) {
     return this.shopsService.create(req.user, dto);
   }
@@ -47,13 +50,15 @@ export class ShopsController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('shops.manage')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateShopDto) {
     return this.shopsService.update(req.user, id, dto);
   }
 
   @Delete(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('shops.manage')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.shopsService.remove(req.user, id);
   }

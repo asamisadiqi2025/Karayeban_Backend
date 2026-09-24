@@ -28,18 +28,21 @@ import { StockStatementQueryDto } from './dto/stock-statement-query.dto';
 import { InventoryMovementSummaryQueryDto } from './dto/inventory-movement-summary-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('inventory')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
   // ---------- Category ----------
 
   @Post('categories')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.categories.manage')
   createCategory(@Req() req: any, @Body() dto: CreateInventoryCategoryDto) {
     return this.inventoryService.createCategory(req.user, dto, extractRequestMeta(req));
   }
@@ -58,7 +61,8 @@ export class InventoryController {
   }
 
   @Patch('categories/:id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.categories.manage')
   updateCategory(
     @Req() req: any,
     @Param('id') id: string,
@@ -68,7 +72,8 @@ export class InventoryController {
   }
 
   @Delete('categories/:id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.categories.manage')
   removeCategory(@Req() req: any, @Param('id') id: string) {
     return this.inventoryService.removeCategory(req.user, id, extractRequestMeta(req));
   }
@@ -76,7 +81,8 @@ export class InventoryController {
   // ---------- Unit ----------
 
   @Post('units')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.units.manage')
   createUnit(@Req() req: any, @Body() dto: CreateInventoryUnitDto) {
     return this.inventoryService.createUnit(req.user, dto, extractRequestMeta(req));
   }
@@ -92,7 +98,8 @@ export class InventoryController {
   }
 
   @Patch('units/:id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.units.manage')
   updateUnit(
     @Req() req: any,
     @Param('id') id: string,
@@ -102,7 +109,8 @@ export class InventoryController {
   }
 
   @Delete('units/:id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.units.manage')
   removeUnit(@Req() req: any, @Param('id') id: string) {
     return this.inventoryService.removeUnit(req.user, id, extractRequestMeta(req));
   }
@@ -110,7 +118,8 @@ export class InventoryController {
   // ---------- Items ----------
 
   @Post('items')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.items.manage')
   createItem(@Req() req: any, @Body() dto: CreateInventoryItemDto) {
     return this.inventoryService.createItem(req.user, dto, extractRequestMeta(req));
   }
@@ -153,7 +162,8 @@ export class InventoryController {
   }
 
   @Patch('items/:id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.items.manage')
   updateItem(
     @Req() req: any,
     @Param('id') id: string,
@@ -163,7 +173,8 @@ export class InventoryController {
   }
 
   @Delete('items/:id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.items.manage')
   removeItem(@Req() req: any, @Param('id') id: string) {
     return this.inventoryService.removeItem(req.user, id, extractRequestMeta(req));
   }
@@ -171,7 +182,8 @@ export class InventoryController {
   // ----------  Transaction (PURCHAGE, SALE, ADJUSTMENT, CONSUMPTION---------
 
   @Post('transactions')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.transactions.create')
   createTransaction(
     @Req() req: any,
     @Body() dto: CreateInventoryTransactionDto,
@@ -180,7 +192,8 @@ export class InventoryController {
   }
 
   @Post('transactions/transfer')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('inventory.transactions.create')
   createTransfer(@Req() req: any, @Body() dto: CreateInventoryTransferDto) {
     return this.inventoryService.createTransfer(req.user, dto, extractRequestMeta(req));
   }

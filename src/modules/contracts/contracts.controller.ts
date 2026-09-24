@@ -24,11 +24,13 @@ import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
 import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('contracts')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class ContractsController {
   constructor(
     private readonly contractsService: ContractsService,
@@ -36,7 +38,8 @@ export class ContractsController {
   ) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.create')
   create(@Req() req: any, @Body() dto: CreateContractDto) {
     return this.contractsService.create(req.user, dto, extractRequestMeta(req));
   }
@@ -58,7 +61,8 @@ export class ContractsController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.update')
   update(
     @Req() req: any,
     @Param('id') id: string,
@@ -68,7 +72,8 @@ export class ContractsController {
   }
 
   @Post(':id/cancel')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.cancel')
   cancel(
     @Req() req: any,
     @Param('id') id: string,
@@ -78,7 +83,8 @@ export class ContractsController {
   }
 
   @Post(':id/renew')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.renew')
   renew(
     @Req() req: any,
     @Param('id') id: string,
@@ -88,7 +94,8 @@ export class ContractsController {
   }
 
   @Post(':id/adjust-rent')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.adjust-rent')
   adjustRent(
     @Req() req: any,
     @Param('id') id: string,
@@ -98,7 +105,8 @@ export class ContractsController {
   }
 
   @Post(':id/discount-debt')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.discount-debt')
   discountDebt(
     @Req() req: any,
     @Param('id') id: string,
@@ -108,7 +116,8 @@ export class ContractsController {
   }
 
   @Post(':id/terminate')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.terminate')
   terminate(
     @Req() req: any,
     @Param('id') id: string,
@@ -118,7 +127,8 @@ export class ContractsController {
   }
 
   @Post(':id/settle')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('contracts.settle')
   settle(
     @Req() req: any,
     @Param('id') id: string,
@@ -128,7 +138,8 @@ export class ContractsController {
   }
 
   @Post(':id/pay-debt')
-  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT', 'STAFF')
+  @RequirePermissions('contracts.payments.create')
   payDebt(
     @Req() req: any,
     @Param('id') id: string,

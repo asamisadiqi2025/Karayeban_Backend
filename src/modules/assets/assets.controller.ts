@@ -18,16 +18,19 @@ import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
 import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summary-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('assets')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('assets.manage')
   create(@Req() req: any, @Body() dto: CreateAssetDto) {
     return this.assetsService.create(req.user, dto, extractRequestMeta(req));
   }
@@ -55,13 +58,15 @@ export class AssetsController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('assets.manage')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateAssetDto) {
     return this.assetsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('assets.manage')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.assetsService.remove(req.user, id, extractRequestMeta(req));
   }

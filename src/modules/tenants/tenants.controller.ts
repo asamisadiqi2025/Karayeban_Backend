@@ -17,15 +17,18 @@ import { TenantQueryDto } from './dto/tenant-query.dto';
 import { TenantStatementQueryDto } from './dto/tenant-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 
 @Controller('tenants')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class TenantsController {
   constructor(private readonly tenantsService: TenantsService) {}
 
   @Post()
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('tenants.manage')
   create(@Req() req: any, @Body() dto: CreateTenantDto) {
     return this.tenantsService.create(req.user, dto);
   }
@@ -50,13 +53,15 @@ export class TenantsController {
   }
 
   @Patch(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('tenants.manage')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateTenantDto) {
     return this.tenantsService.update(req.user, id, dto);
   }
 
   @Delete(':id')
-  @Roles('SUPER_ADMIN', 'ADMIN')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'STAFF')
+  @RequirePermissions('tenants.manage')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.tenantsService.remove(req.user, id);
   }
