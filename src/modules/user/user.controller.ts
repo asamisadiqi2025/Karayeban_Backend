@@ -35,4 +35,11 @@ export class UserController {
   async list(@Req() req: any, @Query() query: UserQueryDto) {
     return this.userService.findAll(query, req.user);
   }
+
+  // باید بعد از 'me' ثبت شود، وگرنه Nest کلمهٔ "me" را به‌عنوان :id تطبیق می‌دهد.
+  @Get(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  async findOne(@Req() req: any, @Param('id') id: string) {
+    return this.userService.findOne(req.user, id);
+  }
 }
