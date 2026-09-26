@@ -1,6 +1,7 @@
 import { Controller, Post, Body, UseGuards, Req, Get, HttpCode } from '@nestjs/common';
 import type { Request } from 'express';
 import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterSuperAdminDto } from './dto/register-super-admin.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -11,7 +12,10 @@ import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Public()
   @Post('login')
@@ -39,10 +43,13 @@ export class AuthController {
     return this.authService.logout(dto.refreshToken, extractRequestMeta(req));
   }
 
+  // req.user این‌جا فقط همان چیزی است که JwtStrategy.validate() برگردانده: {id, email,
+  // role} — دقیقاً محموله‌ی خودِ JWT، نه رکورد کامل کاربر. برای «کی‌ام من» باید از دیتابیس
+  // خواند (fullName, marketId, customRole, permissions و ...)، وگرنه فرانت چیزی برای
+  // ساختن UI (حتی نمایش نام کاربر) در اختیار ندارد.
   @UseGuards(JwtAuthGuard)
   @Get('me')
   me(@Req() req: any) {
-    return req.user;
+    return this.userService.findMe(req.user.id);
   }
 }
-// ❌ export class AuthController {} را حذف کنید
