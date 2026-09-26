@@ -121,6 +121,23 @@ export class UserService {
     return safeUser;
   }
 
+  // برای دیدنِ کاملِ پروفایلِ یک کاربرِ دیگر (نه خودت) — همان جزئیاتی که findMe/findAll
+  // برمی‌گردانند، ولی برای یک id مشخص. ADMIN فقط کاربرانِ همان بازارِ خودش را می‌بیند؛
+  // SUPER_ADMIN هرکسی را.
+  async findOne(currentUser: { id: string }, id: string) {
+    const actor = await this.getActor(currentUser);
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { market: true, customRole: true },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    if (actor.role !== 'SUPER_ADMIN' && user.marketId !== actor.marketId) {
+      throw new ForbiddenException('دسترسی به این کاربر مجاز نیست');
+    }
+    const { passwordHash, ...safeUser } = user as any;
+    return safeUser;
+  }
+
   async findAll(query: UserQueryDto, currentUser: { id: string }) {
     const actor = await this.getActor(currentUser);
 

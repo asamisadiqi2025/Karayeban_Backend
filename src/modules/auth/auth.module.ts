@@ -7,11 +7,13 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule,
+    UserModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
