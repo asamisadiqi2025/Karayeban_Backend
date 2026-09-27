@@ -10,6 +10,9 @@ model AuditLog {
   entityId   String?     @map("entity_id") @db.Uuid
   oldData    Json?       @map("old_data")
   newData    Json?       @map("new_data")
+  // دلیلِ ویرایش/حذف — فقط برای عملیاتی پر می‌شود که کاربر توضیح داده (مثلاً تصحیحِ
+  // مبلغِ یک مصرف)؛ برای بقیهٔ رویدادها (LOGIN و ...) نال می‌ماند.
+  reason     String?     @map("reason") @db.Text
   ipAddress  String?     @map("ip_address") @db.Inet
   userAgent  String?     @map("user_agent") @db.Text
   createdAt  DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)

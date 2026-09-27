@@ -16,9 +16,6 @@ export class CreateExpenseDto {
   amount: number;
 
   @IsUUID()
-  currencyId: string;
-
-  @IsUUID()
   accountId: string;
 
   @IsOptional()

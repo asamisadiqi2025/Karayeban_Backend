@@ -10,6 +10,7 @@ export interface RecordAuditParams {
   userId?: string | null;
   oldData?: unknown;
   newData?: unknown;
+  reason?: string | null;
   ip?: string | null;
   userAgent?: string | null;
   // وقتی داخل یک $transaction صدا زده می‌شود (مثلاً هم‌زمان با ساخت/ویرایش Expense)،
@@ -38,6 +39,7 @@ export class AuditLogService {
       userId: data.userId ?? null,
       oldData: toJsonInput(data.oldData),
       newData: toJsonInput(data.newData),
+      reason: data.reason?.trim() || null,
       ipAddress: data.ip ?? null,
       userAgent: data.userAgent ?? null,
     };
