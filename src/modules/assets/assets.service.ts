@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -234,6 +235,15 @@ export class AssetsService {
     const actor = await this.getActor(currentUser);
     const asset = await this.findActiveOrThrow(id);
     this.ensureAccess(actor, asset.marketId);
+
+    const depreciationEventsCount = await this.prisma.depreciationEvent.count({
+      where: { assetId: id },
+    });
+    if (depreciationEventsCount > 0 || asset.status === 'disposed') {
+      throw new ConflictException(
+        'این دارایی سابقهٔ استهلاک یا واگذاری دارد و قابل حذف نیست؛ در عوض می‌توانید وضعیت آن را «واگذارشده» کنید',
+      );
+    }
 
     await this.prisma.asset.update({ where: { id }, data: { isDeleted: true } });
 
