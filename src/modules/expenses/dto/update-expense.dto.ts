@@ -5,6 +5,7 @@ import {
   IsPositive,
   IsString,
   IsUUID,
+  MaxLength,
 } from 'class-validator';
 
 export class UpdateExpenseDto {
@@ -16,10 +17,6 @@ export class UpdateExpenseDto {
   @IsNumber()
   @IsPositive()
   amount?: number;
-
-  @IsOptional()
-  @IsUUID()
-  currencyId?: string;
 
   @IsOptional()
   @IsUUID()
@@ -41,4 +38,11 @@ export class UpdateExpenseDto {
   @IsOptional()
   @IsString()
   receiptImage?: string;
+
+  // وقتی مبلغ یا حساب عوض می‌شود اجباری است (سرویس چک می‌کند) — تصحیحِ یک مصرفِ
+  // مالی باید یک دلیلِ مکتوب در audit trail داشته باشد، نه فقط عددِ قبل/بعد.
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  reason?: string;
 }

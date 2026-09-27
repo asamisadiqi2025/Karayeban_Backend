@@ -284,11 +284,13 @@ export class ExpensesService {
   // و ShareholdersService.createTransaction استفاده شده.
   // ==========================================================================
 
+  // ارزِ مصرف همیشه ارزِ همان حسابِ انتخابی است — این عملیات نرخ تبدیل ارز را حساب
+  // نمی‌کند، پس currencyId هیچ‌وقت یک انتخابِ مستقل نیست و از خودِ account گرفته می‌شود
+  // (نه از ورودیِ کاربر) تا ناهماهنگیِ حساب/ارز اصلاً ممکن نباشد.
   private async validateCategoryAndAccount(
     marketId: string,
     categoryId: string,
     accountId: string,
-    currencyId: string,
   ) {
     const category = await this.prisma.expenseCategory.findUnique({ where: { id: categoryId } });
     if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
@@ -300,11 +302,6 @@ export class ExpensesService {
     if (!account) throw new NotFoundException('حساب یافت نشد');
     if (account.marketId !== marketId) {
       throw new BadRequestException('حساب باید متعلق به همان بازار باشد');
-    }
-    if (account.currencyId !== currencyId) {
-      throw new BadRequestException(
-        'ارز حساب باید با ارز مصرف یکی باشد (این عملیات نرخ تبدیل ارز را حساب نمی‌کند)',
-      );
     }
     if (!account.isActive) {
       throw new ConflictException('حساب غیرفعال است');
@@ -318,8 +315,9 @@ export class ExpensesService {
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
     await ensureMarketSetupComplete(this.prisma, marketId);
-    await this.validateCategoryAndAccount(marketId, dto.categoryId, dto.accountId, dto.currencyId);
-    await ensureCurrencyEnabledForMarket(this.prisma, marketId, dto.currencyId);
+    const account = await this.validateCategoryAndAccount(marketId, dto.categoryId, dto.accountId);
+    const currencyId = account.currencyId;
+    await ensureCurrencyEnabledForMarket(this.prisma, marketId, currencyId);
 
     const amount = new Prisma.Decimal(dto.amount);
     const expenseDate = dto.expenseDate ? new Date(dto.expenseDate) : new Date();
@@ -339,7 +337,7 @@ export class ExpensesService {
           marketId,
           categoryId: dto.categoryId,
           amount,
-          currencyId: dto.currencyId,
+          currencyId,
           usdEquivalent:
             dto.usdEquivalent !== undefined ? new Prisma.Decimal(dto.usdEquivalent) : null,
           expenseDate,
@@ -354,7 +352,7 @@ export class ExpensesService {
         data: {
           marketId,
           accountId: dto.accountId,
-          currencyId: dto.currencyId,
+          currencyId,
           direction: 'OUT',
           amount,
           balanceAfter: updatedAccount.balance,
@@ -651,19 +649,26 @@ export class ExpensesService {
 
     const nextCategoryId = dto.categoryId ?? expense.categoryId;
     const nextAccountId = dto.accountId ?? expense.accountId;
-    const nextCurrencyId = dto.currencyId ?? expense.currencyId;
     const nextAmount = dto.amount !== undefined ? new Prisma.Decimal(dto.amount) : expense.amount;
 
-    const moneyChanged =
-      dto.amount !== undefined || dto.accountId !== undefined || dto.currencyId !== undefined;
+    const moneyChanged = dto.amount !== undefined || dto.accountId !== undefined;
 
+    // تصحیحِ مبلغ/حسابِ یک مصرفِ ثبت‌شده باید یک دلیلِ مکتوب داشته باشد — برای
+    // audit trail، نه فقط عددِ قبل/بعد.
+    if (moneyChanged && !dto.reason?.trim()) {
+      throw new BadRequestException('برای تغییرِ مبلغ یا حسابِ مصرف، ذکرِ دلیل الزامی است');
+    }
+
+    // ارز همیشه از رویِ حسابِ (جدید/فعلیِ) مصرف مشتق می‌شود، نه از ورودیِ کاربر — اگر
+    // حساب عوض نشده باشد، ارز هم همان ارزِ قبلیِ مصرف باقی می‌ماند.
+    let nextCurrencyId = expense.currencyId;
     if (dto.categoryId !== undefined || moneyChanged) {
-      await this.validateCategoryAndAccount(
+      const account = await this.validateCategoryAndAccount(
         expense.marketId,
         nextCategoryId,
         nextAccountId,
-        nextCurrencyId,
       );
+      nextCurrencyId = account.currencyId;
     }
 
     const data: Record<string, unknown> = {};
@@ -686,6 +691,7 @@ export class ExpensesService {
           userId: actor.id,
           oldData: expense,
           newData: updated,
+          reason: dto.reason,
           ip: meta.ip,
           userAgent: meta.userAgent,
         });
@@ -697,6 +703,21 @@ export class ExpensesService {
     // مبلغ/حساب/ارز عوض شده: اول اثر قبلی برگردانده می‌شود، بعد اثر جدید اعمال می‌شود —
     // همه در یک تراکنش تا حساب هیچ‌وقت در حالت میانه (فقط برگشت‌خورده) دیده نشود.
     return this.prisma.$transaction(async (tx) => {
+      // قفلِ خوش‌بینانه: قبل از هر تغییری در موجودیِ حساب، چک می‌کنیم که این مصرف از
+      // لحظهٔ خواندنِ اولیه (بالای متد، بیرونِ تراکنش) توسط ویرایشِ هم‌زمانِ دیگری تغییر
+      // نکرده باشد. بدونِ این چک، دو ویرایشِ هم‌زمان هر دو مبلغِ قدیمیِ یکسان را به حساب
+      // برمی‌گردانند و موجودی خراب می‌شود (یکی از آن مبلغ‌ها واقعاً دیگر معتبر نیست).
+      // اگر مصرف هم‌زمان تغییر کرده باشد، count=0 می‌شود و خطا می‌دهیم به‌جای خرابکاریِ خاموش.
+      const guarded = await tx.expense.updateMany({
+        where: { id, amount: expense.amount, accountId: expense.accountId },
+        data: { ...data, amount: nextAmount, accountId: nextAccountId, currencyId: nextCurrencyId },
+      });
+      if (guarded.count === 0) {
+        throw new ConflictException(
+          'این مصرف هم‌زمان توسط کاربرِ دیگری ویرایش شده — صفحه را رفرش و دوباره تلاش کنید',
+        );
+      }
+
       await tx.account.update({
         where: { id: expense.accountId },
         data: { balance: { increment: expense.amount } },
@@ -711,10 +732,7 @@ export class ExpensesService {
       }
       const updatedAccount = await tx.account.findUniqueOrThrow({ where: { id: nextAccountId } });
 
-      data.amount = nextAmount;
-      data.accountId = nextAccountId;
-      data.currencyId = nextCurrencyId;
-      const updatedExpense = await tx.expense.update({ where: { id }, data });
+      const updatedExpense = await tx.expense.findUniqueOrThrow({ where: { id } });
 
       await tx.ledgerEntry.update({
         where: { expenseId: id },
@@ -737,6 +755,7 @@ export class ExpensesService {
         userId: actor.id,
         oldData: expense,
         newData: updatedExpense,
+        reason: dto.reason,
         ip: meta.ip,
         userAgent: meta.userAgent,
       });
