@@ -15,7 +15,11 @@ model Warehouse {
   inventoryTransactions InventoryTransaction[]
   assets                Asset[]
 
-  @@unique([marketId, name])
+  // یکتاییِ نام فقط بین گدام‌های فعال (isDeleted=false) با یک ایندکس شرطی در سطح
+  // دیتابیس اعمال می‌شود (ن.ک. migration «warehouse_partial_unique_active_name»)،
+  // نه با @@unique معمولی — وگرنه نامِ یک گدامِ حذف‌شده برای همیشه قابل استفادهٔ
+  // مجدد نمی‌ماند.
+  @@index([marketId, name])
   @@index([marketId])
   @@map("warehouses")
 }
