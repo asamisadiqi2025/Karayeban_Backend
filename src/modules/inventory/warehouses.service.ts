@@ -71,11 +71,25 @@ export class WarehousesService {
 
     await ensureMarketSetupComplete(this.prisma, marketId);
 
+    const name = dto.name.trim();
+
+    // چک اولیهٔ سطح اپلیکیشن فقط بین گدام‌های فعال — گدامِ حذف‌شده (isDeleted=true)
+    // نباید مانع استفادهٔ دوبارهٔ نامش شود. ایندکس شرطیِ دیتابیس (migration
+    // «warehouse_partial_unique_active_name») هم همین قاعده را برای شرایط هم‌زمانی تضمین می‌کند.
+    const existing = await this.prisma.warehouse.findFirst({
+      where: { marketId, name, isDeleted: false },
+    });
+    if (existing) {
+      throw new ConflictException(
+        'گدامی با همین نام در این بازار قبلاً ثبت شده است',
+      );
+    }
+
     try {
       return await this.prisma.warehouse.create({
         data: {
           marketId,
-          name: dto.name.trim(),
+          name,
           details: dto.details?.trim() || null,
           location: dto.location?.trim() || null,
         },
@@ -142,7 +156,25 @@ export class WarehousesService {
     this.ensureAccess(actor, warehouse.marketId);
 
     const data: Record<string, unknown> = {};
-    if (dto.name !== undefined) data.name = dto.name.trim();
+    if (dto.name !== undefined) {
+      const name = dto.name.trim();
+      if (name !== warehouse.name) {
+        const existing = await this.prisma.warehouse.findFirst({
+          where: {
+            marketId: warehouse.marketId,
+            name,
+            isDeleted: false,
+            id: { not: id },
+          },
+        });
+        if (existing) {
+          throw new ConflictException(
+            'گدامی با همین نام در این بازار قبلاً ثبت شده است',
+          );
+        }
+      }
+      data.name = name;
+    }
     if (dto.location !== undefined)
       data.location = dto.location?.trim() || null;
     if (dto.details !== undefined) data.details = dto.details?.trim() || null;
