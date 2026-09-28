@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -43,19 +44,23 @@ export class ExpensesController {
   }
 
   @Get('categories/:id')
-  findOneCategory(@Req() req: any, @Param('id') id: string) {
+  findOneCategory(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.findOneCategory(req.user, id);
   }
 
   @Patch('categories/:id')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
-  updateCategory(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateExpenseCategoryDto) {
+  updateCategory(
+    @Req() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateExpenseCategoryDto,
+  ) {
     return this.expensesService.updateCategory(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete('categories/:id')
   @Roles('SUPER_ADMIN', 'ADMIN')
-  removeCategory(@Req() req: any, @Param('id') id: string) {
+  removeCategory(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.removeCategory(req.user, id, extractRequestMeta(req));
   }
 
@@ -85,19 +90,23 @@ export class ExpensesController {
   }
 
   @Get(':id')
-  findOneExpense(@Req() req: any, @Param('id') id: string) {
+  findOneExpense(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.findOneExpense(req.user, id);
   }
 
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
-  updateExpense(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateExpenseDto) {
+  updateExpense(
+    @Req() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateExpenseDto,
+  ) {
     return this.expensesService.updateExpense(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
-  removeExpense(@Req() req: any, @Param('id') id: string) {
+  removeExpense(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
     return this.expensesService.removeExpense(req.user, id, extractRequestMeta(req));
   }
 }
