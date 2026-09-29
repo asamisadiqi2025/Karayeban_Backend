@@ -19,6 +19,7 @@ import { jalaliMonthStart, jalaliMonthEnd } from '../../common/utils/jalali-date
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
 import { ElectricityBillQueryDto } from './dto/electricity-bill-query.dto';
 import { CreateElectricityPaymentDto } from './dto/create-electricity-payment.dto';
+import { CreateElectricityOpeningPaymentDto } from './dto/create-electricity-opening-payment.dto';
 import { ElectricityPaymentQueryDto } from './dto/electricity-payment-query.dto';
 import { ElectricityDebtQueryDto } from './dto/electricity-debt-query.dto';
 import { CreateElectricityBillingCycleDto } from './dto/create-electricity-billing-cycle.dto';
@@ -860,6 +861,74 @@ export class ElectricityService {
                   contract.securityDepositRemaining ?? new Prisma.Decimal(0),
               }
             : null,
+        },
+        meta,
+      );
+    });
+  }
+
+  // پرداختِ یک‌جای بدهیِ برقِ تاریخی (قبل از راه‌اندازیِ سیستم) — دقیقاً معادلِ
+  // openingRentPaid در ContractsService.create: یک مبلغ کلی می‌گیرد و با isOpeningEntry=true
+  // به recordPayment می‌سپارد تا FIFO روی بل‌های بازِ همین دوکان (که با isOpeningEntry از
+  // bills/bulk ساخته شده‌اند) تقسیم شود — بدون لمسِ account/ledger (recordPayment خودش این
+  // را برای isOpeningEntry رد می‌کند)، پس مسیر زندهٔ createPayment دست‌نخورده می‌ماند.
+  async recordOpeningPayment(
+    currentUser: { id: string },
+    dto: CreateElectricityOpeningPaymentDto,
+    meta: RequestMeta = NO_REQUEST_META,
+  ) {
+    const actor = await this.getActor(currentUser);
+
+    const shop = await this.prisma.shop.findUnique({
+      where: { id: dto.shopId },
+    });
+    if (!shop) throw new NotFoundException('دوکان یافت نشد');
+    this.ensureAccess(actor, shop.marketId, 'دسترسی به این دوکان مجاز نیست');
+
+    const tenant = await this.prisma.tenant.findUnique({
+      where: { id: dto.tenantId },
+    });
+    if (!tenant) throw new NotFoundException('مستأجر یافت نشد');
+    if (tenant.marketId !== shop.marketId) {
+      throw new BadRequestException('مستأجر باید متعلق به همان بازار باشد');
+    }
+
+    // ارز از روی بل‌های بازِ همین دوکان — همان الگوی createPayment وقتی billId داده نشده.
+    const openBills = await this.prisma.electricityBill.findMany({
+      where: {
+        tenantId: dto.tenantId,
+        shopId: dto.shopId,
+        status: { in: OPEN_STATUSES },
+      },
+      take: 1,
+    });
+    if (!openBills[0]) {
+      throw new BadRequestException(
+        'هیچ بل بازی برای این دوکان وجود ندارد — ابتدا بل‌های تاریخی را با bills/bulk (isOpeningEntry) ثبت کنید',
+      );
+    }
+
+    const amount = new Prisma.Decimal(dto.amount);
+    const paymentDate = dto.paymentDate
+      ? new Date(dto.paymentDate)
+      : new Date();
+
+    return this.prisma.$transaction(async (tx) => {
+      return this.recordPayment(
+        tx,
+        actor,
+        {
+          marketId: shop.marketId,
+          shopId: dto.shopId,
+          tenantId: dto.tenantId,
+          currencyId: openBills[0].currencyId,
+          amount,
+          paymentDate,
+          paymentMethod: 'cash',
+          source: PaymentSourceType.BANK,
+          isOpeningEntry: true,
+          notes: dto.notes ?? 'پرداخت‌های برق قبل از راه‌اندازی سیستم',
+          receiptNumber: dto.receiptNumber,
         },
         meta,
       );

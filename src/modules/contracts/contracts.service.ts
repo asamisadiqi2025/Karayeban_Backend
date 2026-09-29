@@ -8,6 +8,7 @@ import {
 import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   ContractStatus,
+  MeterStatus,
   Prisma,
   PaymentSourceType,
   RentChargeStatus,
@@ -184,6 +185,31 @@ export class ContractsService {
       securityDepositAccount = account;
     }
 
+    // نقطهٔ صفرِ تازه برای کنتورِ این دوکان — برای مستأجری که وسطِ یک دورهٔ میترخوانی
+    // می‌آید (مثلاً دوکان چند روز/هفته خالی بوده). اگر ندهید، همه‌چیز مثل قبل است.
+    let meterCheckpoint: { id: string; reading: Prisma.Decimal } | null = null;
+    if (dto.meterId) {
+      const meter = await this.prisma.electricityMeter.findUnique({
+        where: { id: dto.meterId },
+      });
+      if (!meter) throw new NotFoundException('کنتور یافت نشد');
+      if (meter.marketId !== marketId) {
+        throw new BadRequestException('کنتور باید متعلق به همان بازار باشد');
+      }
+      if (meter.shopId && meter.shopId !== dto.shopId) {
+        throw new BadRequestException(
+          'این کنتور به دوکان دیگری متصل است — اول با PATCH /meters/:id آن را به این دوکان منتقل کنید',
+        );
+      }
+      const reading = new Prisma.Decimal(dto.meterReadingOnStart!);
+      if (meter.lastReading && reading.lessThan(meter.lastReading)) {
+        throw new BadRequestException(
+          `درجهٔ واردشده (${reading.toString()}) نمی‌تواند از آخرین درجهٔ ثبت‌شدهٔ کنتور (${meter.lastReading.toString()}) کمتر باشد — اگر کنتور تعویض شده، اول از merge کنتور استفاده کنید`,
+        );
+      }
+      meterCheckpoint = { id: meter.id, reading };
+    }
+
     const rent = new Prisma.Decimal(dto.rent);
     const now = new Date();
     const isStarted = startDate <= now;
@@ -228,6 +254,11 @@ export class ContractsService {
         currencyId: dto.currencyId,
       });
 
+      // بدون این، تا اولین پرداخت/تعدیل، RentDebt اصلاً ساخته نمی‌شود و GET /rent/debts
+      // یک صفرِ ساختگی (پیش‌فرضِ نبودِ رکورد) برمی‌گرداند — در حالی‌که فاکتورهای واقعی همین
+      // الان ساخته شده‌اند.
+      await this.rentService.recomputeRentDebt(tx, dto.tenantId);
+
       await tx.shop.update({
         where: { id: dto.shopId },
         data: {
@@ -236,6 +267,21 @@ export class ContractsService {
           currentTenantId: dto.tenantId,
         },
       });
+
+      if (meterCheckpoint) {
+        // اگر کنتور موقع خالی‌بودنِ دوکان inactive شده بود، همین‌جا که مستأجرِ جدید واقعاً
+        // وصل می‌شود دوباره active می‌شود — وگرنه این هم مثل خودِ lastReading یک قدمِ
+        // دستیِ جداگانه و فراموش‌شدنی می‌ماند.
+        await tx.electricityMeter.update({
+          where: { id: meterCheckpoint.id },
+          data: {
+            shopId: dto.shopId,
+            status: MeterStatus.active,
+            lastReading: meterCheckpoint.reading,
+            lastReadingDate: startDate,
+          },
+        });
+      }
 
       if (securityDepositAccount) {
         const depositAmount = new Prisma.Decimal(dto.securityDeposit!);
@@ -454,15 +500,18 @@ export class ContractsService {
     }
 
     const terminationDate = new Date(dto.terminationDate);
+    const prorate = dto.prorate ?? true;
 
     return this.prisma.$transaction(async (tx) => {
-      const spanningCharge = await tx.rentCharges.findFirst({
-        where: {
-          contractId: id,
-          periodStart: { lte: terminationDate },
-          periodEnd: { gt: terminationDate },
-        },
-      });
+      const spanningCharge = prorate
+        ? await tx.rentCharges.findFirst({
+            where: {
+              contractId: id,
+              periodStart: { lte: terminationDate },
+              periodEnd: { gt: terminationDate },
+            },
+          })
+        : null;
 
       if (spanningCharge) {
         const actualDays = Math.round(
@@ -658,6 +707,22 @@ export class ContractsService {
         'فقط قرارداد فعال یا تمام‌شده قابل تمدید است',
       );
     }
+
+    // تمدیدِ زودهنگام (مثلاً ماه‌ها قبل از پایان) قرارداد فعلی را همین الان expired می‌کند
+    // در حالی‌که هنوز فاکتورهای واقعی و بازِ زیادی رویش مانده — این فاکتورها به‌خاطر renew
+    // لغو نمی‌شوند (بر خلاف terminate)، پس زیر یک قراردادِ ظاهراً «تمام‌شده» معلق می‌مانند.
+    // فقط از ۳۰ روز مانده به پایان (یا بعد از پایان) اجازه می‌دهیم.
+    const RENEW_WINDOW_DAYS = 30;
+    if (contract.status === ContractStatus.active) {
+      const daysUntilEnd = Math.ceil(
+        (contract.endDate!.getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+      );
+      if (daysUntilEnd > RENEW_WINDOW_DAYS) {
+        throw new ConflictException(
+          `این قرارداد هنوز ${daysUntilEnd} روز تا پایانش مانده — تمدید فقط از ${RENEW_WINDOW_DAYS} روز مانده به پایان (یا بعد از آن) مجاز است`,
+        );
+      }
+    }
     if (
       !contract.shopId ||
       !contract.tenantId ||
@@ -722,6 +787,10 @@ export class ContractsService {
     const rent = dto.rent ? new Prisma.Decimal(dto.rent) : effectiveRent;
     const carriedDeposit =
       contract.securityDepositRemaining ?? new Prisma.Decimal(0);
+    // همان قاعدهٔ create(): اگر newStartDate هنوز نرسیده (تمدید زودهنگام، تا ۳۰ روز قبل
+    // مجاز است)، قرارداد جدید draft می‌شود، نه active — تا وقتی کرونِ activateStartedContracts
+    // خودش سر تاریخ آن را فعال کند.
+    const isNewStarted = newStartDate <= new Date();
 
     return this.prisma.$transaction(async (tx) => {
       await tx.contract.update({
@@ -750,7 +819,7 @@ export class ContractsService {
           rent,
           currencyId: contract.currencyId,
           notes: dto.notes?.trim() || null,
-          status: ContractStatus.active,
+          status: isNewStarted ? ContractStatus.active : ContractStatus.draft,
           securityDeposit: contract.securityDeposit ?? 0,
           securityDepositRemaining: carriedDeposit,
           securityDepositAccountId: contract.securityDepositAccountId,
@@ -777,7 +846,7 @@ export class ContractsService {
         await tx.shop.update({
           where: { id: newShopId },
           data: {
-            status: 'rented',
+            status: isNewStarted ? 'rented' : 'pending',
             currentContractId: newContract.id,
             currentTenantId: contract.tenantId,
           },
@@ -786,7 +855,7 @@ export class ContractsService {
         await tx.shop.update({
           where: { id: newShopId },
           data: {
-            status: 'rented',
+            status: isNewStarted ? 'rented' : 'pending',
             currentContractId: newContract.id,
             currentTenantId: contract.tenantId,
           },
@@ -1141,5 +1210,32 @@ export class ContractsService {
       where: { status: ContractStatus.active, endDate: { lt: new Date() } },
       data: { status: ContractStatus.expired },
     });
+  }
+
+  // برعکسِ flagExpiredContracts — قراردادهای draft (تاریخ شروعشان در آینده بود، یا از
+  // یک تمدیدِ زودهنگام آمده‌اند) را وقتی startDate واقعاً رسید، خودکار active می‌کند و
+  // دوکانِ مربوطه را rented می‌گذارد. بدون این، هیچ‌چیز دیگری هیچ‌وقت draft را عوض نمی‌کرد.
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async activateStartedContracts() {
+    const started = await this.prisma.contract.findMany({
+      where: { status: ContractStatus.draft, startDate: { lte: new Date() } },
+      select: { id: true, shopId: true },
+    });
+    if (started.length === 0) return;
+
+    await this.prisma.contract.updateMany({
+      where: { id: { in: started.map((c) => c.id) } },
+      data: { status: ContractStatus.active },
+    });
+
+    const shopIds = started
+      .map((c) => c.shopId)
+      .filter((shopId): shopId is string => !!shopId);
+    if (shopIds.length > 0) {
+      await this.prisma.shop.updateMany({
+        where: { id: { in: shopIds } },
+        data: { status: 'rented' },
+      });
+    }
   }
 }
