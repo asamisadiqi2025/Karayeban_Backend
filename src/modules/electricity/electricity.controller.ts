@@ -12,6 +12,7 @@ import { ElectricityService } from './electricity.service';
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
 import { ElectricityBillQueryDto } from './dto/electricity-bill-query.dto';
 import { CreateElectricityPaymentDto } from './dto/create-electricity-payment.dto';
+import { CreateElectricityOpeningPaymentDto } from './dto/create-electricity-opening-payment.dto';
 import { ElectricityPaymentQueryDto } from './dto/electricity-payment-query.dto';
 import { ElectricityDebtQueryDto } from './dto/electricity-debt-query.dto';
 import { CreateElectricityBillingCycleDto } from './dto/create-electricity-billing-cycle.dto';
@@ -67,6 +68,19 @@ export class ElectricityController {
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createPayment(@Req() req: any, @Body() dto: CreateElectricityPaymentDto) {
     return this.electricityService.createPayment(req.user, dto, extractRequestMeta(req));
+  }
+
+  @Post('payments/opening')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  recordOpeningPayment(
+    @Req() req: any,
+    @Body() dto: CreateElectricityOpeningPaymentDto,
+  ) {
+    return this.electricityService.recordOpeningPayment(
+      req.user,
+      dto,
+      extractRequestMeta(req),
+    );
   }
 
   @Post('payments/bulk')

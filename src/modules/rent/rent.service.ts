@@ -198,12 +198,20 @@ export class RentService {
   }
 
   // مجموع بدهیِ بازِ کرایهٔ یک قرارداد مشخص — برای تسویه (ContractsService.settle) لازم است.
+  // فقط فاکتورهایی که periodStart شان رسیده حساب می‌شوند (همان تعریفِ totalDebt در
+  // recomputeRentDebt) — وگرنه تسویهٔ یک قراردادِ هنوز‌فعال (بدون فسخِ قبلی) کل کرایهٔ
+  // باقی‌ماندهٔ تا آخر قرارداد را هم طلب می‌کرد، نه فقط چیزی که واقعاً تا امروز سررسید شده.
   async getOpenDebtForContract(
     tx: Prisma.TransactionClient,
     contractId: string,
   ): Promise<Prisma.Decimal> {
+    const now = new Date();
     const openCharges = await tx.rentCharges.findMany({
-      where: { contractId, status: { in: OPEN_STATUSES } },
+      where: {
+        contractId,
+        status: { in: OPEN_STATUSES },
+        periodStart: { lte: now },
+      },
     });
     return openCharges.reduce(
       (s, c) => s.add(c.remainingAmount),
@@ -247,7 +255,12 @@ export class RentService {
     });
 
     const now = new Date();
-    const totalDebt = openCharges.reduce(
+    // totalDebt = «چقدر تا امروز باید پرداخته می‌شد» — کرایه از شروعِ همان دوره سررسید
+    // می‌شود (پیش‌پرداخت)، نه پایانش. فاکتورهایی که periodStart شان هنوز نرسیده (ماه‌های
+    // آیندهٔ از قبل تولیدشدهٔ تا آخر قرارداد) عمداً کنار گذاشته می‌شوند — وگرنه یک قرارداد
+    // تازه‌ساز که هنوز حتی یک ماه هم نگذشته، انگار کرایهٔ کل سال را بدهکار نشان می‌داد.
+    const dueCharges = openCharges.filter((c) => c.periodStart <= now);
+    const totalDebt = dueCharges.reduce(
       (s, c) => s.add(c.remainingAmount),
       new Prisma.Decimal(0),
     );

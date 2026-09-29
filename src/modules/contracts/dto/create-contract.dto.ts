@@ -6,6 +6,7 @@ import {
   IsPositive,
   IsString,
   IsUUID,
+  Min,
   ValidateIf,
 } from 'class-validator';
 
@@ -67,4 +68,17 @@ export class CreateContractDto {
   @IsOptional()
   @IsUUID()
   marketId?: string;
+
+  // برای دوکانی که کنتور برق دارد و مستأجرِ تازه وسطِ یک دورهٔ میترخوانی می‌آید (مثلاً
+  // دوکان چند روز خالی بوده): همین لحظهٔ ساختِ قرارداد، meter.lastReading را به این عدد
+  // قفل می‌کند تا اولین بلِ آیندهٔ این دوکان از همین‌جا حساب شود، نه از رقم قدیمیِ
+  // به‌جامانده از مستأجر/دورهٔ قبلی. اختیاری — اگر یکی را بفرستید، آن‌یکی هم الزامی می‌شود.
+  @ValidateIf((dto: CreateContractDto) => dto.meterReadingOnStart !== undefined)
+  @IsUUID()
+  meterId?: string;
+
+  @ValidateIf((dto: CreateContractDto) => dto.meterId !== undefined)
+  @IsNumber()
+  @Min(0)
+  meterReadingOnStart?: number;
 }
