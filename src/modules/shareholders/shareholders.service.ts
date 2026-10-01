@@ -32,7 +32,7 @@ type CurrencyTotals = {
 @Injectable()
 export class ShareholdersService {
   private static readonly SORT_FIELDS = ['fullName', 'createdAt'] as const;
-  private static readonly SEARCH_FIELDS = ['fullName', 'contact', 'idNumber'] as const;
+  private static readonly SEARCH_FIELDS = ['fullName', 'fatherName', 'grandfatherName', 'contact', 'idNumber'] as const;
   private static readonly TRANSACTION_SORT_FIELDS = [
     'transactionDate',
     'amount',
@@ -160,6 +160,8 @@ export class ShareholdersService {
         data: {
           marketId,
           fullName: dto.fullName.trim(),
+          fatherName: dto.fatherName?.trim() || null,
+          grandfatherName: dto.grandfatherName?.trim() || null,
           contact: dto.contact?.trim() || null,
           idNumber: idNumber ?? null,
         },
@@ -234,6 +236,8 @@ export class ShareholdersService {
 
     const data: Record<string, unknown> = {};
     if (dto.fullName !== undefined) data.fullName = dto.fullName.trim();
+    if (dto.fatherName !== undefined) data.fatherName = dto.fatherName?.trim() || null;
+    if (dto.grandfatherName !== undefined) data.grandfatherName = dto.grandfatherName?.trim() || null;
     if (dto.contact !== undefined) data.contact = dto.contact?.trim() || null;
     if (dto.idNumber !== undefined) data.idNumber = dto.idNumber?.trim() || null;
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
@@ -470,7 +474,7 @@ export class ShareholdersService {
       page: query.page,
       limit: query.limit,
       include: {
-        shareholder: { select: { id: true, fullName: true } },
+        shareholder: { select: { id: true, fullName: true, fatherName: true, grandfatherName: true } },
         account: { select: { id: true, name: true, type: true } },
       },
     });
@@ -494,7 +498,7 @@ export class ShareholdersService {
 
     const shareholders = await this.prisma.shareholder.findMany({
       where: { marketId },
-      select: { id: true, fullName: true, isActive: true },
+      select: { id: true, fullName: true, fatherName: true, grandfatherName: true, isActive: true },
       orderBy: { fullName: 'asc' },
     });
     const shareholderIds = shareholders.map((s) => s.id);
@@ -596,6 +600,8 @@ export class ShareholdersService {
       return {
         shareholderId: s.id,
         fullName: s.fullName,
+        fatherName: s.fatherName,
+        grandfatherName: s.grandfatherName,
         isActive: s.isActive,
         currentPercentage,
         byCurrency: toCurrencyTotals(totalsByShareholder.get(s.id) ?? new Map()),
