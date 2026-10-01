@@ -1,6 +1,7 @@
 model Market {
   id                     String   @id @default(uuid()) @db.Uuid
   name                   String   @db.VarChar(200)
+  nameEn                 String?  @map("name_en") @db.VarChar(200)
   subdomain              String   @unique @db.VarChar(63)
   logo                   String?  @db.Text
   address                String?  @db.Text
@@ -12,10 +13,16 @@ model Market {
   // نرخ برق (پول به‌ازای هر واحد مصرف) — یک عدد ثابت برای کل مارکت، همهٔ کنتورها از همین
   // استفاده می‌کنند؛ فقط از پروفایل مارکت قابل تغییر است (نیازی به وارد کردنش هر بار نیست).
   electricityRatePerUnit Decimal  @default(18.5) @map("electricity_rate_per_unit") @db.Decimal(18, 4)
+  // ارزِ همین نرخِ برق — عمداً جدا از baseCurrency، چون در عمل ممکن است با هم فرق کنند
+  // (مثلاً ارز پایهٔ مارکت دالر باشد ولی برق همیشه افغانی حساب شود). بل‌های زنده (نه
+  // isOpeningEntry) ارزشان را همیشه از همین فیلد می‌خوانند، نه از ورودیِ آزادِ کاربر —
+  // تا اشتباهِ دالر/افغانی اصلاً ممکن نباشد. برخلاف baseCurrency، این یک‌بار قفل نمی‌شود.
+  electricityRateCurrencyId String? @map("electricity_rate_currency_id") @db.Uuid
   createdAt              DateTime @default(now()) @db.Timestamp(6)
   updatedAt              DateTime @updatedAt @db.Timestamp(6)
 
-  baseCurrency Currency? @relation(fields: [baseCurrencyId], references: [id], onDelete: SetNull)
+  baseCurrency            Currency? @relation(fields: [baseCurrencyId], references: [id], onDelete: SetNull)
+  electricityRateCurrency Currency? @relation("MarketElectricityRateCurrency", fields: [electricityRateCurrencyId], references: [id], onDelete: SetNull)
 
   customRoles              CustomRole[]
   marketCurrencies         MarketCurrency[]

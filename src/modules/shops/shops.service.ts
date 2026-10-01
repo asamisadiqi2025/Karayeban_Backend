@@ -10,6 +10,7 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { CreateShopDto } from './dto/create-shop.dto';
+import { CreateShopsBulkDto } from './dto/create-shops-bulk.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
 import { ShopQueryDto } from './dto/shop-query.dto';
 import { ShopOccupancyQueryDto } from './dto/shop-occupancy-query.dto';
@@ -110,6 +111,24 @@ export class ShopsService {
       }
       throw e;
     }
+  }
+
+  // برای راه‌اندازیِ اولیهٔ یک مارکت با ده‌ها دوکانِ از قبل موجود — هر آیتم با فراخوانیِ
+  // مستقلِ create پردازش می‌شود (تراکنش خودش را دارد)، پس خطای یک دوکان (مثلاً شمارهٔ
+  // تکراری) بقیه را متوقف نمی‌کند؛ نتیجه در created/failed برمی‌گردد.
+  async createBulk(currentUser: { id: string }, dto: CreateShopsBulkDto) {
+    const created: Awaited<ReturnType<ShopsService['create']>>[] = [];
+    const failed: { index: number; error: string }[] = [];
+
+    for (let i = 0; i < dto.shops.length; i++) {
+      try {
+        created.push(await this.create(currentUser, dto.shops[i]));
+      } catch (e: any) {
+        failed.push({ index: i, error: e?.message ?? 'خطای ناشناخته' });
+      }
+    }
+
+    return { created, failed };
   }
 
   async findAll(currentUser: { id: string }, query: ShopQueryDto) {

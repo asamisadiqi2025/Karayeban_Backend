@@ -12,6 +12,12 @@ export class CreateMarketDto {
   @IsString()
   name: string;
 
+  // نام انگلیسی مارکت (اختیاری)
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  nameEn?: string;
+
   @IsString()
   address: string;
 

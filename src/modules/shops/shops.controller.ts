@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
+import { CreateShopsBulkDto } from './dto/create-shops-bulk.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
 import { ShopQueryDto } from './dto/shop-query.dto';
 import { ShopOccupancyQueryDto } from './dto/shop-occupancy-query.dto';
@@ -28,6 +29,12 @@ export class ShopsController {
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateShopDto) {
     return this.shopsService.create(req.user, dto);
+  }
+
+  @Post('bulk')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  createBulk(@Req() req: any, @Body() dto: CreateShopsBulkDto) {
+    return this.shopsService.createBulk(req.user, dto);
   }
 
   @Get()

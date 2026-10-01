@@ -759,17 +759,34 @@ export class AccountsService {
       };
     });
 
+    const page = Math.max(1, Math.floor(query.page ?? 1));
+    const limit = Math.min(100, Math.max(1, Math.floor(query.limit ?? 20)));
+    const total = transactions.length;
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const start = (page - 1) * limit;
+    const pagedTransactions = transactions.slice(start, start + limit);
+
     return {
       accountId: account.id,
       accountName: account.name,
       currencyId: account.currencyId,
       from: query.from,
       to: query.to,
+      // این سه رقم همیشه روی کلِ بازه‌اند، نه فقط صفحهٔ فعلی — صفحه‌بندی فقط تعداد
+      // ردیف‌های transactions را کم می‌کند، جمع‌های واقعی را دست‌نمی‌زند.
       openingBalance,
       totalIn,
       totalOut,
       closingBalance: runningBalance,
-      transactions,
+      transactions: pagedTransactions,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
     };
   }
 }
