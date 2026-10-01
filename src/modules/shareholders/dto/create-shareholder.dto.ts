@@ -14,6 +14,16 @@ export class CreateShareholderDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(100)
+  fatherName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  grandfatherName?: string;
+
+  @IsOptional()
+  @IsString()
   @MaxLength(30)
   contact?: string;
 
