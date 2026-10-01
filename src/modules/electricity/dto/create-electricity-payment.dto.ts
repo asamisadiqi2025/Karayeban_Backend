@@ -41,6 +41,13 @@ export class CreateElectricityPaymentDto {
   @IsUUID()
   accountId?: string;
 
+  // اختیاری — نرخِ دستیِ همین پرداخت (۱ واحد ارز بل = X واحد ارز پایه). اگر نیاید،
+  // آخرین نرخ ثبت‌شدهٔ مارکت استفاده می‌شود. نرخ سیستم (تنظیمات) هرگز با این تغییر نمی‌کند.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  exchangeRate?: number;
+
   @IsOptional()
   @IsString()
   notes?: string;

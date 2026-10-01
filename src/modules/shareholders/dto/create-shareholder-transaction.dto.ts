@@ -21,6 +21,13 @@ export class CreateShareholderTransactionDto {
   @IsUUID()
   accountId: string;
 
+  // اختیاری — نرخِ دستیِ همین تراکنش (۱ واحد ارز حساب = X واحد ارز پایه). اگر نیاید،
+  // آخرین نرخ ثبت‌شدهٔ مارکت استفاده می‌شود. نرخ سیستم هرگز با این تغییر نمی‌کند.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  exchangeRate?: number;
+
   @IsOptional()
   @IsDateString()
   transactionDate?: string;

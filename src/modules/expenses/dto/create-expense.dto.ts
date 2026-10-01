@@ -31,6 +31,13 @@ export class CreateExpenseDto {
   @IsPositive()
   usdEquivalent?: number;
 
+  // اختیاری — نرخِ دستیِ همین مصرف (۱ واحد ارز حساب = X واحد ارز پایه). اگر نیاید،
+  // آخرین نرخ ثبت‌شدهٔ مارکت استفاده می‌شود. نرخ سیستم (تنظیمات) هرگز با این تغییر نمی‌کند.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  exchangeRate?: number;
+
   @IsOptional()
   @IsString()
   receiptImage?: string;

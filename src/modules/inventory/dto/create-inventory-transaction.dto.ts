@@ -43,6 +43,13 @@ export class CreateInventoryTransactionDto {
   @IsUUID()
   accountId?: string;
 
+  // فقط PURCHASE/SALE — نرخِ دستیِ همین تراکنش (۱ واحد ارز کالا = X واحد ارز پایه). اگر
+  // نیاید، آخرین نرخ ثبت‌شدهٔ مارکت استفاده می‌شود. نرخ سیستم هرگز با این تغییر نمی‌کند.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  exchangeRate?: number;
+
   @IsOptional()
   @IsDateString()
   transactionDate?: string;

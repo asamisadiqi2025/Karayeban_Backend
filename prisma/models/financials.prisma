@@ -133,6 +133,8 @@ model ElectricityPayment {
   tenantId       String            @map("tenant_id") @db.Uuid
   amount         Decimal           @db.Decimal(18, 4)
   currencyId     String            @map("currency_id") @db.Uuid
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
   paymentDate    DateTime          @map("payment_date") @db.Timestamptz(6)
   paymentMethod  PaymentMethod     @map("payment_method")
   accountId      String?           @map("account_id") @db.Uuid

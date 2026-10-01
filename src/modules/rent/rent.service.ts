@@ -26,6 +26,7 @@ import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
 import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 
 const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
@@ -343,10 +344,19 @@ export class RentService {
       notes?: string | null;
       receiptNumber?: string | null;
       isOpeningEntry: boolean;
+      exchangeRate?: number | null;
     },
     meta: RequestMeta = NO_REQUEST_META,
   ) {
     let accountBalanceAfter: Prisma.Decimal | null = null;
+
+    const rate = await resolveRateToBase(tx, {
+      marketId: params.contract.marketId,
+      currencyId: params.contract.currencyId,
+      date: params.paymentDate,
+      amount: params.amount,
+      manualRate: params.exchangeRate,
+    });
 
     if (params.source === PaymentSourceType.SECURITY_DEPOSIT) {
       const remaining =
@@ -383,6 +393,8 @@ export class RentService {
         year,
         amount: params.amount,
         currencyId: params.contract.currencyId,
+        exchangeRate: rate.exchangeRate,
+        baseCurrencyAmount: rate.baseCurrencyAmount,
         paymentDate: params.paymentDate,
         paymentMethod: params.paymentMethod as any,
         accountId:
@@ -497,6 +509,7 @@ export class RentService {
           notes: dto.notes,
           receiptNumber: dto.receiptNumber,
           isOpeningEntry: false,
+          exchangeRate: dto.exchangeRate,
         },
         meta,
       );

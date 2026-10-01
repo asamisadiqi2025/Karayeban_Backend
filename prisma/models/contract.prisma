@@ -16,6 +16,8 @@ model Contract {
   securityDeposit          Decimal? @default(0) @map("security_deposit") @db.Decimal(18, 4)
   securityDepositRemaining Decimal? @default(0) @map("security_deposit_remaining") @db.Decimal(18, 4)
   securityDepositAccountId String?  @map("security_deposit_account_id") @db.Uuid
+  securityDepositExchangeRate       Decimal? @map("security_deposit_exchange_rate") @db.Decimal(24, 10)
+  securityDepositBaseCurrencyAmount Decimal? @map("security_deposit_base_currency_amount") @db.Decimal(18, 4)
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 

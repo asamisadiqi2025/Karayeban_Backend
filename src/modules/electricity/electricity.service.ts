@@ -14,6 +14,7 @@ import {
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import { paginate, resolveSort } from '../../common/utils/pagination';
 import { jalaliMonthStart, jalaliMonthEnd } from '../../common/utils/jalali-date';
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
@@ -629,10 +630,19 @@ export class ElectricityService {
       } | null;
       // اگر داده شود، پرداخت فقط روی همین یک بل می‌نشیند (نه FIFO روی همهٔ بل‌های باز).
       billId?: string | null;
+      exchangeRate?: number | null;
     },
     meta: RequestMeta = NO_REQUEST_META,
   ) {
     let accountBalanceAfter: Prisma.Decimal | null = null;
+
+    const rate = await resolveRateToBase(tx, {
+      marketId: params.marketId,
+      currencyId: params.currencyId,
+      date: params.paymentDate,
+      amount: params.amount,
+      manualRate: params.exchangeRate,
+    });
 
     if (params.source === PaymentSourceType.SECURITY_DEPOSIT) {
       if (!params.securityDeposit) {
@@ -670,6 +680,8 @@ export class ElectricityService {
         tenantId: params.tenantId,
         amount: params.amount,
         currencyId: params.currencyId,
+        exchangeRate: rate.exchangeRate,
+        baseCurrencyAmount: rate.baseCurrencyAmount,
         paymentDate: params.paymentDate,
         paymentMethod: params.paymentMethod as any,
         accountId:
@@ -854,6 +866,7 @@ export class ElectricityService {
           notes: dto.notes,
           receiptNumber: dto.receiptNumber,
           isOpeningEntry: false,
+          exchangeRate: dto.exchangeRate,
           securityDeposit: contract
             ? {
                 contractId: contract.id,
