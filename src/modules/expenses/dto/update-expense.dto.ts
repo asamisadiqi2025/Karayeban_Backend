@@ -35,6 +35,12 @@ export class UpdateExpenseDto {
   @IsPositive()
   usdEquivalent?: number;
 
+  // اختیاری — تصحیحِ دستیِ نرخِ همین مصرف؛ مثل تغییرِ مبلغ، ذکرِ reason الزامی است.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  exchangeRate?: number;
+
   @IsOptional()
   @IsString()
   receiptImage?: string;

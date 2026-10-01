@@ -10,6 +10,7 @@ import { Account, InventoryTransactionType, Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import {
   paginate,
   resolveSort,
@@ -1254,6 +1255,16 @@ export class InventoryService {
         }
       }
 
+      const rate = isMoneyType
+        ? await resolveRateToBase(tx, {
+            marketId: item.marketId,
+            currencyId: item.currencyId,
+            date: transactionDate,
+            amount: totalAmount,
+            manualRate: dto.exchangeRate,
+          })
+        : null;
+
       const transaction = await tx.inventoryTransaction.create({
         data: {
           marketId: item.marketId,
@@ -1269,6 +1280,8 @@ export class InventoryService {
           costOfGoodsSold,
           accountId: account?.id ?? null,
           currencyId: item.currencyId,
+          exchangeRate: rate?.exchangeRate ?? null,
+          baseCurrencyAmount: rate?.baseCurrencyAmount ?? null,
           transactionDate,
           notes: dto.notes?.trim() || null,
           createdById: actor.id,

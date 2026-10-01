@@ -9,6 +9,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
@@ -323,6 +324,14 @@ export class ExpensesService {
     const expenseDate = dto.expenseDate ? new Date(dto.expenseDate) : new Date();
 
     return this.prisma.$transaction(async (tx) => {
+      const rate = await resolveRateToBase(tx, {
+        marketId,
+        currencyId,
+        date: expenseDate,
+        amount,
+        manualRate: dto.exchangeRate,
+      });
+
       const debited = await tx.account.updateMany({
         where: { id: dto.accountId, balance: { gte: amount } },
         data: { balance: { decrement: amount } },
@@ -340,6 +349,8 @@ export class ExpensesService {
           currencyId,
           usdEquivalent:
             dto.usdEquivalent !== undefined ? new Prisma.Decimal(dto.usdEquivalent) : null,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           expenseDate,
           description: dto.description?.trim() || null,
           accountId: dto.accountId,
@@ -651,7 +662,8 @@ export class ExpensesService {
     const nextAccountId = dto.accountId ?? expense.accountId;
     const nextAmount = dto.amount !== undefined ? new Prisma.Decimal(dto.amount) : expense.amount;
 
-    const moneyChanged = dto.amount !== undefined || dto.accountId !== undefined;
+    const moneyChanged =
+      dto.amount !== undefined || dto.accountId !== undefined || dto.exchangeRate !== undefined;
 
     // تصحیحِ مبلغ/حسابِ یک مصرفِ ثبت‌شده باید یک دلیلِ مکتوب داشته باشد — برای
     // audit trail، نه فقط عددِ قبل/بعد.
@@ -703,6 +715,24 @@ export class ExpensesService {
     // مبلغ/حساب/ارز عوض شده: اول اثر قبلی برگردانده می‌شود، بعد اثر جدید اعمال می‌شود —
     // همه در یک تراکنش تا حساب هیچ‌وقت در حالت میانه (فقط برگشت‌خورده) دیده نشود.
     return this.prisma.$transaction(async (tx) => {
+      // نرخِ ثبت‌شدهٔ همین مصرف حفظ می‌شود (فقط معادلِ ارز پایه با مبلغِ جدید دوباره حساب
+      // می‌شود)، مگر نرخِ دستیِ جدید بیاید، ارز عوض شود، یا مصرفِ قدیمی نرخ نداشته باشد.
+      const rate =
+        dto.exchangeRate === undefined &&
+        expense.exchangeRate &&
+        nextCurrencyId === expense.currencyId
+          ? {
+              exchangeRate: expense.exchangeRate,
+              baseCurrencyAmount: nextAmount.mul(expense.exchangeRate).toDecimalPlaces(4),
+            }
+          : await resolveRateToBase(tx, {
+              marketId: expense.marketId,
+              currencyId: nextCurrencyId,
+              date: dto.expenseDate ? new Date(dto.expenseDate) : expense.expenseDate,
+              amount: nextAmount,
+              manualRate: dto.exchangeRate,
+            });
+
       // قفلِ خوش‌بینانه: قبل از هر تغییری در موجودیِ حساب، چک می‌کنیم که این مصرف از
       // لحظهٔ خواندنِ اولیه (بالای متد، بیرونِ تراکنش) توسط ویرایشِ هم‌زمانِ دیگری تغییر
       // نکرده باشد. بدونِ این چک، دو ویرایشِ هم‌زمان هر دو مبلغِ قدیمیِ یکسان را به حساب
@@ -710,7 +740,14 @@ export class ExpensesService {
       // اگر مصرف هم‌زمان تغییر کرده باشد، count=0 می‌شود و خطا می‌دهیم به‌جای خرابکاریِ خاموش.
       const guarded = await tx.expense.updateMany({
         where: { id, amount: expense.amount, accountId: expense.accountId },
-        data: { ...data, amount: nextAmount, accountId: nextAccountId, currencyId: nextCurrencyId },
+        data: {
+          ...data,
+          amount: nextAmount,
+          accountId: nextAccountId,
+          currencyId: nextCurrencyId,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+        },
       });
       if (guarded.count === 0) {
         throw new ConflictException(

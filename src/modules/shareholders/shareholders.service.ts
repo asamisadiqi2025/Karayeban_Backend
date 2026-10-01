@@ -8,6 +8,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { CreateShareholderDto } from './dto/create-shareholder.dto';
 import { UpdateShareholderDto } from './dto/update-shareholder.dto';
@@ -373,6 +374,14 @@ export class ShareholdersService {
     const isWithdrawal = dto.type === 'WITHDRAWAL';
 
     return this.prisma.$transaction(async (tx) => {
+      const rate = await resolveRateToBase(tx, {
+        marketId: shareholder.marketId,
+        currencyId: account.currencyId,
+        date: transactionDate,
+        amount,
+        manualRate: dto.exchangeRate,
+      });
+
       let updatedAccount;
       if (isWithdrawal) {
         // کاهش اتمیک؛ شرط balance >= amount مستقیم در WHERE چک می‌شود.
@@ -400,6 +409,8 @@ export class ShareholdersService {
           accountId: account.id,
           type: dto.type,
           amount,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           transactionDate,
           receiptNumber: dto.receiptNumber?.trim() || null,
           details: dto.details?.trim() || null,

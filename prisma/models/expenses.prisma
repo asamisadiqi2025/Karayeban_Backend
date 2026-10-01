@@ -5,6 +5,8 @@ model Expense {
   amount        Decimal  @db.Decimal(18, 4)
   currencyId    String   @map("currency_id") @db.Uuid
   usdEquivalent Decimal? @map("usd_equivalent") @db.Decimal(18, 4)
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
   expenseDate   DateTime @map("expense_date") @db.Timestamptz(6)
   description   String?  @db.Text
   accountId     String   @map("account_id") @db.Uuid

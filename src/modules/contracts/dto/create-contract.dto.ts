@@ -52,6 +52,13 @@ export class CreateContractDto {
   @IsUUID()
   securityDepositAccountId?: string;
 
+  // اختیاری — نرخِ دستیِ همین امانت (۱ واحد ارز قرارداد = X واحد ارز پایه)؛ فقط وقتی امانت
+  // همین الان به حساب می‌رود. اگر نیاید، آخرین نرخ ثبت‌شدهٔ مارکت استفاده می‌شود.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  securityDepositExchangeRate?: number;
+
   // true = امانت قبلاً (قبل از سیستم) گرفته شده، هیچ حسابی الان افزایش نمی‌یابد.
   @IsOptional()
   @IsBoolean()

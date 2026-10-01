@@ -47,6 +47,8 @@ model ShareholderTransaction {
   accountId       String                     @map("account_id") @db.Uuid
   type            ShareholderTransactionType
   amount          Decimal                    @db.Decimal(18, 4)
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
   transactionDate DateTime                   @map("transaction_date") @db.Timestamptz(6)
   receiptNumber   String?                    @map("receipt_number") @db.VarChar(100)
   details         String?                    @db.Text

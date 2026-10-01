@@ -22,6 +22,7 @@ import {
 } from '../electricity/electricity.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import {
   paginate,
   resolveSort,
@@ -225,6 +226,16 @@ export class ContractsService {
         throw new ConflictException('این دوکان از قبل یک قرارداد فعال دارد');
       }
 
+      const depositRate = securityDepositAccount
+        ? await resolveRateToBase(tx, {
+            marketId,
+            currencyId: dto.currencyId,
+            date: now,
+            amount: new Prisma.Decimal(dto.securityDeposit!),
+            manualRate: dto.securityDepositExchangeRate,
+          })
+        : null;
+
       const contract = await tx.contract.create({
         data: {
           marketId,
@@ -240,6 +251,8 @@ export class ContractsService {
           securityDeposit: dto.securityDeposit ?? 0,
           securityDepositRemaining: dto.securityDeposit ?? 0,
           securityDepositAccountId: securityDepositAccount?.id ?? null,
+          securityDepositExchangeRate: depositRate?.exchangeRate ?? null,
+          securityDepositBaseCurrencyAmount: depositRate?.baseCurrencyAmount ?? null,
         },
       });
 

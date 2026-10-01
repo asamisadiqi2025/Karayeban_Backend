@@ -39,6 +39,13 @@ export class CreateRentPaymentDto {
   @IsUUID()
   accountId?: string;
 
+  // اختیاری — نرخِ دستیِ همین پرداخت (۱ واحد ارز قرارداد = X واحد ارز پایه). اگر نیاید،
+  // آخرین نرخ ثبت‌شدهٔ مارکت استفاده می‌شود. نرخ سیستم (تنظیمات) هرگز با این تغییر نمی‌کند.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  exchangeRate?: number;
+
   @IsOptional()
   @IsString()
   notes?: string;
