@@ -5,6 +5,12 @@ export class UpdateMarketProfileDto {
   @IsString()
   name?: string;
 
+  // نام انگلیسی مارکت (اختیاری)
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  nameEn?: string;
+
   @IsOptional()
   @IsString()
   address?: string;

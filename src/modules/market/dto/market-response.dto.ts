@@ -1,6 +1,7 @@
 export class MarketResponseDto {
   id: string;
   name: string;
+  nameEn?: string;
   address: string;
   phone?: string;
   logo?: string;

@@ -1,0 +1,77 @@
+name: Deploy Test
+
+on:
+  push:
+    branches:
+      - test
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-coolify-test
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || (!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '[skip cd]')) }}
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Coolify
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify deployment
+        env:
+          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          COOLIFY_APP_UUID: ${{ secrets.COOLIFY_APP_UUID }}
+        run: |
+          set -euo pipefail
+
+          missing=0
+          for var in COOLIFY_URL COOLIFY_TOKEN COOLIFY_APP_UUID; do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::Missing GitHub secret: ${var}"
+              missing=1
+            fi
+          done
+          if [ "${missing}" -ne 0 ]; then
+            echo "::error::Add COOLIFY_URL, COOLIFY_TOKEN, and COOLIFY_APP_UUID in repo Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+          COOLIFY_URL="${COOLIFY_URL%/}"
+
+          echo "Deploying ${GITHUB_SHA} from ${GITHUB_REF_NAME} to Coolify app ${COOLIFY_APP_UUID}..."
+
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --url "${COOLIFY_URL}/api/v1/deploy" \
+            --header "Authorization: Bearer ${COOLIFY_TOKEN}" \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json" \
+            --data "{\"uuid\": \"${COOLIFY_APP_UUID}\"}"
+
+          echo
+          echo "Coolify deploy triggered."

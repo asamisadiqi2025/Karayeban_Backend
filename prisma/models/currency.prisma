@@ -6,6 +6,7 @@ model Currency {
   openingBalances OpeningBalance[]
 
   markets             Market[]
+  marketsUsingForElectricityRate Market[] @relation("MarketElectricityRateCurrency")
   marketCurrencies    MarketCurrency[]
   exchangeRates       ExchangeRate[]
   expenses            Expense[]

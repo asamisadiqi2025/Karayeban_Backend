@@ -72,6 +72,7 @@ export class MarketService {
       const market = await this.prisma.market.create({
         data: {
           name: dto.name,
+          nameEn: dto.nameEn ?? null,
           subdomain: dto.subdomain,
           address: dto.address,
           logo: dto.logo || null,
