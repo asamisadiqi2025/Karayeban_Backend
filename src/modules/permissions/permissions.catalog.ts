@@ -82,6 +82,18 @@ export const PERMISSION_CATALOG: PermissionSection[] = [
     ],
   },
   {
+    key: 'dealers',
+    label: 'دیلرها (قرض‌ها)',
+    items: [
+      { key: 'dealers.view', label: 'دیدن دیلرها، قرض‌ها، هشدارها و گزارش' },
+      { key: 'dealers.create', label: 'ثبت دیلر' },
+      { key: 'dealers.update', label: 'ویرایش دیلر' },
+      { key: 'dealers.delete', label: 'حذف دیلر و قرضِ اشتباه' },
+      { key: 'dealers.lend', label: 'ثبت قرض و اصلاح سررسید' },
+      { key: 'dealers.repay', label: 'ثبت بازپرداخت قرض' },
+    ],
+  },
+  {
     key: 'assets',
     label: 'دارایی‌ها',
     items: [
