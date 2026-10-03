@@ -13,6 +13,7 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { Logger as PinoLogger } from 'nestjs-pino';
 import { HttpExceptionFilter } from './common/filters/http-exception-filter';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from './modules/permissions/permissions.guard';
 import { setupSwagger } from './config/swagger.setup';
 
 import { UPLOAD_ROOT } from './modules/uploads/storage/local-disk-storage.service';
@@ -213,6 +214,7 @@ async function bootstrap() {
 
     app.useGlobalGuards(
       new JwtAuthGuard(reflector),
+      app.get(PermissionsGuard),
     );
 
 

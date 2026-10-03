@@ -26,6 +26,7 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { AuditLogModule } from './common/audit-log/audit-log.module';
 import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
     AuditLogsModule,
     AuthModule,
     UserModule,
+    PermissionsModule,
     MarketModule,
     CurrenciesModule,
     AccountsModule,

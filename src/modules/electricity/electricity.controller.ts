@@ -23,6 +23,7 @@ import { ElectricityDebtAgingQueryDto } from './dto/electricity-debt-aging-query
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('electricity')
@@ -30,6 +31,7 @@ import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 export class ElectricityController {
   constructor(private readonly electricityService: ElectricityService) {}
 
+  @Permission('electricity.create_cycle')
   @Post('billing-cycles')
   @Roles('SUPER_ADMIN', 'ADMIN')
   setBillingCycle(
@@ -39,6 +41,7 @@ export class ElectricityController {
     return this.electricityService.setBillingCycle(req.user, dto);
   }
 
+  @Permission('electricity.view')
   @Get('billing-cycles')
   findBillingCycles(
     @Req() req: any,
@@ -47,29 +50,34 @@ export class ElectricityController {
     return this.electricityService.findBillingCycles(req.user, query);
   }
 
+  @Permission('electricity.create_bill')
   @Post('bills')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createBill(@Req() req: any, @Body() dto: CreateElectricityBillDto) {
     return this.electricityService.createBill(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('electricity.create_bill')
   @Post('bills/bulk')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createBillsBulk(@Req() req: any, @Body() dto: CreateElectricityBillsBulkDto) {
     return this.electricityService.createBillsBulk(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('electricity.view')
   @Get('bills')
   findAllBills(@Req() req: any, @Query() query: ElectricityBillQueryDto) {
     return this.electricityService.findAllBills(req.user, query);
   }
 
+  @Permission('electricity.create_payment')
   @Post('payments')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createPayment(@Req() req: any, @Body() dto: CreateElectricityPaymentDto) {
     return this.electricityService.createPayment(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('electricity.create_payment')
   @Post('payments/opening')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   recordOpeningPayment(
@@ -83,6 +91,7 @@ export class ElectricityController {
     );
   }
 
+  @Permission('electricity.create_payment')
   @Post('payments/bulk')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createPaymentsBulk(
@@ -96,22 +105,26 @@ export class ElectricityController {
     );
   }
 
+  @Permission('electricity.view')
   @Get('payments')
   findAllPayments(@Req() req: any, @Query() query: ElectricityPaymentQueryDto) {
     return this.electricityService.findAllPayments(req.user, query);
   }
 
+  @Permission('electricity.view')
   @Get('debts')
   findAllDebts(@Req() req: any, @Query() query: ElectricityDebtQueryDto) {
     return this.electricityService.findAllDebts(req.user, query);
   }
 
   // باید قبل از @Get('debts/:tenantId') ثبت شود، وگرنه Nest کلمهٔ "aging" را به‌عنوان tenantId تطبیق می‌دهد.
+  @Permission('electricity.view')
   @Get('debts/aging')
   getDebtAging(@Req() req: any, @Query() query: ElectricityDebtAgingQueryDto) {
     return this.electricityService.getDebtAging(req.user, query);
   }
 
+  @Permission('electricity.view')
   @Get('debts/:tenantId')
   findDebt(@Req() req: any, @Param('tenantId') tenantId: string) {
     return this.electricityService.findDebt(req.user, tenantId);

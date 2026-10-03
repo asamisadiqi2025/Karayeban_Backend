@@ -25,6 +25,7 @@ import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-q
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('contracts')
@@ -35,28 +36,33 @@ export class ContractsController {
     private readonly rentService: RentService,
   ) {}
 
+  @Permission('contracts.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateContractDto) {
     return this.contractsService.create(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.view')
   @Get()
   findAll(@Req() req: any, @Query() query: ContractQueryDto) {
     return this.contractsService.findAll(req.user, query);
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "expiry-forecast" را به‌عنوان :id تطبیق می‌دهد.
+  @Permission('contracts.view')
   @Get('expiry-forecast')
   getExpiryForecast(@Req() req: any, @Query() query: ContractExpiryForecastQueryDto) {
     return this.contractsService.getExpiryForecast(req.user, query);
   }
 
+  @Permission('contracts.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.contractsService.findOne(req.user, id);
   }
 
+  @Permission('contracts.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   update(
@@ -67,6 +73,7 @@ export class ContractsController {
     return this.contractsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.cancel')
   @Post(':id/cancel')
   @Roles('SUPER_ADMIN', 'ADMIN')
   cancel(
@@ -77,6 +84,7 @@ export class ContractsController {
     return this.contractsService.cancel(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.renew')
   @Post(':id/renew')
   @Roles('SUPER_ADMIN', 'ADMIN')
   renew(
@@ -87,6 +95,7 @@ export class ContractsController {
     return this.contractsService.renew(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.adjust_rent')
   @Post(':id/adjust-rent')
   @Roles('SUPER_ADMIN', 'ADMIN')
   adjustRent(
@@ -97,6 +106,7 @@ export class ContractsController {
     return this.rentService.adjustFutureRent(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.discount_debt')
   @Post(':id/discount-debt')
   @Roles('SUPER_ADMIN', 'ADMIN')
   discountDebt(
@@ -107,6 +117,7 @@ export class ContractsController {
     return this.rentService.discountDebt(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.terminate')
   @Post(':id/terminate')
   @Roles('SUPER_ADMIN', 'ADMIN')
   terminate(
@@ -117,6 +128,7 @@ export class ContractsController {
     return this.contractsService.terminate(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.settle')
   @Post(':id/settle')
   @Roles('SUPER_ADMIN', 'ADMIN')
   settle(
@@ -127,6 +139,7 @@ export class ContractsController {
     return this.contractsService.settle(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('contracts.pay_debt')
   @Post(':id/pay-debt')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   payDebt(
