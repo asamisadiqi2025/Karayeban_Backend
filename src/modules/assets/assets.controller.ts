@@ -19,6 +19,7 @@ import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summa
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('assets')
@@ -26,6 +27,7 @@ import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
+  @Permission('assets.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateAssetDto) {
@@ -33,33 +35,39 @@ export class AssetsController {
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "summary" را :id تفسیر می‌کند.
+  @Permission('assets.view')
   @Get('summary')
   getSummary(@Req() req: any, @Query() query: AssetSummaryQueryDto) {
     return this.assetsService.getSummary(req.user, query);
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "depreciation-summary" را :id تفسیر می‌کند.
+  @Permission('assets.view')
   @Get('depreciation-summary')
   getDepreciationSummary(@Req() req: any, @Query() query: AssetDepreciationSummaryQueryDto) {
     return this.assetsService.getDepreciationSummary(req.user, query);
   }
 
+  @Permission('assets.view')
   @Get()
   findAll(@Req() req: any, @Query() query: AssetQueryDto) {
     return this.assetsService.findAll(req.user, query);
   }
 
+  @Permission('assets.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.assetsService.findOne(req.user, id);
   }
 
+  @Permission('assets.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateAssetDto) {
     return this.assetsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('assets.delete')
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {

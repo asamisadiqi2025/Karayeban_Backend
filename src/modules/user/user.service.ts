@@ -1,4 +1,10 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -34,27 +40,70 @@ export class UserService {
     return user;
   }
 
+  // نقش و بازارِ ادمین از دیتابیس خوانده می‌شود (نه از JWT). ADMIN فقط در بازارِ خودش و فقط
+  // نقش‌های ACCOUNTANT/STAFF را می‌سازد/ویرایش می‌کند؛ ساختِ ADMIN/SUPER_ADMIN با SUPER_ADMIN است.
+  private static readonly ADMIN_ASSIGNABLE_ROLES = ['ACCOUNTANT', 'STAFF'];
+
+  private async ensureCustomRoleInMarket(customRoleId: string | null | undefined, marketId: string | null) {
+    if (!customRoleId) return;
+    const role = await this.prisma.customRole.findUnique({
+      where: { id: customRoleId },
+      select: { marketId: true },
+    });
+    if (!role) throw new NotFoundException('نقش سفارشی یافت نشد');
+    if (role.marketId !== marketId) {
+      throw new BadRequestException('نقش سفارشی باید متعلق به همان بازارِ کاربر باشد');
+    }
+  }
+
+  private handleUniqueConflict(e: any): never {
+    if (e?.code === 'P2002') {
+      const target = Array.isArray(e.meta?.target) ? e.meta.target.join(', ') : '';
+      throw new ConflictException(
+        `این مقدار قبلاً ثبت شده است${target ? ` (${target})` : ''} — نام کاربری، ایمیل یا شمارهٔ تذکره تکراری است`,
+      );
+    }
+    throw e;
+  }
+
   async create(currentUser: any, dto: CreateUserDto, meta: RequestMeta) {
-    if (!currentUser || (currentUser.role !== 'SUPER_ADMIN' && currentUser.role !== 'ADMIN')) {
+    if (!currentUser) throw new ForbiddenException('Not allowed');
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
       throw new ForbiddenException('Not allowed');
     }
 
-    if (dto.isSuperAdmin && currentUser.role !== 'SUPER_ADMIN') {
-      throw new ForbiddenException('Only super admin can set isSuperAdmin');
+    let marketId: string | null | undefined = dto.marketId;
+
+    if (actor.role === 'ADMIN') {
+      if (!actor.marketId) throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+      if (dto.marketId && dto.marketId !== actor.marketId) {
+        throw new ForbiddenException('فقط می‌توانید برای بازارِ خودتان کاربر بسازید');
+      }
+      if (dto.isSuperAdmin || !UserService.ADMIN_ASSIGNABLE_ROLES.includes(dto.role)) {
+        throw new ForbiddenException('ادمین فقط می‌تواند کاربرِ حسابدار (ACCOUNTANT) یا کارمند (STAFF) بسازد');
+      }
+      marketId = actor.marketId;
+    } else if (marketId) {
+      const market = await this.prisma.market.findUnique({ where: { id: marketId }, select: { id: true } });
+      if (!market) throw new NotFoundException('مارکت یافت نشد');
     }
 
-    if (dto.marketId == null && dto.isSuperAdmin !== true && currentUser.role !== 'SUPER_ADMIN') {
-      throw new ForbiddenException('marketId required for non-super-admin');
-    }
+    await this.ensureCustomRoleInMarket(dto.customRoleId, marketId ?? null);
 
     const { password, ...rest } = dto;
     const passwordHash = await bcrypt.hash(password, 10);
-    const data: any = { ...rest, passwordHash };
+    const data: any = { ...rest, marketId: marketId ?? null, passwordHash };
 
-    const user = await this.prisma.user.create({
-      data,
-      include: { market: true, customRole: true },
-    });
+    let user;
+    try {
+      user = await this.prisma.user.create({
+        data,
+        include: { market: true, customRole: true },
+      });
+    } catch (e) {
+      this.handleUniqueConflict(e);
+    }
     const { passwordHash: _hash, ...safeUser } = user as any;
 
     // passwordHash عمداً حتی در audit هم ذخیره نمی‌شود — safeUser از قبل بدون آن است.
@@ -73,26 +122,52 @@ export class UserService {
   }
 
   async update(currentUser: any, id: string, dto: UpdateUserDto, meta: RequestMeta) {
-    if (!currentUser || (currentUser.role !== 'SUPER_ADMIN' && currentUser.role !== 'ADMIN')) {
+    if (!currentUser) throw new ForbiddenException('Not allowed');
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
       throw new ForbiddenException('Not allowed');
     }
 
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) throw new NotFoundException('User not found');
 
-    if (dto.isSuperAdmin && currentUser.role !== 'SUPER_ADMIN') {
-      throw new ForbiddenException('Only super admin can set isSuperAdmin');
+    if (actor.role === 'ADMIN') {
+      if (!actor.marketId || user.marketId !== actor.marketId) {
+        throw new ForbiddenException('دسترسی به این کاربر مجاز نیست');
+      }
+      const isSelf = user.id === actor.id;
+      if (!isSelf && !UserService.ADMIN_ASSIGNABLE_ROLES.includes(user.role)) {
+        throw new ForbiddenException('ادمین فقط کاربرانِ حسابدار (ACCOUNTANT) و کارمند (STAFF) را ویرایش می‌کند');
+      }
+      if (dto.isSuperAdmin !== undefined) {
+        throw new ForbiddenException('Only super admin can set isSuperAdmin');
+      }
+      if (dto.marketId !== undefined && dto.marketId !== actor.marketId) {
+        throw new ForbiddenException('ادمین نمی‌تواند بازارِ کاربر را تغییر دهد');
+      }
+      if (dto.role !== undefined && (isSelf ? dto.role !== user.role : !UserService.ADMIN_ASSIGNABLE_ROLES.includes(dto.role))) {
+        throw new ForbiddenException('ادمین فقط می‌تواند نقشِ حسابدار (ACCOUNTANT) یا کارمند (STAFF) بدهد و نقشِ خودش را تغییر نمی‌دهد');
+      }
+    }
+
+    if (dto.customRoleId !== undefined) {
+      await this.ensureCustomRoleInMarket(dto.customRoleId, dto.marketId ?? user.marketId);
+    }
+
+    let updated;
+    try {
+      updated = await this.prisma.user.update({
+        where: { id },
+        data: { ...dto },
+        include: { market: true, customRole: true },
+      });
+    } catch (e) {
+      this.handleUniqueConflict(e);
     }
 
     if (dto.profilePhoto !== undefined && dto.profilePhoto !== user.profilePhoto) {
       await this.uploadsService.deleteByUrl(user.profilePhoto);
     }
-
-    const updated = await this.prisma.user.update({
-      where: { id },
-      data: { ...dto },
-      include: { market: true, customRole: true },
-    });
     const { passwordHash, ...safeUser } = updated as any;
     const { passwordHash: _oldHash, ...safeOldUser } = user as any;
 

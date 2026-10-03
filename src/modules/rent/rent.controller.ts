@@ -17,6 +17,7 @@ import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('rent')
@@ -30,33 +31,39 @@ export class RentController {
     return this.rentService.getJalaliMonths();
   }
 
+  @Permission('rent.view')
   @Get('charges')
   findAllCharges(@Req() req: any, @Query() query: RentChargeQueryDto) {
     return this.rentService.findAllCharges(req.user, query);
   }
 
+  @Permission('rent.pay')
   @Post('payments')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createPayment(@Req() req: any, @Body() dto: CreateRentPaymentDto) {
     return this.rentService.createPayment(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('rent.view')
   @Get('payments')
   findAllPayments(@Req() req: any, @Query() query: RentPaymentQueryDto) {
     return this.rentService.findAllPayments(req.user, query);
   }
 
+  @Permission('rent.view')
   @Get('debts')
   findAllDebts(@Req() req: any, @Query() query: RentDebtQueryDto) {
     return this.rentService.findAllDebts(req.user, query);
   }
 
   // باید قبل از @Get('debts/:tenantId') ثبت شود، وگرنه Nest کلمهٔ "aging" را به‌عنوان tenantId تطبیق می‌دهد.
+  @Permission('rent.view')
   @Get('debts/aging')
   getDebtAging(@Req() req: any, @Query() query: RentDebtAgingQueryDto) {
     return this.rentService.getDebtAging(req.user, query);
   }
 
+  @Permission('rent.view')
   @Get('debts/:tenantId')
   findRentDebt(@Req() req: any, @Param('tenantId') tenantId: string) {
     return this.rentService.findRentDebt(req.user, tenantId);

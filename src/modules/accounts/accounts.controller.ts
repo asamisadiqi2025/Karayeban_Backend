@@ -22,6 +22,7 @@ import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('accounts')
@@ -29,18 +30,21 @@ import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
+  @Permission('accounts.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   create(@Req() req: any, @Body() dto: CreateAccountDto) {
     return this.accountsService.create(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('accounts.transfer')
   @Post('transfer')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   transfer(@Req() req: any, @Body() dto: TransferFundsDto) {
     return this.accountsService.transfer(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('accounts.transact')
   @Post(':id/transactions')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   createAccountTransaction(
@@ -56,18 +60,21 @@ export class AccountsController {
     );
   }
 
+  @Permission('accounts.view')
   @Get()
   findAll(@Req() req: any, @Query() query: AccountQueryDto) {
     return this.accountsService.findAll(req.user, query);
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "transfer" را به‌عنوان :id تطبیق می‌دهد.
+  @Permission('accounts.view')
   @Get('transfer')
   findAllTransfers(@Req() req: any, @Query() query: TransferQueryDto) {
     return this.accountsService.findAllTransfers(req.user, query);
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "transactions" را به‌عنوان :id تطبیق می‌دهد.
+  @Permission('accounts.view')
   @Get('transactions')
   findAllAccountTransactions(
     @Req() req: any,
@@ -76,11 +83,13 @@ export class AccountsController {
     return this.accountsService.findAllAccountTransactions(req.user, query);
   }
 
+  @Permission('accounts.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.accountsService.findOne(req.user, id);
   }
 
+  @Permission('accounts.view')
   @Get(':id/statement')
   getStatement(
     @Req() req: any,
@@ -90,6 +99,7 @@ export class AccountsController {
     return this.accountsService.getStatement(req.user, id, query);
   }
 
+  @Permission('accounts.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   update(
@@ -100,6 +110,7 @@ export class AccountsController {
     return this.accountsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('accounts.delete')
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {

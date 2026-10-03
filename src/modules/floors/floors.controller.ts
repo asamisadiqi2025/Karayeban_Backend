@@ -17,28 +17,33 @@ import { FloorQueryDto } from './dto/floor-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 
 @Controller('floors')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class FloorsController {
   constructor(private readonly floorsService: FloorsService) {}
 
+  @Permission('floors.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateFloorDto) {
     return this.floorsService.create(req.user, dto);
   }
 
+  @Permission('floors.view')
   @Get()
   findAll(@Req() req: any, @Query() query: FloorQueryDto) {
     return this.floorsService.findAll(req.user, query);
   }
 
+  @Permission('floors.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.floorsService.findOne(req.user, id);
   }
 
+  @Permission('floors.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   update(
@@ -49,6 +54,7 @@ export class FloorsController {
     return this.floorsService.update(req.user, id, dto);
   }
 
+  @Permission('floors.delete')
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {

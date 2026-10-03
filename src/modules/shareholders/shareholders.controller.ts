@@ -21,6 +21,7 @@ import { ShareholderEquitySummaryQueryDto } from './dto/shareholder-equity-summa
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('shareholders')
@@ -28,6 +29,7 @@ import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 export class ShareholdersController {
   constructor(private readonly shareholdersService: ShareholdersService) {}
 
+  @Permission('shareholders.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateShareholderDto) {
@@ -35,45 +37,53 @@ export class ShareholdersController {
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "transactions" را :id تفسیر می‌کند.
+  @Permission('shareholders.view')
   @Get('transactions')
   findAllTransactions(@Req() req: any, @Query() query: ShareholderTransactionQueryDto) {
     return this.shareholdersService.findAllTransactions(req.user, query);
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "equity-summary" را :id تفسیر می‌کند.
+  @Permission('shareholders.view')
   @Get('equity-summary')
   getEquitySummary(@Req() req: any, @Query() query: ShareholderEquitySummaryQueryDto) {
     return this.shareholdersService.getEquitySummary(req.user, query);
   }
 
+  @Permission('shareholders.view')
   @Get()
   findAll(@Req() req: any, @Query() query: ShareholderQueryDto) {
     return this.shareholdersService.findAll(req.user, query);
   }
 
+  @Permission('shareholders.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.shareholdersService.findOne(req.user, id);
   }
 
+  @Permission('shareholders.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateShareholderDto) {
     return this.shareholdersService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('shareholders.delete')
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.shareholdersService.remove(req.user, id, extractRequestMeta(req));
   }
 
+  @Permission('shareholders.set_equity')
   @Post(':id/equity')
   @Roles('SUPER_ADMIN', 'ADMIN')
   setEquity(@Req() req: any, @Param('id') id: string, @Body() dto: SetShareholderEquityDto) {
     return this.shareholdersService.setEquity(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('shareholders.transact')
   @Post(':id/transactions')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createTransaction(

@@ -19,46 +19,54 @@ import { ShopOccupancyQueryDto } from './dto/shop-occupancy-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
 
 @Controller('shops')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
+  @Permission('shops.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   create(@Req() req: any, @Body() dto: CreateShopDto) {
     return this.shopsService.create(req.user, dto);
   }
 
+  @Permission('shops.create')
   @Post('bulk')
   @Roles('SUPER_ADMIN', 'ADMIN')
   createBulk(@Req() req: any, @Body() dto: CreateShopsBulkDto) {
     return this.shopsService.createBulk(req.user, dto);
   }
 
+  @Permission('shops.view')
   @Get()
   findAll(@Req() req: any, @Query() query: ShopQueryDto) {
     return this.shopsService.findAll(req.user, query);
   }
 
   // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "occupancy-summary" را به‌عنوان :id تطبیق می‌دهد.
+  @Permission('shops.view')
   @Get('occupancy-summary')
   getOccupancySummary(@Req() req: any, @Query() query: ShopOccupancyQueryDto) {
     return this.shopsService.getOccupancySummary(req.user, query);
   }
 
+  @Permission('shops.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.shopsService.findOne(req.user, id);
   }
 
+  @Permission('shops.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateShopDto) {
     return this.shopsService.update(req.user, id, dto);
   }
 
+  @Permission('shops.delete')
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {

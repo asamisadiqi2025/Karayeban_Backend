@@ -10,6 +10,7 @@ import { ElectricityCollectionQueryDto } from './dto/electricity-collection-quer
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 
+import { Permission } from '../../common/decorators/permission.decorator';
 @Controller('reports')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ReportsController {
@@ -20,21 +21,25 @@ export class ReportsController {
     private readonly electricityCollectionService: ElectricityCollectionService,
   ) {}
 
+  @Permission('reports.view')
   @Get('financials/summary')
   getFinancialSummary(@Req() req: any, @Query() query: FinancialSummaryQueryDto) {
     return this.financialSummaryService.getSummary(req.user, query);
   }
 
+  @Permission('reports.view')
   @Get('financials/balances')
   getAccountBalances(@Req() req: any, @Query() query: AccountBalancesQueryDto) {
     return this.accountBalancesService.getOverview(req.user, query);
   }
 
+  @Permission('reports.view')
   @Get('rentals/collection-performance')
   getRentCollectionPerformance(@Req() req: any, @Query() query: RentCollectionQueryDto) {
     return this.rentCollectionService.getPerformance(req.user, query);
   }
 
+  @Permission('reports.view')
   @Get('electricity/collection-performance')
   getElectricityCollectionPerformance(
     @Req() req: any,
