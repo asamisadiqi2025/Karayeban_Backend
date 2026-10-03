@@ -10,6 +10,7 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
 import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
+import { cleanName, nameKey } from '../../common/utils/category-name';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
@@ -23,18 +24,6 @@ import { ExpenseSummaryQueryDto } from './dto/expense-summary-query.dto';
 import { ExpenseBreakdownQueryDto } from './dto/expense-breakdown-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
-
-// نامِ ذخیره‌شده: فاصله‌های اضافه جمع می‌شود و دو سرِ نام تمیز می‌شود.
-const cleanName = (name: string) => name.replace(/\s+/g, ' ').trim();
-
-// کلیدِ مقایسهٔ نام‌ها: «نذیر احمد»، «نذیراحمد» و «نذیر‌احمد» (نیم‌فاصله) و تفاوتِ ی/ي و ک/ك
-// همه یک نام حساب می‌شوند — تا با تایپِ عجولانه دو کتگوریِ تکراری ساخته نشود.
-const nameKey = (name: string) =>
-  name
-    .replace(/[\s‌‍]+/g, '')
-    .replace(/ي/g, 'ی')
-    .replace(/ك/g, 'ک')
-    .toLowerCase();
 
 type CurrencyAmount = {
   currencyId: string;

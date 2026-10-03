@@ -1,0 +1,16 @@
+// دسته‌بندیِ دارایی‌های ثابت (مثلاً «لوازم برق»، «اثاثیه»، «وسایل نقلیه») — مخصوصِ هر مارکت.
+// برای فیلتر کردنِ دارایی‌ها؛ نام‌ها در سرویس بدونِ حساسیت به فاصله/نیم‌فاصله یکتا نگه داشته می‌شوند.
+model AssetCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  marketId  String   @map("market_id") @db.Uuid
+  name      String   @db.VarChar(100)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market  @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  assets Asset[]
+
+  @@index([marketId])
+  @@map("asset_categories")
+}

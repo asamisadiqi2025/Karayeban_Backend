@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -12,6 +13,9 @@ import {
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { CreateAssetCategoryDto } from './dto/create-asset-category.dto';
+import { UpdateAssetCategoryDto } from './dto/update-asset-category.dto';
+import { AssetCategoryQueryDto } from './dto/asset-category-query.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { AssetQueryDto } from './dto/asset-query.dto';
 import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
@@ -46,6 +50,40 @@ export class AssetsController {
   @Get('depreciation-summary')
   getDepreciationSummary(@Req() req: any, @Query() query: AssetDepreciationSummaryQueryDto) {
     return this.assetsService.getDepreciationSummary(req.user, query);
+  }
+
+  // ---------- دسته‌بندی دارایی‌ها ----------
+  // باید قبل از @Get(':id') ثبت شوند، وگرنه Nest کلمهٔ "categories" را :id تفسیر می‌کند.
+
+  @Permission('assets.manage_categories')
+  @Post('categories')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  createCategory(@Req() req: any, @Body() dto: CreateAssetCategoryDto) {
+    return this.assetsService.createCategory(req.user, dto, extractRequestMeta(req));
+  }
+
+  @Permission('assets.view')
+  @Get('categories')
+  findAllCategories(@Req() req: any, @Query() query: AssetCategoryQueryDto) {
+    return this.assetsService.findAllCategories(req.user, query);
+  }
+
+  @Permission('assets.manage_categories')
+  @Patch('categories/:id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  updateCategory(
+    @Req() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateAssetCategoryDto,
+  ) {
+    return this.assetsService.updateCategory(req.user, id, dto, extractRequestMeta(req));
+  }
+
+  @Permission('assets.manage_categories')
+  @Delete('categories/:id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  removeCategory(@Req() req: any, @Param('id', ParseUUIDPipe) id: string) {
+    return this.assetsService.removeCategory(req.user, id, extractRequestMeta(req));
   }
 
   @Permission('assets.view')

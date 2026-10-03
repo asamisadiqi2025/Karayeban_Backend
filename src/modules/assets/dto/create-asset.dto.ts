@@ -17,10 +17,10 @@ export class CreateAssetDto {
   @MaxLength(150)
   name: string;
 
+  // اختیاری — شناسهٔ یک دسته‌بندیِ فعالِ دارایی (از GET /assets/categories) مثلاً «لوازم برق».
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  category?: string;
+  @IsUUID()
+  categoryId?: string;
 
   @IsNumber()
   @IsPositive()
