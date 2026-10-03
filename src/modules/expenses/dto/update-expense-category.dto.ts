@@ -1,21 +1,22 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength, ValidateIf } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class UpdateExpenseCategoryDto {
   @IsOptional()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(255)
   name?: string;
 
+  // فعال/غیرفعال کردن فقط توسط ادمین (یا سوپرادمین). کتگوری/سب‌کتگوری غیرفعال دیگر
+  // مصرفِ جدید نمی‌پذیرد، ولی مصرف‌های قبلی‌اش دست‌نخورده می‌مانند.
   @IsOptional()
   @Transform(({ value }) => (value === 'true' ? true : value === 'false' ? false : value))
   @IsBoolean()
   isActive?: boolean;
 
-  // undefined = دست‌نخورده؛ یک UUID = والدِ جدید (تبدیل به/جابه‌جاییِ سب‌کتگوری)؛
-  // null = جدا کردن از والد (تبدیل به کتگوریِ مادرِ مستقل).
-  @ValidateIf((o: UpdateExpenseCategoryDto) => o.parentId !== null)
+  // جابه‌جاییِ کتگوری بین والدها ممنوع است (گزارش‌های قبلی را عوض می‌کند). این فیلد فقط برای
+  // اینکه پیامِ واضحی بدهیم پذیرفته می‌شود و سرویس هر مقداری را رد می‌کند.
   @IsOptional()
-  @IsUUID()
   parentId?: string | null;
 }

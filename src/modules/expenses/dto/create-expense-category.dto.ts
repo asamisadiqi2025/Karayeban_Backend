@@ -1,4 +1,12 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
 export class CreateExpenseCategoryDto {
   @IsString()
@@ -19,4 +27,13 @@ export class CreateExpenseCategoryDto {
   @IsOptional()
   @IsUUID()
   parentId?: string;
+
+  // نام سب‌کتگوری‌هایی که هم‌زمان با ساختِ همین کتگوریِ مادر ساخته می‌شوند (همه یا هیچ).
+  // همراه با parentId معتبر نیست — سب‌کتگوری نمی‌تواند خودش زیرشاخه داشته باشد.
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(100)
+  @IsString({ each: true })
+  @MaxLength(255, { each: true })
+  subcategories?: string[];
 }
