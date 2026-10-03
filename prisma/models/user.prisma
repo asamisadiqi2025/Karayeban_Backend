@@ -50,6 +50,8 @@ model User {
   issuedLotteryEntries         LotteryEntry[]
   approvedSettlements          ContractSettlement[]
   createdExchangeRates         ExchangeRate[]
+  createdDealerLoans           DealerLoan[]             @relation("DealerLoanCreator")
+  createdDealerRepayments      DealerRepayment[]        @relation("DealerRepaymentCreator")
   ledgerEntries                LedgerEntry[]
   inventoryTransactions        InventoryTransaction[]
   refreshToken                 String?                  @map("refresh_token") @db.Text

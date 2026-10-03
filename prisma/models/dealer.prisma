@@ -1,0 +1,110 @@
+enum DealerType {
+  EMPLOYEE // کارمندِ دفتر
+  OTHER // هر شخصِ دیگر
+}
+
+enum DealerLoanStatus {
+  OPEN // هنوز باقی‌مانده دارد
+  SETTLED // کاملاً برگشته
+}
+
+// «دیلر» = طرف‌حسابی که از دفتر پول قرض می‌گیرد و باید برگرداند (کارمند یا هر شخصِ دیگر).
+// قرض مصرف نیست — طلبِ دفتر است؛ پس در گزارش مصارف نمی‌آید.
+model Dealer {
+  id              String     @id @default(uuid()) @db.Uuid
+  marketId        String     @map("market_id") @db.Uuid
+  fullName        String     @map("full_name") @db.VarChar(150)
+  fatherName      String?    @map("father_name") @db.VarChar(100)
+  grandfatherName String?    @map("grandfather_name") @db.VarChar(100)
+  type            DealerType @default(EMPLOYEE)
+  idNumber        String?    @map("id_number") @db.VarChar(50)
+  contact         String?    @db.VarChar(30)
+  details         String?    @db.Text
+
+  // سقفِ مجموعِ قرضِ باز، به «ارز پایهٔ مارکت» (هر قرض با نرخِ همان روزش به ارز پایه تبدیل
+  // می‌شود). null = بدونِ سقف. فقط ادمین می‌تواند بگذارد یا عوض کند.
+  creditLimit Decimal? @map("credit_limit") @db.Decimal(18, 4)
+
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market       @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  loans  DealerLoan[]
+
+  @@unique([marketId, idNumber])
+  @@index([marketId])
+  @@map("dealers")
+}
+
+// یک قرض: پول از یک حسابِ دفتر بیرون می‌رود (ارزِ قرض = ارزِ همان حساب). repaidAmount و
+// remainingAmount با هر بازپرداخت به‌صورتِ اتمیک به‌روز می‌شوند؛ وضعیتِ «سررسیدِ گذشته» و
+// «نزدیک به سررسید» ذخیره نمی‌شود و از dueDate محاسبه می‌شود (ن.ک. dealer-loans.service).
+model DealerLoan {
+  id       String @id @default(uuid()) @db.Uuid
+  marketId String @map("market_id") @db.Uuid
+  dealerId String @map("dealer_id") @db.Uuid
+
+  accountId  String  @map("account_id") @db.Uuid
+  currencyId String  @map("currency_id") @db.Uuid
+  amount     Decimal @db.Decimal(18, 4)
+
+  repaidAmount    Decimal          @default(0) @map("repaid_amount") @db.Decimal(18, 4)
+  remainingAmount Decimal          @map("remaining_amount") @db.Decimal(18, 4)
+  status          DealerLoanStatus @default(OPEN)
+
+  loanDate DateTime  @map("loan_date") @db.Timestamptz(6)
+  dueDate  DateTime? @map("due_date") @db.Date
+
+  // اسنپ‌شاتِ نرخ در لحظهٔ قرض (مثل بقیهٔ تراکنش‌های پولی).
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
+  details     String?  @db.Text
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  dealer    Dealer   @relation(fields: [dealerId], references: [id], onDelete: Restrict)
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency  Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy User?    @relation("DealerLoanCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  repayments  DealerRepayment[]
+  ledgerEntry LedgerEntry?
+
+  @@index([marketId])
+  @@index([dealerId])
+  @@index([status, dueDate])
+  @@map("dealer_loans")
+}
+
+// یک بازپرداخت (کامل یا بخشی): پول به یک حسابِ دفتر (هم‌ارز با ارزِ قرض) برمی‌گردد.
+model DealerRepayment {
+  id       String @id @default(uuid()) @db.Uuid
+  marketId String @map("market_id") @db.Uuid
+  loanId   String @map("loan_id") @db.Uuid
+
+  accountId     String   @map("account_id") @db.Uuid
+  amount        Decimal  @db.Decimal(18, 4)
+  repaymentDate DateTime @map("repayment_date") @db.Timestamptz(6)
+
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
+  details     String?  @db.Text
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market    Market     @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  loan      DealerLoan @relation(fields: [loanId], references: [id], onDelete: Restrict)
+  account   Account    @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  createdBy User?      @relation("DealerRepaymentCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  ledgerEntry LedgerEntry?
+
+  @@index([marketId])
+  @@index([loanId])
+  @@map("dealer_repayments")
+}

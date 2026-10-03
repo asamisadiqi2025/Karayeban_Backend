@@ -43,6 +43,9 @@ model Account {
 
   accountTransactions AccountTransaction[]
 
+  dealerLoans      DealerLoan[]
+  dealerRepayments DealerRepayment[]
+
   ledgerEntries LedgerEntry[]
 
   @@unique([marketId, name])
