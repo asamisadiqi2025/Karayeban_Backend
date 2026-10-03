@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsOptional, IsUUID, ValidateIf } from 'class-validator';
 import { PaginationQueryDto } from '../../../common/dto/pagination-query.dto';
 
 export class ExpenseCategoryQueryDto extends PaginationQueryDto {
@@ -11,5 +11,7 @@ export class ExpenseCategoryQueryDto extends PaginationQueryDto {
   // برای گرفتنِ فقط سب‌کتگوری‌های یک کتگوریِ مادرِ مشخص (مثلاً برای cascading dropdown).
   // نفرستید = همه (مادر و فرزند با هم)؛ 'root' بفرستید = فقط کتگوری‌های مادر.
   @IsOptional()
+  @ValidateIf((o: ExpenseCategoryQueryDto) => o.parentId !== 'root')
+  @IsUUID()
   parentId?: string;
 }

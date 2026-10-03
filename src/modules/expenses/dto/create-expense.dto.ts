@@ -5,11 +5,20 @@ import {
   IsPositive,
   IsString,
   IsUUID,
+  MaxLength,
 } from 'class-validator';
 
 export class CreateExpenseDto {
   @IsUUID()
   categoryId: string;
+
+  // اختیاری — نامِ یک سب‌کتگوریِ جدید زیرِ همین categoryId (که باید کتگوریِ مادر باشد).
+  // اگر زیرِ این مادر سب‌کتگوریِ هم‌نام (فعال) باشد همان استفاده می‌شود، وگرنه ساخته می‌شود؛
+  // ساخت و ثبتِ مصرف در یک تراکنش‌اند (همه یا هیچ).
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  newSubcategoryName?: string;
 
   @IsNumber()
   @IsPositive()

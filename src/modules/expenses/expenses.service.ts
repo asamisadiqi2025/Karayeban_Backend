@@ -24,6 +24,18 @@ import { ExpenseBreakdownQueryDto } from './dto/expense-breakdown-query.dto';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
+// نامِ ذخیره‌شده: فاصله‌های اضافه جمع می‌شود و دو سرِ نام تمیز می‌شود.
+const cleanName = (name: string) => name.replace(/\s+/g, ' ').trim();
+
+// کلیدِ مقایسهٔ نام‌ها: «نذیر احمد»، «نذیراحمد» و «نذیر‌احمد» (نیم‌فاصله) و تفاوتِ ی/ي و ک/ك
+// همه یک نام حساب می‌شوند — تا با تایپِ عجولانه دو کتگوریِ تکراری ساخته نشود.
+const nameKey = (name: string) =>
+  name
+    .replace(/[\s‌‍]+/g, '')
+    .replace(/ي/g, 'ی')
+    .replace(/ك/g, 'ک')
+    .toLowerCase();
+
 type CurrencyAmount = {
   currencyId: string;
   currencyCode: string | null;
@@ -99,12 +111,59 @@ export class ExpensesService {
     return parent;
   }
 
+  // نامِ تکراری در همان «سطح» ممنوع است: مادرها بین مادرهای قابل‌دیدنِ همان بازار (و سراسری‌ها)،
+  // سب‌کتگوری‌ها زیرِ همان مادر. مقایسه روی کلیدِ نرمال‌شده است (ن.ک. nameKey).
+  private async assertCategoryNameFree(
+    db: Pick<Prisma.TransactionClient, 'expenseCategory'>,
+    scope: { parentId: string | null; marketId: string | null },
+    name: string,
+    excludeId?: string,
+  ) {
+    const where: Prisma.ExpenseCategoryWhereInput =
+      scope.parentId !== null
+        ? { parentId: scope.parentId }
+        : {
+            parentId: null,
+            OR: [{ marketId: null }, ...(scope.marketId ? [{ marketId: scope.marketId }] : [])],
+          };
+    const siblings = await db.expenseCategory.findMany({ where, select: { id: true, name: true } });
+    const key = nameKey(name);
+    const clash = siblings.find((s) => s.id !== excludeId && nameKey(s.name) === key);
+    if (clash) {
+      throw new ConflictException(
+        scope.parentId !== null
+          ? `سب‌کتگوری «${clash.name}» زیر همین کتگوری از قبل وجود دارد`
+          : `کتگوری «${clash.name}» از قبل وجود دارد`,
+      );
+    }
+  }
+
   async createCategory(
     currentUser: { id: string },
     dto: CreateExpenseCategoryDto,
     meta: RequestMeta,
   ) {
     const actor = await this.getActor(currentUser);
+
+    const name = cleanName(dto.name);
+    if (!name) throw new BadRequestException('نام کتگوری نمی‌تواند خالی باشد');
+
+    let subNames: string[] = [];
+    if (dto.subcategories !== undefined) {
+      if (dto.parentId) {
+        throw new BadRequestException(
+          'سب‌کتگوری نمی‌تواند خودش سب‌کتگوری داشته باشد؛ subcategories فقط هنگام ساختِ کتگوریِ مادر مجاز است',
+        );
+      }
+      subNames = dto.subcategories.map(cleanName);
+      if (subNames.some((n) => !n)) {
+        throw new BadRequestException('نامِ سب‌کتگوری نمی‌تواند خالی باشد');
+      }
+      const keys = subNames.map(nameKey);
+      if (new Set(keys).size !== keys.length) {
+        throw new BadRequestException('نامِ سب‌کتگوری‌ها در این فهرست تکراری است');
+      }
+    }
 
     let marketId: string | null;
     let parent: { id: string; marketId: string | null } | null = null;
@@ -122,22 +181,47 @@ export class ExpensesService {
       }
     }
 
-    const category = await this.prisma.expenseCategory.create({
-      data: { marketId, name: dto.name.trim(), parentId: parent?.id ?? null },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      await this.assertCategoryNameFree(tx, { parentId: parent?.id ?? null, marketId }, name);
 
-    await this.auditLog.record({
-      action: 'CREATE',
-      entityType: 'ExpenseCategory',
-      entityId: category.id,
-      marketId,
-      userId: actor.id,
-      newData: category,
-      ip: meta.ip,
-      userAgent: meta.userAgent,
-    });
+      const category = await tx.expenseCategory.create({
+        data: { marketId, name, parentId: parent?.id ?? null },
+      });
 
-    return category;
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'ExpenseCategory',
+        entityId: category.id,
+        marketId,
+        userId: actor.id,
+        newData: category,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      if (subNames.length === 0) return category;
+
+      const children = [];
+      for (const subName of subNames) {
+        const sub = await tx.expenseCategory.create({
+          data: { marketId, name: subName, parentId: category.id },
+        });
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'ExpenseCategory',
+          entityId: sub.id,
+          marketId,
+          userId: actor.id,
+          newData: sub,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+        children.push(sub);
+      }
+      return { ...category, children };
+    });
   }
 
   async findAllCategories(currentUser: { id: string }, query: ExpenseCategoryQueryDto) {
@@ -200,31 +284,29 @@ export class ExpensesService {
     const category = await this.findCategoryOrThrow(id);
     this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
 
-    const data: Record<string, unknown> = {};
-    if (dto.name !== undefined) data.name = dto.name.trim();
-    if (dto.isActive !== undefined) data.isActive = dto.isActive;
-
     if (dto.parentId !== undefined) {
-      if (dto.parentId === null) {
-        data.parentId = null;
-      } else {
-        if (dto.parentId === id) {
-          throw new BadRequestException('یک کتگوری نمی‌تواند والدِ خودش باشد');
-        }
-        const childrenCount = await this.prisma.expenseCategory.count({
-          where: { parentId: id },
-        });
-        if (childrenCount > 0) {
-          throw new BadRequestException(
-            'این کتگوری خودش سب‌کتگوری دارد، نمی‌تواند زیرِ کتگوریِ دیگری برود — فقط ۲ سطح مجاز است',
-          );
-        }
-        const parent = await this.findParentOrThrow(dto.parentId);
-        this.ensureAccess(actor, parent.marketId, 'دسترسی به این کتگوریِ مادر مجاز نیست');
-        data.parentId = parent.id;
-        data.marketId = parent.marketId;
-      }
+      throw new BadRequestException(
+        'جابه‌جایی کتگوری یا سب‌کتگوری زیر والدِ دیگر ممنوع است؛ سب‌کتگوریِ قدیمی را غیرفعال کنید و در جای درست یکی تازه بسازید',
+      );
     }
+
+    if (dto.isActive !== undefined && actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
+      throw new ForbiddenException('فعال یا غیرفعال کردنِ کتگوری فقط توسط ادمین ممکن است');
+    }
+
+    const data: Record<string, unknown> = {};
+    if (dto.name !== undefined) {
+      const name = cleanName(dto.name);
+      if (!name) throw new BadRequestException('نام کتگوری نمی‌تواند خالی باشد');
+      await this.assertCategoryNameFree(
+        this.prisma,
+        { parentId: category.parentId, marketId: category.marketId },
+        name,
+        id,
+      );
+      data.name = name;
+    }
+    if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     const updated = await this.prisma.expenseCategory.update({ where: { id }, data });
 
@@ -288,15 +370,37 @@ export class ExpensesService {
   // ارزِ مصرف همیشه ارزِ همان حسابِ انتخابی است — این عملیات نرخ تبدیل ارز را حساب
   // نمی‌کند، پس currencyId هیچ‌وقت یک انتخابِ مستقل نیست و از خودِ account گرفته می‌شود
   // (نه از ورودیِ کاربر) تا ناهماهنگیِ حساب/ارز اصلاً ممکن نباشد.
+  // requireActive: فقط وقتی کتگوری «تازه انتخاب» می‌شود (ثبتِ مصرفِ جدید یا عوض‌کردنِ کتگوریِ
+  // یک مصرف) — اصلاحِ مبلغ/حسابِ مصرفی که از قبل زیرِ یک کتگوریِ حالا-غیرفعال ثبت شده باید
+  // ممکن بماند.
   private async validateCategoryAndAccount(
     marketId: string,
     categoryId: string,
     accountId: string,
+    requireActive = false,
   ) {
     const category = await this.prisma.expenseCategory.findUnique({ where: { id: categoryId } });
     if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
     if (category.marketId !== null && category.marketId !== marketId) {
       throw new BadRequestException('دسته‌بندی باید سراسری یا متعلق به همان بازار باشد');
+    }
+    if (requireActive) {
+      if (!category.isActive) {
+        throw new ConflictException(
+          `«${category.name}» غیرفعال است و مصرفِ جدید نمی‌پذیرد؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+        );
+      }
+      if (category.parentId) {
+        const parent = await this.prisma.expenseCategory.findUnique({
+          where: { id: category.parentId },
+          select: { name: true, isActive: true },
+        });
+        if (parent && !parent.isActive) {
+          throw new ConflictException(
+            `کتگوریِ مادرِ «${parent.name}» غیرفعال است و مصرفِ جدید نمی‌پذیرد؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+          );
+        }
+      }
     }
 
     const account = await this.prisma.account.findUnique({ where: { id: accountId } });
@@ -308,7 +412,7 @@ export class ExpensesService {
       throw new ConflictException('حساب غیرفعال است');
     }
 
-    return account;
+    return { account, category };
   }
 
   async createExpense(currentUser: { id: string }, dto: CreateExpenseDto, meta: RequestMeta) {
@@ -316,14 +420,66 @@ export class ExpensesService {
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
     await ensureMarketSetupComplete(this.prisma, marketId);
-    const account = await this.validateCategoryAndAccount(marketId, dto.categoryId, dto.accountId);
+    const { account, category } = await this.validateCategoryAndAccount(
+      marketId,
+      dto.categoryId,
+      dto.accountId,
+      true,
+    );
     const currencyId = account.currencyId;
     await ensureCurrencyEnabledForMarket(this.prisma, marketId, currencyId);
+
+    let newSubName: string | null = null;
+    if (dto.newSubcategoryName !== undefined) {
+      newSubName = cleanName(dto.newSubcategoryName);
+      if (!newSubName) throw new BadRequestException('نامِ سب‌کتگوری نمی‌تواند خالی باشد');
+      if (category.parentId !== null) {
+        throw new BadRequestException(
+          'سب‌کتگوریِ جدید را فقط زیرِ کتگوریِ مادر می‌توان ساخت؛ categoryId باید یک کتگوریِ مادر باشد',
+        );
+      }
+    }
 
     const amount = new Prisma.Decimal(dto.amount);
     const expenseDate = dto.expenseDate ? new Date(dto.expenseDate) : new Date();
 
     return this.prisma.$transaction(async (tx) => {
+      // سب‌کتگوریِ هم‌نامِ فعال → همان؛ غیرفعال → خطا (ادمین باید فعالش کند)؛ نبود → ساخته می‌شود.
+      // سب‌کتگوری بازارِ مادرش را می‌گیرد؛ اگر مادر سراسری باشد، بازارِ همین مصرف را.
+      let categoryId = dto.categoryId;
+      if (newSubName) {
+        const siblings = await tx.expenseCategory.findMany({
+          where: { parentId: category.id },
+          select: { id: true, name: true, isActive: true },
+        });
+        const key = nameKey(newSubName);
+        const existing = siblings.find((s) => nameKey(s.name) === key);
+        if (existing) {
+          if (!existing.isActive) {
+            throw new ConflictException(
+              `سب‌کتگوریِ «${existing.name}» غیرفعال است؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+            );
+          }
+          categoryId = existing.id;
+        } else {
+          const sub = await tx.expenseCategory.create({
+            data: { marketId: category.marketId ?? marketId, name: newSubName, parentId: category.id },
+          });
+          await this.auditLog.record({
+            tx,
+            action: 'CREATE',
+            entityType: 'ExpenseCategory',
+            entityId: sub.id,
+            marketId,
+            userId: actor.id,
+            newData: sub,
+            ip: meta.ip,
+            userAgent: meta.userAgent,
+          });
+          categoryId = sub.id;
+        }
+      }
+
       const rate = await resolveRateToBase(tx, {
         marketId,
         currencyId,
@@ -344,7 +500,7 @@ export class ExpensesService {
       const expense = await tx.expense.create({
         data: {
           marketId,
-          categoryId: dto.categoryId,
+          categoryId,
           amount,
           currencyId,
           usdEquivalent:
@@ -675,10 +831,11 @@ export class ExpensesService {
     // حساب عوض نشده باشد، ارز هم همان ارزِ قبلیِ مصرف باقی می‌ماند.
     let nextCurrencyId = expense.currencyId;
     if (dto.categoryId !== undefined || moneyChanged) {
-      const account = await this.validateCategoryAndAccount(
+      const { account } = await this.validateCategoryAndAccount(
         expense.marketId,
         nextCategoryId,
         nextAccountId,
+        dto.categoryId !== undefined && dto.categoryId !== expense.categoryId,
       );
       nextCurrencyId = account.currencyId;
     }
