@@ -81,7 +81,14 @@ export const PERMISSION_CATALOG: PermissionSection[] = [
       { key: 'expenses.manage_categories', label: 'مدیریت دسته‌بندی مصارف' },
     ],
   },
-  { key: 'assets', label: 'دارایی‌ها', items: crud('assets', 'دارایی‌ها') },
+  {
+    key: 'assets',
+    label: 'دارایی‌ها',
+    items: [
+      ...crud('assets', 'دارایی‌ها'),
+      { key: 'assets.manage_categories', label: 'مدیریت دسته‌بندی دارایی‌ها' },
+    ],
+  },
   { key: 'warehouses', label: 'گدام‌ها', items: crud('warehouses', 'گدام‌ها') },
   {
     key: 'inventory',

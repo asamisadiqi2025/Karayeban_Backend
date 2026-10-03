@@ -18,10 +18,10 @@ export class UpdateAssetDto {
   @MaxLength(150)
   name?: string;
 
+  // undefined = دست‌نخورده؛ یک UUID = دستهٔ جدید (باید فعال باشد)؛ null = برداشتنِ دسته‌بندی.
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  category?: string;
+  @IsUUID()
+  categoryId?: string | null;
 
   @IsOptional()
   @IsNumber()

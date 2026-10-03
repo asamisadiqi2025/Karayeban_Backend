@@ -17,6 +17,10 @@ import { UpdateAssetDto } from './dto/update-asset.dto';
 import { AssetQueryDto } from './dto/asset-query.dto';
 import { AssetSummaryQueryDto } from './dto/asset-summary-query.dto';
 import { AssetDepreciationSummaryQueryDto } from './dto/asset-depreciation-summary-query.dto';
+import { CreateAssetCategoryDto } from './dto/create-asset-category.dto';
+import { UpdateAssetCategoryDto } from './dto/update-asset-category.dto';
+import { AssetCategoryQueryDto } from './dto/asset-category-query.dto';
+import { cleanName, nameKey } from '../../common/utils/category-name';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
@@ -33,7 +37,9 @@ export class AssetsService {
     'currentBookValue',
     'createdAt',
   ] as const;
-  private static readonly SEARCH_FIELDS = ['name', 'category', 'details'] as const;
+  private static readonly SEARCH_FIELDS = ['name', 'category.name', 'details'] as const;
+  private static readonly CATEGORY_SORT_FIELDS = ['name', 'createdAt'] as const;
+  private static readonly CATEGORY_SEARCH_FIELDS = ['name'] as const;
   private readonly logger = new Logger(AssetsService.name);
 
   constructor(
@@ -83,11 +89,182 @@ export class AssetsService {
     return asset;
   }
 
+  // ==========================================================================
+  // دسته‌بندی دارایی‌ها (AssetCategory) — مخصوصِ هر مارکت؛ برای فیلترِ دارایی‌ها.
+  // ==========================================================================
+
+  private async findCategoryOrThrow(id: string) {
+    const category = await this.prisma.assetCategory.findUnique({ where: { id } });
+    if (!category) throw new NotFoundException('دسته‌بندی دارایی یافت نشد');
+    return category;
+  }
+
+  private async assertCategoryNameFree(marketId: string, name: string, excludeId?: string) {
+    const siblings = await this.prisma.assetCategory.findMany({
+      where: { marketId },
+      select: { id: true, name: true },
+    });
+    const key = nameKey(name);
+    const clash = siblings.find((s) => s.id !== excludeId && nameKey(s.name) === key);
+    if (clash) {
+      throw new ConflictException(`دسته‌بندی «${clash.name}» از قبل وجود دارد`);
+    }
+  }
+
+  // برای انتخابِ دسته روی یک دارایی: باید همین بازار و فعال باشد.
+  private async ensureCategoryUsable(marketId: string, categoryId: string) {
+    const category = await this.findCategoryOrThrow(categoryId);
+    if (category.marketId !== marketId) {
+      throw new BadRequestException('دسته‌بندی باید متعلق به همان بازارِ دارایی باشد');
+    }
+    if (!category.isActive) {
+      throw new ConflictException(
+        `دسته‌بندیِ «${category.name}» غیرفعال است؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+      );
+    }
+    return category;
+  }
+
+  async createCategory(
+    currentUser: { id: string },
+    dto: CreateAssetCategoryDto,
+    meta: RequestMeta,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, dto.marketId);
+    await ensureMarketSetupComplete(this.prisma, marketId);
+
+    const name = cleanName(dto.name);
+    if (!name) throw new BadRequestException('نام دسته‌بندی نمی‌تواند خالی باشد');
+    await this.assertCategoryNameFree(marketId, name);
+
+    const category = await this.prisma.assetCategory.create({ data: { marketId, name } });
+
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'AssetCategory',
+      entityId: category.id,
+      marketId,
+      userId: actor.id,
+      newData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return category;
+  }
+
+  async findAllCategories(currentUser: { id: string }, query: AssetCategoryQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const where: any = {};
+    if (actor.role === 'SUPER_ADMIN') {
+      if (query.marketId) where.marketId = query.marketId;
+    } else {
+      if (!actor.marketId) {
+        throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+      }
+      where.marketId = actor.marketId;
+    }
+    if (query.isActive !== undefined) where.isActive = query.isActive;
+
+    const searchWhere = buildSearchWhere(AssetsService.CATEGORY_SEARCH_FIELDS, query.search);
+    if (searchWhere) where.AND = [searchWhere];
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      AssetsService.CATEGORY_SORT_FIELDS,
+      { name: 'asc' },
+    );
+
+    return paginate(this.prisma.assetCategory, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+    });
+  }
+
+  async updateCategory(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateAssetCategoryDto,
+    meta: RequestMeta,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const category = await this.findCategoryOrThrow(id);
+    this.ensureAccess(actor, category.marketId);
+
+    if (dto.isActive !== undefined && actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
+      throw new ForbiddenException('فعال یا غیرفعال کردنِ دسته‌بندی فقط توسط ادمین ممکن است');
+    }
+
+    const data: Record<string, unknown> = {};
+    if (dto.name !== undefined) {
+      const name = cleanName(dto.name);
+      if (!name) throw new BadRequestException('نام دسته‌بندی نمی‌تواند خالی باشد');
+      await this.assertCategoryNameFree(category.marketId, name, id);
+      data.name = name;
+    }
+    if (dto.isActive !== undefined) data.isActive = dto.isActive;
+
+    const updated = await this.prisma.assetCategory.update({ where: { id }, data });
+
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'AssetCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      newData: updated,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return updated;
+  }
+
+  async removeCategory(currentUser: { id: string }, id: string, meta: RequestMeta) {
+    const actor = await this.getActor(currentUser);
+    const category = await this.findCategoryOrThrow(id);
+    this.ensureAccess(actor, category.marketId);
+
+    // همهٔ دارایی‌ها (حتی حذف‌شده‌ها) — کلیدِ خارجی Restrict است و حذفِ دسته‌ای که هنوز
+    // دارایی‌ای به آن وصل است ممکن نیست.
+    const assetsCount = await this.prisma.asset.count({ where: { categoryId: id } });
+    if (assetsCount > 0) {
+      throw new ConflictException(
+        'این دسته‌بندی به دارایی وصل است و قابل حذف نیست؛ می‌توانید آن را غیرفعال کنید',
+      );
+    }
+
+    await this.prisma.assetCategory.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'AssetCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return { message: `دسته‌بندی «${category.name}» حذف شد` };
+  }
+
+  // ==========================================================================
+  // دارایی‌ها (Asset)
+  // ==========================================================================
+
   async create(currentUser: { id: string }, dto: CreateAssetDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
 
     await ensureMarketSetupComplete(this.prisma, marketId);
+    if (dto.categoryId) await this.ensureCategoryUsable(marketId, dto.categoryId);
 
     const currency = await this.prisma.currency.findUnique({
       where: { id: dto.currencyId },
@@ -103,7 +280,7 @@ export class AssetsService {
       data: {
         marketId,
         name: dto.name.trim(),
-        category: dto.category?.trim() || null,
+        categoryId: dto.categoryId ?? null,
         purchasePrice,
         currencyId: dto.currencyId,
         lifespanYears: dto.lifespanYears,
@@ -112,6 +289,7 @@ export class AssetsService {
         purchaseDate,
         details: dto.details?.trim() || null,
       },
+      include: { category: { select: { id: true, name: true } } },
     });
 
     await this.auditLog.record({
@@ -139,7 +317,7 @@ export class AssetsService {
     };
 
     if (query.status !== undefined) where.status = query.status;
-    if (query.category !== undefined) where.category = query.category;
+    if (query.categoryId !== undefined) where.categoryId = query.categoryId;
     if (query.currencyId !== undefined) where.currencyId = query.currencyId;
 
     const searchWhere = buildSearchWhere(AssetsService.SEARCH_FIELDS, query.search);
@@ -154,7 +332,10 @@ export class AssetsService {
       orderBy,
       page: query.page,
       limit: query.limit,
-      include: { currency: { select: { id: true, code: true, name: true } } },
+      include: {
+        currency: { select: { id: true, code: true, name: true } },
+        category: { select: { id: true, name: true } },
+      },
     });
   }
 
@@ -167,6 +348,7 @@ export class AssetsService {
       where: { id },
       include: {
         currency: { select: { id: true, code: true, name: true } },
+        category: { select: { id: true, name: true } },
         depreciationEvents: { orderBy: { year: 'desc' } },
       },
     });
@@ -192,7 +374,12 @@ export class AssetsService {
 
     const data: Record<string, unknown> = {};
     if (dto.name !== undefined) data.name = dto.name.trim();
-    if (dto.category !== undefined) data.category = dto.category?.trim() || null;
+    if (dto.categoryId !== undefined) {
+      if (dto.categoryId !== null && dto.categoryId !== asset.categoryId) {
+        await this.ensureCategoryUsable(asset.marketId, dto.categoryId);
+      }
+      data.categoryId = dto.categoryId;
+    }
     if (dto.currencyId !== undefined) data.currencyId = dto.currencyId;
     if (dto.purchaseDate !== undefined) data.purchaseDate = new Date(dto.purchaseDate);
     if (dto.status !== undefined) data.status = dto.status;
@@ -214,7 +401,11 @@ export class AssetsService {
       }
     }
 
-    const updated = await this.prisma.asset.update({ where: { id }, data });
+    const updated = await this.prisma.asset.update({
+      where: { id },
+      data,
+      include: { category: { select: { id: true, name: true } } },
+    });
 
     await this.auditLog.record({
       action: 'UPDATE',
@@ -274,7 +465,11 @@ export class AssetsService {
       marketId = actor.marketId;
     }
 
-    const where: any = { isDeleted: false, ...(marketId ? { marketId } : {}) };
+    const where: any = {
+      isDeleted: false,
+      ...(marketId ? { marketId } : {}),
+      ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+    };
 
     const [totalAssets, statusGroups, currencyGroups] = await Promise.all([
       this.prisma.asset.count({ where }),

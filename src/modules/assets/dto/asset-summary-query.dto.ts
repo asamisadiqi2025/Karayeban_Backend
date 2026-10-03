@@ -6,4 +6,9 @@ export class AssetSummaryQueryDto {
   @IsOptional()
   @IsUUID()
   marketId?: string;
+
+  // محدود کردنِ مجموع به یک دسته‌بندی (مثلاً «لوازم برق»).
+  @IsOptional()
+  @IsUUID()
+  categoryId?: string;
 }
