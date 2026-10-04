@@ -1,4 +1,5 @@
-import { Controller, Post, Body, UseGuards, Patch, Param, Get, Query, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Patch, Param, ParseUUIDPipe, Get, Query, Req } from '@nestjs/common';
+import { SetUserPasswordDto } from './dto/set-user-password.dto';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -23,6 +24,17 @@ export class UserController {
   @Roles('SUPER_ADMIN', 'ADMIN')
   async update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.userService.update(req.user, id, dto, extractRequestMeta(req));
+  }
+
+  // رمزِ جدیدِ یک کاربر؛ رمزِ فعلیِ هیچ‌کس دیده نمی‌شود. ن.ک. UserService.setPassword.
+  @Patch(':id/password')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  async setPassword(
+    @Req() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: SetUserPasswordDto,
+  ) {
+    return this.userService.setPassword(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Get('me')
