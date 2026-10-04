@@ -5,6 +5,8 @@ import { UserService } from '../user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterSuperAdminDto } from './dto/register-super-admin.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Public } from '../../common/decorators/public.decorator';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -21,6 +23,21 @@ export class AuthController {
   @Post('login')
   async login(@Body() dto: LoginDto, @Req() req: Request) {
     return this.authService.login(dto, extractRequestMeta(req));
+  }
+
+  // فقط ADMIN/SUPER_ADMIN؛ پاسخ همیشه یکسان است (ن.ک. AuthService.requestPasswordReset).
+  @Public()
+  @Post('forgot-password')
+  @HttpCode(200)
+  async forgotPassword(@Body() dto: ForgotPasswordDto, @Req() req: Request) {
+    return this.authService.requestPasswordReset(dto.email, extractRequestMeta(req));
+  }
+
+  @Public()
+  @Post('reset-password')
+  @HttpCode(200)
+  async resetPassword(@Body() dto: ResetPasswordDto, @Req() req: Request) {
+    return this.authService.resetPassword(dto.token, dto.newPassword, extractRequestMeta(req));
   }
 
   @Public()

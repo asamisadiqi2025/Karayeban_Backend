@@ -28,6 +28,7 @@ import { AuditLogModule } from './common/audit-log/audit-log.module';
 import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { DealersModule } from './modules/dealers/dealers.module';
+import { MailModule } from './common/mail/mail.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { DealersModule } from './modules/dealers/dealers.module';
     ScheduleModule.forRoot(),
     PrismaModule,
     AuditLogModule,
+    MailModule,
     AuditLogsModule,
     AuthModule,
     UserModule,

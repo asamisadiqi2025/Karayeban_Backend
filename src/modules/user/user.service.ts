@@ -9,6 +9,8 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQueryDto } from './dto/user-query.dto';
+import { SetUserPasswordDto } from './dto/set-user-password.dto';
+import { Prisma } from '@prisma/client';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import * as bcrypt from 'bcrypt';
 import { UploadsService } from '../uploads/uploads.service';
@@ -187,6 +189,75 @@ export class UserService {
     });
 
     return safeUser;
+  }
+
+  hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 10);
+  }
+
+  // تغییرِ رمز و قطعِ فوریِ همهٔ نشست‌های قدیمیِ آن کاربر: passwordChangedAt باعث می‌شود هر JWTِ
+  // قبلی رد شود و همهٔ refresh tokenها باطل می‌شوند. برای کاربری که از مارکت رفته و هنوز رمز را
+  // دارد، همین یعنی بلافاصله بیرون است.
+  async applyPasswordHash(tx: Prisma.TransactionClient, userId: string, passwordHash: string) {
+    await tx.user.update({
+      where: { id: userId },
+      data: { passwordHash, passwordChangedAt: new Date() },
+    });
+    await tx.refreshToken.updateMany({
+      where: { userId, revoked: false },
+      data: { revoked: true },
+    });
+  }
+
+  // ادمینِ مارکت رمزِ کاربرانِ «خودش» (حسابدار/کارمند) را عوض می‌کند — بدون اینکه رمزِ فعلیِ
+  // کسی را ببیند. سوپرادمین هر کسی را. تغییرِ رمزِ خودِ شخص از همین مسیر ممکن نیست (برای
+  // ادمین‌ها مسیرِ «فراموشی رمز» با تأییدِ ایمیل است) تا نشستِ دزدیده‌شده نتواند صاحبِ حساب را بیرون کند.
+  async setPassword(currentUser: any, id: string, dto: SetUserPasswordDto, meta: RequestMeta) {
+    if (!currentUser) throw new ForbiddenException('Not allowed');
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
+      throw new ForbiddenException('Not allowed');
+    }
+
+    const target = await this.prisma.user.findUnique({
+      where: { id },
+      select: { id: true, fullName: true, role: true, marketId: true },
+    });
+    if (!target) throw new NotFoundException('User not found');
+
+    if (target.id === actor.id) {
+      throw new BadRequestException(
+        'تغییرِ رمزِ خودتان از این مسیر ممکن نیست؛ از «فراموشی رمز» با تأییدِ ایمیل استفاده کنید',
+      );
+    }
+    if (actor.role === 'ADMIN') {
+      if (!actor.marketId || target.marketId !== actor.marketId) {
+        throw new ForbiddenException('دسترسی به این کاربر مجاز نیست');
+      }
+      if (!UserService.ADMIN_ASSIGNABLE_ROLES.includes(target.role)) {
+        throw new ForbiddenException('ادمین فقط رمزِ کاربرانِ حسابدار (ACCOUNTANT) و کارمند (STAFF) را عوض می‌کند');
+      }
+    }
+
+    const passwordHash = await this.hashPassword(dto.newPassword);
+    await this.prisma.$transaction(async (tx) => {
+      await this.applyPasswordHash(tx, target.id, passwordHash);
+
+      // خودِ رمز (و هشِ آن) هرگز وارد audit نمی‌شود.
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'UserPassword',
+        entityId: target.id,
+        marketId: target.marketId,
+        userId: actor.id,
+        newData: { event: 'password_changed_by_admin', sessionsRevoked: true },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+    });
+
+    return { message: `رمزِ «${target.fullName}» عوض شد و نشست‌های قبلیِ او بسته شد` };
   }
 
   async findMe(userId: string) {
