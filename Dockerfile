@@ -43,7 +43,7 @@ USER node
 # Documentation only. Runtime port comes from ENV.
 EXPOSE ${PORT}
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=25s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=240s --retries=5 \
   CMD wget -qO- http://127.0.0.1:${PORT}/ >/dev/null || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
