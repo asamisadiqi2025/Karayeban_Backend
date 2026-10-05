@@ -310,6 +310,8 @@ export class ContractsService {
             direction: 'IN',
             amount: depositAmount,
             balanceAfter: updatedAccount.balance,
+            exchangeRate: depositRate?.exchangeRate ?? null,
+            baseCurrencyAmount: depositRate?.baseCurrencyAmount ?? null,
             entryDate: now,
             description: `امانت (پیش‌پرداخت) قرارداد دوکان «${shop.shopNumber}»`,
             createdById: actor.id,

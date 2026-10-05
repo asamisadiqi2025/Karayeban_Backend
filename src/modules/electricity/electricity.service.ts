@@ -733,6 +733,8 @@ export class ElectricityService {
           direction: 'IN',
           amount: params.amount,
           balanceAfter: accountBalanceAfter!,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: params.paymentDate,
           description: 'دریافت بل برق',
           electricityPaymentId: payment.id,

@@ -1298,6 +1298,8 @@ export class InventoryService {
               dto.type === InventoryTransactionType.PURCHASE ? 'OUT' : 'IN',
             amount: totalAmount,
             balanceAfter: updatedAccount.balance,
+            exchangeRate: rate?.exchangeRate ?? null,
+            baseCurrencyAmount: rate?.baseCurrencyAmount ?? null,
             entryDate: transactionDate,
             description:
               dto.type === InventoryTransactionType.PURCHASE

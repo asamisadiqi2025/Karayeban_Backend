@@ -1,5 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { AccountBalancesQueryDto } from './dto/account-balances-query.dto';
 
@@ -116,11 +117,54 @@ export class AccountBalancesService {
       totalsByCurrency.set(row.currencyId, entry);
     }
 
+    // ارزشِ ارز پایه: «نرخِ ثبت‌شدهٔ مارکت تا تاریخِ گزارش» (asOfDate یا امروز) — این یک ارزش‌گذاریِ روزِ
+    // گزارش است، نه هزینهٔ تاریخیِ هر تراکنش (آن در گزارشِ خلاصهٔ مالی است). ارزی که نرخ ندارد در
+    // currenciesWithoutRate می‌آید و در مجموع نمی‌آید.
+    const market = await this.prisma.market.findUnique({
+      where: { id: marketId },
+      select: { baseCurrency: { select: { id: true, code: true } } },
+    });
+    const valuationDate = query.asOfDate ? new Date(query.asOfDate) : new Date();
+    const rateByCurrency = new Map<string, Prisma.Decimal | null>();
+    if (market?.baseCurrency) {
+      for (const currencyId of totalsByCurrency.keys()) {
+        try {
+          const r = await resolveRateToBase(this.prisma, {
+            marketId,
+            currencyId,
+            date: valuationDate,
+            amount: new Prisma.Decimal(1),
+          });
+          rateByCurrency.set(currencyId, r.exchangeRate);
+        } catch {
+          rateByCurrency.set(currencyId, null);
+        }
+      }
+    }
+    const accountsWithBase = accountRows.map((a) => {
+      const rate = rateByCurrency.get(a.currencyId) ?? null;
+      return {
+        ...a,
+        rateToBase: rate,
+        balanceInBase: rate ? a.balance.mul(rate).toDecimalPlaces(4) : null,
+      };
+    });
+    const totalInBase = accountsWithBase.reduce(
+      (sum, a) => (a.balanceInBase ? sum.add(a.balanceInBase) : sum),
+      zero,
+    );
+
     return {
       marketId,
       asOfDate: query.asOfDate ?? null,
-      accounts: accountRows,
+      baseCurrency: market?.baseCurrency ?? null,
+      valuationDate: valuationDate.toISOString().slice(0, 10),
+      accounts: accountsWithBase,
       totalsByCurrency: [...totalsByCurrency.values()],
+      totalInBase,
+      currenciesWithoutRate: [...totalsByCurrency.values()]
+        .filter((t) => market?.baseCurrency && rateByCurrency.get(t.currencyId) === null)
+        .map((t) => t.currencyCode),
     };
   }
 }

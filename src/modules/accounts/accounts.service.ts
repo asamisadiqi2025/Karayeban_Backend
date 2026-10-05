@@ -17,6 +17,7 @@ import { AccountTransactionQueryDto } from './dto/account-transaction-query.dto'
 import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
@@ -58,51 +59,6 @@ export class AccountsService {
     if (actor.marketId !== accountMarketId) {
       throw new ForbiddenException('دسترسی به این حساب مجاز نیست');
     }
-  }
-
-  // نرخ «۱ واحد این ارز = X واحد ارز پایه» را برمی‌گرداند: ۱ برای خودِ ارز پایه،
-  // وگرنه آخرین نرخ ثبت‌شده در ExchangeRate (تنظیمات مارکت). این متد فقط می‌خواند،
-  // هرگز چیزی در جدول نرخ ارز نمی‌نویسد.
-  private async getRateToBase(
-    marketId: string,
-    currencyId: string,
-    baseCurrencyId: string,
-  ): Promise<Prisma.Decimal | null> {
-    if (currencyId === baseCurrencyId) return new Prisma.Decimal(1);
-    const row = await this.prisma.exchangeRate.findFirst({
-      where: { marketId, currencyId },
-      orderBy: { effectiveDate: 'desc' },
-    });
-    return row ? row.rateToBase : null;
-  }
-
-  // وقتی کاربر نرخ تبدیل را دستی نمی‌فرستد، از روی آخرین نرخ‌های ثبت‌شدهٔ هر دو ارز
-  // نسبت به ارز پایهٔ مارکت محاسبه می‌شود («نرخ خوانده می‌شود»، طبق چیزی که خواستی).
-  private async resolveExchangeRate(
-    marketId: string,
-    fromCurrencyId: string,
-    toCurrencyId: string,
-  ): Promise<Prisma.Decimal> {
-    const market = await this.prisma.market.findUnique({
-      where: { id: marketId },
-      select: { baseCurrencyId: true },
-    });
-    if (!market?.baseCurrencyId) {
-      throw new BadRequestException(
-        'نرخ تبدیل ارسال نشده و ارز پایهٔ مارکت هم تنظیم نیست؛ نرخ را دستی بفرستید',
-      );
-    }
-
-    const [fromRate, toRate] = await Promise.all([
-      this.getRateToBase(marketId, fromCurrencyId, market.baseCurrencyId),
-      this.getRateToBase(marketId, toCurrencyId, market.baseCurrencyId),
-    ]);
-    if (!fromRate || !toRate) {
-      throw new BadRequestException(
-        'نرخ تبدیل ارسال نشده و برای این جفت ارز در تنظیمات مارکت هم نرخی ثبت نشده؛ نرخ را دستی بفرستید یا ابتدا نرخ روز را ثبت کنید',
-      );
-    }
-    return fromRate.div(toRate);
   }
 
   async create(currentUser: { id: string }, dto: CreateAccountDto, meta: RequestMeta) {
@@ -149,15 +105,23 @@ export class AccountsService {
         });
 
         if (openingAmount !== 0) {
+          // معادلِ ارز پایه را سرور حساب می‌کند، نه کلاینت: نرخِ دستی (اختیاری) یا نرخِ ثبت‌شدهٔ مارکت
+          // تا تاریخِ افتتاحیه. baseCurrencyAmountِ ارسالیِ کلاینت دیگر استفاده نمی‌شود.
+          const openingRate = await resolveRateToBase(tx, {
+            marketId,
+            currencyId: dto.currencyId,
+            date: openingDate,
+            amount: new Prisma.Decimal(openingAmount),
+            manualRate: dto.openingBalance?.exchangeRate,
+          });
           const openingBalance = await tx.openingBalance.create({
             data: {
               marketId,
               accountId: account.id,
               currencyId: dto.currencyId,
               amount: openingAmount,
-              exchangeRate: dto.openingBalance?.exchangeRate ?? null,
-              baseCurrencyAmount:
-                dto.openingBalance?.baseCurrencyAmount ?? null,
+              exchangeRate: openingRate.exchangeRate,
+              baseCurrencyAmount: openingRate.baseCurrencyAmount,
               openingDate,
               createdById: actor.id,
             },
@@ -171,6 +135,8 @@ export class AccountsService {
               direction: openingAmount > 0 ? 'IN' : 'OUT',
               amount: Math.abs(openingAmount),
               balanceAfter: openingAmount,
+              exchangeRate: openingRate.exchangeRate,
+              baseCurrencyAmount: openingRate.baseCurrencyAmount.abs(),
               entryDate: openingDate,
               description: 'موجودی افتتاحیهٔ حساب',
               openingBalanceId: openingBalance.id,
@@ -383,32 +349,41 @@ export class AccountsService {
 
     const amount = new Prisma.Decimal(dto.amount);
     const isCrossCurrency = fromAccount.currencyId !== toAccount.currencyId;
+    const transferDate = dto.transferDate ? new Date(dto.transferDate) : new Date();
 
-    let receivedAmount: Prisma.Decimal;
-    let exchangeRate: Prisma.Decimal | null = null;
-
-    if (isCrossCurrency) {
-      if (dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
-        // نرخ دستی همین یک انتقال را می‌پوشاند؛ هیچ‌جا در ExchangeRate ذخیره نمی‌شود.
-        exchangeRate = new Prisma.Decimal(dto.exchangeRate);
-      } else {
-        exchangeRate = await this.resolveExchangeRate(
-          fromAccount.marketId,
-          fromAccount.currencyId,
-          toAccount.currencyId,
-        );
-      }
-      receivedAmount = amount.mul(exchangeRate).toDecimalPlaces(4);
-    } else {
-      if (dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
-        throw new BadRequestException(
-          'حساب مبدا و مقصد هم‌ارز هستند؛ نرخ تبدیل نباید ارسال شود',
-        );
-      }
-      receivedAmount = amount;
+    if (!isCrossCurrency && dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
+      throw new BadRequestException(
+        'حساب مبدا و مقصد هم‌ارز هستند؛ نرخ تبدیل نباید ارسال شود',
+      );
     }
 
     return await this.prisma.$transaction(async (tx) => {
+      // نرخِ هر ارز به ارز پایه، «در تاریخِ همین انتقال» (نه آخرین نرخ). اگر برای ارزی نرخ نبود،
+      // انتقال رد می‌شود. نرخِ دستیِ انتقال فقط «مبدا→مقصد» را می‌پوشاند و نرخ‌های سیستم عوض نمی‌شوند.
+      const one = new Prisma.Decimal(1);
+      const fromRate = (
+        await resolveRateToBase(tx, { marketId: fromAccount.marketId, currencyId: fromAccount.currencyId, date: transferDate, amount: one })
+      ).exchangeRate;
+      const toRate = isCrossCurrency
+        ? (
+            await resolveRateToBase(tx, { marketId: toAccount.marketId, currencyId: toAccount.currencyId, date: transferDate, amount: one })
+          ).exchangeRate
+        : fromRate;
+
+      let receivedAmount: Prisma.Decimal;
+      let exchangeRate: Prisma.Decimal | null = null;
+      if (isCrossCurrency) {
+        exchangeRate =
+          dto.exchangeRate !== undefined && dto.exchangeRate !== null
+            ? new Prisma.Decimal(dto.exchangeRate)
+            : fromRate.div(toRate).toDecimalPlaces(10);
+        receivedAmount = amount.mul(exchangeRate).toDecimalPlaces(4);
+      } else {
+        receivedAmount = amount;
+      }
+      const baseCurrencyAmount = amount.mul(fromRate).toDecimalPlaces(4);
+      const receivedBaseCurrencyAmount = receivedAmount.mul(toRate).toDecimalPlaces(4);
+
       // کاهش اتمیک موجودی مبدا؛ شرط balance >= amount مستقیم در WHERE چک می‌شود
       // تا زیر بار همزمان دو انتقال، موجودی هرگز منفی نشود.
       const debited = await tx.account.updateMany({
@@ -441,9 +416,11 @@ export class AccountsService {
           amount,
           receivedAmount,
           exchangeRate,
-          transferDate: dto.transferDate
-            ? new Date(dto.transferDate)
-            : new Date(),
+          fromRateToBase: fromRate,
+          toRateToBase: toRate,
+          baseCurrencyAmount,
+          receivedBaseCurrencyAmount,
+          transferDate,
           notes: dto.notes?.trim() || null,
           createdById: actor.id,
         },
@@ -457,6 +434,8 @@ export class AccountsService {
           direction: 'OUT',
           amount,
           balanceAfter: updatedFromAccount.balance,
+          exchangeRate: fromRate,
+          baseCurrencyAmount,
           entryDate: accountTransfer.transferDate,
           description: `انتقال به حساب «${toAccount.name}»${rateNote}`,
           accountTransferId: accountTransfer.id,
@@ -471,6 +450,8 @@ export class AccountsService {
           direction: 'IN',
           amount: receivedAmount,
           balanceAfter: updatedToAccount.balance,
+          exchangeRate: toRate,
+          baseCurrencyAmount: receivedBaseCurrencyAmount,
           entryDate: accountTransfer.transferDate,
           description: `انتقال از حساب «${fromAccount.name}»${rateNote}`,
           accountTransferId: accountTransfer.id,
@@ -562,41 +543,17 @@ export class AccountsService {
       : new Date();
     const isWithdrawal = dto.type === 'WITHDRAWAL';
 
-    // معادل ارز پایه را خودِ سیستم حساب می‌کند، نه کلاینت: اگر ارز حساب همان ارز پایه
-    // باشد نسبت ۱ است؛ وگرنه یا نرخِ دستیِ فرستاده‌شده (override) یا آخرین نرخ ثبت‌شدهٔ
-    // مارکت برای آن ارز (رزُلوشن) استفاده می‌شود؛ اگر هیچ‌کدام نبود، فقط ثبت نمی‌شود
-    // (این فیلد صرفاً برای گزارش‌گیری است، نباید جلوی واریز/برداشت را بگیرد).
-    const market = await this.prisma.market.findUnique({
-      where: { id: account.marketId },
-      select: { baseCurrencyId: true },
-    });
-
-    let rateToBase: Prisma.Decimal | null = null;
-    let baseCurrencyAmount: Prisma.Decimal | null = null;
-
-    if (market?.baseCurrencyId) {
-      if (account.currencyId === market.baseCurrencyId) {
-        if (dto.exchangeRate !== undefined) {
-          throw new BadRequestException(
-            'ارز این حساب همان ارز پایهٔ مارکت است؛ نرخ تبدیل نباید ارسال شود',
-          );
-        }
-        rateToBase = new Prisma.Decimal(1);
-      } else if (dto.exchangeRate !== undefined) {
-        rateToBase = new Prisma.Decimal(dto.exchangeRate);
-      } else {
-        rateToBase = await this.getRateToBase(
-          account.marketId,
-          account.currencyId,
-          market.baseCurrencyId,
-        );
-      }
-      if (rateToBase) {
-        baseCurrencyAmount = amount.mul(rateToBase).toDecimalPlaces(4);
-      }
-    }
-
     return this.prisma.$transaction(async (tx) => {
+      // معادلِ ارز پایه را خودِ سیستم حساب می‌کند (نه کلاینت): نرخِ دستیِ همین تراکنش یا آخرین نرخِ
+      // ثبت‌شدهٔ مارکت «تا تاریخِ همین تراکنش». اگر برای ارزِ حساب نرخی ثبت نشده باشد تراکنش رد می‌شود.
+      const rate = await resolveRateToBase(tx, {
+        marketId: account.marketId,
+        currencyId: account.currencyId,
+        date: transactionDate,
+        amount,
+        manualRate: dto.exchangeRate,
+      });
+
       let updatedAccount;
       if (isWithdrawal) {
         const debited = await tx.account.updateMany({
@@ -625,8 +582,8 @@ export class AccountsService {
           type: dto.type,
           amount,
           transactionDate,
-          exchangeRate: rateToBase,
-          baseCurrencyAmount,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           details: dto.details?.trim() || null,
           createdById: actor.id,
         },
@@ -640,6 +597,8 @@ export class AccountsService {
           direction: isWithdrawal ? 'OUT' : 'IN',
           amount,
           balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: transactionDate,
           description: isWithdrawal
             ? `برداشت از حساب «${account.name}»`

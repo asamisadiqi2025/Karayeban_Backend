@@ -20,7 +20,9 @@
     "test:e2e": "jest --config ./apps/Karayeban_Backend/test/jest-e2e.json",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev --name init",
-    "prisma:seed": "ts-node -r dotenv/config --transpile-only prisma/seed.ts"
+    "prisma:seed": "ts-node -r dotenv/config --transpile-only prisma/seed.ts",
+    "backup:verify": "ts-node -r dotenv/config --transpile-only src/tools/market-backup-tool.ts verify",
+    "backup:restore": "ts-node -r dotenv/config --transpile-only src/tools/market-backup-tool.ts restore"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

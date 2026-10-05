@@ -16,6 +16,12 @@ model LedgerEntry {
   amount       Decimal         @db.Decimal(18, 4) // همیشه مثبت؛ جهت را direction مشخص می‌کند
   balanceAfter Decimal         @map("balance_after") @db.Decimal(18, 4)
 
+  // اسنپ‌شاتِ ارز پایه در لحظهٔ همین رویداد (۱ واحد ارزِ ردیف = exchangeRate واحد ارز پایه). با
+  // این‌ها، هر گزارشِ مبتنی بر دفتر کل بدونِ دوباره‌حساب‌کردن با نرخِ روز، به ارز پایه جمع می‌خورد.
+  // برای ردیف‌های قدیمیِ قبل از این ویژگی null است (ابزارِ backfill آن‌ها را با نرخِ همان تاریخ پر می‌کند).
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
   entryDate   DateTime @map("entry_date") @db.Timestamptz(6)
   description String?  @db.Text
 

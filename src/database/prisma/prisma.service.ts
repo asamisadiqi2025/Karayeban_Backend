@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
@@ -37,8 +37,15 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
+  private static readonly logger = new Logger('PrismaPool');
+
   constructor() {
-    super({ adapter: new PrismaPg(createPool()) });
+    const pool = createPool();
+    // بدون این listener، قطع شدنِ یک اتصالِ بیکار (ریستارت/failover دیتابیس) یک رویدادِ 'error'
+    // بدونِ شنونده تولید می‌کند و کلِ پروسهٔ API را می‌اندازد. pg خودش اتصالِ خراب را دور می‌اندازد
+    // و در کوئریِ بعدی اتصالِ تازه می‌سازد؛ فقط باید ثبت شود.
+    pool.on('error', (err) => PrismaService.logger.error(`خطای اتصالِ بیکارِ دیتابیس: ${err.message}`));
+    super({ adapter: new PrismaPg(pool) });
   }
 
   async onModuleInit() {

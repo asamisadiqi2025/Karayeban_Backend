@@ -426,6 +426,8 @@ export class ShareholdersService {
           direction: isWithdrawal ? 'OUT' : 'IN',
           amount,
           balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: transactionDate,
           description: isWithdrawal
             ? `برداشت سهام‌دار «${shareholder.fullName}»`
