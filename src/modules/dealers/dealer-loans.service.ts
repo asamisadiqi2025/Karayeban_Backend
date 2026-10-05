@@ -185,6 +185,8 @@ export class DealerLoansService {
           direction: 'OUT',
           amount,
           balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: loanDate,
           description: `قرض به «${fresh.fullName}»`,
           dealerLoanId: loan.id,
@@ -286,6 +288,8 @@ export class DealerLoansService {
           direction: 'IN',
           amount,
           balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: repaymentDate,
           description: `بازپرداخت قرض از «${dealer.fullName}»`,
           dealerRepaymentId: repayment.id,
@@ -530,8 +534,20 @@ export class DealerLoansService {
     const codeById = new Map(currencies.map((c) => [c.id, c.code]));
     const openCountById = new Map(openByCurrency.map((g) => [g.currencyId, g._count._all]));
 
+    // مجموعِ باقی‌ماندهٔ قرض‌های باز به ارز پایه (هر قرض با نرخِ همان روزِ قرض). فقط وقتی یک مارکت
+    // مشخص باشد معنی دارد (مارکت‌های مختلف ارز پایهٔ متفاوت دارند).
+    let totalRemainingInBase: Prisma.Decimal | null = null;
+    if (scope.marketId) {
+      const rows = await this.prisma.$queryRaw<{ t: string }[]>(Prisma.sql`
+        SELECT COALESCE(sum(remaining_amount * exchange_rate), 0)::text AS t
+        FROM dealer_loans
+        WHERE market_id = ${scope.marketId}::uuid AND status = 'OPEN' AND exchange_rate IS NOT NULL`);
+      totalRemainingInBase = new Prisma.Decimal(rows[0]?.t ?? '0').toDecimalPlaces(4);
+    }
+
     return {
       days,
+      totalRemainingInBase,
       dealersWithDebt: dealersWithDebt.length,
       overdueLoans: overdueCount,
       dueSoonLoans: dueSoonCount,

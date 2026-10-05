@@ -429,6 +429,8 @@ export class RentService {
           direction: 'IN',
           amount: params.amount,
           balanceAfter: accountBalanceAfter!,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: params.paymentDate,
           description: 'دریافت کرایه',
           rentPaymentId: payment.id,

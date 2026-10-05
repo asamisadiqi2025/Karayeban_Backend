@@ -29,6 +29,7 @@ import { AuditLogsModule } from './modules/audit-logs/audit-logs.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { DealersModule } from './modules/dealers/dealers.module';
 import { MailModule } from './common/mail/mail.module';
+import { BackupsModule } from './modules/backups/backups.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { MailModule } from './common/mail/mail.module';
     UserModule,
     PermissionsModule,
     DealersModule,
+    BackupsModule,
     MarketModule,
     CurrenciesModule,
     AccountsModule,

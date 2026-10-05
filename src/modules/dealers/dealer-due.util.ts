@@ -1,21 +1,12 @@
 import { Prisma } from '@prisma/client';
+import { kabulDate } from '../../common/utils/kabul-date';
 
 export type DueStatus = 'settled' | 'no_due_date' | 'overdue' | 'due_soon' | 'ok';
 
 export const DEFAULT_DUE_SOON_DAYS = 7;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-// «تاریخ تقویمیِ» یک لحظه در وقتِ کابل، به‌صورت نیمه‌شبِ UTC — تا با ستون‌های @db.Date (که
-// فقط روز دارند) مستقیم قابل‌مقایسه باشد و نتیجه به تایم‌زونِ سرور بستگی نداشته باشد.
-export function kabulDate(instant: Date = new Date()): Date {
-  const ymd = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Kabul',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(instant);
-  return new Date(`${ymd}T00:00:00.000Z`);
-}
+export { kabulDate };
 
 export function parseDateOnly(value: string): Date {
   return new Date(`${value.slice(0, 10)}T00:00:00.000Z`);

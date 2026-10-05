@@ -1,0 +1,42 @@
+enum BackupKind {
+  MANUAL // ادمین خودش درخواست داده
+  AUTO // زمان‌بندیِ روزانهٔ سیستم
+}
+
+enum BackupStatus {
+  PENDING
+  RUNNING
+  READY
+  FAILED
+  EXPIRED // فایلش بعد از مهلتِ نگهداری پاک شده
+}
+
+// بک‌آپِ داده‌های «یک مارکت» (نه کلِ دیتابیس). خودِ فایل روی دیسک (BACKUP_DIR) است؛ این جدول فقط
+// وضعیت و مشخصاتش را نگه می‌دارد. بازگردانی فقط توسط اپراتور با ابزارِ scripts/backup انجام می‌شود.
+model MarketBackup {
+  id            String       @id @default(uuid()) @db.Uuid
+  marketId      String       @map("market_id") @db.Uuid
+  kind          BackupKind
+  status        BackupStatus @default(PENDING)
+  requestedById String?      @map("requested_by_id") @db.Uuid
+
+  fileKey       String? @map("file_key") @db.VarChar(255)
+  sizeBytes     Int?    @map("size_bytes")
+  sha256        String? @db.VarChar(64)
+  schemaVersion String? @map("schema_version") @db.VarChar(100)
+  rowCounts     Json?   @map("row_counts")
+  totalRows     Int?    @map("total_rows")
+  error         String? @db.Text
+
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  startedAt  DateTime? @map("started_at") @db.Timestamptz(6)
+  finishedAt DateTime? @map("finished_at") @db.Timestamptz(6)
+  expiresAt  DateTime? @map("expires_at") @db.Timestamptz(6)
+
+  market      Market @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  requestedBy User?  @relation("BackupRequestedBy", fields: [requestedById], references: [id], onDelete: SetNull)
+
+  @@index([marketId, createdAt])
+  @@index([status])
+  @@map("market_backups")
+}

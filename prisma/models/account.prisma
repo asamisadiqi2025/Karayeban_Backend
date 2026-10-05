@@ -69,7 +69,16 @@ model AccountTransfer {
 
   receivedAmount Decimal @map("received_amount") @db.Decimal(18, 4)
 
+  // نرخِ تبدیلِ «مبدا → مقصد» (۱ واحد ارز مبدا = exchangeRate واحد ارز مقصد)؛ فقط انتقالِ بین‌ارزی.
   exchangeRate Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+
+  // اسنپ‌شاتِ ارز پایه در لحظهٔ انتقال: نرخِ هر ارز به ارز پایه (۱ واحد = X ارز پایه) و ارزشِ
+  // مبلغِ خارج‌شده و دریافت‌شده به ارز پایه. اگر نرخِ دستیِ انتقال با نرخ‌های سیستم نخواند، تفاوتِ
+  // این دو ارزش همان «سود/زیانِ ارزی» همین انتقال است.
+  fromRateToBase             Decimal? @map("from_rate_to_base") @db.Decimal(24, 10)
+  toRateToBase               Decimal? @map("to_rate_to_base") @db.Decimal(24, 10)
+  baseCurrencyAmount         Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+  receivedBaseCurrencyAmount Decimal? @map("received_base_currency_amount") @db.Decimal(18, 4)
 
   transferDate DateTime @map("transfer_date") @db.Timestamptz(6)
   notes        String?  @db.Text

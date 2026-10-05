@@ -53,6 +53,7 @@ model User {
   issuedLotteryEntries         LotteryEntry[]
   approvedSettlements          ContractSettlement[]
   createdExchangeRates         ExchangeRate[]
+  requestedBackups             MarketBackup[]           @relation("BackupRequestedBy")
   createdDealerLoans           DealerLoan[]             @relation("DealerLoanCreator")
   createdDealerRepayments      DealerRepayment[]        @relation("DealerRepaymentCreator")
   ledgerEntries                LedgerEntry[]

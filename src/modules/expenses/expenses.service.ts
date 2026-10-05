@@ -29,6 +29,8 @@ type CurrencyAmount = {
   currencyId: string;
   currencyCode: string | null;
   amount: Prisma.Decimal;
+  // معادلِ ارز پایه با نرخِ همان روزِ هر مصرف (اسنپ‌شاتِ ذخیره‌شده)؛ مصرف‌های قدیمیِ بدونِ نرخ در جمع نمی‌آیند.
+  amountInBase: Prisma.Decimal;
   count: number;
 };
 
@@ -512,6 +514,8 @@ export class ExpensesService {
           direction: 'OUT',
           amount,
           balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: expenseDate,
           description: `مصرف: ${dto.description?.trim() || ''}`.trim(),
           expenseId: expense.id,
@@ -617,12 +621,22 @@ export class ExpensesService {
       };
     }
 
-    const byCurrency = await this.prisma.expense.groupBy({
-      by: ['currencyId'],
-      where,
-      _sum: { amount: true },
-      _count: true,
-    });
+    const scopeMarketId = actor.role === 'SUPER_ADMIN' ? category.marketId : actor.marketId;
+    const [byCurrency, market, withoutBaseValue] = await Promise.all([
+      this.prisma.expense.groupBy({
+        by: ['currencyId'],
+        where,
+        _sum: { amount: true, baseCurrencyAmount: true },
+        _count: true,
+      }),
+      scopeMarketId
+        ? this.prisma.market.findUnique({
+            where: { id: scopeMarketId },
+            select: { baseCurrency: { select: { id: true, code: true } } },
+          })
+        : Promise.resolve(null),
+      this.prisma.expense.count({ where: { ...where, baseCurrencyAmount: null } }),
+    ]);
 
     const currencyIds = byCurrency.map((g) => g.currencyId);
     const currencies = currencyIds.length
@@ -639,12 +653,21 @@ export class ExpensesService {
       isParentCategory: category.parentId === null,
       fromDate: query.fromDate ?? null,
       toDate: query.toDate ?? null,
+      baseCurrency: market?.baseCurrency ?? null,
       totalsByCurrency: byCurrency.map((g) => ({
         currencyId: g.currencyId,
         currencyCode: currencyCodeById.get(g.currencyId) ?? null,
         totalAmount: g._sum.amount ?? new Prisma.Decimal(0),
+        totalInBase: g._sum.baseCurrencyAmount ?? new Prisma.Decimal(0),
         count: g._count,
       })),
+      // مجموعِ همهٔ ارزها به ارز پایه (هر مصرف با نرخِ همان روز). اگر expensesWithoutBaseValue > 0
+      // باشد مجموع ناقص است (مصرف‌هایی بدونِ نرخ).
+      totalInBase: byCurrency.reduce(
+        (sum, g) => sum.add(g._sum.baseCurrencyAmount ?? new Prisma.Decimal(0)),
+        new Prisma.Decimal(0),
+      ),
+      expensesWithoutBaseValue: withoutBaseValue,
     };
   }
 
@@ -667,7 +690,7 @@ export class ExpensesService {
       };
     }
 
-    const [categories, grouped] = await Promise.all([
+    const [categories, grouped, market, withoutBaseValue] = await Promise.all([
       this.prisma.expenseCategory.findMany({
         where: { OR: [{ marketId: null }, { marketId }] },
         select: { id: true, name: true, parentId: true },
@@ -675,9 +698,14 @@ export class ExpensesService {
       this.prisma.expense.groupBy({
         by: ['categoryId', 'currencyId'],
         where,
-        _sum: { amount: true },
+        _sum: { amount: true, baseCurrencyAmount: true },
         _count: true,
       }),
+      this.prisma.market.findUnique({
+        where: { id: marketId },
+        select: { baseCurrency: { select: { id: true, code: true } } },
+      }),
+      this.prisma.expense.count({ where: { ...where, baseCurrencyAmount: null } }),
     ]);
 
     const currencyIds = [...new Set(grouped.map((g) => g.currencyId))];
@@ -690,22 +718,24 @@ export class ExpensesService {
     const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
 
     // categoryId → currencyId → {amount, count} — فقط مصرفِ مستقیمِ بسته‌شده به همان کتگوری.
-    const directByCategory = new Map<string, Map<string, { amount: Prisma.Decimal; count: number }>>();
+    const directByCategory = new Map<string, Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>>();
     for (const row of grouped) {
       const byCurrency = directByCategory.get(row.categoryId) ?? new Map();
       byCurrency.set(row.currencyId, {
         amount: row._sum.amount ?? new Prisma.Decimal(0),
+        base: row._sum.baseCurrencyAmount ?? new Prisma.Decimal(0),
         count: row._count,
       });
       directByCategory.set(row.categoryId, byCurrency);
     }
 
-    const toCurrencyAmounts = (byCurrency: Map<string, { amount: Prisma.Decimal; count: number }>): CurrencyAmount[] =>
+    const toCurrencyAmounts = (byCurrency: Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>): CurrencyAmount[] =>
       [...byCurrency.entries()]
         .map(([currencyId, v]) => ({
           currencyId,
           currencyCode: currencyCodeById.get(currencyId) ?? null,
           amount: v.amount,
+          amountInBase: v.base,
           count: v.count,
         }))
         .sort((a, b) => (a.currencyCode ?? '').localeCompare(b.currencyCode ?? ''));
@@ -719,10 +749,11 @@ export class ExpensesService {
       }
     }
 
-    const grandTotal = new Map<string, { amount: Prisma.Decimal; count: number }>();
+    const grandTotal = new Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>();
     for (const row of grouped) {
-      const entry = grandTotal.get(row.currencyId) ?? { amount: new Prisma.Decimal(0), count: 0 };
+      const entry = grandTotal.get(row.currencyId) ?? { amount: new Prisma.Decimal(0), base: new Prisma.Decimal(0), count: 0 };
       entry.amount = entry.amount.add(row._sum.amount ?? new Prisma.Decimal(0));
+      entry.base = entry.base.add(row._sum.baseCurrencyAmount ?? new Prisma.Decimal(0));
       entry.count += row._count;
       grandTotal.set(row.currencyId, entry);
     }
@@ -736,11 +767,12 @@ export class ExpensesService {
           direct: toCurrencyAmounts(directByCategory.get(child.id) ?? new Map()),
         }));
 
-        const totalByCurrency = new Map<string, { amount: Prisma.Decimal; count: number }>();
-        const addToTotal = (byCurrency: Map<string, { amount: Prisma.Decimal; count: number }>) => {
+        const totalByCurrency = new Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>();
+        const addToTotal = (byCurrency: Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>) => {
           for (const [currencyId, v] of byCurrency) {
-            const entry = totalByCurrency.get(currencyId) ?? { amount: new Prisma.Decimal(0), count: 0 };
+            const entry = totalByCurrency.get(currencyId) ?? { amount: new Prisma.Decimal(0), base: new Prisma.Decimal(0), count: 0 };
             entry.amount = entry.amount.add(v.amount);
+            entry.base = entry.base.add(v.base);
             entry.count += v.count;
             totalByCurrency.set(currencyId, entry);
           }
@@ -766,7 +798,11 @@ export class ExpensesService {
       marketId,
       fromDate: query.fromDate ?? null,
       toDate: query.toDate ?? null,
+      baseCurrency: market?.baseCurrency ?? null,
       grandTotal: toCurrencyAmounts(grandTotal),
+      // مجموعِ همهٔ ارزها به ارز پایه با نرخِ همان روزِ هر مصرف؛ expensesWithoutBaseValue > 0 یعنی ناقص است.
+      grandTotalInBase: [...grandTotal.values()].reduce((sum, g) => sum.add(g.base), new Prisma.Decimal(0)),
+      expensesWithoutBaseValue: withoutBaseValue,
       categories: result,
     };
   }
@@ -924,6 +960,8 @@ export class ExpensesService {
           currencyId: nextCurrencyId,
           amount: nextAmount,
           balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
           entryDate: updatedExpense.expenseDate,
           description: `مصرف: ${updatedExpense.description ?? ''}`.trim(),
         },
