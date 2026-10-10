@@ -39,6 +39,7 @@ import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
 import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
+import { hashRequest, runIdempotent } from '../../common/idempotency/idempotency';
 
 const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
@@ -1093,11 +1094,14 @@ export class ContractsService {
   // پرداخت می‌شود؛ electricityAmount با ارزِ بل‌های بازِ همین مستأجر (ممکن است با ارز
   // قرارداد فرق کند) — اگر یک accountId نتواند هر دو ارز را پوشش دهد، خطای واضح می‌دهد
   // تا آن بخش را جدا (از /electricity/payments) پرداخت کنند.
+  // idempotencyKey (هدر Idempotency-Key): تلاشِ دوبارهٔ همان درخواست (دابل‌کلیک) پرداختِ دوم نمی‌سازد
+  // و همان پاسخِ قبلی را برمی‌گرداند؛ کلِ پرداختِ ترکیبی (کرایه+برق) یک واحد است.
   async payDebt(
     currentUser: { id: string },
     id: string,
     dto: PayContractDebtDto,
     meta: RequestMeta = NO_REQUEST_META,
+    idempotencyKey?: string,
   ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.findOrThrow(id);
@@ -1140,7 +1144,12 @@ export class ContractsService {
     const paymentDate = dto.paymentDate ? new Date(dto.paymentDate) : new Date();
     const paymentMethod = dto.paymentMethod ?? 'cash';
 
-    return this.prisma.$transaction(async (tx) => {
+    return runIdempotent(this.prisma, {
+      userId: actor.id,
+      scope: 'CONTRACT_PAY_DEBT',
+      key: idempotencyKey,
+      requestHash: hashRequest({ contractId: id, ...dto }),
+      work: async (tx) => {
       const result: {
         rentPayment: Awaited<ReturnType<RentService['recordPayment']>> | null;
         electricityPayment:
@@ -1211,6 +1220,7 @@ export class ContractsService {
       }
 
       return result;
+      },
     });
   }
 

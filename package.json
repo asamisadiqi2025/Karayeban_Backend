@@ -22,7 +22,8 @@
     "prisma:migrate:dev": "prisma migrate dev --name init",
     "prisma:seed": "ts-node -r dotenv/config --transpile-only prisma/seed.ts",
     "backup:verify": "ts-node -r dotenv/config --transpile-only src/tools/market-backup-tool.ts verify",
-    "backup:restore": "ts-node -r dotenv/config --transpile-only src/tools/market-backup-tool.ts restore"
+    "backup:restore": "ts-node -r dotenv/config --transpile-only src/tools/market-backup-tool.ts restore",
+    "rent-debts:rebuild": "ts-node -r dotenv/config --transpile-only src/tools/rebuild-rent-debts.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

@@ -12,6 +12,7 @@ model Currency {
   expenses            Expense[]
   rentPayments        RentPayment[]
   rentCharges         RentCharges[]
+  rentDebts           RentDebt[]
   contracts           Contract[]
   assets              Asset[]
   dealerLoans         DealerLoan[]

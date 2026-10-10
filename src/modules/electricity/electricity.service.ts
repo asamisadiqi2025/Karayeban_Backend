@@ -10,11 +10,29 @@ import {
   Prisma,
   PaymentSourceType,
   ElectricityBillStatus,
+  MeterStatus,
 } from '@prisma/client';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveElectricityCurrency } from '../../common/utils/resolve-electricity-currency';
+import { buildBillSnapshot } from './electricity-bill-snapshot';
+import {
+  buildBillFilters,
+  buildDebtFilters,
+  buildPaymentFilters,
+} from './electricity-filters';
 import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
+import { assertPaymentDateNotInFuture } from '../../common/utils/assert-payment-date';
+import {
+  assertReceiptNumberFree,
+  normalizeReceiptNumber,
+} from '../../common/utils/receipt-number';
+import {
+  hashRequest,
+  itemIdempotencyKey,
+  runIdempotent,
+} from '../../common/idempotency/idempotency';
 import { paginate, resolveSort } from '../../common/utils/pagination';
 import { jalaliMonthStart, jalaliMonthEnd } from '../../common/utils/jalali-date';
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
@@ -184,6 +202,39 @@ export class ElectricityService {
     };
   }
 
+  // ارزِ یک بلِ برق. بل‌های زنده همیشه ارزِ ثابتِ برقِ بازار را دارند (پیش‌فرض AFN) — ارز از
+  // کاربر گرفته نمی‌شود؛ اگر کلاینت currencyId بفرستد فقط وقتی پذیرفته می‌شود که همان ارزِ
+  // ثابت باشد (سازگاری با کلاینت‌های قدیمی)، وگرنه ۴۰۰ تا اشتباهِ دالر/افغانی ممکن نباشد.
+  // استثنا: بل‌های مهاجرت‌شده از دفتر کاغذی (isOpeningEntry) ممکن است واقعاً به ارزِ دیگری
+  // بوده باشند، پس برایشان ارزِ صریح پذیرفته می‌شود (به‌شرط فعال‌بودن برای بازار).
+  private async resolveBillCurrencyId(
+    marketId: string,
+    requestedCurrencyId: string | undefined,
+    isOpeningEntry: boolean,
+  ): Promise<string> {
+    if (requestedCurrencyId !== undefined && isOpeningEntry) {
+      const currency = await this.prisma.currency.findUnique({
+        where: { id: requestedCurrencyId },
+        select: { id: true },
+      });
+      if (!currency) throw new NotFoundException('ارز مورد نظر یافت نشد');
+      await ensureCurrencyEnabledForMarket(
+        this.prisma,
+        marketId,
+        requestedCurrencyId,
+      );
+      return requestedCurrencyId;
+    }
+
+    const fixed = await resolveElectricityCurrency(this.prisma, marketId);
+    if (requestedCurrencyId !== undefined && requestedCurrencyId !== fixed.id) {
+      throw new BadRequestException(
+        `ارزِ بل‌های برق ثابت و برابر ${fixed.code} است؛ currencyId را نفرستید`,
+      );
+    }
+    return fixed.id;
+  }
+
   // ==========================================================================
   // بل‌ها — ثبت دستی (نه تولید خودکار)، همیشه بر مبنای دوره‌ی محاسبه‌شدهٔ قرارداد.
   // ==========================================================================
@@ -215,6 +266,7 @@ export class ElectricityService {
     let meter: {
       id: string;
       marketId: string;
+      status: MeterStatus;
       lastReading: Prisma.Decimal | null;
     } | null = null;
     if (dto.meterId) {
@@ -224,6 +276,12 @@ export class ElectricityService {
       if (!meter) throw new NotFoundException('کنتور یافت نشد');
       if (meter.marketId !== marketId) {
         throw new BadRequestException('کنتور باید متعلق به همان بازار باشد');
+      }
+      // بلِ زنده روی کنتورِ غیرفعال صادر نمی‌شود (مثلاً دوکانِ بسته‌شده). بل‌های مهاجرتیِ تاریخی معاف‌اند.
+      if (!isOpeningEntry && meter.status !== MeterStatus.active) {
+        throw new BadRequestException(
+          'این کنتور غیرفعال است و برایش بل زنده صادر نمی‌شود؛ اگر کنتور تعویض شده، بل را روی کنتورِ فعالِ همین دوکان صادر کنید',
+        );
       }
     } else if (!isOpeningEntry) {
       throw new BadRequestException(
@@ -235,11 +293,11 @@ export class ElectricityService {
       throw new BadRequestException('currentReading برای بل‌های زنده الزامی است');
     }
 
-    const currency = await this.prisma.currency.findUnique({
-      where: { id: dto.currencyId },
-    });
-    if (!currency) throw new NotFoundException('ارز مورد نظر یافت نشد');
-    await ensureCurrencyEnabledForMarket(this.prisma, marketId, dto.currencyId);
+    const currencyId = await this.resolveBillCurrencyId(
+      marketId,
+      dto.currencyId,
+      isOpeningEntry,
+    );
 
     if (dto.paidAmount !== undefined && !isOpeningEntry) {
       throw new BadRequestException(
@@ -274,6 +332,17 @@ export class ElectricityService {
     let currentReading: Prisma.Decimal | null =
       dto.currentReading !== undefined ? new Prisma.Decimal(dto.currentReading) : null;
 
+    // نرخِ برقِ بازار فقط برای بل‌های زنده لازم است: هم مبلغ از روی آن حساب می‌شود و هم همین نرخ
+    // روی بل ذخیره می‌شود (ratePerUnit) تا با عوض‌شدنِ نرخِ بازار، نرخِ بل‌های قبلی گم نشود.
+    const marketRate = isOpeningEntry
+      ? null
+      : ((
+          await this.prisma.market.findUnique({
+            where: { id: marketId },
+            select: { electricityRatePerUnit: true },
+          })
+        )?.electricityRatePerUnit ?? null);
+
     let totalAmount: Prisma.Decimal;
     if (dto.totalAmount !== undefined) {
       // override دستی — همیشه مجاز (تخفیف خاص، توافق دستی، یا isOpeningEntry).
@@ -284,19 +353,31 @@ export class ElectricityService {
           'totalAmount برای بل‌های تاریخی (isOpeningEntry) الزامی است',
         );
       }
-      if (!previousReading) previousReading = new Prisma.Decimal(0);
-      if (currentReading!.lessThan(previousReading)) {
+      // کنتورِ بدونِ قرائتِ مبنا: «درجهٔ قبلی = ۰» حدس زدن یعنی کلِ عددِ صفحهٔ کنتور (مثلاً ۱۵٬۰۰۰) به‌عنوان
+      // مصرف بل می‌شد. به‌جای حدس، صریحاً مبنا خواسته می‌شود (۰ هم یک مبنای معتبر است: کنتورِ نو).
+      if (!previousReading) {
         throw new BadRequestException(
-          `درجهٔ فعلی (${currentReading!.toString()}) نمی‌تواند از درجهٔ قبلی (${previousReading.toString()}) کمتر باشد — اگر کنتور تعویض شده، اول از merge کنتور استفاده کنید`,
+          'این کنتور هنوز قرائتِ قبلی ندارد؛ previousReading را (برای کنتورِ نو: ۰) بفرستید یا ابتدا lastReading کنتور را با PATCH /meters/:id تنظیم کنید',
         );
       }
-      const market = await this.prisma.market.findUnique({
-        where: { id: marketId },
-        select: { electricityRatePerUnit: true },
-      });
+      if (currentReading!.lessThan(previousReading)) {
+        throw new BadRequestException(
+          `درجهٔ فعلی (${currentReading!.toString()}) نمی‌تواند از درجهٔ قبلی (${previousReading.toString()}) کمتر باشد — اگر کنتور تعویض شده، از POST /meters/:id/replace استفاده کنید`,
+        );
+      }
       const consumption = currentReading!.sub(previousReading);
-      totalAmount = consumption.mul(market!.electricityRatePerUnit);
+      totalAmount = consumption.mul(marketRate!);
     }
+
+    const snapshot = buildBillSnapshot({
+      isOpeningEntry,
+      totalAmountProvided: dto.totalAmount !== undefined,
+      marketRate,
+      previousReading,
+      currentReading,
+      readingsProvidedExplicitly:
+        dto.previousReading !== undefined && dto.currentReading !== undefined,
+    });
 
     const paidAmount = new Prisma.Decimal(dto.paidAmount ?? 0);
     if (paidAmount.greaterThan(totalAmount)) {
@@ -325,10 +406,13 @@ export class ElectricityService {
             periodEnd,
             previousReading,
             currentReading,
+            ratePerUnit: snapshot.ratePerUnit,
+            consumedUnits: snapshot.consumedUnits,
+            isManualAmount: snapshot.isManualAmount,
             totalAmount,
             paidAmount,
             remainingAmount,
-            currencyId: dto.currencyId,
+            currencyId,
             status,
             isOpeningEntry,
             notes: dto.notes?.trim() || null,
@@ -413,6 +497,9 @@ export class ElectricityService {
     if (query.shopId !== undefined) where.shopId = query.shopId;
     if (query.tenantId !== undefined) where.tenantId = query.tenantId;
     if (query.status !== undefined) where.status = query.status;
+    // فیلترهای بیشتر (قرارداد، دوره، طبقه، کنتور، بازه، جست‌وجو، ...) — فقط شرط اضافه می‌کنند و
+    // marketId را هرگز لمس نمی‌کنند.
+    Object.assign(where, buildBillFilters(query));
 
     const orderBy = resolveSort(
       query.sortBy,
@@ -634,6 +721,18 @@ export class ElectricityService {
     },
     meta: RequestMeta = NO_REQUEST_META,
   ) {
+    // قواعدِ مشترکِ «همهٔ» مسیرهای ثبتِ پرداختِ برق (عادی، bulk، ترکیبیِ قرارداد، تسویه، افتتاحیه):
+    // ۱) تاریخِ پرداخت آینده نباشد؛ ۲) شمارهٔ رسیدِ پرداخت‌های زنده تکراری نباشد. هر دو قبل از هر نوشتن.
+    assertPaymentDateNotInFuture(params.paymentDate);
+    const receiptNumber = normalizeReceiptNumber(params.receiptNumber);
+    if (receiptNumber && !params.isOpeningEntry) {
+      await assertReceiptNumberFree(tx, {
+        kind: 'electricity',
+        marketId: params.marketId,
+        receiptNumber,
+      });
+    }
+
     let accountBalanceAfter: Prisma.Decimal | null = null;
 
     const rate = await resolveRateToBase(tx, {
@@ -692,7 +791,7 @@ export class ElectricityService {
         isOpeningEntry: params.isOpeningEntry,
         collectedById: actor.id,
         notes: params.notes ?? null,
-        receiptNumber: params.receiptNumber ?? null,
+        receiptNumber,
       },
     });
 
@@ -760,10 +859,13 @@ export class ElectricityService {
     return payment;
   }
 
+  // idempotencyKey (هدر Idempotency-Key): اگر بیاید، تلاشِ دوبارهٔ همان درخواست پرداختِ دوم نمی‌سازد و
+  // همان پاسخِ قبلی را برمی‌گرداند (ن.ک. common/idempotency). نیاید = رفتارِ قبلی.
   async createPayment(
     currentUser: { id: string },
     dto: CreateElectricityPaymentDto,
     meta: RequestMeta = NO_REQUEST_META,
+    idempotencyKey?: string,
   ) {
     const actor = await this.getActor(currentUser);
 
@@ -850,35 +952,40 @@ export class ElectricityService {
       ? new Date(dto.paymentDate)
       : new Date();
 
-    return this.prisma.$transaction(async (tx) => {
-      return this.recordPayment(
-        tx,
-        actor,
-        {
-          marketId: shop.marketId,
-          shopId: dto.shopId,
-          tenantId: dto.tenantId,
-          currencyId,
-          amount,
-          paymentDate,
-          paymentMethod: dto.paymentMethod ?? 'cash',
-          source,
-          accountId: dto.accountId,
-          billId: dto.billId,
-          notes: dto.notes,
-          receiptNumber: dto.receiptNumber,
-          isOpeningEntry: false,
-          exchangeRate: dto.exchangeRate,
-          securityDeposit: contract
-            ? {
-                contractId: contract.id,
-                remaining:
-                  contract.securityDepositRemaining ?? new Prisma.Decimal(0),
-              }
-            : null,
-        },
-        meta,
-      );
+    return runIdempotent(this.prisma, {
+      userId: actor.id,
+      scope: 'ELECTRICITY_PAYMENT',
+      key: idempotencyKey,
+      requestHash: hashRequest(dto),
+      work: (tx) =>
+        this.recordPayment(
+          tx,
+          actor,
+          {
+            marketId: shop.marketId,
+            shopId: dto.shopId,
+            tenantId: dto.tenantId,
+            currencyId,
+            amount,
+            paymentDate,
+            paymentMethod: dto.paymentMethod ?? 'cash',
+            source,
+            accountId: dto.accountId,
+            billId: dto.billId,
+            notes: dto.notes,
+            receiptNumber: dto.receiptNumber,
+            isOpeningEntry: false,
+            exchangeRate: dto.exchangeRate,
+            securityDeposit: contract
+              ? {
+                  contractId: contract.id,
+                  remaining:
+                    contract.securityDepositRemaining ?? new Prisma.Decimal(0),
+                }
+              : null,
+          },
+          meta,
+        ),
     });
   }
 
@@ -956,6 +1063,7 @@ export class ElectricityService {
     currentUser: { id: string },
     dto: CreateElectricityPaymentsBulkDto,
     meta: RequestMeta = NO_REQUEST_META,
+    idempotencyKey?: string,
   ) {
     const created: Awaited<ReturnType<ElectricityService['createPayment']>>[] =
       [];
@@ -963,7 +1071,10 @@ export class ElectricityService {
 
     for (let i = 0; i < dto.payments.length; i++) {
       try {
-        created.push(await this.createPayment(currentUser, dto.payments[i], meta));
+        // کلیدِ هر آیتم = کلیدِ درخواست + شمارهٔ آیتم (تلاشِ دوباره فقط آیتم‌های انجام‌نشده را انجام می‌دهد).
+        created.push(
+          await this.createPayment(currentUser, dto.payments[i], meta, itemIdempotencyKey(idempotencyKey, i)),
+        );
       } catch (e: any) {
         failed.push({ index: i, error: e?.message ?? 'خطای ناشناخته' });
       }
@@ -985,6 +1096,7 @@ export class ElectricityService {
     };
     if (query.shopId !== undefined) where.shopId = query.shopId;
     if (query.tenantId !== undefined) where.tenantId = query.tenantId;
+    Object.assign(where, buildPaymentFilters(query));
 
     const orderBy = resolveSort(
       query.sortBy,
@@ -1034,6 +1146,8 @@ export class ElectricityService {
         ? {}
         : { tenant: { marketId: actor.marketId! } }),
     };
+
+    Object.assign(where, buildDebtFilters(query));
 
     return paginate(this.prisma.electricityDebt, {
       where,

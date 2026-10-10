@@ -2,7 +2,9 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  HttpException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -20,6 +22,8 @@ import {
 } from '../../common/utils/pagination';
 import { toJalaliYearMonth, AFGHAN_SOLAR_MONTHS } from '../../common/utils/jalali-date';
 import { CreateRentPaymentDto } from './dto/create-rent-payment.dto';
+import { CreateRentPaymentsBulkDto } from './dto/create-rent-payments-bulk.dto';
+import { buildRentDebtView, summarizeRentDebt } from './rent-debt-summary';
 import { RentChargeQueryDto } from './dto/rent-charge-query.dto';
 import { RentPaymentQueryDto } from './dto/rent-payment-query.dto';
 import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
@@ -27,6 +31,16 @@ import { RentDebtAgingQueryDto } from './dto/rent-debt-aging-query.dto';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
 import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
+import { assertPaymentDateNotInFuture } from '../../common/utils/assert-payment-date';
+import {
+  assertReceiptNumberFree,
+  normalizeReceiptNumber,
+} from '../../common/utils/receipt-number';
+import {
+  hashRequest,
+  itemIdempotencyKey,
+  runIdempotent,
+} from '../../common/idempotency/idempotency';
 
 const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
@@ -255,68 +269,50 @@ export class RentService {
       where: { tenantId, status: { in: OPEN_STATUSES } },
     });
 
-    const now = new Date();
-    // totalDebt = «چقدر تا امروز باید پرداخته می‌شد» — کرایه از شروعِ همان دوره سررسید
-    // می‌شود (پیش‌پرداخت)، نه پایانش. فاکتورهایی که periodStart شان هنوز نرسیده (ماه‌های
-    // آیندهٔ از قبل تولیدشدهٔ تا آخر قرارداد) عمداً کنار گذاشته می‌شوند — وگرنه یک قرارداد
-    // تازه‌ساز که هنوز حتی یک ماه هم نگذشته، انگار کرایهٔ کل سال را بدهکار نشان می‌داد.
-    const dueCharges = openCharges.filter((c) => c.periodStart <= now);
-    const totalDebt = dueCharges.reduce(
-      (s, c) => s.add(c.remainingAmount),
-      new Prisma.Decimal(0),
-    );
-    const overdueDebt = openCharges
-      .filter((c) => c.periodEnd < now)
-      .reduce((s, c) => s.add(c.remainingAmount), new Prisma.Decimal(0));
-
-    // مقیاسِ «چند ماه بدهکار است» — به‌جای Contract.rent (که بعد از adjust-rent دیگر نرخ
-    // واقعی نیست و همیشه همان رقم امضاشدهٔ اصلی می‌ماند)، از netAmount آخرین فاکتورِ بازِ
-    // همین مستأجر استفاده می‌شود — این همیشه نرخِ واقعاً در حال اعمال است، حتی اگر تخفیف
-    // خورده باشد. یک عارضهٔ کوچک: اگر آخرین فاکتور به‌خاطر فسخ زودهنگام کوتاه شده باشد،
-    // مقیاس کمی کوچک‌تر از یک ماه کامل می‌شود — قابل قبول چون این فقط یک برچسبِ شدت است،
-    // نه مبلغ واقعیِ بدهی (که همیشه دقیق می‌ماند). این تغییر یک query کامل (roundtrip به
-    // جدول contracts) را هم حذف می‌کند — سریع‌تر، بدون هیچ کوئری اضافه.
-    const lastCharge = openCharges.sort(
-      (a, b) => b.periodStart.getTime() - a.periodStart.getTime(),
-    )[0];
-    const monthlyRent = lastCharge?.netAmount ?? null;
-
-    let status: DebtStatus = DebtStatus.CLEAN;
-    if (
-      monthlyRent &&
-      monthlyRent.greaterThan(0) &&
-      overdueDebt.greaterThan(0)
-    ) {
-      const monthsOverdue = overdueDebt.div(monthlyRent);
-      if (monthsOverdue.greaterThan(6)) status = DebtStatus.CRITICAL;
-      else if (monthsOverdue.greaterThan(3)) status = DebtStatus.HIGH;
-      else if (monthsOverdue.greaterThan(1)) status = DebtStatus.MEDIUM;
-      else status = DebtStatus.LOW;
-    } else if (overdueDebt.greaterThan(0)) {
-      status = DebtStatus.LOW;
+    // کرایه به ارزِ قرارداد است و یک مستأجر می‌تواند قراردادهایی به ارزهای مختلف داشته باشد؛ ارزهای
+    // مختلف هرگز در یک عدد جمع نمی‌شوند، پس بدهی «به‌ازای هر ارز» یک ردیف دارد (RentDebt: tenantId + currencyId).
+    const chargesByCurrency = new Map<string, typeof openCharges>();
+    for (const charge of openCharges) {
+      const list = chargesByCurrency.get(charge.currencyId) ?? [];
+      list.push(charge);
+      chargesByCurrency.set(charge.currencyId, list);
     }
 
-    await tx.rentDebt.upsert({
-      where: { tenantId },
-      create: {
-        tenantId,
-        totalDebt,
-        overdueDebt,
-        status,
-        lastChargeAmount: lastCharge?.netAmount ?? 0,
-        lastChargeDate: lastCharge?.periodStart ?? null,
-      },
-      update: {
-        totalDebt,
-        overdueDebt,
-        status,
-        ...(lastCharge
-          ? {
-              lastChargeAmount: lastCharge.netAmount,
-              lastChargeDate: lastCharge.periodStart,
-            }
-          : {}),
-      },
+    const now = new Date();
+    for (const [currencyId, charges] of chargesByCurrency) {
+      // تعریفِ totalDebt/overdueDebt/status در summarizeRentDebt (خالص و تست‌شده) آمده است.
+      const { totalDebt, overdueDebt, status, lastCharge } = summarizeRentDebt(charges, now);
+
+      await tx.rentDebt.upsert({
+        where: { tenantId_currencyId: { tenantId, currencyId } },
+        create: {
+          tenantId,
+          currencyId,
+          totalDebt,
+          overdueDebt,
+          status,
+          lastChargeAmount: lastCharge?.netAmount ?? 0,
+          lastChargeDate: lastCharge?.periodStart ?? null,
+        },
+        update: {
+          totalDebt,
+          overdueDebt,
+          status,
+          ...(lastCharge
+            ? {
+                lastChargeAmount: lastCharge.netAmount,
+                lastChargeDate: lastCharge.periodStart,
+              }
+            : {}),
+        },
+      });
+    }
+
+    // ارزهایی که دیگر فاکتورِ بازی ندارند: بدهی صفر و CLEAN. ردیف حذف نمی‌شود تا فیلدهای دستیِ
+    // notes/riskScore بماند (همان رفتارِ قبلی برای مستأجری که همهٔ بدهی‌اش را پرداخته).
+    await tx.rentDebt.updateMany({
+      where: { tenantId, currencyId: { notIn: [...chargesByCurrency.keys()] } },
+      data: { totalDebt: 0, overdueDebt: 0, status: DebtStatus.CLEAN },
     });
   }
 
@@ -348,6 +344,18 @@ export class RentService {
     },
     meta: RequestMeta = NO_REQUEST_META,
   ) {
+    // قواعدِ مشترکِ «همهٔ» مسیرهای ثبتِ پرداختِ کرایه (پرداخت عادی، bulk، پرداختِ ترکیبیِ قرارداد، تسویه):
+    // ۱) تاریخِ پرداخت آینده نباشد؛ ۲) شمارهٔ رسیدِ پرداخت‌های زنده تکراری نباشد. هر دو قبل از هر نوشتن.
+    assertPaymentDateNotInFuture(params.paymentDate);
+    const receiptNumber = normalizeReceiptNumber(params.receiptNumber);
+    if (receiptNumber && !params.isOpeningEntry) {
+      await assertReceiptNumberFree(tx, {
+        kind: 'rent',
+        marketId: params.contract.marketId,
+        receiptNumber,
+      });
+    }
+
     let accountBalanceAfter: Prisma.Decimal | null = null;
 
     const rate = await resolveRateToBase(tx, {
@@ -405,7 +413,7 @@ export class RentService {
         isOpeningEntry: params.isOpeningEntry,
         collectedById: actor.id,
         notes: params.notes ?? null,
-        receiptNumber: params.receiptNumber ?? null,
+        receiptNumber,
       },
     });
 
@@ -460,7 +468,14 @@ export class RentService {
   // API عمومی
   // ==========================================================================
 
-  async createPayment(currentUser: { id: string }, dto: CreateRentPaymentDto, meta: RequestMeta) {
+  // idempotencyKey (هدر Idempotency-Key): اگر بیاید، تلاشِ دوبارهٔ همان درخواست پرداختِ دوم نمی‌سازد و
+  // همان پاسخِ قبلی را برمی‌گرداند (ن.ک. common/idempotency). نیاید = رفتارِ قبلی.
+  async createPayment(
+    currentUser: { id: string },
+    dto: CreateRentPaymentDto,
+    meta: RequestMeta,
+    idempotencyKey?: string,
+  ) {
     const actor = await this.getActor(currentUser);
     const contract = await this.prisma.contract.findUnique({
       where: { id: dto.contractId },
@@ -490,32 +505,91 @@ export class RentService {
       }
     }
 
-    return this.prisma.$transaction(async (tx) => {
-      return this.recordPayment(
-        tx,
-        actor,
-        {
-          contract: {
-            id: contract.id,
-            marketId: contract.marketId,
-            tenantId: contract.tenantId!,
-            shopId: contract.shopId!,
-            currencyId: contract.currencyId!,
-            securityDepositRemaining: contract.securityDepositRemaining,
+    return runIdempotent(this.prisma, {
+      userId: actor.id,
+      scope: 'RENT_PAYMENT',
+      key: idempotencyKey,
+      requestHash: hashRequest(dto),
+      work: (tx) =>
+        this.recordPayment(
+          tx,
+          actor,
+          {
+            contract: {
+              id: contract.id,
+              marketId: contract.marketId,
+              tenantId: contract.tenantId!,
+              shopId: contract.shopId!,
+              currencyId: contract.currencyId!,
+              securityDepositRemaining: contract.securityDepositRemaining,
+            },
+            amount: new Prisma.Decimal(dto.amount),
+            paymentDate: dto.paymentDate ? new Date(dto.paymentDate) : new Date(),
+            paymentMethod: dto.paymentMethod ?? 'cash',
+            source,
+            accountId: dto.accountId,
+            notes: dto.notes,
+            receiptNumber: dto.receiptNumber,
+            isOpeningEntry: false,
+            exchangeRate: dto.exchangeRate,
           },
-          amount: new Prisma.Decimal(dto.amount),
-          paymentDate: dto.paymentDate ? new Date(dto.paymentDate) : new Date(),
-          paymentMethod: dto.paymentMethod ?? 'cash',
-          source,
-          accountId: dto.accountId,
-          notes: dto.notes,
-          receiptNumber: dto.receiptNumber,
-          isOpeningEntry: false,
-          exchangeRate: dto.exchangeRate,
-        },
-        meta,
-      );
+          meta,
+        ),
     });
+  }
+
+  // چند پرداختِ کرایه یک‌جا (حداکثر ۱۰) — همان الگوی ElectricityService.createPaymentsBulk: هر آیتم با
+  // createPaymentِ خودش (تراکنشِ مستقل) پردازش می‌شود، پس خطای یکی بقیه را متوقف نمی‌کند و حسابدار فقط
+  // همان را در failed می‌بیند. آیتم‌ها «پشت‌سرهم» (نه موازی) اجرا می‌شوند تا دو پرداخت برای یک قرارداد
+  // تخصیصِ FIFO را از هم عقب نیندازند.
+  //
+  // دو تفاوتِ عمدی با نسخهٔ برق: (۱) شمارهٔ رسیدِ تکراری «داخل همین درخواست» رد می‌شود (جلوگیری از
+  // ثبتِ دوبارهٔ یک رسید)؛ (۲) متنِ خطا فقط برای خطاهای تجاری (HttpException) به کلاینت می‌رود — خطای
+  // غیرمنتظره (مثلاً خطای دیتابیس) فقط لاگ می‌شود و جزئیاتش نشت نمی‌کند.
+  async createPaymentsBulk(
+    currentUser: { id: string },
+    dto: CreateRentPaymentsBulkDto,
+    meta: RequestMeta = NO_REQUEST_META,
+    idempotencyKey?: string,
+  ) {
+    const created: Awaited<ReturnType<RentService['createPayment']>>[] = [];
+    const failed: { index: number; error: string }[] = [];
+    const usedReceipts = new Set<string>();
+
+    for (let i = 0; i < dto.payments.length; i++) {
+      const item = dto.payments[i];
+      const receipt = item.receiptNumber?.trim();
+      if (receipt && usedReceipts.has(receipt)) {
+        failed.push({
+          index: i,
+          error: `شمارهٔ رسید «${receipt}» در همین درخواست تکراری است`,
+        });
+        continue;
+      }
+
+      try {
+        // کلیدِ هر آیتم از کلیدِ درخواست + شمارهٔ آیتم ساخته می‌شود: تلاشِ دوبارهٔ کلِ درخواست فقط
+        // آیتم‌های انجام‌نشده را انجام می‌دهد و بقیه را از ثبتِ قبلی بازپخش می‌کند.
+        created.push(
+          await this.createPayment(currentUser, item, meta, itemIdempotencyKey(idempotencyKey, i)),
+        );
+        // فقط بعد از موفقیت ثبت می‌شود: اگر آیتمِ اول خطا داشت، اصلاحِ همان رسید در آیتمِ بعدی مجاز است.
+        if (receipt) usedReceipts.add(receipt);
+      } catch (e) {
+        if (!(e instanceof HttpException)) {
+          new Logger(RentService.name).error(
+            `bulk rent payment #${i} failed unexpectedly`,
+            e instanceof Error ? e.stack : String(e),
+          );
+        }
+        failed.push({
+          index: i,
+          error: e instanceof HttpException ? e.message : 'خطای ناشناخته',
+        });
+      }
+    }
+
+    return { created, failed };
   }
 
   // فهرست برج‌های افغانستان (حمل تا حوت) با شماره‌شان — تا فرانت مجبور نباشد این نام‌ها
@@ -599,6 +673,36 @@ export class RentService {
     });
   }
 
+  // بازسازیِ کاملِ کشِ بدهیِ کرایه برای «همهٔ» مستأجرها (idempotent). RentDebt یک کشِ مشتق از rent_charges
+  // است و فقط با رویدادها (پرداخت/فاکتور/فسخ) به‌روز می‌شود؛ این متد برای ابزارِ عملیاتی
+  // (npm run rent-debts:rebuild) و بعد از مهاجرت‌ها/ترمیمِ داده است، نه یک endpoint. هر مستأجر با
+  // تراکنشِ مستقلِ خودش بازسازی می‌شود (خطای یکی بقیه را متوقف نمی‌کند).
+  async rebuildAllRentDebts(): Promise<{ tenants: number; failed: string[] }> {
+    const [withOpen, withRow] = await Promise.all([
+      this.prisma.rentCharges.findMany({
+        where: { status: { in: OPEN_STATUSES } },
+        select: { tenantId: true },
+        distinct: ['tenantId'],
+      }),
+      this.prisma.rentDebt.findMany({
+        select: { tenantId: true },
+        distinct: ['tenantId'],
+      }),
+    ]);
+    // مستأجرِ دارای فاکتورِ باز (باید ردیف داشته باشد) ∪ مستأجرِ دارای ردیف (شاید کهنه و باید صفر شود).
+    const tenantIds = [...new Set([...withOpen, ...withRow].map((r) => r.tenantId))];
+
+    const failed: string[] = [];
+    for (const tenantId of tenantIds) {
+      try {
+        await this.prisma.$transaction((tx) => this.recomputeRentDebt(tx, tenantId));
+      } catch {
+        failed.push(tenantId);
+      }
+    }
+    return { tenants: tenantIds.length, failed };
+  }
+
   async findRentDebt(currentUser: { id: string }, tenantId: string) {
     const actor = await this.getActor(currentUser);
     const tenant = await this.prisma.tenant.findUnique({
@@ -607,15 +711,12 @@ export class RentService {
     if (!tenant) throw new NotFoundException('مستأجر یافت نشد');
     this.ensureAccess(actor, tenant.marketId, 'دسترسی به این مستأجر مجاز نیست');
 
-    const debt = await this.prisma.rentDebt.findUnique({ where: { tenantId } });
-    return (
-      debt ?? {
-        tenantId,
-        totalDebt: new Prisma.Decimal(0),
-        overdueDebt: new Prisma.Decimal(0),
-        status: DebtStatus.CLEAN,
-      }
-    );
+    // به‌ازای هر ارز یک ردیف؛ شکلِ پاسخ (تک‌ارزی سازگار با قبل، چندارزی با byCurrency) در buildRentDebtView.
+    const rows = await this.prisma.rentDebt.findMany({
+      where: { tenantId },
+      include: { currency: { select: { id: true, code: true } } },
+    });
+    return buildRentDebtView(tenantId, rows);
   }
 
   async findAllDebts(currentUser: { id: string }, query: RentDebtQueryDto) {
@@ -630,6 +731,9 @@ export class RentService {
         : { tenant: { marketId: actor.marketId! } }),
     };
     if (query.status !== undefined) where.status = query.status;
+    // هر ردیف = یک مستأجر در یک ارز؛ مرتب‌سازیِ totalDebt فقط داخلِ یک ارز معنی دارد، پس برای فهرستِ
+    // دقیق currencyId بدهید.
+    if (query.currencyId !== undefined) where.currencyId = query.currencyId;
 
     return paginate(this.prisma.rentDebt, {
       where,
@@ -638,6 +742,7 @@ export class RentService {
       limit: query.limit,
       include: {
         tenant: { select: { id: true, fullName: true, marketId: true } },
+        currency: { select: { id: true, code: true } },
       },
     });
   }

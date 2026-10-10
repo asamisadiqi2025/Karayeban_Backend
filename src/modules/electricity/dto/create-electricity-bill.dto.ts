@@ -49,8 +49,12 @@ export class CreateElectricityBillDto {
   @IsPositive()
   totalAmount?: number;
 
+  // اختیاری و معمولاً نباید فرستاده شود: ارزِ بل‌های زنده همیشه ارزِ ثابتِ برقِ بازار است
+  // (پیش‌فرض افغانی) و سرور خودش تعیین می‌کند. اگر بفرستید باید همان ارز باشد، وگرنه ۴۰۰.
+  // فقط برای isOpeningEntry (بل‌های مهاجرت‌شده) می‌توان ارزِ دیگری داد.
+  @IsOptional()
   @IsUUID()
-  currencyId: string;
+  currencyId?: string;
 
   @IsOptional()
   @IsString()

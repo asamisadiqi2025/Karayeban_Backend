@@ -104,6 +104,8 @@ async function bootstrap() {
         'Content-Type',
         'Authorization',
         'Accept',
+        // کلیدِ تکرارگیریِ ثبتِ پرداخت — بدونِ این، مرورگر درخواست‌های cross-origin با این هدر را مسدود می‌کند.
+        'Idempotency-Key',
       ],
     };
 

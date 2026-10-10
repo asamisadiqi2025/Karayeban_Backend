@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -10,6 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ContractsService } from './contracts.service';
+import { IDEMPOTENCY_HEADER, parseIdempotencyKey } from '../../common/idempotency/idempotency';
 import { RentService } from '../rent/rent.service';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
@@ -146,7 +148,14 @@ export class ContractsController {
     @Req() req: any,
     @Param('id') id: string,
     @Body() dto: PayContractDebtDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
   ) {
-    return this.contractsService.payDebt(req.user, id, dto, extractRequestMeta(req));
+    return this.contractsService.payDebt(
+      req.user,
+      id,
+      dto,
+      extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
+    );
   }
 }

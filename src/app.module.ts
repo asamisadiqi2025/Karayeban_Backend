@@ -30,6 +30,9 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { DealersModule } from './modules/dealers/dealers.module';
 import { MailModule } from './common/mail/mail.module';
 import { BackupsModule } from './modules/backups/backups.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { IdempotencyModule } from './common/idempotency/idempotency.module';
 
 @Module({
   imports: [
@@ -62,6 +65,9 @@ import { BackupsModule } from './modules/backups/backups.module';
     ElectricityModule,
     UploadsModule,
     ReportsModule,
+    DashboardModule,
+    PaymentsModule,
+    IdempotencyModule,
   ],
   controllers: [AppController],
 })

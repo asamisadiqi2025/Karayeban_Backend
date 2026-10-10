@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Query,
@@ -10,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { RentService } from './rent.service';
 import { CreateRentPaymentDto } from './dto/create-rent-payment.dto';
+import { CreateRentPaymentsBulkDto } from './dto/create-rent-payments-bulk.dto';
 import { RentChargeQueryDto } from './dto/rent-charge-query.dto';
 import { RentPaymentQueryDto } from './dto/rent-payment-query.dto';
 import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
@@ -19,6 +21,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Permission } from '../../common/decorators/permission.decorator';
 import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
+import { IDEMPOTENCY_HEADER, parseIdempotencyKey } from '../../common/idempotency/idempotency';
 
 @Controller('rent')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,8 +43,34 @@ export class RentController {
   @Permission('rent.pay')
   @Post('payments')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
-  createPayment(@Req() req: any, @Body() dto: CreateRentPaymentDto) {
-    return this.rentService.createPayment(req.user, dto, extractRequestMeta(req));
+  createPayment(
+    @Req() req: any,
+    @Body() dto: CreateRentPaymentDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
+  ) {
+    return this.rentService.createPayment(
+      req.user,
+      dto,
+      extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
+    );
+  }
+
+  // چند کرایه یک‌جا (حداکثر ۱۰) — هر آیتم مستقل؛ خروجی { created, failed } مثل POST /electricity/payments/bulk.
+  @Permission('rent.pay')
+  @Post('payments/bulk')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  createPaymentsBulk(
+    @Req() req: any,
+    @Body() dto: CreateRentPaymentsBulkDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
+  ) {
+    return this.rentService.createPaymentsBulk(
+      req.user,
+      dto,
+      extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
+    );
   }
 
   @Permission('rent.view')
