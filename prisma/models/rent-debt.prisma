@@ -12,7 +12,9 @@ enum DebtStatus {
 
 model RentDebt {
   id       String @id @default(uuid()) @db.Uuid
-  tenantId String @unique @map("tenant_id") @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+  // هر مستأجر «به‌ازای هر ارز» یک ردیف دارد: کرایه به ارزِ قرارداد است و ارزهای مختلف هرگز جمع نمی‌شوند.
+  currencyId String @map("currency_id") @db.Uuid
 
   // مبالغ کلی
   totalDebt         Decimal @default(0) @map("total_debt") @db.Decimal(18, 4)
@@ -33,9 +35,11 @@ model RentDebt {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // ارتباط با مستأجر
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  currency Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
 
   // ایندکس‌ها
+  @@unique([tenantId, currencyId])
   @@index([tenantId])
   @@index([status])
   @@index([updatedAt])

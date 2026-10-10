@@ -34,6 +34,12 @@ export class MailService {
           port,
           secure: config.get<string>('MAIL_SECURE') === 'true' || port === 465,
           auth: user && pass ? { user, pass } : undefined,
+          // فقط برای توسعه: وقتی آنتی‌ویروس/پراکسی TLS را رهگیری می‌کند («self-signed certificate
+          // in certificate chain»). در production هرگز false نگذارید.
+          tls:
+            config.get<string>('MAIL_TLS_REJECT_UNAUTHORIZED') === 'false' && !this.isProduction
+              ? { rejectUnauthorized: false }
+              : undefined,
         })
       : null;
   }

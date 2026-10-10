@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Query,
@@ -9,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ElectricityService } from './electricity.service';
+import { IDEMPOTENCY_HEADER, parseIdempotencyKey } from '../../common/idempotency/idempotency';
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
 import { ElectricityBillQueryDto } from './dto/electricity-bill-query.dto';
 import { CreateElectricityPaymentDto } from './dto/create-electricity-payment.dto';
@@ -73,8 +75,17 @@ export class ElectricityController {
   @Permission('electricity.create_payment')
   @Post('payments')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
-  createPayment(@Req() req: any, @Body() dto: CreateElectricityPaymentDto) {
-    return this.electricityService.createPayment(req.user, dto, extractRequestMeta(req));
+  createPayment(
+    @Req() req: any,
+    @Body() dto: CreateElectricityPaymentDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
+  ) {
+    return this.electricityService.createPayment(
+      req.user,
+      dto,
+      extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
+    );
   }
 
   @Permission('electricity.create_payment')
@@ -97,11 +108,13 @@ export class ElectricityController {
   createPaymentsBulk(
     @Req() req: any,
     @Body() dto: CreateElectricityPaymentsBulkDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
   ) {
     return this.electricityService.createPaymentsBulk(
       req.user,
       dto,
       extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
     );
   }
 

@@ -16,9 +16,12 @@ model ElectricityMeter {
   primaryForShopGroup ShopGroup?        @relation("PrimaryMeterForShopGroup")
   bills               ElectricityBill[]
 
-  @@unique([marketId, meterNumber])
+  // یکتاییِ shop_id و (market_id, meter_number) فقط بینِ کنتورهای «فعال» است (ایندکس‌های شرطیِ دیتابیس:
+  // electricity_meters_shop_id_active_key و electricity_meters_market_id_meter_number_active_key، ن.ک. migration
+  // «meter_unique_per_active_shop») — Prisma ایندکسِ شرطی را نمی‌شناسد، پس این‌جا @@unique نیست. وقتی کنتورِ
+  // خراب غیرفعال می‌شود، دوکانش برای کنتورِ جدید آزاد می‌شود و سابقهٔ کنتورِ قدیمی (بل‌ها با همان meterId) می‌ماند.
+  // سریالِ دستگاه همچنان در کلِ بازار یکتاست (یک دستگاهِ فیزیکی دو رکورد ندارد).
   @@unique([marketId, serialNumber])
-  @@unique([shopId])
   @@index([shopId])
   @@index([status])
   @@map("electricity_meters")
@@ -71,6 +74,16 @@ model ElectricityBill {
   periodEnd       DateTime @map("period_end") @db.Timestamptz(6)
   previousReading Decimal? @map("previous_reading") @db.Decimal(12, 2)
   currentReading  Decimal? @map("current_reading") @db.Decimal(12, 2)
+
+  // اسنپ‌شاتِ محاسبهٔ همین بل در لحظهٔ صدور — بدون این‌ها، با عوض‌شدنِ Market.electricityRatePerUnit
+  // معلوم نیست بل‌های قبلی با چه نرخی حساب شده‌اند. همه nullable‌اند؛ null یعنی «نامعلوم» (بل‌های
+  // قبل از این ویژگی، یا بل مهاجرتی بدونِ قرائتِ کنتور) و هیچ‌وقت عددِ حدسی ذخیره نمی‌شود.
+  //  - ratePerUnit: نرخِ برقِ بازار در لحظهٔ صدورِ بلِ زنده (به ارزِ همین بل)؛ برای بل مهاجرتی null.
+  //  - consumedUnits: مصرفِ دوره = currentReading − previousReading (فقط وقتی هر دو قرائتِ معتبر هستند).
+  //  - isManualAmount: true یعنی totalAmount را کاربر دستی داده (تخفیف/توافق/بل کاغذی)، نه «مصرف × نرخ».
+  ratePerUnit    Decimal? @map("rate_per_unit") @db.Decimal(18, 4)
+  consumedUnits  Decimal? @map("consumed_units") @db.Decimal(12, 2)
+  isManualAmount Boolean? @map("is_manual_amount")
 
   totalAmount     Decimal @map("total_amount") @db.Decimal(18, 4)
   paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(18, 4)

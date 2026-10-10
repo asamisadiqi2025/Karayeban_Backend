@@ -84,6 +84,7 @@ export const EXCLUDED_MODELS: Record<string, string> = {
   RefreshToken: 'محرمانه (نشست‌های ورود)',
   PasswordResetToken: 'محرمانه (توکنِ بازیابیِ رمز)',
   MarketBackup: 'متادیتای خودِ بک‌آپ‌ها',
+  IdempotencyKey: 'کلیدهای تکرارگیریِ موقت (۴۸ ساعته)؛ داده‌ٔ تجاری نیست و نباید بازگردانی شود',
 };
 
 export function delegateName(model: string): string {
