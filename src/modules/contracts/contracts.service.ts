@@ -29,6 +29,7 @@ import {
   buildSearchWhere,
 } from '../../common/utils/pagination';
 import { CreateContractDto } from './dto/create-contract.dto';
+import { assertSecurityDepositIntent } from './security-deposit-intent';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { ContractQueryDto } from './dto/contract-query.dto';
 import { TerminateContractDto } from './dto/terminate-contract.dto';
@@ -160,6 +161,16 @@ export class ContractsService {
     if (endDate <= startDate) {
       throw new BadRequestException('تاریخ پایان باید بعد از تاریخ شروع باشد');
     }
+
+    // قراردادِ قدیمی (شروع‌شده در گذشته) + امانت: «قبلاً گرفته شده» یا «همین الان» باید صریح باشد،
+    // وگرنه امانتِ قدیمی بی‌صدا به‌عنوان پولِ نو به حساب اضافه می‌شود (دوبار شمرده شدن).
+    assertSecurityDepositIntent({
+      startDate,
+      securityDeposit: dto.securityDeposit,
+      isOpeningEntry: dto.securityDepositIsOpeningEntry,
+      accountId: dto.securityDepositAccountId,
+      exchangeRate: dto.securityDepositExchangeRate,
+    });
 
     let securityDepositAccount: {
       id: string;
