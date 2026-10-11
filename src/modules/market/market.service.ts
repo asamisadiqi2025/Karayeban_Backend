@@ -11,6 +11,7 @@ import { UpdateMarketProfileDto } from './dto/update-market-profile.dto';
 import { UpdateExchangeRateDto } from './dto/update-exchange-rate.dto';
 import { ConfigService } from '@nestjs/config';
 import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { describeRateJumps, findSuspiciousRateJumps } from '../../common/utils/exchange-rate-sanity';
 import { UploadsService } from '../uploads/uploads.service';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
@@ -221,6 +222,29 @@ export class MarketService {
     // محاسبات تبدیلِ مارکت اثر می‌گذارد، پس باید دقیقاً معلوم باشد قبلش چه بوده.
     const existing = await this.prisma.exchangeRate.findUnique({ where: whereKey });
 
+    // جلوگیری از خطای تایپی: نرخِ جدید با نزدیک‌ترین نرخِ قبل و بعد از همین تاریخ (غیر از خودِ همین
+    // روز که دارد جایگزین می‌شود) مقایسه می‌شود؛ جهشِ بیش از ۲۵٪ بدونِ تأییدِ صریح ثبت نمی‌شود.
+    const neighborSelect = { rateToBase: true, effectiveDate: true } as const;
+    const [previousRow, nextRow] = await Promise.all([
+      this.prisma.exchangeRate.findFirst({
+        where: { marketId, currencyId: dto.currencyId, effectiveDate: { lt: effectiveDate } },
+        orderBy: { effectiveDate: 'desc' },
+        select: neighborSelect,
+      }),
+      this.prisma.exchangeRate.findFirst({
+        where: { marketId, currencyId: dto.currencyId, effectiveDate: { gt: effectiveDate } },
+        orderBy: { effectiveDate: 'asc' },
+        select: neighborSelect,
+      }),
+    ]);
+    const jumps = findSuspiciousRateJumps(dto.rateToBase, {
+      previous: previousRow && { rate: previousRow.rateToBase, effectiveDate: previousRow.effectiveDate },
+      next: nextRow && { rate: nextRow.rateToBase, effectiveDate: nextRow.effectiveDate },
+    });
+    if (jumps.length > 0 && !dto.confirmLargeChange) {
+      throw new ConflictException(describeRateJumps(dto.rateToBase, jumps));
+    }
+
     const rate = await this.prisma.exchangeRate.upsert({
       where: whereKey,
       create: {
@@ -245,6 +269,7 @@ export class MarketService {
       userId: actor.id,
       oldData: existing ?? undefined,
       newData: rate,
+      reason: jumps.length > 0 ? 'تأییدِ آگاهانهٔ جهشِ بزرگِ نرخ (confirmLargeChange)' : undefined,
       ip: meta.ip,
       userAgent: meta.userAgent,
     });

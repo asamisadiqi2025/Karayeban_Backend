@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDateString,
   IsNumber,
   IsOptional,
@@ -21,4 +22,10 @@ export class UpdateExchangeRateDto {
   @IsOptional()
   @IsDateString()
   effectiveDate?: string;
+
+  // اگر نرخِ جدید بیش از ۲۵٪ (در هر جهت) با نرخِ قبلی/بعدیِ همین ارز فاصله داشته باشد، سرور برای
+  // جلوگیری از خطای تایپی ۴۰۹ می‌دهد؛ با true فرستادنِ این فیلد، ثبت آگاهانه تأیید می‌شود.
+  @IsOptional()
+  @IsBoolean()
+  confirmLargeChange?: boolean;
 }
