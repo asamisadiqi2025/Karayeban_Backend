@@ -406,6 +406,27 @@ export class ExpensesService {
     return { account, category };
   }
 
+  // مصرف باید روی «برگ» ثبت شود: اگر کتگوریِ مادر سب‌کتگوریِ فعال دارد، ثبتِ مستقیم روی خودش
+  // ممنوع است — وگرنه مصرفی بدونِ نامِ شخص/مورد (مثلاً «معاشات» بدونِ نامِ کارمند) در گزارش می‌ماند
+  // و جمعِ سب‌کتگوری‌ها ناقص می‌شود. مثل requireActive فقط وقتی کتگوری «تازه انتخاب» می‌شود
+  // صدا زده می‌شود؛ مصرف‌های قدیمیِ ثبت‌شده روی مادر همچنان قابلِ ویرایشِ مبلغ/توضیح‌اند.
+  // مادرِ بدونِ سب‌کتگوریِ فعال (و خودِ سب‌کتگوری) مستقیم مصرف می‌پذیرد.
+  private async assertCategoryAcceptsExpense(category: {
+    id: string;
+    name: string;
+    parentId: string | null;
+  }) {
+    if (category.parentId !== null) return;
+    const activeChildren = await this.prisma.expenseCategory.count({
+      where: { parentId: category.id, isActive: true },
+    });
+    if (activeChildren > 0) {
+      throw new BadRequestException(
+        `«${category.name}» سب‌کتگوری دارد؛ مصرف را باید روی یکی از سب‌کتگوری‌هایش ثبت کنید (یا با newSubcategoryName یک سب‌کتگوریِ جدید بسازید)`,
+      );
+    }
+  }
+
   async createExpense(currentUser: { id: string }, dto: CreateExpenseDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const marketId = this.resolveMarketId(actor, dto.marketId);
@@ -429,6 +450,8 @@ export class ExpensesService {
           'سب‌کتگوریِ جدید را فقط زیرِ کتگوریِ مادر می‌توان ساخت؛ categoryId باید یک کتگوریِ مادر باشد',
         );
       }
+    } else {
+      await this.assertCategoryAcceptsExpense(category);
     }
 
     const amount = new Prisma.Decimal(dto.amount);
@@ -856,12 +879,14 @@ export class ExpensesService {
     // حساب عوض نشده باشد، ارز هم همان ارزِ قبلیِ مصرف باقی می‌ماند.
     let nextCurrencyId = expense.currencyId;
     if (dto.categoryId !== undefined || moneyChanged) {
-      const { account } = await this.validateCategoryAndAccount(
+      const categoryChanged = dto.categoryId !== undefined && dto.categoryId !== expense.categoryId;
+      const { account, category } = await this.validateCategoryAndAccount(
         expense.marketId,
         nextCategoryId,
         nextAccountId,
-        dto.categoryId !== undefined && dto.categoryId !== expense.categoryId,
+        categoryChanged,
       );
+      if (categoryChanged) await this.assertCategoryAcceptsExpense(category);
       nextCurrencyId = account.currencyId;
     }
 
