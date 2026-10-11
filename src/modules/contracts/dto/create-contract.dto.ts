@@ -59,7 +59,10 @@ export class CreateContractDto {
   @IsPositive()
   securityDepositExchangeRate?: number;
 
-  // true = امانت قبلاً (قبل از سیستم) گرفته شده، هیچ حسابی الان افزایش نمی‌یابد.
+  // true = امانت قبلاً (قبل از سیستم) گرفته شده، هیچ حسابی الان افزایش نمی‌یابد (و نباید
+  // securityDepositAccountId/securityDepositExchangeRate هم بیاید). false = همین الان دریافت می‌شود.
+  // اگر قرارداد از روزِ قبل از امروز (به وقتِ کابل) شروع شده و امانت دارد، فرستادنِ این فیلد
+  // (true یا false) الزامی است — برای قراردادِ تازه (شروع امروز/آینده) اختیاری و پیش‌فرض false است.
   @IsOptional()
   @IsBoolean()
   securityDepositIsOpeningEntry?: boolean;
