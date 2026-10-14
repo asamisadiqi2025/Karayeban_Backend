@@ -44,6 +44,23 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## API documentation (Swagger)
+
+Interactive OpenAPI docs are served at **`/api/docs`** (raw spec at `/api/docs-json`).
+
+It is enabled automatically when `NODE_ENV` is not `production`. To control it
+explicitly use these env vars (see `.env.example`):
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SWAGGER_ENABLED` | `true` outside production | Force docs on/off |
+| `SWAGGER_PATH` | `docs` | Path under the `/api` prefix |
+| `SWAGGER_TITLE` / `SWAGGER_DESCRIPTION` / `SWAGGER_VERSION` | — | Document metadata |
+| `SWAGGER_USER` / `SWAGGER_PASSWORD` | — | When both set, the UI + spec require HTTP Basic Auth |
+
+DTO schemas are generated automatically by the `@nestjs/swagger` CLI plugin
+(configured in `nest-cli.json`), so `npm run build` uses `nest build`.
+
 ## Run tests
 
 ```bash

@@ -9,6 +9,8 @@ export class RolesGuard implements CanActivate {
     const roles = this.reflector.get<string[]>('roles', context.getHandler()) || this.reflector.get<string[]>('roles', context.getClass());
     if (!roles || roles.length === 0) return true;
     const req = context.switchToHttp().getRequest();
+    // PermissionsGuard (سراسری) قبلاً با فهرستِ دسترسیِ ذخیره‌شدهٔ کاربر این route را مجاز کرده.
+    if (req.permissionGranted) return true;
     const user = req.user;
     if (!user) throw new ForbiddenException('No user');
     if (roles.includes(user.role)) return true;

@@ -1,9 +1,15 @@
-import { ArrayUnique, IsArray, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsOptional, IsPositive, IsString, MaxLength } from 'class-validator';
 
 export class UpdateMarketProfileDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  // نام انگلیسی مارکت (اختیاری)
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  nameEn?: string;
 
   @IsOptional()
   @IsString()
@@ -17,16 +23,24 @@ export class UpdateMarketProfileDto {
   @IsString()
   baseCurrency?: string;
 
-   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @ArrayUnique()
-  phones?: string[];
+  @IsOptional()
+  @IsString()
+  @MaxLength(30)
+  phone?: string;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @ArrayUnique()
-  emails?: string[];
+  @IsEmail()
+  @MaxLength(255)
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  details?: string;
+
+  // نرخ برق (به‌ازای هر واحد مصرف) — همهٔ بل‌های تولیدشده از دورهٔ میترخوانیِ دسته‌جمعی
+  // همین عدد را استفاده می‌کنند تا هر بار مجبور نباشید وارد کنید.
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  electricityRatePerUnit?: number;
 }
- 

@@ -1,4 +1,13 @@
-import { IsEmail, IsEnum, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export enum UserRole {
@@ -9,12 +18,18 @@ export enum UserRole {
 }
 
 export class CreateUserDto {
-  @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase() : value))
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.toLowerCase() : value,
+  )
   @IsString()
-  @MinLength(3)
+  @MinLength(8)
   @MaxLength(30)
   @Matches(/^[a-z0-9_.]+$/, {
-    message: 'username can only contain lowercase letters, numbers, "_" and "."',
+    message:
+      'username can only contain lowercase letters, numbers, "_" and "."',
+  })
+  @Matches(/(?=.*[a-z])(?=.*\d)/, {
+    message: 'username must contain at least one letter and one number',
   })
   username: string;
 
@@ -58,11 +73,11 @@ export class CreateUserDto {
   role: UserRole;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   customRoleId?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   marketId?: string;
 
   @IsOptional()

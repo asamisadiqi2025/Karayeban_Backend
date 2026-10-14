@@ -1,10 +1,13 @@
-import { Controller, Post, Body, UseGuards, Patch, Param, Get, Query, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Patch, Param, ParseUUIDPipe, Get, Query, Req } from '@nestjs/common';
+import { SetUserPasswordDto } from './dto/set-user-password.dto';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserQueryDto } from './dto/user-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../common/guards/roles.guard';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -14,13 +17,24 @@ export class UserController {
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN')
   async create(@Req() req: any, @Body() dto: CreateUserDto) {
-    return this.userService.create(req.user, dto);
+    return this.userService.create(req.user, dto, extractRequestMeta(req));
   }
 
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   async update(@Req() req: any, @Param('id') id: string, @Body() dto: UpdateUserDto) {
-    return this.userService.update(req.user, id, dto);
+    return this.userService.update(req.user, id, dto, extractRequestMeta(req));
+  }
+
+  // رمزِ جدیدِ یک کاربر؛ رمزِ فعلیِ هیچ‌کس دیده نمی‌شود. ن.ک. UserService.setPassword.
+  @Patch(':id/password')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  async setPassword(
+    @Req() req: any,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: SetUserPasswordDto,
+  ) {
+    return this.userService.setPassword(req.user, id, dto, extractRequestMeta(req));
   }
 
   @Get('me')
@@ -30,7 +44,14 @@ export class UserController {
 
   @Get()
   @Roles('SUPER_ADMIN', 'ADMIN')
-  async list(@Req() req: any, @Query('marketId') marketId: string, @Query('role') role: string, @Query('skip') skip = '0', @Query('take') take = '20') {
-    return this.userService.findAll({ marketId, role, skip: parseInt(skip, 10), take: parseInt(take, 10) }, req.user);
+  async list(@Req() req: any, @Query() query: UserQueryDto) {
+    return this.userService.findAll(query, req.user);
+  }
+
+  // باید بعد از 'me' ثبت شود، وگرنه Nest کلمهٔ "me" را به‌عنوان :id تطبیق می‌دهد.
+  @Get(':id')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  async findOne(@Req() req: any, @Param('id') id: string) {
+    return this.userService.findOne(req.user, id);
   }
 }

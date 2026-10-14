@@ -1,11 +1,23 @@
-import { Injectable, UnauthorizedException, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { randomBytes } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
+import { UserService } from '../user/user.service';
+import { MailService } from '../../common/mail/mail.service';
+import { RateLimiter } from '../../common/utils/rate-limiter';
 import { RegisterSuperAdminDto } from './dto/register-super-admin.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +25,9 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly auditLog: AuditLogService,
+    private readonly users: UserService,
+    private readonly mail: MailService,
   ) {}
 
   async validateUser(identifier: string, password: string) {
@@ -26,13 +41,51 @@ export class AuthService {
     return rest;
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, meta: RequestMeta) {
     const user = await this.prisma.user.findFirst({
       where: { OR: [{ email: dto.identifier }, { username: dto.identifier }] },
     });
-    if (!user) throw new UnauthorizedException('Invalid credentials');
-     const match = await bcrypt.compare(dto.password, user.passwordHash);
-    if (!match) throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      // identifier نادرست است — کاربری برای گره‌زدنِ entityId وجود ندارد، ولی خودِ
+      // تلاشِ لاگینِ ناموفق (با آی‌پی/زمان) برای تشخیصِ حملهٔ brute-force ثبت می‌شود.
+      await this.auditLog.record({
+        action: 'LOGIN_FAILED',
+        entityType: 'User',
+        newData: { identifier: dto.identifier, reason: 'user_not_found' },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const match = await bcrypt.compare(dto.password, user.passwordHash);
+    if (!match) {
+      await this.auditLog.record({
+        action: 'LOGIN_FAILED',
+        entityType: 'User',
+        entityId: user.id,
+        marketId: user.marketId,
+        userId: user.id,
+        newData: { identifier: dto.identifier, reason: 'wrong_password' },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    if (!user.isActive || user.isDeleted === true) {
+      await this.auditLog.record({
+        action: 'LOGIN_FAILED',
+        entityType: 'User',
+        entityId: user.id,
+        marketId: user.marketId,
+        userId: user.id,
+        newData: { identifier: dto.identifier, reason: 'account_disabled' },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+      throw new UnauthorizedException('Account is disabled');
+    }
 
     const payload = { sub: user.id, id: user.id, email: user.email, role: user.role };
     const accessToken = this.jwt.sign(payload);
@@ -48,6 +101,16 @@ export class AuthService {
         expiresAt,
         revoked: false,
       },
+    });
+
+    await this.auditLog.record({
+      action: 'LOGIN',
+      entityType: 'User',
+      entityId: user.id,
+      marketId: user.marketId,
+      userId: user.id,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
     });
 
     const { passwordHash, ...userWithoutPassword } = user;
@@ -68,6 +131,9 @@ export class AuthService {
 
     const user = await this.prisma.user.findUnique({ where: { id: rt.userId } });
     if (!user) throw new NotFoundException('User not found');
+    if (!user.isActive || user.isDeleted === true) {
+      throw new UnauthorizedException('Account is disabled');
+    }
 
     await this.prisma.refreshToken.update({ where: { id: rt.id }, data: { revoked: true } });
 
@@ -90,14 +156,158 @@ export class AuthService {
     return { accessToken, refreshToken, expiresIn: this.config.get<string>('JWT_EXPIRES_IN') };
   }
 
-  async logout(token: string) {
+  // ==========================================================================
+  // فراموشیِ رمز — فقط ADMIN و SUPER_ADMIN، با لینکِ ایمیل. بقیهٔ کاربران رمزشان را ادمینِ
+  // مارکت عوض می‌کند (PATCH /users/:id/password).
+  // ==========================================================================
+
+  private static readonly RESET_TOKEN_TTL_MS = 30 * 60 * 1000;
+  private readonly resetLimiter = new RateLimiter();
+
+  private hashToken(token: string): string {
+    return createHash('sha256').update(token).digest('hex');
+  }
+
+  private resetUrl(token: string): string {
+    const base = this.config.get<string>('PASSWORD_RESET_URL') || 'http://localhost:3000/reset-password';
+    return `${base}${base.includes('?') ? '&' : '?'}token=${token}`;
+  }
+
+  // پاسخ همیشه یکسان است — چه ایمیل وجود داشته باشد، چه نه، چه ادمین باشد، چه نه — تا مهاجم
+  // نتواند ایمیلِ ادمین‌ها را حدس بزند. خطای ارسالِ ایمیل هم به بیرون درز نمی‌کند.
+  async requestPasswordReset(email: string, meta: RequestMeta) {
+    const generic = { message: 'اگر این ایمیل متعلق به یک ادمین باشد، لینکِ بازیابیِ رمز برایش ارسال شد' };
+
+    if (!this.resetLimiter.hit(`ip:${meta.ip ?? 'unknown'}`, 10, 10 * 60 * 1000)) {
+      throw new HttpException('تعدادِ درخواست‌ها زیاد است؛ کمی بعد دوباره تلاش کنید', HttpStatus.TOO_MANY_REQUESTS);
+    }
+    // سقفِ هر ایمیل: جلوگیری از پر کردنِ صندوقِ ایمیلِ یک ادمین.
+    const allowedForEmail = this.resetLimiter.hit(`email:${email}`, 3, 60 * 60 * 1000);
+
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email: { equals: email, mode: 'insensitive' },
+        role: { in: ['ADMIN', 'SUPER_ADMIN'] },
+        isActive: true,
+        NOT: { isDeleted: true },
+      },
+    });
+    if (!user || !allowedForEmail) return generic;
+
+    const token = randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + AuthService.RESET_TOKEN_TTL_MS);
+
+    await this.prisma.$transaction(async (tx) => {
+      // هر درخواستِ تازه، لینک‌های قبلیِ استفاده‌نشده را باطل می‌کند.
+      await tx.passwordResetToken.updateMany({
+        where: { userId: user.id, usedAt: null },
+        data: { usedAt: new Date() },
+      });
+      await tx.passwordResetToken.create({
+        data: { userId: user.id, tokenHash: this.hashToken(token), expiresAt, requestIp: meta.ip?.slice(0, 64) ?? null },
+      });
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'PasswordReset',
+        entityId: user.id,
+        marketId: user.marketId,
+        userId: user.id,
+        newData: { event: 'reset_requested' },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+    });
+
+    const link = this.resetUrl(token);
+    void this.mail.send({
+      to: user.email,
+      subject: 'بازیابی رمز عبور',
+      text: `برای تعیین رمز جدید روی این لینک بزنید (۳۰ دقیقه اعتبار دارد و فقط یک‌بار قابل استفاده است):\n${link}\n\nاگر شما این درخواست را نداده‌اید، این ایمیل را نادیده بگیرید؛ رمز شما تغییری نکرده است.`,
+      html: `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;line-height:1.9"><p>برای تعیین رمز جدید روی دکمهٔ زیر بزنید. این لینک ۳۰ دقیقه اعتبار دارد و فقط یک‌بار قابل استفاده است.</p><p><a href="${link}" style="display:inline-block;padding:10px 20px;background:#2563eb;color:#fff;border-radius:6px;text-decoration:none">تعیین رمز جدید</a></p><p style="color:#666">اگر شما این درخواست را نداده‌اید، این ایمیل را نادیده بگیرید؛ رمز شما تغییری نکرده است.</p></div>`,
+    });
+
+    return generic;
+  }
+
+  async resetPassword(token: string, newPassword: string, meta: RequestMeta) {
+    if (!this.resetLimiter.hit(`reset-ip:${meta.ip ?? 'unknown'}`, 20, 10 * 60 * 1000)) {
+      throw new HttpException('تعدادِ درخواست‌ها زیاد است؛ کمی بعد دوباره تلاش کنید', HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    const invalid = () => new BadRequestException('لینک نامعتبر است یا منقضی شده؛ دوباره «فراموشی رمز» را بزنید');
+    const row = await this.prisma.passwordResetToken.findUnique({
+      where: { tokenHash: this.hashToken(token) },
+      include: { user: true },
+    });
+    if (
+      !row ||
+      row.usedAt ||
+      row.expiresAt < new Date() ||
+      !row.user.isActive ||
+      row.user.isDeleted === true ||
+      !['ADMIN', 'SUPER_ADMIN'].includes(row.user.role)
+    ) {
+      throw invalid();
+    }
+
+    const passwordHash = await this.users.hashPassword(newPassword);
+    await this.prisma.$transaction(async (tx) => {
+      // مصرفِ اتمیکِ توکن: اگر هم‌زمان دو بار فرستاده شود فقط یکی موفق می‌شود.
+      const consumed = await tx.passwordResetToken.updateMany({
+        where: { id: row.id, usedAt: null },
+        data: { usedAt: new Date() },
+      });
+      if (consumed.count === 0) throw invalid();
+
+      await tx.passwordResetToken.updateMany({
+        where: { userId: row.userId, usedAt: null },
+        data: { usedAt: new Date() },
+      });
+      await this.users.applyPasswordHash(tx, row.userId, passwordHash);
+
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'PasswordReset',
+        entityId: row.userId,
+        marketId: row.user.marketId,
+        userId: row.userId,
+        newData: { event: 'password_reset_completed', sessionsRevoked: true },
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+    });
+
+    void this.mail.send({
+      to: row.user.email,
+      subject: 'رمز عبور شما تغییر کرد',
+      text: 'رمز عبور حساب شما همین الان تغییر کرد و همهٔ نشست‌های قبلی بسته شد. اگر این کار را شما نکرده‌اید، فوراً به مسئول سیستم اطلاع دهید.',
+    });
+
+    return { message: 'رمز با موفقیت عوض شد؛ با رمز جدید وارد شوید' };
+  }
+
+  async logout(token: string, meta: RequestMeta) {
     const rt = await this.prisma.refreshToken.findUnique({ where: { token } });
     if (!rt) throw new NotFoundException('Refresh token not found');
     await this.prisma.refreshToken.update({ where: { id: rt.id }, data: { revoked: true } });
+
+    const user = await this.prisma.user.findUnique({ where: { id: rt.userId } });
+    await this.auditLog.record({
+      action: 'LOGOUT',
+      entityType: 'User',
+      entityId: rt.userId,
+      marketId: user?.marketId,
+      userId: rt.userId,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { success: true };
   }
 
-  async registerSuperAdmin(dto: RegisterSuperAdminDto) {
+  async registerSuperAdmin(dto: RegisterSuperAdminDto, meta: RequestMeta) {
     const secret = this.config.get<string>('SUPER_ADMIN_REGISTRATION_SECRET');
     if (!secret || secret !== dto.secret) throw new UnauthorizedException('Invalid registration secret');
 
@@ -119,6 +329,20 @@ export class AuthService {
     });
 
     const { passwordHash, ...rest } = user as any;
+
+    // حساس‌ترین عملیاتِ ممکن در کل سیستم — ساختِ اولین سوپرادمین. عاملی جز خودِ کاربرِ
+    // تازه‌ساخته‌شده وجود ندارد (این مسیر عمداً بدون لاگین است، پشتِ یک secret مشترک)،
+    // پس userId هم خودِ همین رکورد است.
+    await this.auditLog.record({
+      action: 'CREATE',
+      entityType: 'User',
+      entityId: user.id,
+      userId: user.id,
+      newData: rest,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return rest;
   }
 }

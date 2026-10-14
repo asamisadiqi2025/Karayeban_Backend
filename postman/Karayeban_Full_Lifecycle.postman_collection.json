@@ -1,0 +1,538 @@
+{
+  "info": {
+    "name": "Karayeban Backend - Full Lifecycle Test (Contract + Rent + Electricity)",
+    "description": "تست سر تا ته: قرارداد تازه، قرارداد قدیمی با بدهی کرایه/برق + کاهش قیمت وسط قرارداد + تخفیف، تمدید/فسخ/باطل‌سازی، بدهی قسطی کرایه، دوره‌بندی و بل برق زنده، و تسویه‌ی نهایی. ترتیب پوشه‌ها را رعایت کنید چون هر مرحله به ID های مرحله‌ی قبل نیاز دارد (خودکار در متغیرهای کالکشن ذخیره می‌شوند).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api" },
+    { "key": "superAdminSecret", "value": "", "description": "از .env مقدار SUPER_ADMIN_REGISTRATION_SECRET را اینجا بگذارید" },
+    { "key": "accessToken", "value": "" },
+    { "key": "marketId", "value": "" },
+    { "key": "currencyId", "value": "" },
+    { "key": "accountId", "value": "" },
+    { "key": "shopId1", "value": "" },
+    { "key": "shopId2", "value": "" },
+    { "key": "shopId3", "value": "" },
+    { "key": "shopId4", "value": "" },
+    { "key": "tenantId1", "value": "" },
+    { "key": "tenantId2", "value": "" },
+    { "key": "tenantId3", "value": "" },
+    { "key": "tenantId4", "value": "" },
+    { "key": "meterId1", "value": "" },
+    { "key": "meterId2", "value": "" },
+    { "key": "contractIdFresh", "value": "" },
+    { "key": "contractIdLegacy", "value": "" },
+    { "key": "contractIdTerminate", "value": "" },
+    { "key": "contractIdCancel", "value": "" },
+    { "key": "electricityBillIdLive", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "۰) راه‌اندازی (Setup)",
+      "item": [
+        {
+          "name": "0.1 ثبت سوپرادمین اول",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register-super-admin",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"superadmin1\",\n  \"email\": \"superadmin1@example.com\",\n  \"password\": \"Passw0rd1\",\n  \"fullName\": \"مدیر کل سیستم\",\n  \"secret\": \"{{superAdminSecret}}\"\n}"
+            },
+            "description": "اگر قبلاً یک سوپرادمین ساخته‌اید، این مرحله با خطا (کاربر تکراری) رد می‌شود — مشکلی نیست، برو مرحله‌ی بعد (لاگین) با همان ایمیل/پسورد."
+          }
+        },
+        {
+          "name": "0.2 ورود (Login)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.accessToken) { pm.collectionVariables.set('accessToken', data.accessToken); }",
+            "pm.test('login ok', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"superadmin1@example.com\",\n  \"password\": \"Passw0rd1\"\n}"
+            }
+          }
+        },
+        {
+          "name": "0.3 ساخت بازار (Market)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('marketId', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/markets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"بازار مرکزی تست\",\n  \"address\": \"کابل، شهرنو\",\n  \"subdomain\": \"karayeban-test-{{$timestamp}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "0.4 تنظیم نرخ برق مارکت (electricityRatePerUnit)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/markets/{{marketId}}/profile",
+            "body": { "mode": "raw", "raw": "{\n  \"electricityRatePerUnit\": 15\n}" }
+          }
+        },
+        {
+          "name": "0.5 فعال‌سازی ارز افغانی (AFN) برای بازار",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('currencyId', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/currencies",
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"AFN\",\n  \"marketId\": \"{{marketId}}\"\n}" }
+          }
+        },
+        {
+          "name": "0.6 ساخت حساب نقدی (Account)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('accountId', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/accounts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"حساب نقدی اصلی\",\n  \"type\": \"CASH\",\n  \"currencyId\": \"{{currencyId}}\",\n  \"marketId\": \"{{marketId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "0.7 دوکان ۱ (تازه/renew) - F-101",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('shopId1', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/shops",
+            "body": { "mode": "raw", "raw": "{\n  \"shopNumber\": \"F-101\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.7 دوکان ۲ (قدیمی/بدهکار) - L-102",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('shopId2', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/shops",
+            "body": { "mode": "raw", "raw": "{\n  \"shopNumber\": \"L-102\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.7 دوکان ۳ (فسخ/terminate) - T-103",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('shopId3', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/shops",
+            "body": { "mode": "raw", "raw": "{\n  \"shopNumber\": \"T-103\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.7 دوکان ۴ (باطل‌سازی/cancel) - C-104",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('shopId4', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/shops",
+            "body": { "mode": "raw", "raw": "{\n  \"shopNumber\": \"C-104\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.8 مستاجر ۱ (احمد - قرارداد تازه)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('tenantId1', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/tenants",
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"احمد ولی\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.8 مستاجر ۲ (کریم - قرارداد قدیمی بدهکار)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('tenantId2', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/tenants",
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"کریم داد\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.8 مستاجر ۳ (فرید - تست فسخ)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('tenantId3', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/tenants",
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"فرید احمدی\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.8 مستاجر ۴ (نجیب - تست باطل‌سازی)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('tenantId4', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/tenants",
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"نجیب الله\",\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.9 کنتور برق دوکان ۱",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('meterId1', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/meters",
+            "body": { "mode": "raw", "raw": "{\n  \"shopNumber\": \"F-101\",\n  \"serialNumber\": \"MTR-F-101\",\n  \"lastReading\": 100,\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.9 کنتور برق دوکان ۲",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('meterId2', data.id); }"
+          ]}}],
+          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/meters",
+            "body": { "mode": "raw", "raw": "{\n  \"shopNumber\": \"L-102\",\n  \"serialNumber\": \"MTR-L-102\",\n  \"lastReading\": 50,\n  \"marketId\": \"{{marketId}}\"\n}" } }
+        },
+        {
+          "name": "0.10 تنظیم دوره‌بندی میترخوانی سال ۱۴۰۵/2026 (هر ۲ ماه یک دوره = ۶ دوره در سال)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/electricity/billing-cycles",
+            "body": { "mode": "raw", "raw": "{\n  \"year\": 2026,\n  \"monthsPerPeriod\": 2,\n  \"marketId\": \"{{marketId}}\"\n}" },
+            "description": "این یک‌بار برای کل بازار تنظیم می‌شود؛ همه‌ی بل‌های سال ۲۰۲۶ (زنده و تاریخی) از همین استفاده می‌کنند."
+          }
+        }
+      ]
+    },
+    {
+      "name": "۱) قرارداد تازه (بدون بدهی قبلی) - دوکان F-101",
+      "item": [
+        {
+          "name": "1.1 ساخت قرارداد تازه (رایگان از بدهی)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('contractIdFresh', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopId1}}\",\n  \"tenantId\": \"{{tenantId1}}\",\n  \"startDate\": \"2026-09-01\",\n  \"endDate\": \"2027-09-01\",\n  \"rent\": 6000,\n  \"currencyId\": \"{{currencyId}}\"\n}"
+            },
+            "description": "بدون openingRentPaid — قرارداد کاملاً تازه، صفر بدهی."
+          }
+        },
+        {
+          "name": "1.2 ⚠️ چک کن: GET بدهی کرایه مستاجر ۱ (نکته‌ی مهم totalDebt vs overdueDebt)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/rent/debts/{{tenantId1}}",
+            "description": "⚠️ نکته‌ی مهم: چون همه‌ی فاکتورهای کرایه‌ی کل یک‌سال قرارداد همین الان (در لحظه‌ی ساخت) از قبل ساخته شده‌اند، فیلد totalDebt این‌جا تقریباً کل کرایه‌ی یک‌سال (۷۲,۰۰۰) را نشان می‌دهد — نه فقط چیزی که *تا امروز* باید داده می‌شد! فیلد overdueDebt همان چیزی است که واقعاً می‌خواهید («واقعاً معوق تا امروز») و باید صفر یا نزدیک صفر باشد چون هنوز هیچ ماهی تمام نشده. این رفتار را در پاسخ چت هم به‌عنوان یک یافته گزارش کردم — اگر داشبورد شما مستقیم totalDebt را به‌عنوان «بدهی مستاجر» نشان می‌دهد، این گمراه‌کننده است."
+          }
+        },
+        {
+          "name": "1.3 پرداخت جزئی کرایه (POST /rent/payments)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/rent/payments",
+            "body": { "mode": "raw", "raw": "{\n  \"contractId\": \"{{contractIdFresh}}\",\n  \"amount\": 2000,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"پرداخت اول ماه\"\n}" }
+          }
+        },
+        {
+          "name": "1.4 GET فاکتورهای کرایه‌ی این قرارداد (باید فاکتور اول PARTIAL باشد)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/charges?contractId={{contractIdFresh}}" }
+        }
+      ]
+    },
+    {
+      "name": "۲) قرارداد قدیمی وسط‌راه: بدهی کرایه+برق، کاهش قیمت وسط قرارداد، تخفیف - دوکان L-102",
+      "item": [
+        {
+          "name": "2.1 ساخت قرارداد قدیمی (شروع ۶ ماه قبل، رایه ۵۰۰۰، پرداخت افتتاحیه ۱۵۰۰۰)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('contractIdLegacy', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopId2}}\",\n  \"tenantId\": \"{{tenantId2}}\",\n  \"startDate\": \"2026-03-28\",\n  \"endDate\": \"2027-03-28\",\n  \"rent\": 5000,\n  \"currencyId\": \"{{currencyId}}\",\n  \"openingRentPaid\": 15000\n}"
+            },
+            "description": "معادل: از ۲ حمل با ۵۰۰۰ شروع شده. openingRentPaid=15000 دقیقاً برابر ۳ ماه اول (۳×۵۰۰۰) است — یعنی طبق دفتر کاغذی همین مقدار تا الان داده. سیستم فاکتورهای کل قرارداد را می‌سازد (همه با ۵۰۰۰) و این ۱۵,۰۰۰ را FIFO روی ۳ ماه اول می‌ریزد (کامل تسویه)."
+          }
+        },
+        {
+          "name": "2.2 کاهش قیمت از ماه چهارم (adjust-rent: 5000 → 4000 از 2026-06-28)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdLegacy}}/adjust-rent",
+            "body": { "mode": "raw", "raw": "{\n  \"newRent\": 4000,\n  \"effectiveFrom\": \"2026-06-28\",\n  \"reason\": \"افت بازار\"\n}" },
+            "description": "این تاریخ دقیقاً معادل شروع دوره‌ی چهارم است (هر دوره ۱ ماه از startDate است، نه اول ماه تقویمی) — پس فقط فاکتورهای ماه ۴ به بعد (که هنوز PENDING اند) به ۴۰۰۰ تغییر می‌کنند؛ ۳ ماه اول (که با openingRentPaid تسویه شدند) دست‌نخورده با ۵۰۰۰ می‌مانند. ⚠️ نکته‌ی مهم که در چت گزارش کردم: این endpoint هیچ محدودیتی روی «فقط کاهش مجاز است» ندارد — اگر همین درخواست را با newRent بزرگ‌تر از رایه فعلی بزنید (مثلاً 6000)، سیستم بدون خطا قبول می‌کند! این برخلاف قانون کسب‌وکاری است که خودتان گفتید (قیمت فقط می‌تواند پایین بیاید). اگر می‌خواهید همین الان این validation را اضافه کنم بگویید."
+          }
+        },
+        {
+          "name": "2.3 GET فاکتورهای کرایه (چک کن: ۳ ماه اول=۵۰۰۰ PAID، بقیه=۴۰۰۰ PENDING)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/charges?contractId={{contractIdLegacy}}" }
+        },
+        {
+          "name": "2.4 بخشش بخشی از بدهی کرایه (discount-debt: 2000)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdLegacy}}/discount-debt",
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 2000,\n  \"reason\": \"تسویه با تخفیف، توافق صاحب‌کار\"\n}" },
+            "description": "روی قدیمی‌ترین فاکتور بازِ (ماه ۴، که ۴۰۰۰ است) اعمال می‌شود؛ discountAmount آن فاکتور را ۲۰۰۰ می‌کند تا در گزارش هم «بدهی واقعی» هم «بخشش» جدا دیده شود."
+          }
+        },
+        {
+          "name": "2.5 ثبت دسته‌ای بل‌های تاریخی برق (bills/bulk با isOpeningEntry - دوره‌های ۲،۳،۴)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/electricity/bills/bulk",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bills\": [\n    { \"contractId\": \"{{contractIdLegacy}}\", \"year\": 2026, \"periodNumber\": 2, \"totalAmount\": 1500, \"currencyId\": \"{{currencyId}}\", \"isOpeningEntry\": true, \"notes\": \"مهاجرت از دفتر کاغذی\" },\n    { \"contractId\": \"{{contractIdLegacy}}\", \"year\": 2026, \"periodNumber\": 3, \"totalAmount\": 1500, \"currencyId\": \"{{currencyId}}\", \"isOpeningEntry\": true, \"notes\": \"مهاجرت از دفتر کاغذی\" },\n    { \"contractId\": \"{{contractIdLegacy}}\", \"year\": 2026, \"periodNumber\": 4, \"totalAmount\": 1500, \"currencyId\": \"{{currencyId}}\", \"isOpeningEntry\": true, \"notes\": \"مهاجرت از دفتر کاغذی\" }\n  ]\n}"
+            },
+            "description": "سه دوره‌ی گذشته (دوره ۲=مارچ-آپریل، ۳=می-جون، ۴=جولای-آگست) یک‌جا ثبت می‌شوند — هر کدام ۱۵۰۰، بدون قرائت کنتور، دقیقاً مثل بدهی برق روی کاغذ. دوره‌ی جاری (۵) عمداً اینجا ثبت نمی‌شود چون هنوز تمام نشده."
+          }
+        },
+        {
+          "name": "2.6 پرداخت یک‌جای بدهی برق تاریخی (payments/opening: 3000)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/electricity/payments/opening",
+            "body": { "mode": "raw", "raw": "{\n  \"shopId\": \"{{shopId2}}\",\n  \"tenantId\": \"{{tenantId2}}\",\n  \"amount\": 3000,\n  \"notes\": \"پرداخت‌های برق قبل از سیستم\"\n}" },
+            "description": "این همان مسیر جدیدی است که امروز اضافه کردیم. باید خودکار FIFO روی دوره‌ی ۲ (۱۵۰۰، کامل تسویه) و دوره‌ی ۳ (۱۵۰۰، کامل تسویه) بنشیند و دوره‌ی ۴ (۱۵۰۰) را دست‌نخورده باز نگه دارد."
+          }
+        },
+        {
+          "name": "2.7 GET بدهی برق مستاجر ۲ (باید ۱۵۰۰ باقی مانده باشد)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/electricity/debts/{{tenantId2}}" }
+        }
+      ]
+    },
+    {
+      "name": "۳) تمدید / فسخ / باطل‌سازی",
+      "item": [
+        {
+          "name": "3.1 ساخت قرارداد ساده برای تست فسخ - دوکان T-103",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('contractIdTerminate', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts",
+            "body": { "mode": "raw", "raw": "{\n  \"shopId\": \"{{shopId3}}\",\n  \"tenantId\": \"{{tenantId3}}\",\n  \"startDate\": \"2026-08-01\",\n  \"endDate\": \"2027-08-01\",\n  \"rent\": 3000,\n  \"currencyId\": \"{{currencyId}}\"\n}" }
+          }
+        },
+        {
+          "name": "3.2 فسخ زودهنگام (terminate در 2026-08-20 - وسط ماه اول)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdTerminate}}/terminate",
+            "body": { "mode": "raw", "raw": "{\n  \"terminationDate\": \"2026-08-20\",\n  \"reason\": \"مستاجر زودتر دوکان را تحویل داد\"\n}" },
+            "description": "چک کن: فاکتور ماه اول باید از ۳۰ روز به ۱۹ روز کوتاه (prorate) شده باشد و مبلغش کم شده باشد؛ همه‌ی فاکتورهای بعد از این تاریخ باید status=CANCELED شوند (نه اینکه هنوز بدهی حساب شوند). status قرارداد باید early_terminated شود و دوکان T-103 باید status=empty برگردد."
+          }
+        },
+        {
+          "name": "3.3 GET قرارداد فسخ‌شده (چک status)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/contracts/{{contractIdTerminate}}" }
+        },
+        {
+          "name": "3.4 تمدید قرارداد تازه (renew تا 2028-09-01)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdFresh}}/renew",
+            "body": { "mode": "raw", "raw": "{\n  \"newEndDate\": \"2028-09-01\",\n  \"rent\": 6500,\n  \"notes\": \"تمدید سالانه با افزایش کرایه در قرارداد جدید\"\n}" },
+            "description": "قرارداد قبلی (contractIdFresh) بسته (expired) می‌شود و یک قرارداد جدید پیوسته ساخته می‌شود؛ دوکان F-101 هرگز خالی نمی‌شود. توجه: افزایش کرایه این‌جا کاملاً مجاز است چون این «قرارداد جدید» است، نه adjust-rent روی قرارداد جاری — این با قانون «فقط کاهش وسط قرارداد» در تضاد نیست."
+          }
+        },
+        {
+          "name": "3.5 ساخت قرارداد آینده برای تست باطل‌سازی (draft) - دوکان C-104",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('contractIdCancel', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts",
+            "body": { "mode": "raw", "raw": "{\n  \"shopId\": \"{{shopId4}}\",\n  \"tenantId\": \"{{tenantId4}}\",\n  \"startDate\": \"2026-11-01\",\n  \"endDate\": \"2027-11-01\",\n  \"rent\": 4000,\n  \"currencyId\": \"{{currencyId}}\"\n}" },
+            "description": "startDate در آینده است پس status باید خودکار draft شود (نه active)."
+          }
+        },
+        {
+          "name": "3.6 باطل‌سازی قبل از شروع (cancel)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdCancel}}/cancel",
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"مستاجر پشیمان شد، هنوز شروع نکرده بود\"\n}" },
+            "description": "فقط روی قرارداد draft کار می‌کند. اگر همین را روی contractIdFresh یا contractIdLegacy (که active اند) بزنید، باید خطای 409 بگیرید — این هم یک تست خوب برای مسیر خطا است."
+          }
+        }
+      ]
+    },
+    {
+      "name": "۴) بدهی قسطی کرایه — گزارش‌ها",
+      "item": [
+        {
+          "name": "4.1 GET همه‌ی فاکتورهای بازِ کرایه (status=PENDING)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/charges?status=PENDING" }
+        },
+        {
+          "name": "4.2 GET لیست کل بدهکاران کرایه",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/debts" }
+        },
+        {
+          "name": "4.3 GET رده‌بندی سنیِ بدهی کرایه (aging) کل بازار",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/debts/aging?marketId={{marketId}}" }
+        },
+        {
+          "name": "4.4 GET بدهی کرایه‌ی مستاجر ۲ (قرارداد قدیمی، بعد از تخفیف)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/debts/{{tenantId2}}" }
+        }
+      ]
+    },
+    {
+      "name": "۵) برق زنده: دوره میترخوانی، بل، جمع‌آوری پول - دوکان F-101",
+      "item": [
+        {
+          "name": "5.1 ثبت بل زنده‌ی برق (دوره ۵ = سپتامبر-اکتبر ۲۰۲۶، قرائت کنتور)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const data = pm.response.json();",
+            "if (data.id) { pm.collectionVariables.set('electricityBillIdLive', data.id); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/electricity/bills",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractIdFresh}}\",\n  \"year\": 2026,\n  \"periodNumber\": 5,\n  \"meterId\": \"{{meterId1}}\",\n  \"currentReading\": 140,\n  \"currencyId\": \"{{currencyId}}\"\n}"
+            },
+            "description": "previousReading از خود کنتور (lastReading=100) خوانده می‌شود، نیازی نیست بفرستید. مصرف = 140-100=40 واحد × نرخ بازار (15) = 600 افغانی. چک کن totalAmount دقیقاً 600 برگردد."
+          }
+        },
+        {
+          "name": "5.2 پرداخت کامل همین بل (payments با billId)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/electricity/payments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopId1}}\",\n  \"tenantId\": \"{{tenantId1}}\",\n  \"amount\": 600,\n  \"accountId\": \"{{accountId}}\",\n  \"billId\": \"{{electricityBillIdLive}}\"\n}"
+            },
+            "description": "چون billId داده شده، این پرداخت فقط روی همین یک بل می‌نشیند (نه FIFO روی همه‌ی بل‌های باز مستاجر)."
+          }
+        },
+        {
+          "name": "5.3 GET بل‌های برق این مستاجر (باید status=PAID باشد)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/electricity/bills?tenantId={{tenantId1}}" }
+        },
+        {
+          "name": "5.4 GET رده‌بندی سنی بدهی برق کل بازار",
+          "request": { "method": "GET", "url": "{{baseUrl}}/electricity/debts/aging?marketId={{marketId}}" }
+        }
+      ]
+    },
+    {
+      "name": "۶) تسویه‌ی نهایی حساب مستاجر (Settlement) - قرارداد قدیمی L-102",
+      "item": [
+        {
+          "name": "6.1 فسخ قرارداد قدیمی قبل از تسویه (terminate در 2026-09-20)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdLegacy}}/terminate",
+            "body": { "mode": "raw", "raw": "{\n  \"terminationDate\": \"2026-09-20\",\n  \"reason\": \"مستاجر دوکان را تخلیه کرد\"\n}" },
+            "description": "⚠️ مهم: settle باید همیشه بعد از terminate صدا زده شود، نه به‌جای آن. چون فاکتورهای آینده‌ی هنوز‌نرسیده تا آخر قرارداد (تا 2027-03-28) از همان لحظه‌ی ساخت قرارداد به‌عنوان PENDING در سیستم وجود دارند؛ terminate آن‌ها را status=CANCELED می‌کند و از محاسبه‌ی «بدهی کل» خارج می‌شوند. اگر settle را بدون terminate قبلی صدا بزنید، «بدهی کل» شامل تمام ماه‌های باقی‌مانده‌ی قرارداد (حتی ماه‌هایی که هنوز نرسیده) هم می‌شود — همان مشکلی که در مورد 1.2 هم گزارش کردم."
+          }
+        },
+        {
+          "name": "6.2 GET بدهی نهایی کرایه (برای دیدن رقم دقیق قبل از تسویه)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/debts/{{tenantId2}}" }
+        },
+        {
+          "name": "6.3 GET بدهی نهایی برق (برای دیدن رقم دقیق قبل از تسویه)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/electricity/debts/{{tenantId2}}" }
+        },
+        {
+          "name": "6.4a تسویه با بخشش کامل (WRITE_OFF - ساده‌ترین تست، نیازی به دیدن رقم دقیق نیست)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdLegacy}}/settle",
+            "body": { "mode": "raw", "raw": "{\n  \"settlementMethod\": \"WRITE_OFF\",\n  \"notes\": \"مستاجر توان پرداخت نداشت، صاحب‌کار کل باقیمانده را بخشید\"\n}" },
+            "description": "این را اجرا کنید *یا* 6.4b را — هر دو نمی‌توانند روی یک قرارداد اجرا شوند (خطای «قبلاً تسویه شده»)."
+          }
+        },
+        {
+          "name": "6.4b (جایگزین) تسویه‌ی ترکیبی - بخشی نقد بخشی بخشش (MIXED)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/contracts/{{contractIdLegacy}}/settle",
+            "body": { "mode": "raw", "raw": "{\n  \"settlementMethod\": \"MIXED\",\n  \"cashAmount\": 1000,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"مبلغ نقدی را طبق رقمی که در 6.2/6.3 دیدید تنظیم کنید (نباید از کل بدهی بیشتر باشد)\"\n}" },
+            "description": "فقط اگر 6.4a را اجرا نکرده‌اید این را بزنید. cashAmount را با توجه به مجموع بدهی که در مرحله‌ی 6.2+6.3 دیدید عدد منطقی بگذارید (باید ≤ مجموع باشد)."
+          }
+        },
+        {
+          "name": "6.5 GET قرارداد نهایی (چک: بدهی باید صفر شده باشد)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/contracts/{{contractIdLegacy}}" }
+        },
+        {
+          "name": "6.6 GET بدهی کرایه‌ی مستاجر ۲ بعد از تسویه (باید صفر باشد)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/rent/debts/{{tenantId2}}" }
+        },
+        {
+          "name": "6.7 GET بدهی برق مستاجر ۲ بعد از تسویه (باید صفر باشد)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/electricity/debts/{{tenantId2}}" }
+        }
+      ]
+    }
+  ]
+}

@@ -28,16 +28,23 @@ model Account {
 
   openingBalances OpeningBalance[]
 
-  expenses                Expense[]
-  rentPayments            RentPayment[]
-  rentCharges             RentCharges[]
-  miscellaneousIncome     MiscellaneousIncome[]
-  electricityPayments     ElectricityPayment[]
-  shareholderTransactions ShareholderTransaction[]
-  collateralItems         CollateralItem[]
+  expenses                 Expense[]
+  rentPayments             RentPayment[]
+  rentCharges              RentCharges[]
+  miscellaneousIncome      MiscellaneousIncome[]
+  electricityPayments      ElectricityPayment[]
+  shareholderTransactions  ShareholderTransaction[]
+  collateralItems          CollateralItem[]
+  inventoryTransactions    InventoryTransaction[]
+  securityDepositContracts Contract[]
 
   transfersOut AccountTransfer[] @relation("TransferFrom")
   transfersIn  AccountTransfer[] @relation("TransferTo")
+
+  accountTransactions AccountTransaction[]
+
+  dealerLoans      DealerLoan[]
+  dealerRepayments DealerRepayment[]
 
   ledgerEntries LedgerEntry[]
 
@@ -58,12 +65,20 @@ model AccountTransfer {
   fromAccountId String @map("from_account_id") @db.Uuid
   toAccountId   String @map("to_account_id") @db.Uuid
 
-   amount Decimal @db.Decimal(18, 4)
- 
+  amount Decimal @db.Decimal(18, 4)
+
   receivedAmount Decimal @map("received_amount") @db.Decimal(18, 4)
 
-  
-  exchangeRate Decimal? @map("exchange_rate") @db.Decimal(18, 6)
+  // نرخِ تبدیلِ «مبدا → مقصد» (۱ واحد ارز مبدا = exchangeRate واحد ارز مقصد)؛ فقط انتقالِ بین‌ارزی.
+  exchangeRate Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+
+  // اسنپ‌شاتِ ارز پایه در لحظهٔ انتقال: نرخِ هر ارز به ارز پایه (۱ واحد = X ارز پایه) و ارزشِ
+  // مبلغِ خارج‌شده و دریافت‌شده به ارز پایه. اگر نرخِ دستیِ انتقال با نرخ‌های سیستم نخواند، تفاوتِ
+  // این دو ارزش همان «سود/زیانِ ارزی» همین انتقال است.
+  fromRateToBase             Decimal? @map("from_rate_to_base") @db.Decimal(24, 10)
+  toRateToBase               Decimal? @map("to_rate_to_base") @db.Decimal(24, 10)
+  baseCurrencyAmount         Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+  receivedBaseCurrencyAmount Decimal? @map("received_base_currency_amount") @db.Decimal(18, 4)
 
   transferDate DateTime @map("transfer_date") @db.Timestamptz(6)
   notes        String?  @db.Text
@@ -76,7 +91,6 @@ model AccountTransfer {
   toAccount   Account @relation("TransferTo", fields: [toAccountId], references: [id], onDelete: Restrict)
   createdBy   User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
 
-  // یک AccountTransfer دو LedgerEntry می‌سازد: یک OUT روی fromAccount و یک IN روی toAccount.
   ledgerEntries LedgerEntry[]
 
   @@index([marketId])

@@ -10,14 +10,42 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
+import { CreateAccountTransactionDto } from './dto/create-account-transaction.dto';
+import { AccountQueryDto } from './dto/account-query.dto';
+import { TransferQueryDto } from './dto/transfer-query.dto';
+import { AccountTransactionQueryDto } from './dto/account-transaction-query.dto';
+import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
+import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
+import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
+import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
 @Injectable()
 export class AccountsService {
-  constructor(private readonly prisma: PrismaService) {}
+  private static readonly SORT_FIELDS = ['name', 'balance', 'createdAt'] as const;
+  private static readonly SEARCH_FIELDS = ['name', 'bankName', 'accountNumber'] as const;
+  private static readonly TRANSFER_SORT_FIELDS = ['transferDate', 'amount', 'createdAt'] as const;
+  private static readonly TRANSFER_SEARCH_FIELDS = [
+    'notes',
+    'fromAccount.name',
+    'toAccount.name',
+  ] as const;
+  private static readonly ACCOUNT_TRANSACTION_SORT_FIELDS = [
+    'transactionDate',
+    'amount',
+    'createdAt',
+  ] as const;
 
-    private async getActor(currentUser: { id: string }): Promise<Actor> {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
+
+  private async getActor(currentUser: { id: string }): Promise<Actor> {
     const user = await this.prisma.user.findUnique({
       where: { id: currentUser.id },
       select: { id: true, role: true, marketId: true },
@@ -33,7 +61,7 @@ export class AccountsService {
     }
   }
 
-  async create(currentUser: { id: string }, dto: CreateAccountDto) {
+  async create(currentUser: { id: string }, dto: CreateAccountDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
 
     let marketId: string;
@@ -49,10 +77,13 @@ export class AccountsService {
       marketId = actor.marketId;
     }
 
+    await ensureMarketSetupComplete(this.prisma, marketId);
+
     const currency = await this.prisma.currency.findUnique({
       where: { id: dto.currencyId },
     });
     if (!currency) throw new NotFoundException('ارز مورد نظر یافت نشد');
+    await ensureCurrencyEnabledForMarket(this.prisma, marketId, dto.currencyId);
 
     const openingAmount = dto.openingBalance?.amount ?? 0;
     const openingDate = dto.openingBalance?.openingDate
@@ -74,15 +105,23 @@ export class AccountsService {
         });
 
         if (openingAmount !== 0) {
+          // معادلِ ارز پایه را سرور حساب می‌کند، نه کلاینت: نرخِ دستی (اختیاری) یا نرخِ ثبت‌شدهٔ مارکت
+          // تا تاریخِ افتتاحیه. baseCurrencyAmountِ ارسالیِ کلاینت دیگر استفاده نمی‌شود.
+          const openingRate = await resolveRateToBase(tx, {
+            marketId,
+            currencyId: dto.currencyId,
+            date: openingDate,
+            amount: new Prisma.Decimal(openingAmount),
+            manualRate: dto.openingBalance?.exchangeRate,
+          });
           const openingBalance = await tx.openingBalance.create({
             data: {
               marketId,
               accountId: account.id,
               currencyId: dto.currencyId,
               amount: openingAmount,
-              exchangeRate: dto.openingBalance?.exchangeRate ?? null,
-              baseCurrencyAmount:
-                dto.openingBalance?.baseCurrencyAmount ?? null,
+              exchangeRate: openingRate.exchangeRate,
+              baseCurrencyAmount: openingRate.baseCurrencyAmount,
               openingDate,
               createdById: actor.id,
             },
@@ -96,6 +135,8 @@ export class AccountsService {
               direction: openingAmount > 0 ? 'IN' : 'OUT',
               amount: Math.abs(openingAmount),
               balanceAfter: openingAmount,
+              exchangeRate: openingRate.exchangeRate,
+              baseCurrencyAmount: openingRate.baseCurrencyAmount.abs(),
               entryDate: openingDate,
               description: 'موجودی افتتاحیهٔ حساب',
               openingBalanceId: openingBalance.id,
@@ -103,6 +144,18 @@ export class AccountsService {
             },
           });
         }
+
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'Account',
+          entityId: account.id,
+          marketId,
+          userId: actor.id,
+          newData: account,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
 
         return account;
       });
@@ -116,16 +169,28 @@ export class AccountsService {
     }
   }
 
-  async findAll(currentUser: { id: string }) {
+  async findAll(currentUser: { id: string }, query: AccountQueryDto) {
     const actor = await this.getActor(currentUser);
     if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
-      throw new ForbiddenException('کاربر جاری به هیچ   مارکت ازاری متصل نیست');
+      throw new ForbiddenException('کاربر جاری به هیچ مارکتی متصل نیست');
     }
-    const where =
+    const where: any =
       actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! };
-    return this.prisma.account.findMany({
+    if (query.type !== undefined) where.type = query.type;
+    if (query.isActive !== undefined) where.isActive = query.isActive;
+
+    const searchWhere = buildSearchWhere(AccountsService.SEARCH_FIELDS, query.search);
+    if (searchWhere) Object.assign(where, searchWhere);
+
+    const orderBy = resolveSort(query.sortBy, query.sortOrder, AccountsService.SORT_FIELDS, {
+      createdAt: 'asc',
+    });
+
+    return paginate(this.prisma.account, {
       where,
-      orderBy: { createdAt: 'asc' },
+      orderBy,
+      page: query.page,
+      limit: query.limit,
     });
   }
 
@@ -137,7 +202,12 @@ export class AccountsService {
     return account;
   }
 
-  async update(currentUser: { id: string }, id: string, dto: UpdateAccountDto) {
+  async update(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateAccountDto,
+    meta: RequestMeta,
+  ) {
     const actor = await this.getActor(currentUser);
     const account = await this.prisma.account.findUnique({ where: { id } });
     if (!account) throw new NotFoundException('حساب یافت نشد');
@@ -152,7 +222,21 @@ export class AccountsService {
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
     try {
-      return await this.prisma.account.update({ where: { id }, data });
+      const updated = await this.prisma.account.update({ where: { id }, data });
+
+      await this.auditLog.record({
+        action: 'UPDATE',
+        entityType: 'Account',
+        entityId: id,
+        marketId: account.marketId,
+        userId: actor.id,
+        oldData: account,
+        newData: updated,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return updated;
     } catch (e: any) {
       if (e.code === 'P2002') {
         throw new ConflictException(
@@ -163,7 +247,7 @@ export class AccountsService {
     }
   }
 
-  async remove(currentUser: { id: string }, id: string) {
+  async remove(currentUser: { id: string }, id: string, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
     const account = await this.prisma.account.findUnique({ where: { id } });
     if (!account) throw new NotFoundException('حساب یافت نشد');
@@ -185,6 +269,7 @@ export class AccountsService {
       collateralItemsCount,
       transfersOutCount,
       transfersInCount,
+      accountTransactionsCount,
     ] = await Promise.all([
       this.prisma.ledgerEntry.count({ where: { accountId: id } }),
       this.prisma.openingBalance.count({ where: { accountId: id } }),
@@ -197,6 +282,7 @@ export class AccountsService {
       this.prisma.collateralItem.count({ where: { accountId: id } }),
       this.prisma.accountTransfer.count({ where: { fromAccountId: id } }),
       this.prisma.accountTransfer.count({ where: { toAccountId: id } }),
+      this.prisma.accountTransaction.count({ where: { accountId: id } }),
     ]);
 
     const hasTransactions =
@@ -210,7 +296,8 @@ export class AccountsService {
       shareholderTransactionsCount > 0 ||
       collateralItemsCount > 0 ||
       transfersOutCount > 0 ||
-      transfersInCount > 0;
+      transfersInCount > 0 ||
+      accountTransactionsCount > 0;
 
     if (hasTransactions) {
       throw new ConflictException(
@@ -219,10 +306,22 @@ export class AccountsService {
     }
 
     await this.prisma.account.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'Account',
+      entityId: id,
+      marketId: account.marketId,
+      userId: actor.id,
+      oldData: account,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
     return { message: `حساب «${account.name}» حذف شد` };
   }
 
-  async transfer(currentUser: { id: string }, dto: TransferFundsDto) {
+  async transfer(currentUser: { id: string }, dto: TransferFundsDto, meta: RequestMeta) {
     const actor = await this.getActor(currentUser);
 
     if (dto.fromAccountId === dto.toAccountId) {
@@ -250,28 +349,41 @@ export class AccountsService {
 
     const amount = new Prisma.Decimal(dto.amount);
     const isCrossCurrency = fromAccount.currencyId !== toAccount.currencyId;
+    const transferDate = dto.transferDate ? new Date(dto.transferDate) : new Date();
 
-    let receivedAmount: Prisma.Decimal;
-    let exchangeRate: Prisma.Decimal | null = null;
-
-    if (isCrossCurrency) {
-      if (dto.exchangeRate === undefined || dto.exchangeRate === null) {
-        throw new BadRequestException(
-          'چون ارز حساب مبدا و مقصد متفاوت است، نرخ تبدیل (exchangeRate) الزامی است',
-        );
-      }
-      exchangeRate = new Prisma.Decimal(dto.exchangeRate);
-      receivedAmount = amount.mul(exchangeRate).toDecimalPlaces(4);
-    } else {
-      if (dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
-        throw new BadRequestException(
-          'حساب مبدا و مقصد هم‌ارز هستند؛ نرخ تبدیل نباید ارسال شود',
-        );
-      }
-      receivedAmount = amount;
+    if (!isCrossCurrency && dto.exchangeRate !== undefined && dto.exchangeRate !== null) {
+      throw new BadRequestException(
+        'حساب مبدا و مقصد هم‌ارز هستند؛ نرخ تبدیل نباید ارسال شود',
+      );
     }
 
     return await this.prisma.$transaction(async (tx) => {
+      // نرخِ هر ارز به ارز پایه، «در تاریخِ همین انتقال» (نه آخرین نرخ). اگر برای ارزی نرخ نبود،
+      // انتقال رد می‌شود. نرخِ دستیِ انتقال فقط «مبدا→مقصد» را می‌پوشاند و نرخ‌های سیستم عوض نمی‌شوند.
+      const one = new Prisma.Decimal(1);
+      const fromRate = (
+        await resolveRateToBase(tx, { marketId: fromAccount.marketId, currencyId: fromAccount.currencyId, date: transferDate, amount: one })
+      ).exchangeRate;
+      const toRate = isCrossCurrency
+        ? (
+            await resolveRateToBase(tx, { marketId: toAccount.marketId, currencyId: toAccount.currencyId, date: transferDate, amount: one })
+          ).exchangeRate
+        : fromRate;
+
+      let receivedAmount: Prisma.Decimal;
+      let exchangeRate: Prisma.Decimal | null = null;
+      if (isCrossCurrency) {
+        exchangeRate =
+          dto.exchangeRate !== undefined && dto.exchangeRate !== null
+            ? new Prisma.Decimal(dto.exchangeRate)
+            : fromRate.div(toRate).toDecimalPlaces(10);
+        receivedAmount = amount.mul(exchangeRate).toDecimalPlaces(4);
+      } else {
+        receivedAmount = amount;
+      }
+      const baseCurrencyAmount = amount.mul(fromRate).toDecimalPlaces(4);
+      const receivedBaseCurrencyAmount = receivedAmount.mul(toRate).toDecimalPlaces(4);
+
       // کاهش اتمیک موجودی مبدا؛ شرط balance >= amount مستقیم در WHERE چک می‌شود
       // تا زیر بار همزمان دو انتقال، موجودی هرگز منفی نشود.
       const debited = await tx.account.updateMany({
@@ -304,9 +416,11 @@ export class AccountsService {
           amount,
           receivedAmount,
           exchangeRate,
-          transferDate: dto.transferDate
-            ? new Date(dto.transferDate)
-            : new Date(),
+          fromRateToBase: fromRate,
+          toRateToBase: toRate,
+          baseCurrencyAmount,
+          receivedBaseCurrencyAmount,
+          transferDate,
           notes: dto.notes?.trim() || null,
           createdById: actor.id,
         },
@@ -320,6 +434,8 @@ export class AccountsService {
           direction: 'OUT',
           amount,
           balanceAfter: updatedFromAccount.balance,
+          exchangeRate: fromRate,
+          baseCurrencyAmount,
           entryDate: accountTransfer.transferDate,
           description: `انتقال به حساب «${toAccount.name}»${rateNote}`,
           accountTransferId: accountTransfer.id,
@@ -334,11 +450,25 @@ export class AccountsService {
           direction: 'IN',
           amount: receivedAmount,
           balanceAfter: updatedToAccount.balance,
+          exchangeRate: toRate,
+          baseCurrencyAmount: receivedBaseCurrencyAmount,
           entryDate: accountTransfer.transferDate,
           description: `انتقال از حساب «${fromAccount.name}»${rateNote}`,
           accountTransferId: accountTransfer.id,
           createdById: actor.id,
         },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'AccountTransfer',
+        entityId: accountTransfer.id,
+        marketId: fromAccount.marketId,
+        userId: actor.id,
+        newData: accountTransfer,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
       });
 
       return {
@@ -347,5 +477,275 @@ export class AccountsService {
         toAccount: updatedToAccount,
       };
     });
+  }
+
+  async findAllTransfers(currentUser: { id: string }, query: TransferQueryDto) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ مارکتی متصل نیست');
+    }
+    const where: any =
+      actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! };
+
+    if (query.accountId) {
+      where.OR = [
+        { fromAccountId: query.accountId },
+        { toAccountId: query.accountId },
+      ];
+    }
+    if (query.fromAccountId) where.fromAccountId = query.fromAccountId;
+    if (query.toAccountId) where.toAccountId = query.toAccountId;
+
+    const searchWhere = buildSearchWhere(AccountsService.TRANSFER_SEARCH_FIELDS, query.search);
+    if (searchWhere) where.AND = [searchWhere];
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      AccountsService.TRANSFER_SORT_FIELDS,
+      { transferDate: 'desc' },
+    );
+
+    return paginate(this.prisma.accountTransfer, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+      include: {
+        fromAccount: { select: { id: true, name: true, type: true } },
+        toAccount: { select: { id: true, name: true, type: true } },
+        createdBy: { select: { id: true, fullName: true } },
+      },
+    });
+  }
+
+  // واریز/برداشت مستقیم به یک حساب — نه از حساب دیگری (آن transfer است) و نه به سهام‌دار
+  // خاصی وصل (آن ShareholdersService.createTransaction است). دقیقاً همان الگوی atomic.
+  async createAccountTransaction(
+    currentUser: { id: string },
+    accountId: string,
+    dto: CreateAccountTransactionDto,
+    meta: RequestMeta,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const account = await this.prisma.account.findUnique({
+      where: { id: accountId },
+    });
+    if (!account) throw new NotFoundException('حساب یافت نشد');
+    this.ensureAccess(actor, account.marketId);
+    if (!account.isActive) {
+      throw new ConflictException('حساب غیرفعال است');
+    }
+
+    const amount = new Prisma.Decimal(dto.amount);
+    const transactionDate = dto.transactionDate
+      ? new Date(dto.transactionDate)
+      : new Date();
+    const isWithdrawal = dto.type === 'WITHDRAWAL';
+
+    return this.prisma.$transaction(async (tx) => {
+      // معادلِ ارز پایه را خودِ سیستم حساب می‌کند (نه کلاینت): نرخِ دستیِ همین تراکنش یا آخرین نرخِ
+      // ثبت‌شدهٔ مارکت «تا تاریخِ همین تراکنش». اگر برای ارزِ حساب نرخی ثبت نشده باشد تراکنش رد می‌شود.
+      const rate = await resolveRateToBase(tx, {
+        marketId: account.marketId,
+        currencyId: account.currencyId,
+        date: transactionDate,
+        amount,
+        manualRate: dto.exchangeRate,
+      });
+
+      let updatedAccount;
+      if (isWithdrawal) {
+        const debited = await tx.account.updateMany({
+          where: { id: account.id, balance: { gte: amount } },
+          data: { balance: { decrement: amount } },
+        });
+        if (debited.count === 0) {
+          throw new ConflictException(
+            `موجودی حساب «${account.name}» برای این برداشت کافی نیست`,
+          );
+        }
+        updatedAccount = await tx.account.findUniqueOrThrow({
+          where: { id: account.id },
+        });
+      } else {
+        updatedAccount = await tx.account.update({
+          where: { id: account.id },
+          data: { balance: { increment: amount } },
+        });
+      }
+
+      const transaction = await tx.accountTransaction.create({
+        data: {
+          marketId: account.marketId,
+          accountId: account.id,
+          type: dto.type,
+          amount,
+          transactionDate,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+          details: dto.details?.trim() || null,
+          createdById: actor.id,
+        },
+      });
+
+      await tx.ledgerEntry.create({
+        data: {
+          marketId: account.marketId,
+          accountId: account.id,
+          currencyId: account.currencyId,
+          direction: isWithdrawal ? 'OUT' : 'IN',
+          amount,
+          balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+          entryDate: transactionDate,
+          description: isWithdrawal
+            ? `برداشت از حساب «${account.name}»`
+            : `واریز به حساب «${account.name}»`,
+          accountTransactionId: transaction.id,
+          createdById: actor.id,
+        },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'AccountTransaction',
+        entityId: transaction.id,
+        marketId: account.marketId,
+        userId: actor.id,
+        newData: transaction,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return { transaction, account: updatedAccount };
+    });
+  }
+
+  async findAllAccountTransactions(
+    currentUser: { id: string },
+    query: AccountTransactionQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ مارکتی متصل نیست');
+    }
+    const where: any =
+      actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! };
+
+    if (query.accountId !== undefined) where.accountId = query.accountId;
+    if (query.type !== undefined) where.type = query.type;
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      AccountsService.ACCOUNT_TRANSACTION_SORT_FIELDS,
+      { transactionDate: 'desc' },
+    );
+
+    return paginate(this.prisma.accountTransaction, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+      include: {
+        account: { select: { id: true, name: true, type: true } },
+        createdBy: { select: { id: true, fullName: true } },
+      },
+    });
+  }
+
+  // صورت‌حساب یک دوره برای یک حساب، مثل صورت‌حساب بانکی: موجودی اول دوره
+  // (جمع اثرِ همهٔ ledger entryهای قبل از from) + لیست تراکنش‌های [from, to] با موجودیِ
+  // تجمیعی محاسبه‌شده به ترتیبِ entryDate — نه balanceAfter ذخیره‌شده، چون آن بر اساس
+  // ترتیب ساخته‌شدنِ ردیف‌هاست و entryDate می‌تواند گذشته‌نگر (backdated) باشد.
+  async getStatement(
+    currentUser: { id: string },
+    id: string,
+    query: AccountStatementQueryDto,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const account = await this.prisma.account.findUnique({ where: { id } });
+    if (!account) throw new NotFoundException('حساب یافت نشد');
+    this.ensureAccess(actor, account.marketId);
+
+    const from = new Date(query.from);
+    const to = new Date(query.to);
+    if (to < from) {
+      throw new BadRequestException(
+        'تاریخ پایان باید بعد یا برابر تاریخ شروع باشد',
+      );
+    }
+    // «to» یعنی تا آخرِ همان روز، نه نیمه‌شبِ اولش — وگرنه تراکنش‌های همان روز جا می‌مانند.
+    const toExclusive = new Date(to);
+    toExclusive.setUTCDate(toExclusive.getUTCDate() + 1);
+
+    const openingAgg = await this.prisma.ledgerEntry.groupBy({
+      by: ['direction'],
+      where: { accountId: id, entryDate: { lt: from } },
+      _sum: { amount: true },
+    });
+    const zero = new Prisma.Decimal(0);
+    const sumOf = (direction: 'IN' | 'OUT') =>
+      openingAgg.find((g) => g.direction === direction)?._sum.amount ?? zero;
+    const openingBalance = sumOf('IN').sub(sumOf('OUT'));
+
+    const entries = await this.prisma.ledgerEntry.findMany({
+      where: { accountId: id, entryDate: { gte: from, lt: toExclusive } },
+      orderBy: [{ entryDate: 'asc' }, { createdAt: 'asc' }],
+    });
+
+    let runningBalance = openingBalance;
+    let totalIn = zero;
+    let totalOut = zero;
+    const transactions = entries.map((entry) => {
+      if (entry.direction === 'IN') {
+        runningBalance = runningBalance.add(entry.amount);
+        totalIn = totalIn.add(entry.amount);
+      } else {
+        runningBalance = runningBalance.sub(entry.amount);
+        totalOut = totalOut.add(entry.amount);
+      }
+      return {
+        id: entry.id,
+        entryDate: entry.entryDate,
+        description: entry.description,
+        direction: entry.direction,
+        amount: entry.amount,
+        balance: runningBalance,
+      };
+    });
+
+    const page = Math.max(1, Math.floor(query.page ?? 1));
+    const limit = Math.min(100, Math.max(1, Math.floor(query.limit ?? 20)));
+    const total = transactions.length;
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const start = (page - 1) * limit;
+    const pagedTransactions = transactions.slice(start, start + limit);
+
+    return {
+      accountId: account.id,
+      accountName: account.name,
+      currencyId: account.currencyId,
+      from: query.from,
+      to: query.to,
+      // این سه رقم همیشه روی کلِ بازه‌اند، نه فقط صفحهٔ فعلی — صفحه‌بندی فقط تعداد
+      // ردیف‌های transactions را کم می‌کند، جمع‌های واقعی را دست‌نمی‌زند.
+      openingBalance,
+      totalIn,
+      totalOut,
+      closingBalance: runningBalance,
+      transactions: pagedTransactions,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    };
   }
 }

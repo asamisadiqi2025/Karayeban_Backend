@@ -1,7 +1,6 @@
 model MiscellaneousIncome {
   id          String   @id @default(uuid()) @db.Uuid
   marketId    String   @map("market_id") @db.Uuid
-  type        String   @db.VarChar(100)
   amount      Decimal  @db.Decimal(18, 4)
   currencyId  String   @map("currency_id") @db.Uuid
   accountId   String   @map("account_id") @db.Uuid
@@ -9,13 +8,35 @@ model MiscellaneousIncome {
   description String?  @db.Text
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  market   Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  account  Account  @relation(fields: [accountId], references: [id], onDelete: Restrict)
-  currency Currency @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  // منسوخ: قبل از دسته‌بندی، نوعِ عایدی یک متنِ آزاد بود. مایگریشن هر type را به یک
+  // MiscellaneousIncomeCategory تبدیل کرد؛ ستون برای ردِ تاریخی نگه داشته شده و کد جدید آن را نمی‌نویسد.
+  type String? @db.VarChar(100)
+
+  // دسته‌بندی (برگ): کتگوریِ مادرِ بدونِ زیرشاخه یا یک سب‌کتگوری.
+  categoryId     String @map("category_id") @db.Uuid
+  // کتگوریِ مادرِ categoryId (اگر categoryId خودش مادر باشد = همان). denormalize عمدی: فیلتر و جمعِ
+  // «همهٔ عایدی‌های زیرِ این مادر» بدونِ JOIN و بدونِ OR، فقط با ایندکسِ (market, rootCategory, date).
+  // کهنه نمی‌شود چون جابه‌جاییِ دسته‌بندی بین والدها ممنوع است.
+  rootCategoryId String @map("root_category_id") @db.Uuid
+
+  // نرخِ تبدیل به ارز پایهٔ مارکت در لحظهٔ ثبت (همان اسنپ‌شاتی که روی LedgerEntry هم هست).
+  exchangeRate       Decimal? @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal? @map("base_currency_amount") @db.Decimal(18, 4)
+
+  createdById String? @map("created_by_id") @db.Uuid
+
+  market       Market                      @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  account      Account                     @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  currency     Currency                    @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  category     MiscellaneousIncomeCategory @relation("MiscellaneousIncomeCategoryLeaf", fields: [categoryId], references: [id], onDelete: Restrict)
+  rootCategory MiscellaneousIncomeCategory @relation("MiscellaneousIncomeCategoryRoot", fields: [rootCategoryId], references: [id], onDelete: Restrict)
+  createdBy    User?                       @relation("MiscellaneousIncomeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
 
   ledgerEntry LedgerEntry?
 
-  @@index([marketId])
+  @@index([marketId, date])
+  @@index([marketId, rootCategoryId, date])
+  @@index([categoryId])
   @@index([accountId])
   @@map("miscellaneous_income")
 }

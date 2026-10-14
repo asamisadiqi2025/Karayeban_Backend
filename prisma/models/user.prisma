@@ -1,12 +1,14 @@
 model User {
-  id           String   @id @default(uuid()) @db.Uuid
-  fullName     String   @map("full_name") @db.VarChar(150)
-  username     String   @unique @db.VarChar(100)
-  email        String   @unique @db.VarChar(255)
-  passwordHash String   @map("password_hash") @db.VarChar(255)
-  role         UserRole @default(STAFF)
-  customRoleId String?  @map("custom_role_id") @db.Uuid
-  marketId     String?  @map("market_id") @db.Uuid
+  id                String    @id @default(uuid()) @db.Uuid
+  fullName          String    @map("full_name") @db.VarChar(150)
+  username          String    @unique @db.VarChar(100)
+  email             String    @unique @db.VarChar(255)
+  passwordHash      String    @map("password_hash") @db.VarChar(255)
+  // آخرین باری که رمز عوض شد؛ هر JWTی که قبل از این صادر شده باشد دیگر معتبر نیست.
+  passwordChangedAt DateTime? @map("password_changed_at") @db.Timestamptz(6)
+  role              UserRole  @default(STAFF)
+  customRoleId      String?   @map("custom_role_id") @db.Uuid
+  marketId          String?   @map("market_id") @db.Uuid
 
   fatherName      String? @map("father_name") @db.VarChar(100)
   grandfatherName String? @map("grandfather_name") @db.VarChar(100)
@@ -15,11 +17,15 @@ model User {
   address         String? @db.Text
   profilePhoto    String? @map("profile_photo") @db.Text
 
-  extraPermissions  Json? @map("extra_permissions")
-  deniedPermissions Json? @map("denied_permissions")
+  // null = دسترسی‌های پیش‌فرضِ نقش؛ آرایه‌ای از کلیدها (مثلاً ["rent.view","rent.pay"]) = دقیقاً
+  // همین کارها (فقط برای ACCOUNTANT/STAFF). ن.ک. permissions.catalog.ts
+  grantedPermissions Json? @map("granted_permissions")
+  extraPermissions   Json? @map("extra_permissions")
+  deniedPermissions  Json? @map("denied_permissions")
 
   isSuperAdmin Boolean   @default(false) @map("is_super_admin")
   isActive     Boolean   @default(true) @map("is_active")
+  isDeleted    Boolean?  @default(false) @map("is_deleted")
   lastLogin    DateTime? @map("last_login") @db.Timestamptz(6)
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
@@ -27,17 +33,20 @@ model User {
   market     Market?     @relation(fields: [marketId], references: [id], onDelete: SetNull)
   customRole CustomRole? @relation(fields: [customRoleId], references: [id], onDelete: SetNull)
 
-  refreshTokens RefreshToken[]
+  refreshTokens       RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
 
   terminatedContracts          Contract[]               @relation("ContractTerminatedBy")
   collectedRentPayments        RentPayment[]            @relation("RentCollectedBy")
   createdRentCharges           RentCharges[]            @relation("RentChargeCreator")
   changedContractStatuses      ContractStatusHistory[]  @relation("ContractStatusChangedBy")
   paidExpenses                 Expense[]                @relation("ExpensePaidBy")
+  createdMiscellaneousIncome   MiscellaneousIncome[]    @relation("MiscellaneousIncomeCreatedBy")
   depreciationEvents           DepreciationEvent[]      @relation("DepreciationAppliedBy")
   shareholderTransactions      ShareholderTransaction[] @relation("ShareholderTransactionCreatedBy")
   shareholderEquityChanges     ShareholderEquity[]
   accountTransfers             AccountTransfer[]
+  accountTransactions          AccountTransaction[]
   openingBalances              OpeningBalance[]
   createdElectricityBills      ElectricityBill[]        @relation("ElectricityBillCreator")
   collectedElectricityPayments ElectricityPayment[]     @relation("ElectricityCollectedBy")
@@ -45,7 +54,11 @@ model User {
   issuedLotteryEntries         LotteryEntry[]
   approvedSettlements          ContractSettlement[]
   createdExchangeRates         ExchangeRate[]
+  requestedBackups             MarketBackup[]           @relation("BackupRequestedBy")
+  createdDealerLoans           DealerLoan[]             @relation("DealerLoanCreator")
+  createdDealerRepayments      DealerRepayment[]        @relation("DealerRepaymentCreator")
   ledgerEntries                LedgerEntry[]
+  inventoryTransactions        InventoryTransaction[]
   refreshToken                 String?                  @map("refresh_token") @db.Text
   refreshTokenExpiry           DateTime?                @map("refresh_token_expiry") @db.Timestamptz(6)
   auditLogs                    AuditLog[]

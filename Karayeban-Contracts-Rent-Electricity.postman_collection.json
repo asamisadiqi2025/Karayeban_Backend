@@ -1,0 +1,2658 @@
+{
+  "info": {
+    "name": "Karayeban - قرارداد، کرایه، برق و تسویه",
+    "description": "کالکشن تست جریان کامل قرارداد: ساخت قرارداد جدید (با کرایهٔ روزانه)، پرداخت قسطی کرایه (FIFO)، تخفیف از وسط قرارداد، تمدید، لغو قبل از شروع، بل/پرداخت برق، فسخ زودهنگام، تسویهٔ نهایی (کرایه+برق با هم)، و ساخت قراردادِ «قبلی/مهاجرت‌شده» (openingRentPaid). با Collection Runner از بالا به پایین اجرا کنید — هر درخواست id لازم را خودش در متغیرهای کالکشن ذخیره می‌کند و تاریخ‌ها نسبت به «امروز» خودکار محاسبه می‌شوند.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1"
+    },
+    {
+      "key": "identifier",
+      "value": "adminmilicenter20"
+    },
+    {
+      "key": "password",
+      "value": "almas@12345"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "currencyId",
+      "value": "e9508cc0-ccd4-4258-bf6c-70b52faa0266",
+      "description": "AFN — از قبل باید برای بازار فعال باشد"
+    },
+    {
+      "key": "accountId",
+      "value": "f07a4005-dba2-4a1d-ac3a-2f78648b7917",
+      "description": "حساب بانکی هم‌ارز با currencyId"
+    },
+    {
+      "key": "todayDate",
+      "value": ""
+    },
+    {
+      "key": "freshEndDate",
+      "value": ""
+    },
+    {
+      "key": "discountFromDate",
+      "value": ""
+    },
+    {
+      "key": "pastStartDate",
+      "value": ""
+    },
+    {
+      "key": "pastEndDate",
+      "value": ""
+    },
+    {
+      "key": "futureStartDate",
+      "value": ""
+    },
+    {
+      "key": "futureEndDate",
+      "value": ""
+    },
+    {
+      "key": "migratedStartDate",
+      "value": ""
+    },
+    {
+      "key": "migratedEndDate",
+      "value": ""
+    },
+    {
+      "key": "floorId",
+      "value": ""
+    },
+    {
+      "key": "shopNewId",
+      "value": ""
+    },
+    {
+      "key": "shopTerminateId",
+      "value": ""
+    },
+    {
+      "key": "shopCancelId",
+      "value": ""
+    },
+    {
+      "key": "shopMigratedId",
+      "value": ""
+    },
+    {
+      "key": "tenantNewId",
+      "value": ""
+    },
+    {
+      "key": "tenantTerminateId",
+      "value": ""
+    },
+    {
+      "key": "tenantCancelId",
+      "value": ""
+    },
+    {
+      "key": "tenantMigratedId",
+      "value": ""
+    },
+    {
+      "key": "contractNewId",
+      "value": ""
+    },
+    {
+      "key": "contractTerminateId",
+      "value": ""
+    },
+    {
+      "key": "contractCancelId",
+      "value": ""
+    },
+    {
+      "key": "contractMigratedId",
+      "value": ""
+    },
+    {
+      "key": "renewedContractId",
+      "value": ""
+    },
+    {
+      "key": "electricityBillId",
+      "value": ""
+    },
+    {
+      "key": "rollingStartDate",
+      "value": ""
+    },
+    {
+      "key": "rollingEndDate",
+      "value": ""
+    },
+    {
+      "key": "rollingPay1Date",
+      "value": ""
+    },
+    {
+      "key": "rollingVisit1Date",
+      "value": ""
+    },
+    {
+      "key": "rollingVisit2Date",
+      "value": ""
+    },
+    {
+      "key": "rollingVisit3Date",
+      "value": ""
+    },
+    {
+      "key": "shopRollingId",
+      "value": ""
+    },
+    {
+      "key": "tenantRollingId",
+      "value": ""
+    },
+    {
+      "key": "contractRollingId",
+      "value": ""
+    },
+    {
+      "key": "testFloorNumber",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "0. ورود و آماده‌سازی تاریخ‌ها",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "function fmt(d) { return d.toISOString().slice(0, 10); }",
+                  "const today = new Date();",
+                  "const fresh = new Date(today); fresh.setUTCFullYear(fresh.getUTCFullYear() + 1);",
+                  "const discountFrom = new Date(today); discountFrom.setUTCMonth(discountFrom.getUTCMonth() + 5);",
+                  "const past = new Date(today.getTime() - 200 * 24 * 60 * 60 * 1000);",
+                  "const pastEnd = new Date(past); pastEnd.setUTCFullYear(pastEnd.getUTCFullYear() + 1);",
+                  "const future = new Date(today.getTime() + 60 * 24 * 60 * 60 * 1000);",
+                  "const futureEnd = new Date(future); futureEnd.setUTCFullYear(futureEnd.getUTCFullYear() + 1);",
+                  "const migrated = new Date(today.getTime() - 150 * 24 * 60 * 60 * 1000);",
+                  "const migratedEnd = new Date(migrated); migratedEnd.setUTCFullYear(migratedEnd.getUTCFullYear() + 1);",
+                  "pm.collectionVariables.set('todayDate', fmt(today));",
+                  "pm.collectionVariables.set('freshEndDate', fmt(fresh));",
+                  "pm.collectionVariables.set('discountFromDate', fmt(discountFrom));",
+                  "pm.collectionVariables.set('pastStartDate', fmt(past));",
+                  "pm.collectionVariables.set('pastEndDate', fmt(pastEnd));",
+                  "pm.collectionVariables.set('futureStartDate', fmt(future));",
+                  "pm.collectionVariables.set('futureEndDate', fmt(futureEnd));",
+                  "pm.collectionVariables.set('migratedStartDate', fmt(migrated));",
+                  "pm.collectionVariables.set('migratedEndDate', fmt(migratedEnd));",
+                  "const rollingStart = new Date(today.getTime() - 100 * 24 * 60 * 60 * 1000);",
+                  "const p1End = new Date(rollingStart); p1End.setUTCMonth(p1End.getUTCMonth() + 1);",
+                  "const p2End = new Date(rollingStart); p2End.setUTCMonth(p2End.getUTCMonth() + 2);",
+                  "const rollingEnd = new Date(rollingStart); rollingEnd.setUTCMonth(rollingEnd.getUTCMonth() + 4);",
+                  "const pay1Date = new Date(rollingStart.getTime() + 10 * 24 * 60 * 60 * 1000);",
+                  "const visit1Date = new Date(p1End.getTime() + 8 * 24 * 60 * 60 * 1000);",
+                  "const visit2Date = new Date(p2End.getTime() - 5 * 24 * 60 * 60 * 1000);",
+                  "const visit3Date = new Date(p2End.getTime() + 10 * 24 * 60 * 60 * 1000);",
+                  "pm.collectionVariables.set('rollingStartDate', fmt(rollingStart));",
+                  "pm.collectionVariables.set('rollingEndDate', fmt(rollingEnd));",
+                  "pm.collectionVariables.set('rollingPay1Date', fmt(pay1Date));",
+                  "pm.collectionVariables.set('rollingVisit1Date', fmt(visit1Date));",
+                  "pm.collectionVariables.set('rollingVisit2Date', fmt(visit2Date));",
+                  "pm.collectionVariables.set('rollingVisit3Date', fmt(visit3Date));",
+                  "pm.collectionVariables.set('testFloorNumber', String(Date.now() % 100000));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('200/201 و accessToken دارد', function () {",
+                  "  pm.expect([200, 201]).to.include(pm.response.code);",
+                  "  pm.expect(pm.response.json()).to.have.property('accessToken');",
+                  "});",
+                  "if (pm.response.code < 300) { pm.collectionVariables.set('token', pm.response.json().accessToken); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"{{identifier}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. آماده‌سازی (طبقه، دوکان‌ها، مستأجرها)",
+      "item": [
+        {
+          "name": "ساخت طبقهٔ تستی",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('floorId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"floorNumber\": {{testFloorNumber}},\n  \"name\": \"طبقه تست قرارداد\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/floors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "floors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان ۱ — برای قرارداد جدید",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('shopNewId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopNumber\": \"T-NEW-{{testFloorNumber}}\",\n  \"floorId\": \"{{floorId}}\",\n  \"type\": \"shop\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان ۲ — برای فسخ/تسویه",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('shopTerminateId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopNumber\": \"T-TERM-{{testFloorNumber}}\",\n  \"floorId\": \"{{floorId}}\",\n  \"type\": \"shop\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان ۳ — برای لغو قبل از شروع",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('shopCancelId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopNumber\": \"T-CANCEL-{{testFloorNumber}}\",\n  \"floorId\": \"{{floorId}}\",\n  \"type\": \"shop\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان ۴ — برای قرارداد «قبلی/مهاجرت‌شده»",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('shopMigratedId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopNumber\": \"T-MIGR-{{testFloorNumber}}\",\n  \"floorId\": \"{{floorId}}\",\n  \"type\": \"shop\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops"
+              ]
+            }
+          }
+        },
+        {
+          "name": "مستأجر ۱ — جدید",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('tenantNewId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"مستأجر تست - جدید\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tenants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
+            }
+          }
+        },
+        {
+          "name": "مستأجر ۲ — فسخ/تسویه",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('tenantTerminateId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"مستأجر تست - فسخ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tenants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
+            }
+          }
+        },
+        {
+          "name": "مستأجر ۳ — لغو",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('tenantCancelId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"مستأجر تست - لغو\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tenants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
+            }
+          }
+        },
+        {
+          "name": "مستأجر ۴ — مهاجرت‌شده",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('tenantMigratedId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"مستأجر تست - مهاجرت‌شده\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tenants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. قرارداد جدید — کرایهٔ روزانه",
+      "item": [
+        {
+          "name": "ساخت قرارداد (۱۲ ماه، کرایه ۵۰۰۰)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201/200 و status=active', function () { pm.expect([200,201]).to.include(pm.response.code); });",
+                  "if (pm.response.json().id) { pm.collectionVariables.set('contractNewId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopNewId}}\",\n  \"tenantId\": \"{{tenantNewId}}\",\n  \"startDate\": \"{{todayDate}}\",\n  \"endDate\": \"{{freshEndDate}}\",\n  \"rent\": 5000,\n  \"currencyId\": \"{{currencyId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "فاکتورهای این قرارداد (۱۲ دوره، dailyRate متغیر)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractNewId}}&limit=20&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractNewId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. پرداخت قسطیِ کرایه (FIFO)",
+      "item": [
+        {
+          "name": "پرداخت هفتگی ۱ (۲۰۰۰)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractNewId}}\",\n  \"amount\": 2000,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "پرداخت هفتگی ۲ (۳۵۰۰ — باید ماه اول تکمیل و مقداری برود روی ماه دوم)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractNewId}}\",\n  \"amount\": 3500,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی مستأجر بعد از پرداخت‌ها",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/debts/{{tenantNewId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "debts",
+                "{{tenantNewId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "وضعیت فاکتورها (ماه اول PAID، ماه دوم PARTIAL)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractNewId}}&limit=20&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractNewId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. تخفیف کرایه از وسط قرارداد",
+      "item": [
+        {
+          "name": "تعدیل کرایه از ماه ۶ به بعد (۵۰۰۰ → ۳۰۰۰)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newRent\": 3000,\n  \"effectiveFrom\": \"{{discountFromDate}}\",\n  \"reason\": \"کاسادی بازار\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractNewId}}/adjust-rent",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractNewId}}",
+                "adjust-rent"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی بعد از تخفیف (باید کمتر شده باشد)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/debts/{{tenantNewId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "debts",
+                "{{tenantNewId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "تست خطا: تعدیل با تاریخ گذشته که فاکتور PENDING ندارد",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400 اگر هیچ فاکتور PENDING/OVERDUE‌ای نباشد', function () { /* ممکن است 400 یا 200 بدهد، بسته به اینکه کدام فاکتورها هنوز باز هستند */ });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newRent\": 100,\n  \"effectiveFrom\": \"2000-01-01\",\n  \"reason\": \"تست\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractNewId}}/adjust-rent",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractNewId}}",
+                "adjust-rent"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. تمدید قرارداد",
+      "item": [
+        {
+          "name": "تمدید (کرایه جدید ۴۰۰۰، ۶ ماه بیشتر)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('renewedFromContractId درست ست شده', function () { pm.expect(pm.response.json().renewedFromContractId).to.eql(pm.collectionVariables.get('contractNewId')); });",
+                  "if (pm.response.json().id) { pm.collectionVariables.set('renewedContractId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newEndDate\": \"{{futureEndDate}}\",\n  \"rent\": 4000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractNewId}}/renew",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractNewId}}",
+                "renew"
+              ]
+            }
+          }
+        },
+        {
+          "name": "قرارداد قدیمی حالا expired است",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractNewId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractNewId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان هنوز rented است (خالی نشد)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/shops/{{shopNewId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops",
+                "{{shopNewId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "تست خطا: تمدید دوباره همان قرارداد قدیمی (باید 409 بدهد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409 قبلاً تمدید شده', function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newEndDate\": \"{{futureEndDate}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractNewId}}/renew",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractNewId}}",
+                "renew"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. لغو قرارداد قبل از شروع",
+      "item": [
+        {
+          "name": "ساخت قرارداد draft (شروع در آینده)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=draft', function () { pm.expect(pm.response.json().status).to.eql('draft'); });",
+                  "if (pm.response.json().id) { pm.collectionVariables.set('contractCancelId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopCancelId}}\",\n  \"tenantId\": \"{{tenantCancelId}}\",\n  \"startDate\": \"{{futureStartDate}}\",\n  \"endDate\": \"{{futureEndDate}}\",\n  \"rent\": 6000,\n  \"currencyId\": \"{{currencyId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان الان pending است",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/shops/{{shopCancelId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops",
+                "{{shopCancelId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "لغو قرارداد (مستأجر پشیمان شد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=cancelled', function () { pm.expect(pm.response.json().status).to.eql('cancelled'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"مستأجر انصراف داد\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractCancelId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractCancelId}}",
+                "cancel"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان بعد از لغو دوباره empty است",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=empty', function () { pm.expect(pm.response.json().status).to.eql('empty'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/shops/{{shopCancelId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops",
+                "{{shopCancelId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "تست خطا: لغوِ دوباره (باید 409 بدهد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409', function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"دوباره\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractCancelId}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractCancelId}}",
+                "cancel"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. قرارداد فسخ/تسویه — ساخت بدهی (کرایه + برق)",
+      "item": [
+        {
+          "name": "ساخت قرارداد (۶+ ماه پیش شروع شده، هیچ پرداختی نمی‌کنیم)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('contractTerminateId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopTerminateId}}\",\n  \"tenantId\": \"{{tenantTerminateId}}\",\n  \"startDate\": \"{{pastStartDate}}\",\n  \"endDate\": \"{{pastEndDate}}\",\n  \"rent\": 5000,\n  \"currencyId\": \"{{currencyId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بل برق ۸۰۰ (پرداخت‌نشده)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('electricityBillId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopTerminateId}}\",\n  \"tenantId\": \"{{tenantTerminateId}}\",\n  \"periodStart\": \"{{todayDate}}\",\n  \"periodEnd\": \"{{todayDate}}\",\n  \"totalAmount\": 800,\n  \"currencyId\": \"{{currencyId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/electricity/bills",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "electricity",
+                "bills"
+              ]
+            }
+          }
+        },
+        {
+          "name": "پرداخت جزئی برق (۳۰۰ از ۸۰۰)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopTerminateId}}\",\n  \"tenantId\": \"{{tenantTerminateId}}\",\n  \"amount\": 300,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/electricity/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "electricity",
+                "payments"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. فسخ زودهنگام",
+      "item": [
+        {
+          "name": "فسخ امروز (وسط یک دوره — فاکتور آخر کوتاه می‌شود)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=early_terminated', function () { pm.expect(pm.response.json().status).to.eql('early_terminated'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"terminationDate\": \"{{todayDate}}\",\n  \"reason\": \"مستأجر رفت، بدهکار است\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractTerminateId}}/terminate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractTerminateId}}",
+                "terminate"
+              ]
+            }
+          }
+        },
+        {
+          "name": "دوکان بلافاصله empty شد",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=empty', function () { pm.expect(pm.response.json().status).to.eql('empty'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/shops/{{shopTerminateId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops",
+                "{{shopTerminateId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی کرایه قبل از تسویه",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/debts/{{tenantTerminateId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "debts",
+                "{{tenantTerminateId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی برق قبل از تسویه",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/electricity/debts/{{tenantTerminateId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "electricity",
+                "debts",
+                "{{tenantTerminateId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. تسویهٔ نهایی (کرایه + برق با هم)",
+      "item": [
+        {
+          "name": "تست خطا: WRITE_OFF با cashAmount>0 (باید 400 بدهد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settlementMethod\": \"WRITE_OFF\",\n  \"cashAmount\": 50,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractTerminateId}}/settle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractTerminateId}}",
+                "settle"
+              ]
+            }
+          }
+        },
+        {
+          "name": "تست خطا: CASH با مبلغ ناقص (باید 400 بدهد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400', function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settlementMethod\": \"CASH\",\n  \"cashAmount\": 1,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractTerminateId}}/settle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractTerminateId}}",
+                "settle"
+              ]
+            }
+          }
+        },
+        {
+          "name": "تسویهٔ واقعی — MIXED: ۱۰۰۰۰ نقد، باقی بخشیده می‌شود",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('finalRentDebt و finalElectricityDebt برگشته', function () {",
+                  "  const b = pm.response.json();",
+                  "  pm.expect(b).to.have.property('finalRentDebt');",
+                  "  pm.expect(b).to.have.property('finalElectricityDebt');",
+                  "  pm.expect(b.settlementMethod).to.eql('MIXED');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settlementMethod\": \"MIXED\",\n  \"cashAmount\": 10000,\n  \"accountId\": \"{{accountId}}\",\n  \"notes\": \"مستأجر رفت، بخشی نقد، باقی بخشیده شد\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractTerminateId}}/settle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractTerminateId}}",
+                "settle"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی کرایه بعد از تسویه (باید صفر باشد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('totalDebt=0', function () { pm.expect(pm.response.json().totalDebt).to.eql('0'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/debts/{{tenantTerminateId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "debts",
+                "{{tenantTerminateId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی برق بعد از تسویه (باید صفر باشد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('totalDebt=0', function () { pm.expect(pm.response.json().totalDebt).to.eql('0'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/electricity/debts/{{tenantTerminateId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "electricity",
+                "debts",
+                "{{tenantTerminateId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "تست خطا: تسویهٔ دوباره (باید 409 بدهد)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409', function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settlementMethod\": \"CASH\",\n  \"cashAmount\": 1,\n  \"accountId\": \"{{accountId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts/{{contractTerminateId}}/settle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts",
+                "{{contractTerminateId}}",
+                "settle"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. قرارداد «قبلی/مهاجرت‌شده» (openingRentPaid)",
+      "item": [
+        {
+          "name": "ساخت قرارداد که از ۵ ماه پیش در جریان بوده + مبلغی که قبلاً گرفته شده",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=active', function () { pm.expect(pm.response.json().status).to.eql('active'); });",
+                  "if (pm.response.json().id) { pm.collectionVariables.set('contractMigratedId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopMigratedId}}\",\n  \"tenantId\": \"{{tenantMigratedId}}\",\n  \"startDate\": \"{{migratedStartDate}}\",\n  \"endDate\": \"{{migratedEndDate}}\",\n  \"rent\": 4500,\n  \"currencyId\": \"{{currencyId}}\",\n  \"openingRentPaid\": 12000,\n  \"notes\": \"قراردادی که قبل از راه‌اندازی سیستم شروع شده بود\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "فاکتورهای گذشته — باید با همان ۱۲۰۰۰ به‌صورت FIFO تسویه شده باشند",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractMigratedId}}&limit=20&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractMigratedId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "بدهی باقی‌ماندهٔ این مستأجر بعد از افتتاحیه",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/debts/{{tenantMigratedId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "debts",
+                "{{tenantMigratedId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "پرداخت افتتاحیه در تاریخچهٔ پرداخت‌ها (isOpeningEntry=true, هیچ حسابی دست نخورده)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments?contractId={{contractMigratedId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractMigratedId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. فهرست کلی بدهکاران (برای مقایسه)",
+      "item": [
+        {
+          "name": "همهٔ مستأجرانِ بدهکار کرایه",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/debts?limit=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "debts"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "همهٔ مستأجرانِ بدهکار برق",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/electricity/debts?limit=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "electricity",
+                "debts"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. تست کرایهٔ قسطی/یکجا روی دورهٔ رولینگ (۱۲-به-۱۲)",
+      "item": [
+        {
+          "name": "دوکان تستیِ رولینگ",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('shopRollingId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopNumber\": \"T-ROLL-{{testFloorNumber}}\",\n  \"floorId\": \"{{floorId}}\",\n  \"type\": \"shop\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "shops"
+              ]
+            }
+          }
+        },
+        {
+          "name": "مستأجر تستیِ رولینگ",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.json().id) { pm.collectionVariables.set('tenantRollingId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"مستأجر تست - دورهٔ رولینگ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tenants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
+            }
+          }
+        },
+        {
+          "name": "ساخت قرارداد (کرایه ۵۰۰۰، ۴ دوره از {{rollingStartDate}})",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status=active', function () { pm.expect(pm.response.json().status).to.eql('active'); });",
+                  "if (pm.response.json().id) { pm.collectionVariables.set('contractRollingId', pm.response.json().id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shopId\": \"{{shopRollingId}}\",\n  \"tenantId\": \"{{tenantRollingId}}\",\n  \"startDate\": \"{{rollingStartDate}}\",\n  \"endDate\": \"{{rollingEndDate}}\",\n  \"rent\": 5000,\n  \"currencyId\": \"{{currencyId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contracts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "contracts"
+              ]
+            }
+          }
+        },
+        {
+          "name": "فاکتورهای اولیه — ۴ دوره، همه ۵۰۰۰ و PENDING",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const charges = pm.response.json().data;",
+                  "pm.test('۴ دوره ساخته شده', function () { pm.expect(charges.length).to.eql(4); });",
+                  "pm.test('همه PENDING و ۵۰۰۰ هستند', function () {",
+                  "  charges.forEach(c => { pm.expect(c.status).to.eql('PENDING'); pm.expect(parseFloat(c.netAmount)).to.eql(5000); });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractRollingId}}&limit=10&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractRollingId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "سؤال ۱: پرداخت کامل دورهٔ ۱ یک‌جا (روی {{rollingPay1Date}}، خیلی قبل از پایان دوره)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractRollingId}}\",\n  \"amount\": 5000,\n  \"accountId\": \"{{accountId}}\",\n  \"paymentDate\": \"{{rollingPay1Date}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بررسی: دورهٔ ۱ همان لحظه PAID شد (بدون صبر تا پایان دوره)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const charges = pm.response.json().data;",
+                  "pm.test('دورهٔ ۱ = PAID، remaining=0', function () {",
+                  "  pm.expect(charges[0].status).to.eql('PAID');",
+                  "  pm.expect(parseFloat(charges[0].remainingAmount)).to.eql(0);",
+                  "});",
+                  "pm.test('دورهٔ ۲ هنوز PENDING است', function () { pm.expect(charges[1].status).to.eql('PENDING'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractRollingId}}&limit=10&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractRollingId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "سؤال ۲ - بازدید ۱: قسطِ ۱۵۰۰ روی دورهٔ ۲ ({{rollingVisit1Date}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractRollingId}}\",\n  \"amount\": 1500,\n  \"accountId\": \"{{accountId}}\",\n  \"paymentDate\": \"{{rollingVisit1Date}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "سؤال ۲ - بازدید ۲: قسطِ ۲۰۰۰ روی دورهٔ ۲، هنوز قبل از پایانش ({{rollingVisit2Date}})",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractRollingId}}\",\n  \"amount\": 2000,\n  \"accountId\": \"{{accountId}}\",\n  \"paymentDate\": \"{{rollingVisit2Date}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بررسی: دورهٔ ۲ بعد از ۲ بازدید — PARTIAL، ۱۵۰۰ باقی",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const charges = pm.response.json().data;",
+                  "pm.test('دورهٔ ۲ = PARTIAL، paid=3500، remaining=1500', function () {",
+                  "  pm.expect(charges[1].status).to.eql('PARTIAL');",
+                  "  pm.expect(parseFloat(charges[1].paidAmount)).to.eql(3500);",
+                  "  pm.expect(parseFloat(charges[1].remainingAmount)).to.eql(1500);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractRollingId}}&limit=10&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractRollingId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "سؤال ۲ - بازدید ۳: ۴۰۰۰ روی {{rollingVisit3Date}} — دیگر از مرز دورهٔ ۲ هم گذشته!",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"{{contractRollingId}}\",\n  \"amount\": 4000,\n  \"accountId\": \"{{accountId}}\",\n  \"paymentDate\": \"{{rollingVisit3Date}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "بررسیِ نهایی: دورهٔ ۲ کامل شد (PAID) و مازاد خودکار رفت روی دورهٔ ۳ (PARTIAL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const charges = pm.response.json().data;",
+                  "pm.test('دورهٔ ۲ = PAID، remaining=0', function () {",
+                  "  pm.expect(charges[1].status).to.eql('PAID');",
+                  "  pm.expect(parseFloat(charges[1].remainingAmount)).to.eql(0);",
+                  "});",
+                  "pm.test('دورهٔ ۳ = PARTIAL، paid=2500، remaining=2500 (۴۰۰۰ منهای ۱۵۰۰ که رفت روی دورهٔ ۲)', function () {",
+                  "  pm.expect(charges[2].status).to.eql('PARTIAL');",
+                  "  pm.expect(parseFloat(charges[2].paidAmount)).to.eql(2500);",
+                  "  pm.expect(parseFloat(charges[2].remainingAmount)).to.eql(2500);",
+                  "});",
+                  "pm.test('دورهٔ ۴ دست‌نخورده مانده (PENDING)', function () { pm.expect(charges[3].status).to.eql('PENDING'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/charges?contractId={{contractRollingId}}&limit=10&sortBy=periodStart&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "charges"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractRollingId}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "periodStart"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "ریزِ پرداخت‌ها — هر مبلغ دقیقاً روی کدام دوره(ها) تخصیص یافت",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payments = pm.response.json().data;",
+                  "pm.test('۴ پرداخت ثبت شده', function () { pm.expect(payments.length).to.eql(4); });",
+                  "const last = payments[payments.length - 1];",
+                  "pm.test('پرداخت آخر (۴۰۰۰) بین ۲ دوره تقسیم شده', function () {",
+                  "  pm.expect(last.allocations.length).to.eql(2);",
+                  "  const sum = last.allocations.reduce((s, a) => s + parseFloat(a.amount), 0);",
+                  "  pm.expect(sum).to.eql(4000);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rent/payments?contractId={{contractRollingId}}&sortBy=paymentDate&sortOrder=asc&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rent",
+                "payments"
+              ],
+              "query": [
+                {
+                  "key": "contractId",
+                  "value": "{{contractRollingId}}"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "paymentDate"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

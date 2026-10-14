@@ -1,0 +1,20 @@
+// کلیدِ تکرارگیریِ درخواست‌های ثبتِ پرداخت (هدر Idempotency-Key). یک ردیف «همزمان با commitِ خودِ
+// پرداخت» در همان تراکنش ساخته می‌شود؛ پس یا پرداخت و کلید هر دو ثبت می‌شوند یا هیچ‌کدام. اگر همان
+// کلید دوباره بیاید (دابل‌کلیک، تلاشِ دوباره بعد از قطعیِ شبکه)، به‌جای ساختنِ پرداختِ دوم، همان
+// پاسخِ قبلی برمی‌گردد. فقط ۴۸ ساعت نگه داشته می‌شود (cron شبانه پاک می‌کند) و داده‌ٔ تجاری نیست.
+model IdempotencyKey {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  // کدام عملیات (RENT_PAYMENT | ELECTRICITY_PAYMENT | CONTRACT_PAY_DEBT) — کلیدها بینِ عملیات‌ها جدا هستند.
+  scope       String   @db.VarChar(50)
+  key         String   @db.VarChar(128)
+  // SHA-256 بدنهٔ درخواست: همان کلید با بدنهٔ متفاوت خطاست (نه بازپخشِ پاسخِ یک درخواستِ دیگر).
+  requestHash String   @map("request_hash") @db.VarChar(64)
+  response    Json
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt   DateTime @map("expires_at") @db.Timestamptz(6)
+
+  @@unique([userId, scope, key])
+  @@index([expiresAt])
+  @@map("idempotency_keys")
+}

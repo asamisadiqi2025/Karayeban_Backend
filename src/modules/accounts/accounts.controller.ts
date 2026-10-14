@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,37 +14,92 @@ import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { TransferFundsDto } from './dto/transfer-funds.dto';
+import { CreateAccountTransactionDto } from './dto/create-account-transaction.dto';
+import { AccountQueryDto } from './dto/account-query.dto';
+import { TransferQueryDto } from './dto/transfer-query.dto';
+import { AccountTransactionQueryDto } from './dto/account-transaction-query.dto';
+import { AccountStatementQueryDto } from './dto/account-statement-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Permission } from '../../common/decorators/permission.decorator';
+import { extractRequestMeta } from '../../common/audit-log/request-meta.util';
 
 @Controller('accounts')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
+  @Permission('accounts.create')
   @Post()
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   create(@Req() req: any, @Body() dto: CreateAccountDto) {
-    return this.accountsService.create(req.user, dto);
+    return this.accountsService.create(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('accounts.transfer')
   @Post('transfer')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   transfer(@Req() req: any, @Body() dto: TransferFundsDto) {
-    return this.accountsService.transfer(req.user, dto);
+    return this.accountsService.transfer(req.user, dto, extractRequestMeta(req));
   }
 
+  @Permission('accounts.transact')
+  @Post(':id/transactions')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  createAccountTransaction(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: CreateAccountTransactionDto,
+  ) {
+    return this.accountsService.createAccountTransaction(
+      req.user,
+      id,
+      dto,
+      extractRequestMeta(req),
+    );
+  }
+
+  @Permission('accounts.view')
   @Get()
-  findAll(@Req() req: any) {
-    return this.accountsService.findAll(req.user);
+  findAll(@Req() req: any, @Query() query: AccountQueryDto) {
+    return this.accountsService.findAll(req.user, query);
   }
 
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "transfer" را به‌عنوان :id تطبیق می‌دهد.
+  @Permission('accounts.view')
+  @Get('transfer')
+  findAllTransfers(@Req() req: any, @Query() query: TransferQueryDto) {
+    return this.accountsService.findAllTransfers(req.user, query);
+  }
+
+  // باید قبل از @Get(':id') ثبت شود، وگرنه Nest کلمهٔ "transactions" را به‌عنوان :id تطبیق می‌دهد.
+  @Permission('accounts.view')
+  @Get('transactions')
+  findAllAccountTransactions(
+    @Req() req: any,
+    @Query() query: AccountTransactionQueryDto,
+  ) {
+    return this.accountsService.findAllAccountTransactions(req.user, query);
+  }
+
+  @Permission('accounts.view')
   @Get(':id')
   findOne(@Req() req: any, @Param('id') id: string) {
     return this.accountsService.findOne(req.user, id);
   }
 
+  @Permission('accounts.view')
+  @Get(':id/statement')
+  getStatement(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Query() query: AccountStatementQueryDto,
+  ) {
+    return this.accountsService.getStatement(req.user, id, query);
+  }
+
+  @Permission('accounts.update')
   @Patch(':id')
   @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
   update(
@@ -51,12 +107,13 @@ export class AccountsController {
     @Param('id') id: string,
     @Body() dto: UpdateAccountDto,
   ) {
-    return this.accountsService.update(req.user, id, dto);
+    return this.accountsService.update(req.user, id, dto, extractRequestMeta(req));
   }
 
+  @Permission('accounts.delete')
   @Delete(':id')
   @Roles('SUPER_ADMIN', 'ADMIN')
   remove(@Req() req: any, @Param('id') id: string) {
-    return this.accountsService.remove(req.user, id);
+    return this.accountsService.remove(req.user, id, extractRequestMeta(req));
   }
 }

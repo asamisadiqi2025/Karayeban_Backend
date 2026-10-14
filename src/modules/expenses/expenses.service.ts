@@ -1,1 +1,1041 @@
-export class ExpensesService {}
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from '../../database/prisma/prisma.service';
+import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
+import { ensureCurrencyEnabledForMarket } from '../../common/utils/ensure-currency-enabled-for-market';
+import { resolveRateToBase } from '../../common/utils/resolve-rate-to-base';
+import { cleanName, nameKey } from '../../common/utils/category-name';
+import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
+import { AuditLogService } from '../../common/audit-log/audit-log.service';
+import { RequestMeta } from '../../common/audit-log/request-meta.util';
+import { CreateExpenseCategoryDto } from './dto/create-expense-category.dto';
+import { UpdateExpenseCategoryDto } from './dto/update-expense-category.dto';
+import { ExpenseCategoryQueryDto } from './dto/expense-category-query.dto';
+import { CreateExpenseDto } from './dto/create-expense.dto';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
+import { ExpenseQueryDto } from './dto/expense-query.dto';
+import { ExpenseSummaryQueryDto } from './dto/expense-summary-query.dto';
+import { ExpenseBreakdownQueryDto } from './dto/expense-breakdown-query.dto';
+
+type Actor = { id: string; role: string; marketId: string | null };
+
+type CurrencyAmount = {
+  currencyId: string;
+  currencyCode: string | null;
+  amount: Prisma.Decimal;
+  // معادلِ ارز پایه با نرخِ همان روزِ هر مصرف (اسنپ‌شاتِ ذخیره‌شده)؛ مصرف‌های قدیمیِ بدونِ نرخ در جمع نمی‌آیند.
+  amountInBase: Prisma.Decimal;
+  count: number;
+};
+
+// دسته‌بندی مصرف + خودِ مصرف در یک فایل، دقیقاً مثل ShareholdersService (سهام‌دار +
+// سهم + تراکنش یک‌جا) — نه چند فایل جدا برای هر بخش کوچک.
+@Injectable()
+export class ExpensesService {
+  private static readonly CATEGORY_SORT_FIELDS = ['name', 'createdAt'] as const;
+  private static readonly CATEGORY_SEARCH_FIELDS = ['name'] as const;
+  private static readonly EXPENSE_SORT_FIELDS = ['amount', 'expenseDate', 'createdAt'] as const;
+  private static readonly EXPENSE_SEARCH_FIELDS = ['description'] as const;
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly auditLog: AuditLogService,
+  ) {}
+
+  private async getActor(currentUser: { id: string }): Promise<Actor> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: currentUser.id },
+      select: { id: true, role: true, marketId: true },
+    });
+    if (!user) throw new ForbiddenException('کاربر معتبر نیست');
+    return user;
+  }
+
+   private ensureAccess(actor: Actor, entityMarketId: string | null, message: string) {
+    if (actor.role === 'SUPER_ADMIN') return;
+    if (entityMarketId === null || actor.marketId !== entityMarketId) {
+      throw new ForbiddenException(message);
+    }
+  }
+
+  private resolveMarketId(actor: Actor, providedMarketId: string | undefined): string {
+    if (actor.role === 'SUPER_ADMIN') {
+      if (!providedMarketId) {
+        throw new BadRequestException('برای سوپر ادمین، marketId الزامی است');
+      }
+      return providedMarketId;
+    }
+    if (!actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+    return actor.marketId;
+  }
+
+  // ==========================================================================
+  // دسته‌بندی‌های مصرف (ExpenseCategory)
+  // ==========================================================================
+
+  private async findCategoryOrThrow(id: string) {
+    const category = await this.prisma.expenseCategory.findUnique({ where: { id } });
+    if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
+    return category;
+  }
+
+  // سب‌کتگوری فقط زیرِ یک کتگوریِ مادرِ واقعی مجاز است (سطحِ سوم ممنوع) — یک کوئریِ
+  // ایندکس‌شده (findUnique روی id)، نه پیمایشِ زنجیره.
+  private async findParentOrThrow(parentId: string) {
+    const parent = await this.prisma.expenseCategory.findUnique({
+      where: { id: parentId },
+    });
+    if (!parent) throw new NotFoundException('کتگوریِ مادر یافت نشد');
+    if (parent.parentId !== null) {
+      throw new BadRequestException(
+        'سب‌کتگوری نمی‌تواند زیرِ کتگوریِ دیگری باشد که خودش سب‌کتگوری است — فقط ۲ سطح مجاز است',
+      );
+    }
+    return parent;
+  }
+
+  // نامِ تکراری در همان «سطح» ممنوع است: مادرها بین مادرهای قابل‌دیدنِ همان بازار (و سراسری‌ها)،
+  // سب‌کتگوری‌ها زیرِ همان مادر. مقایسه روی کلیدِ نرمال‌شده است (ن.ک. nameKey).
+  private async assertCategoryNameFree(
+    db: Pick<Prisma.TransactionClient, 'expenseCategory'>,
+    scope: { parentId: string | null; marketId: string | null },
+    name: string,
+    excludeId?: string,
+  ) {
+    const where: Prisma.ExpenseCategoryWhereInput =
+      scope.parentId !== null
+        ? { parentId: scope.parentId }
+        : {
+            parentId: null,
+            OR: [{ marketId: null }, ...(scope.marketId ? [{ marketId: scope.marketId }] : [])],
+          };
+    const siblings = await db.expenseCategory.findMany({ where, select: { id: true, name: true } });
+    const key = nameKey(name);
+    const clash = siblings.find((s) => s.id !== excludeId && nameKey(s.name) === key);
+    if (clash) {
+      throw new ConflictException(
+        scope.parentId !== null
+          ? `سب‌کتگوری «${clash.name}» زیر همین کتگوری از قبل وجود دارد`
+          : `کتگوری «${clash.name}» از قبل وجود دارد`,
+      );
+    }
+  }
+
+  async createCategory(
+    currentUser: { id: string },
+    dto: CreateExpenseCategoryDto,
+    meta: RequestMeta,
+  ) {
+    const actor = await this.getActor(currentUser);
+
+    const name = cleanName(dto.name);
+    if (!name) throw new BadRequestException('نام کتگوری نمی‌تواند خالی باشد');
+
+    let subNames: string[] = [];
+    if (dto.subcategories !== undefined) {
+      if (dto.parentId) {
+        throw new BadRequestException(
+          'سب‌کتگوری نمی‌تواند خودش سب‌کتگوری داشته باشد؛ subcategories فقط هنگام ساختِ کتگوریِ مادر مجاز است',
+        );
+      }
+      subNames = dto.subcategories.map(cleanName);
+      if (subNames.some((n) => !n)) {
+        throw new BadRequestException('نامِ سب‌کتگوری نمی‌تواند خالی باشد');
+      }
+      const keys = subNames.map(nameKey);
+      if (new Set(keys).size !== keys.length) {
+        throw new BadRequestException('نامِ سب‌کتگوری‌ها در این فهرست تکراری است');
+      }
+    }
+
+    let marketId: string | null;
+    let parent: { id: string; marketId: string | null } | null = null;
+
+    if (dto.parentId) {
+      parent = await this.findParentOrThrow(dto.parentId);
+      this.ensureAccess(actor, parent.marketId, 'دسترسی به این کتگوریِ مادر مجاز نیست');
+      // سب‌کتگوری همیشه بازارِ والدش را به ارث می‌برد — marketId ورودی نادیده گرفته می‌شود
+      // تا هیچ‌وقت سب‌کتگوری و والدش در دو بازارِ متفاوت قرار نگیرند.
+      marketId = parent.marketId;
+    } else {
+      marketId = actor.role === 'SUPER_ADMIN' ? (dto.marketId ?? null) : actor.marketId;
+      if (marketId === null && actor.role !== 'SUPER_ADMIN') {
+        throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+      }
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      await this.assertCategoryNameFree(tx, { parentId: parent?.id ?? null, marketId }, name);
+
+      const category = await tx.expenseCategory.create({
+        data: { marketId, name, parentId: parent?.id ?? null },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'ExpenseCategory',
+        entityId: category.id,
+        marketId,
+        userId: actor.id,
+        newData: category,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      if (subNames.length === 0) return category;
+
+      const children = [];
+      for (const subName of subNames) {
+        const sub = await tx.expenseCategory.create({
+          data: { marketId, name: subName, parentId: category.id },
+        });
+        await this.auditLog.record({
+          tx,
+          action: 'CREATE',
+          entityType: 'ExpenseCategory',
+          entityId: sub.id,
+          marketId,
+          userId: actor.id,
+          newData: sub,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+        children.push(sub);
+      }
+      return { ...category, children };
+    });
+  }
+
+  async findAllCategories(currentUser: { id: string }, query: ExpenseCategoryQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const where: any =
+      actor.role === 'SUPER_ADMIN'
+        ? {}
+        : { OR: [{ marketId: null }, { marketId: actor.marketId }] };
+
+    if (query.isActive !== undefined) where.isActive = query.isActive;
+    if (query.parentId === 'root') {
+      where.parentId = null;
+    } else if (query.parentId !== undefined) {
+      where.parentId = query.parentId;
+    }
+
+    const searchWhere = buildSearchWhere(ExpensesService.CATEGORY_SEARCH_FIELDS, query.search);
+    if (searchWhere) where.AND = [searchWhere];
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      ExpensesService.CATEGORY_SORT_FIELDS,
+      { name: 'asc' },
+    );
+
+    // parent را هم include می‌کنیم (یک JOIN، نه کوئریِ جدا) تا فرانت بدون رفت‌وبرگشتِ
+    // اضافه بداند این ردیف کتگوریِ مادر است یا سب‌کتگوریِ کدام‌یک.
+    return paginate(this.prisma.expenseCategory, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+      include: { parent: { select: { id: true, name: true } } },
+    });
+  }
+
+  async findOneCategory(currentUser: { id: string }, id: string) {
+    const actor = await this.getActor(currentUser);
+    const category = await this.findCategoryOrThrow(id);
+    // برخلاف update/remove: دسته‌بندی سراسری (marketId خالی) برای خواندن باز است —
+    // همان چیزی که در findAllCategories هم می‌بینند، فقط این‌جا هم باید یکسان باشد.
+    if (
+      actor.role !== 'SUPER_ADMIN' &&
+      category.marketId !== null &&
+      category.marketId !== actor.marketId
+    ) {
+      throw new ForbiddenException('دسترسی به این دسته‌بندی مجاز نیست');
+    }
+    return category;
+  }
+
+  async updateCategory(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateExpenseCategoryDto,
+    meta: RequestMeta,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const category = await this.findCategoryOrThrow(id);
+    this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
+
+    if (dto.parentId !== undefined) {
+      throw new BadRequestException(
+        'جابه‌جایی کتگوری یا سب‌کتگوری زیر والدِ دیگر ممنوع است؛ سب‌کتگوریِ قدیمی را غیرفعال کنید و در جای درست یکی تازه بسازید',
+      );
+    }
+
+    if (dto.isActive !== undefined && actor.role !== 'SUPER_ADMIN' && actor.role !== 'ADMIN') {
+      throw new ForbiddenException('فعال یا غیرفعال کردنِ کتگوری فقط توسط ادمین ممکن است');
+    }
+
+    const data: Record<string, unknown> = {};
+    if (dto.name !== undefined) {
+      const name = cleanName(dto.name);
+      if (!name) throw new BadRequestException('نام کتگوری نمی‌تواند خالی باشد');
+      await this.assertCategoryNameFree(
+        this.prisma,
+        { parentId: category.parentId, marketId: category.marketId },
+        name,
+        id,
+      );
+      data.name = name;
+    }
+    if (dto.isActive !== undefined) data.isActive = dto.isActive;
+
+    const updated = await this.prisma.expenseCategory.update({ where: { id }, data });
+
+    await this.auditLog.record({
+      action: 'UPDATE',
+      entityType: 'ExpenseCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      newData: updated,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return updated;
+  }
+
+  async removeCategory(currentUser: { id: string }, id: string, meta: RequestMeta) {
+    const actor = await this.getActor(currentUser);
+    const category = await this.findCategoryOrThrow(id);
+    this.ensureAccess(actor, category.marketId, 'دسترسی به این دسته‌بندی مجاز نیست');
+
+    const [expensesCount, childrenCount] = await Promise.all([
+      this.prisma.expense.count({ where: { categoryId: id } }),
+      this.prisma.expenseCategory.count({ where: { parentId: id } }),
+    ]);
+    if (expensesCount > 0) {
+      throw new ConflictException(
+        'این دسته‌بندی دارای مصرف ثبت‌شده است و قابل حذف نیست؛ می‌توانید آن را غیرفعال کنید',
+      );
+    }
+    if (childrenCount > 0) {
+      throw new ConflictException(
+        'این کتگوری دارای سب‌کتگوری است و قابل حذف نیست؛ اول سب‌کتگوری‌ها را حذف یا جابه‌جا کنید',
+      );
+    }
+
+    await this.prisma.expenseCategory.delete({ where: { id } });
+
+    await this.auditLog.record({
+      action: 'DELETE',
+      entityType: 'ExpenseCategory',
+      entityId: id,
+      marketId: category.marketId,
+      userId: actor.id,
+      oldData: category,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+    });
+
+    return { message: `دسته‌بندی «${category.name}» حذف شد` };
+  }
+
+  // ==========================================================================
+  // مصارف (Expense)
+  // خرید/برداشت پول دقیقاً همان الگوی atomic-ledger که در AccountsService.transfer
+  // و ShareholdersService.createTransaction استفاده شده.
+  // ==========================================================================
+
+  // ارزِ مصرف همیشه ارزِ همان حسابِ انتخابی است — این عملیات نرخ تبدیل ارز را حساب
+  // نمی‌کند، پس currencyId هیچ‌وقت یک انتخابِ مستقل نیست و از خودِ account گرفته می‌شود
+  // (نه از ورودیِ کاربر) تا ناهماهنگیِ حساب/ارز اصلاً ممکن نباشد.
+  // requireActive: فقط وقتی کتگوری «تازه انتخاب» می‌شود (ثبتِ مصرفِ جدید یا عوض‌کردنِ کتگوریِ
+  // یک مصرف) — اصلاحِ مبلغ/حسابِ مصرفی که از قبل زیرِ یک کتگوریِ حالا-غیرفعال ثبت شده باید
+  // ممکن بماند.
+  private async validateCategoryAndAccount(
+    marketId: string,
+    categoryId: string,
+    accountId: string,
+    requireActive = false,
+  ) {
+    const category = await this.prisma.expenseCategory.findUnique({ where: { id: categoryId } });
+    if (!category) throw new NotFoundException('دسته‌بندی یافت نشد');
+    if (category.marketId !== null && category.marketId !== marketId) {
+      throw new BadRequestException('دسته‌بندی باید سراسری یا متعلق به همان بازار باشد');
+    }
+    if (requireActive) {
+      if (!category.isActive) {
+        throw new ConflictException(
+          `«${category.name}» غیرفعال است و مصرفِ جدید نمی‌پذیرد؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+        );
+      }
+      if (category.parentId) {
+        const parent = await this.prisma.expenseCategory.findUnique({
+          where: { id: category.parentId },
+          select: { name: true, isActive: true },
+        });
+        if (parent && !parent.isActive) {
+          throw new ConflictException(
+            `کتگوریِ مادرِ «${parent.name}» غیرفعال است و مصرفِ جدید نمی‌پذیرد؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+          );
+        }
+      }
+    }
+
+    const account = await this.prisma.account.findUnique({ where: { id: accountId } });
+    if (!account) throw new NotFoundException('حساب یافت نشد');
+    if (account.marketId !== marketId) {
+      throw new BadRequestException('حساب باید متعلق به همان بازار باشد');
+    }
+    if (!account.isActive) {
+      throw new ConflictException('حساب غیرفعال است');
+    }
+
+    return { account, category };
+  }
+
+  // مصرف باید روی «برگ» ثبت شود: اگر کتگوریِ مادر سب‌کتگوریِ فعال دارد، ثبتِ مستقیم روی خودش
+  // ممنوع است — وگرنه مصرفی بدونِ نامِ شخص/مورد (مثلاً «معاشات» بدونِ نامِ کارمند) در گزارش می‌ماند
+  // و جمعِ سب‌کتگوری‌ها ناقص می‌شود. مثل requireActive فقط وقتی کتگوری «تازه انتخاب» می‌شود
+  // صدا زده می‌شود؛ مصرف‌های قدیمیِ ثبت‌شده روی مادر همچنان قابلِ ویرایشِ مبلغ/توضیح‌اند.
+  // مادرِ بدونِ سب‌کتگوریِ فعال (و خودِ سب‌کتگوری) مستقیم مصرف می‌پذیرد.
+  private async assertCategoryAcceptsExpense(category: {
+    id: string;
+    name: string;
+    parentId: string | null;
+  }) {
+    if (category.parentId !== null) return;
+    const activeChildren = await this.prisma.expenseCategory.count({
+      where: { parentId: category.id, isActive: true },
+    });
+    if (activeChildren > 0) {
+      throw new BadRequestException(
+        `«${category.name}» سب‌کتگوری دارد؛ مصرف را باید روی یکی از سب‌کتگوری‌هایش ثبت کنید (یا با newSubcategoryName یک سب‌کتگوریِ جدید بسازید)`,
+      );
+    }
+  }
+
+  async createExpense(currentUser: { id: string }, dto: CreateExpenseDto, meta: RequestMeta) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, dto.marketId);
+
+    await ensureMarketSetupComplete(this.prisma, marketId);
+    const { account, category } = await this.validateCategoryAndAccount(
+      marketId,
+      dto.categoryId,
+      dto.accountId,
+      true,
+    );
+    const currencyId = account.currencyId;
+    await ensureCurrencyEnabledForMarket(this.prisma, marketId, currencyId);
+
+    let newSubName: string | null = null;
+    if (dto.newSubcategoryName !== undefined) {
+      newSubName = cleanName(dto.newSubcategoryName);
+      if (!newSubName) throw new BadRequestException('نامِ سب‌کتگوری نمی‌تواند خالی باشد');
+      if (category.parentId !== null) {
+        throw new BadRequestException(
+          'سب‌کتگوریِ جدید را فقط زیرِ کتگوریِ مادر می‌توان ساخت؛ categoryId باید یک کتگوریِ مادر باشد',
+        );
+      }
+    } else {
+      await this.assertCategoryAcceptsExpense(category);
+    }
+
+    const amount = new Prisma.Decimal(dto.amount);
+    const expenseDate = dto.expenseDate ? new Date(dto.expenseDate) : new Date();
+
+    return this.prisma.$transaction(async (tx) => {
+      // سب‌کتگوریِ هم‌نامِ فعال → همان؛ غیرفعال → خطا (ادمین باید فعالش کند)؛ نبود → ساخته می‌شود.
+      // سب‌کتگوری بازارِ مادرش را می‌گیرد؛ اگر مادر سراسری باشد، بازارِ همین مصرف را.
+      let categoryId = dto.categoryId;
+      if (newSubName) {
+        const siblings = await tx.expenseCategory.findMany({
+          where: { parentId: category.id },
+          select: { id: true, name: true, isActive: true },
+        });
+        const key = nameKey(newSubName);
+        const existing = siblings.find((s) => nameKey(s.name) === key);
+        if (existing) {
+          if (!existing.isActive) {
+            throw new ConflictException(
+              `سب‌کتگوریِ «${existing.name}» غیرفعال است؛ ادمینِ مارکت باید آن را دوباره فعال کند`,
+            );
+          }
+          categoryId = existing.id;
+        } else {
+          const sub = await tx.expenseCategory.create({
+            data: { marketId: category.marketId ?? marketId, name: newSubName, parentId: category.id },
+          });
+          await this.auditLog.record({
+            tx,
+            action: 'CREATE',
+            entityType: 'ExpenseCategory',
+            entityId: sub.id,
+            marketId,
+            userId: actor.id,
+            newData: sub,
+            ip: meta.ip,
+            userAgent: meta.userAgent,
+          });
+          categoryId = sub.id;
+        }
+      }
+
+      const rate = await resolveRateToBase(tx, {
+        marketId,
+        currencyId,
+        date: expenseDate,
+        amount,
+        manualRate: dto.exchangeRate,
+      });
+
+      const debited = await tx.account.updateMany({
+        where: { id: dto.accountId, balance: { gte: amount } },
+        data: { balance: { decrement: amount } },
+      });
+      if (debited.count === 0) {
+        throw new ConflictException('موجودی حساب برای این مصرف کافی نیست');
+      }
+      const updatedAccount = await tx.account.findUniqueOrThrow({ where: { id: dto.accountId } });
+
+      const expense = await tx.expense.create({
+        data: {
+          marketId,
+          categoryId,
+          amount,
+          currencyId,
+          usdEquivalent:
+            dto.usdEquivalent !== undefined ? new Prisma.Decimal(dto.usdEquivalent) : null,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+          expenseDate,
+          description: dto.description?.trim() || null,
+          accountId: dto.accountId,
+          paidById: actor.id,
+          receiptImage: dto.receiptImage?.trim() || null,
+        },
+      });
+
+      await tx.ledgerEntry.create({
+        data: {
+          marketId,
+          accountId: dto.accountId,
+          currencyId,
+          direction: 'OUT',
+          amount,
+          balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+          entryDate: expenseDate,
+          description: `مصرف: ${dto.description?.trim() || ''}`.trim(),
+          expenseId: expense.id,
+          createdById: actor.id,
+        },
+      });
+
+      // داخلِ همین تراکنش: اگر audit insert شکست بخورد، کلِ مصرف/تغییرِ حساب هم
+      // rollback می‌شود — یک برداشتِ مالی بدون ردِ پای audit نباید commit شود.
+      await this.auditLog.record({
+        tx,
+        action: 'CREATE',
+        entityType: 'Expense',
+        entityId: expense.id,
+        marketId,
+        userId: actor.id,
+        newData: expense,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return expense;
+    });
+  }
+
+  async findAllExpenses(currentUser: { id: string }, query: ExpenseQueryDto) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+    const where: any = {
+      ...(actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! }),
+    };
+
+    // اگر categoryId یک کتگوریِ مادر باشد، خودکار مصارفِ همهٔ سب‌کتگوری‌هایش هم می‌آید —
+    // یک فیلترِ رابطه‌ای (JOIN با OR روی id/parent_id، هر دو ایندکس‌شده)، نه دو کوئریِ جدا.
+    if (query.categoryId !== undefined) {
+      where.category = { OR: [{ id: query.categoryId }, { parentId: query.categoryId }] };
+    }
+    if (query.accountId !== undefined) where.accountId = query.accountId;
+    if (query.currencyId !== undefined) where.currencyId = query.currencyId;
+    if (query.fromDate !== undefined || query.toDate !== undefined) {
+      where.expenseDate = {
+        ...(query.fromDate !== undefined ? { gte: new Date(query.fromDate) } : {}),
+        ...(query.toDate !== undefined ? { lte: new Date(query.toDate) } : {}),
+      };
+    }
+
+    const searchWhere = buildSearchWhere(ExpensesService.EXPENSE_SEARCH_FIELDS, query.search);
+    if (searchWhere) where.AND = [searchWhere];
+
+    const orderBy = resolveSort(
+      query.sortBy,
+      query.sortOrder,
+      ExpensesService.EXPENSE_SORT_FIELDS,
+      { expenseDate: 'desc' },
+    );
+
+    return paginate(this.prisma.expense, {
+      where,
+      orderBy,
+      page: query.page,
+      limit: query.limit,
+      include: {
+        category: {
+          select: { id: true, name: true, parent: { select: { id: true, name: true } } },
+        },
+        account: { select: { id: true, name: true } },
+        currency: { select: { id: true, code: true, name: true } },
+        paidBy: { select: { id: true, fullName: true } },
+      },
+    });
+  }
+
+  // خلاصهٔ «تاحال/در این بازه چقدر» — یک aggregate، نه fetch+reduce: هیچ ردیفِ خامِ
+  // Expense خوانده نمی‌شود، فقط SUM از دیتابیس برمی‌گردد. چون مصارف می‌توانند چند ارزی
+  // باشند، حتماً به‌ازای هر ارز جدا جمع می‌زنیم (جمع‌کردنِ دو ارزِ متفاوت در یک عدد غلط
+  // است) — با groupBy روی currencyId، یک کوئری برای همهٔ ارزها با هم.
+  async getExpenseSummary(currentUser: { id: string }, query: ExpenseSummaryQueryDto) {
+    const actor = await this.getActor(currentUser);
+    if (actor.role !== 'SUPER_ADMIN' && !actor.marketId) {
+      throw new ForbiddenException('کاربر جاری به هیچ بازاری متصل نیست');
+    }
+
+    const category = await this.findCategoryOrThrow(query.categoryId);
+    // کتگوریِ سراسری (marketId=null) برای خواندن باز است — همان قاعدهٔ findOneCategory.
+    if (
+      actor.role !== 'SUPER_ADMIN' &&
+      category.marketId !== null &&
+      category.marketId !== actor.marketId
+    ) {
+      throw new ForbiddenException('دسترسی به این دسته‌بندی مجاز نیست');
+    }
+
+    const where: any = {
+      ...(actor.role === 'SUPER_ADMIN' ? {} : { marketId: actor.marketId! }),
+      category: { OR: [{ id: query.categoryId }, { parentId: query.categoryId }] },
+    };
+    if (query.fromDate !== undefined || query.toDate !== undefined) {
+      where.expenseDate = {
+        ...(query.fromDate !== undefined ? { gte: new Date(query.fromDate) } : {}),
+        ...(query.toDate !== undefined ? { lte: new Date(query.toDate) } : {}),
+      };
+    }
+
+    const scopeMarketId = actor.role === 'SUPER_ADMIN' ? category.marketId : actor.marketId;
+    const [byCurrency, market, withoutBaseValue] = await Promise.all([
+      this.prisma.expense.groupBy({
+        by: ['currencyId'],
+        where,
+        _sum: { amount: true, baseCurrencyAmount: true },
+        _count: true,
+      }),
+      scopeMarketId
+        ? this.prisma.market.findUnique({
+            where: { id: scopeMarketId },
+            select: { baseCurrency: { select: { id: true, code: true } } },
+          })
+        : Promise.resolve(null),
+      this.prisma.expense.count({ where: { ...where, baseCurrencyAmount: null } }),
+    ]);
+
+    const currencyIds = byCurrency.map((g) => g.currencyId);
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    return {
+      categoryId: category.id,
+      categoryName: category.name,
+      isParentCategory: category.parentId === null,
+      fromDate: query.fromDate ?? null,
+      toDate: query.toDate ?? null,
+      baseCurrency: market?.baseCurrency ?? null,
+      totalsByCurrency: byCurrency.map((g) => ({
+        currencyId: g.currencyId,
+        currencyCode: currencyCodeById.get(g.currencyId) ?? null,
+        totalAmount: g._sum.amount ?? new Prisma.Decimal(0),
+        totalInBase: g._sum.baseCurrencyAmount ?? new Prisma.Decimal(0),
+        count: g._count,
+      })),
+      // مجموعِ همهٔ ارزها به ارز پایه (هر مصرف با نرخِ همان روز). اگر expensesWithoutBaseValue > 0
+      // باشد مجموع ناقص است (مصرف‌هایی بدونِ نرخ).
+      totalInBase: byCurrency.reduce(
+        (sum, g) => sum.add(g._sum.baseCurrencyAmount ?? new Prisma.Decimal(0)),
+        new Prisma.Decimal(0),
+      ),
+      expensesWithoutBaseValue: withoutBaseValue,
+    };
+  }
+
+  // خلاصهٔ همهٔ کتگوری‌ها یک‌جا — برخلاف getExpenseSummary که فقط یک کتگوری را می‌گیرد،
+  // این یک groupBy روی (categoryId, currencyId) برای کلِ مصارفِ بازار در یک بازه است، بعد
+  // در همین سرویس روی درختِ ۲‌سطحیِ کتگوری‌ها جمع می‌شود (مصرفِ مستقیمِ هر مادر + مصرفِ
+  // مستقیمِ هر زیرشاخه‌اش = totalِ همان مادر) — چون Prisma نمی‌تواند parent/child را در سطحِ
+  // دیتابیس خودش جمع بزند. حجمِ کتگوری‌ها همیشه کوچک است (ده‌ها ردیف، نه هزاران)، پس این
+  // جمعِ درون‌حافظه‌ای هیچ ریسکِ کارایی‌ای ندارد؛ چیزی که ریسک دارد (خودِ مصارف) همچنان
+  // با groupBy در دیتابیس جمع می‌شود، نه با خواندن تک‌تک ردیف‌های Expense.
+  async getExpenseBreakdown(currentUser: { id: string }, query: ExpenseBreakdownQueryDto) {
+    const actor = await this.getActor(currentUser);
+    const marketId = this.resolveMarketId(actor, query.marketId);
+
+    const where: any = { marketId };
+    if (query.fromDate !== undefined || query.toDate !== undefined) {
+      where.expenseDate = {
+        ...(query.fromDate !== undefined ? { gte: new Date(query.fromDate) } : {}),
+        ...(query.toDate !== undefined ? { lte: new Date(query.toDate) } : {}),
+      };
+    }
+
+    const [categories, grouped, market, withoutBaseValue] = await Promise.all([
+      this.prisma.expenseCategory.findMany({
+        where: { OR: [{ marketId: null }, { marketId }] },
+        select: { id: true, name: true, parentId: true },
+      }),
+      this.prisma.expense.groupBy({
+        by: ['categoryId', 'currencyId'],
+        where,
+        _sum: { amount: true, baseCurrencyAmount: true },
+        _count: true,
+      }),
+      this.prisma.market.findUnique({
+        where: { id: marketId },
+        select: { baseCurrency: { select: { id: true, code: true } } },
+      }),
+      this.prisma.expense.count({ where: { ...where, baseCurrencyAmount: null } }),
+    ]);
+
+    const currencyIds = [...new Set(grouped.map((g) => g.currencyId))];
+    const currencies = currencyIds.length
+      ? await this.prisma.currency.findMany({
+          where: { id: { in: currencyIds } },
+          select: { id: true, code: true },
+        })
+      : [];
+    const currencyCodeById = new Map(currencies.map((c) => [c.id, c.code]));
+
+    // categoryId → currencyId → {amount, count} — فقط مصرفِ مستقیمِ بسته‌شده به همان کتگوری.
+    const directByCategory = new Map<string, Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>>();
+    for (const row of grouped) {
+      const byCurrency = directByCategory.get(row.categoryId) ?? new Map();
+      byCurrency.set(row.currencyId, {
+        amount: row._sum.amount ?? new Prisma.Decimal(0),
+        base: row._sum.baseCurrencyAmount ?? new Prisma.Decimal(0),
+        count: row._count,
+      });
+      directByCategory.set(row.categoryId, byCurrency);
+    }
+
+    const toCurrencyAmounts = (byCurrency: Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>): CurrencyAmount[] =>
+      [...byCurrency.entries()]
+        .map(([currencyId, v]) => ({
+          currencyId,
+          currencyCode: currencyCodeById.get(currencyId) ?? null,
+          amount: v.amount,
+          amountInBase: v.base,
+          count: v.count,
+        }))
+        .sort((a, b) => (a.currencyCode ?? '').localeCompare(b.currencyCode ?? ''));
+
+    const childrenByParent = new Map<string, { id: string; name: string }[]>();
+    for (const c of categories) {
+      if (c.parentId) {
+        const list = childrenByParent.get(c.parentId) ?? [];
+        list.push({ id: c.id, name: c.name });
+        childrenByParent.set(c.parentId, list);
+      }
+    }
+
+    const grandTotal = new Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>();
+    for (const row of grouped) {
+      const entry = grandTotal.get(row.currencyId) ?? { amount: new Prisma.Decimal(0), base: new Prisma.Decimal(0), count: 0 };
+      entry.amount = entry.amount.add(row._sum.amount ?? new Prisma.Decimal(0));
+      entry.base = entry.base.add(row._sum.baseCurrencyAmount ?? new Prisma.Decimal(0));
+      entry.count += row._count;
+      grandTotal.set(row.currencyId, entry);
+    }
+
+    const parents = categories.filter((c) => c.parentId === null);
+    const result = parents
+      .map((parent) => {
+        const children = (childrenByParent.get(parent.id) ?? []).map((child) => ({
+          categoryId: child.id,
+          name: child.name,
+          direct: toCurrencyAmounts(directByCategory.get(child.id) ?? new Map()),
+        }));
+
+        const totalByCurrency = new Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>();
+        const addToTotal = (byCurrency: Map<string, { amount: Prisma.Decimal; base: Prisma.Decimal; count: number }>) => {
+          for (const [currencyId, v] of byCurrency) {
+            const entry = totalByCurrency.get(currencyId) ?? { amount: new Prisma.Decimal(0), base: new Prisma.Decimal(0), count: 0 };
+            entry.amount = entry.amount.add(v.amount);
+            entry.base = entry.base.add(v.base);
+            entry.count += v.count;
+            totalByCurrency.set(currencyId, entry);
+          }
+        };
+        addToTotal(directByCategory.get(parent.id) ?? new Map());
+        for (const child of childrenByParent.get(parent.id) ?? []) {
+          addToTotal(directByCategory.get(child.id) ?? new Map());
+        }
+
+        return {
+          categoryId: parent.id,
+          name: parent.name,
+          direct: toCurrencyAmounts(directByCategory.get(parent.id) ?? new Map()),
+          total: toCurrencyAmounts(totalByCurrency),
+          children,
+        };
+      })
+      // کتگوری‌های بدون هیچ مصرفی (نه خودشان، نه زیرشاخه‌هایشان) در این بازه حذف می‌شوند
+      // تا خروجی فقط چیزی را نشان دهد که واقعاً اتفاق افتاده — نه لیستِ کاملِ کتگوری‌های تعریف‌شده.
+      .filter((p) => p.total.length > 0);
+
+    return {
+      marketId,
+      fromDate: query.fromDate ?? null,
+      toDate: query.toDate ?? null,
+      baseCurrency: market?.baseCurrency ?? null,
+      grandTotal: toCurrencyAmounts(grandTotal),
+      // مجموعِ همهٔ ارزها به ارز پایه با نرخِ همان روزِ هر مصرف؛ expensesWithoutBaseValue > 0 یعنی ناقص است.
+      grandTotalInBase: [...grandTotal.values()].reduce((sum, g) => sum.add(g.base), new Prisma.Decimal(0)),
+      expensesWithoutBaseValue: withoutBaseValue,
+      categories: result,
+    };
+  }
+
+  private async findExpenseOrThrow(id: string) {
+    const expense = await this.prisma.expense.findUnique({ where: { id } });
+    if (!expense) throw new NotFoundException('مصرف یافت نشد');
+    return expense;
+  }
+
+  async findOneExpense(currentUser: { id: string }, id: string) {
+    const actor = await this.getActor(currentUser);
+    const expense = await this.findExpenseOrThrow(id);
+    this.ensureAccess(actor, expense.marketId, 'دسترسی به این مصرف مجاز نیست');
+
+    return this.prisma.expense.findUnique({
+      where: { id },
+      include: {
+        category: { select: { id: true, name: true } },
+        account: { select: { id: true, name: true } },
+        currency: { select: { id: true, code: true, name: true } },
+        paidBy: { select: { id: true, fullName: true } },
+      },
+    });
+  }
+
+  async updateExpense(
+    currentUser: { id: string },
+    id: string,
+    dto: UpdateExpenseDto,
+    meta: RequestMeta,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const expense = await this.findExpenseOrThrow(id);
+    this.ensureAccess(actor, expense.marketId, 'دسترسی به این مصرف مجاز نیست');
+
+    const nextCategoryId = dto.categoryId ?? expense.categoryId;
+    const nextAccountId = dto.accountId ?? expense.accountId;
+    const nextAmount = dto.amount !== undefined ? new Prisma.Decimal(dto.amount) : expense.amount;
+
+    const moneyChanged =
+      dto.amount !== undefined || dto.accountId !== undefined || dto.exchangeRate !== undefined;
+
+    // تصحیحِ مبلغ/حسابِ یک مصرفِ ثبت‌شده باید یک دلیلِ مکتوب داشته باشد — برای
+    // audit trail، نه فقط عددِ قبل/بعد.
+    if (moneyChanged && !dto.reason?.trim()) {
+      throw new BadRequestException('برای تغییرِ مبلغ یا حسابِ مصرف، ذکرِ دلیل الزامی است');
+    }
+
+    // ارز همیشه از رویِ حسابِ (جدید/فعلیِ) مصرف مشتق می‌شود، نه از ورودیِ کاربر — اگر
+    // حساب عوض نشده باشد، ارز هم همان ارزِ قبلیِ مصرف باقی می‌ماند.
+    let nextCurrencyId = expense.currencyId;
+    if (dto.categoryId !== undefined || moneyChanged) {
+      const categoryChanged = dto.categoryId !== undefined && dto.categoryId !== expense.categoryId;
+      const { account, category } = await this.validateCategoryAndAccount(
+        expense.marketId,
+        nextCategoryId,
+        nextAccountId,
+        categoryChanged,
+      );
+      if (categoryChanged) await this.assertCategoryAcceptsExpense(category);
+      nextCurrencyId = account.currencyId;
+    }
+
+    const data: Record<string, unknown> = {};
+    if (dto.categoryId !== undefined) data.categoryId = dto.categoryId;
+    if (dto.expenseDate !== undefined) data.expenseDate = new Date(dto.expenseDate);
+    if (dto.description !== undefined) data.description = dto.description?.trim() || null;
+    if (dto.usdEquivalent !== undefined) data.usdEquivalent = new Prisma.Decimal(dto.usdEquivalent);
+    if (dto.receiptImage !== undefined) data.receiptImage = dto.receiptImage?.trim() || null;
+
+    if (!moneyChanged) {
+      return this.prisma.$transaction(async (tx) => {
+        const updated = await tx.expense.update({ where: { id }, data });
+
+        await this.auditLog.record({
+          tx,
+          action: 'UPDATE',
+          entityType: 'Expense',
+          entityId: id,
+          marketId: expense.marketId,
+          userId: actor.id,
+          oldData: expense,
+          newData: updated,
+          reason: dto.reason,
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+
+        return updated;
+      });
+    }
+
+    // مبلغ/حساب/ارز عوض شده: اول اثر قبلی برگردانده می‌شود، بعد اثر جدید اعمال می‌شود —
+    // همه در یک تراکنش تا حساب هیچ‌وقت در حالت میانه (فقط برگشت‌خورده) دیده نشود.
+    return this.prisma.$transaction(async (tx) => {
+      // نرخِ ثبت‌شدهٔ همین مصرف حفظ می‌شود (فقط معادلِ ارز پایه با مبلغِ جدید دوباره حساب
+      // می‌شود)، مگر نرخِ دستیِ جدید بیاید، ارز عوض شود، یا مصرفِ قدیمی نرخ نداشته باشد.
+      const rate =
+        dto.exchangeRate === undefined &&
+        expense.exchangeRate &&
+        nextCurrencyId === expense.currencyId
+          ? {
+              exchangeRate: expense.exchangeRate,
+              baseCurrencyAmount: nextAmount.mul(expense.exchangeRate).toDecimalPlaces(4),
+            }
+          : await resolveRateToBase(tx, {
+              marketId: expense.marketId,
+              currencyId: nextCurrencyId,
+              date: dto.expenseDate ? new Date(dto.expenseDate) : expense.expenseDate,
+              amount: nextAmount,
+              manualRate: dto.exchangeRate,
+            });
+
+      // قفلِ خوش‌بینانه: قبل از هر تغییری در موجودیِ حساب، چک می‌کنیم که این مصرف از
+      // لحظهٔ خواندنِ اولیه (بالای متد، بیرونِ تراکنش) توسط ویرایشِ هم‌زمانِ دیگری تغییر
+      // نکرده باشد. بدونِ این چک، دو ویرایشِ هم‌زمان هر دو مبلغِ قدیمیِ یکسان را به حساب
+      // برمی‌گردانند و موجودی خراب می‌شود (یکی از آن مبلغ‌ها واقعاً دیگر معتبر نیست).
+      // اگر مصرف هم‌زمان تغییر کرده باشد، count=0 می‌شود و خطا می‌دهیم به‌جای خرابکاریِ خاموش.
+      const guarded = await tx.expense.updateMany({
+        where: { id, amount: expense.amount, accountId: expense.accountId },
+        data: {
+          ...data,
+          amount: nextAmount,
+          accountId: nextAccountId,
+          currencyId: nextCurrencyId,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+        },
+      });
+      if (guarded.count === 0) {
+        throw new ConflictException(
+          'این مصرف هم‌زمان توسط کاربرِ دیگری ویرایش شده — صفحه را رفرش و دوباره تلاش کنید',
+        );
+      }
+
+      await tx.account.update({
+        where: { id: expense.accountId },
+        data: { balance: { increment: expense.amount } },
+      });
+
+      const debited = await tx.account.updateMany({
+        where: { id: nextAccountId, balance: { gte: nextAmount } },
+        data: { balance: { decrement: nextAmount } },
+      });
+      if (debited.count === 0) {
+        throw new ConflictException('موجودی حساب برای این ویرایش کافی نیست');
+      }
+      const updatedAccount = await tx.account.findUniqueOrThrow({ where: { id: nextAccountId } });
+
+      const updatedExpense = await tx.expense.findUniqueOrThrow({ where: { id } });
+
+      await tx.ledgerEntry.update({
+        where: { expenseId: id },
+        data: {
+          accountId: nextAccountId,
+          currencyId: nextCurrencyId,
+          amount: nextAmount,
+          balanceAfter: updatedAccount.balance,
+          exchangeRate: rate.exchangeRate,
+          baseCurrencyAmount: rate.baseCurrencyAmount,
+          entryDate: updatedExpense.expenseDate,
+          description: `مصرف: ${updatedExpense.description ?? ''}`.trim(),
+        },
+      });
+
+      await this.auditLog.record({
+        tx,
+        action: 'UPDATE',
+        entityType: 'Expense',
+        entityId: id,
+        marketId: expense.marketId,
+        userId: actor.id,
+        oldData: expense,
+        newData: updatedExpense,
+        reason: dto.reason,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+
+      return updatedExpense;
+    });
+  }
+
+  async removeExpense(currentUser: { id: string }, id: string, meta: RequestMeta) {
+    const actor = await this.getActor(currentUser);
+    const expense = await this.findExpenseOrThrow(id);
+    this.ensureAccess(actor, expense.marketId, 'دسترسی به این مصرف مجاز نیست');
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.account.update({
+        where: { id: expense.accountId },
+        data: { balance: { increment: expense.amount } },
+      });
+      // LedgerEntry مرتبط به‌خاطر onDelete: Cascade خودش پاک می‌شود.
+      await tx.expense.delete({ where: { id } });
+
+      await this.auditLog.record({
+        tx,
+        action: 'DELETE',
+        entityType: 'Expense',
+        entityId: id,
+        marketId: expense.marketId,
+        userId: actor.id,
+        oldData: expense,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      });
+    });
+
+    return { message: 'مصرف حذف شد و مبلغش به حساب برگشت' };
+  }
+}

@@ -1,24 +1,30 @@
 model ElectricityMeter {
-  id           String      @id @default(uuid()) @db.Uuid
-  marketId     String      @map("market_id") @db.Uuid
-  // شمارهٔ نمایشی کنتور — هنگام ساخت برابر shopNumber مقداردهی می‌شود (شمارهٔ کنتور = شمارهٔ دوکان).
-  meterNumber  String?     @map("meter_number")
-  serialNumber String? // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
-  // shopId «خانهٔ اصلی و ثابت» کنتور است و هنگام ادغام/تفکیک دوکان‌ها هرگز تغییر نمی‌کند؛
-  // فقط status عوض می‌شود (فعال/غیرفعال). دوکان فعلاً‌فعال یک گروه از ShopGroup.primaryMeterId معلوم می‌شود.
-  shopId       String?     @map("shop_id") @db.Uuid
-  status       MeterStatus @default(active)
-  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id              String      @id @default(uuid()) @db.Uuid
+  marketId        String      @map("market_id") @db.Uuid
+  meterNumber     String?     @map("meter_number")
+  serialNumber    String?     @map("serial_number") // شمارهٔ فیزیکی سخت‌افزار کنتور — مفهومی جدا از meterNumber
+  shopId          String?     @map("shop_id") @db.Uuid
+  status          MeterStatus @default(active)
+  location        String?     @db.VarChar(255)
+  lastReading     Decimal?    @map("last_reading") @db.Decimal(12, 2)
+  lastReadingDate DateTime?   @map("last_reading_date") @db.Timestamptz(6)
+  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime    @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   market              Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
   shop                Shop?             @relation(fields: [shopId], references: [id], onDelete: SetNull)
   primaryForShopGroup ShopGroup?        @relation("PrimaryMeterForShopGroup")
   bills               ElectricityBill[]
 
-  @@unique([marketId, meterNumber])
+  // یکتاییِ shop_id و (market_id, meter_number) فقط بینِ کنتورهای «فعال» است (ایندکس‌های شرطیِ دیتابیس:
+  // electricity_meters_shop_id_active_key و electricity_meters_market_id_meter_number_active_key، ن.ک. migration
+  // «meter_unique_per_active_shop») — Prisma ایندکسِ شرطی را نمی‌شناسد، پس این‌جا @@unique نیست. وقتی کنتورِ
+  // خراب غیرفعال می‌شود، دوکانش برای کنتورِ جدید آزاد می‌شود و سابقهٔ کنتورِ قدیمی (بل‌ها با همان meterId) می‌ماند.
+  // سریالِ دستگاه همچنان در کلِ بازار یکتاست (یک دستگاهِ فیزیکی دو رکورد ندارد).
+  @@unique([marketId, serialNumber])
   @@index([shopId])
   @@index([status])
+  @@map("electricity_meters")
 }
 
 enum ElectricityBillStatus {
@@ -29,19 +35,55 @@ enum ElectricityBillStatus {
   CANCELED
 }
 
-// بل برق دوره‌ای (هر دو ماه)؛ جمع‌آوری همچنان هفته‌وار و قسطی است — همان الگوی RentCharges.
-// وقتی paidAmount به totalAmount برسد، سرویس status را PAID می‌کند و دوره «بسته» تلقی می‌شود.
+// دورهٔ میترخوانی هر بازار در هر سال شمسی: هر ۱ ماه (۱۲ دوره) یا هر ۲ ماه (۶ دوره) یا هر
+// طول دیگری که ۱۲ را بدون باقی‌مانده تقسیم کند. یک رکورد per (marketId, year) — تصمیمِ
+// «امسال چند دوره داریم» مستقل برای هر بازار و هر سال است و سال‌های گذشته را تغییر نمی‌دهد.
+// دورهٔ شمارهٔ N شامل ماه‌های شمسیِ [(N-1)*monthsPerPeriod+1 .. N*monthsPerPeriod] است
+// (حمل=۱) — periodStart/periodEnd هر ElectricityBill از همین‌جا محاسبه می‌شود، نه آزاد.
+model ElectricityBillingCycle {
+  id              String @id @default(uuid()) @db.Uuid
+  marketId        String @map("market_id") @db.Uuid
+  year            Int
+  monthsPerPeriod Int    @map("months_per_period")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  bills  ElectricityBill[]
+
+  @@unique([marketId, year])
+  @@map("electricity_billing_cycles")
+}
+
 model ElectricityBill {
-  id       String  @id @default(uuid()) @db.Uuid
-  marketId String  @map("market_id") @db.Uuid
-  shopId   String  @map("shop_id") @db.Uuid
-  meterId  String? @map("meter_id") @db.Uuid
-  tenantId String? @map("tenant_id") @db.Uuid
+  id         String  @id @default(uuid()) @db.Uuid
+  marketId   String  @map("market_id") @db.Uuid
+  shopId     String  @map("shop_id") @db.Uuid
+  meterId    String? @map("meter_id") @db.Uuid
+  tenantId   String? @map("tenant_id") @db.Uuid
+  contractId String? @map("contract_id") @db.Uuid
+
+  // سال شمسی + شمارهٔ دوره (طبق ElectricityBillingCycle همان بازار/سال) — منبع حقیقتِ
+  // periodStart/periodEnd زیر؛ nullable فقط برای سازگاری با بل‌های دستیِ قدیمی‌تر.
+  billingCycleId String? @map("billing_cycle_id") @db.Uuid
+  year           Int?
+  periodNumber   Int?    @map("period_number")
 
   periodStart     DateTime @map("period_start") @db.Timestamptz(6)
   periodEnd       DateTime @map("period_end") @db.Timestamptz(6)
   previousReading Decimal? @map("previous_reading") @db.Decimal(12, 2)
   currentReading  Decimal? @map("current_reading") @db.Decimal(12, 2)
+
+  // اسنپ‌شاتِ محاسبهٔ همین بل در لحظهٔ صدور — بدون این‌ها، با عوض‌شدنِ Market.electricityRatePerUnit
+  // معلوم نیست بل‌های قبلی با چه نرخی حساب شده‌اند. همه nullable‌اند؛ null یعنی «نامعلوم» (بل‌های
+  // قبل از این ویژگی، یا بل مهاجرتی بدونِ قرائتِ کنتور) و هیچ‌وقت عددِ حدسی ذخیره نمی‌شود.
+  //  - ratePerUnit: نرخِ برقِ بازار در لحظهٔ صدورِ بلِ زنده (به ارزِ همین بل)؛ برای بل مهاجرتی null.
+  //  - consumedUnits: مصرفِ دوره = currentReading − previousReading (فقط وقتی هر دو قرائتِ معتبر هستند).
+  //  - isManualAmount: true یعنی totalAmount را کاربر دستی داده (تخفیف/توافق/بل کاغذی)، نه «مصرف × نرخ».
+  ratePerUnit    Decimal? @map("rate_per_unit") @db.Decimal(18, 4)
+  consumedUnits  Decimal? @map("consumed_units") @db.Decimal(12, 2)
+  isManualAmount Boolean? @map("is_manual_amount")
 
   totalAmount     Decimal @map("total_amount") @db.Decimal(18, 4)
   paidAmount      Decimal @default(0) @map("paid_amount") @db.Decimal(18, 4)
@@ -49,7 +91,6 @@ model ElectricityBill {
 
   currencyId     String                @map("currency_id") @db.Uuid
   status         ElectricityBillStatus @default(PENDING)
-  // برای بل‌هایی که از کتابچهٔ کاغذی مهاجرت شده‌اند (ن.ک. حالت پرخطر ۵ در گزارش)
   isOpeningEntry Boolean               @default(false) @map("is_opening_entry")
 
   notes       String? @db.Text
@@ -58,24 +99,29 @@ model ElectricityBill {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  market    Market            @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  shop      Shop              @relation(fields: [shopId], references: [id], onDelete: Restrict)
-  meter     ElectricityMeter? @relation(fields: [meterId], references: [id], onDelete: SetNull)
-  tenant    Tenant?           @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  currency  Currency          @relation(fields: [currencyId], references: [id], onDelete: Restrict)
-  createdBy User?             @relation("ElectricityBillCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  market       Market                   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  shop         Shop                     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  meter        ElectricityMeter?        @relation(fields: [meterId], references: [id], onDelete: SetNull)
+  tenant       Tenant?                  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  contract     Contract?                @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  billingCycle ElectricityBillingCycle? @relation(fields: [billingCycleId], references: [id], onDelete: SetNull)
+  currency     Currency                 @relation(fields: [currencyId], references: [id], onDelete: Restrict)
+  createdBy    User?                    @relation("ElectricityBillCreator", fields: [createdById], references: [id], onDelete: SetNull)
 
   allocations ElectricityPaymentAllocation[]
 
+  // یک بیل به‌ازای هر (قرارداد، سال، شمارهٔ دوره) — nullable بودن contractId/year/periodNumber
+  // یعنی این قید فقط روی بل‌های جدیدِ مبتنی‌بر دوره اعمال می‌شود، نه بل‌های دستیِ قدیمی.
+  @@unique([contractId, year, periodNumber])
   @@index([marketId])
   @@index([shopId])
   @@index([tenantId])
+  @@index([contractId])
   @@index([status])
   @@index([periodStart, periodEnd])
   @@map("electricity_bills")
 }
 
-// خلاصهٔ زندهٔ بدهی برق هر مستأجر — دقیقاً هم‌الگو با RentDebt.
 model ElectricityDebt {
   id       String @id @default(uuid()) @db.Uuid
   tenantId String @unique @map("tenant_id") @db.Uuid
@@ -93,22 +139,24 @@ model ElectricityDebt {
   @@map("electricity_debts")
 }
 
-// یک پرداخت فیزیکی (یک رسید) برای برق؛ می‌تواند بین چند بل تقسیم شود (ن.ک. ElectricityPaymentAllocation) —
-// دقیقاً همان قانونی که برای کرایه خواستید: هر پرداخت اول بدهی قدیمی‌تر را می‌پوشاند.
 model ElectricityPayment {
-  id            String        @id @default(uuid()) @db.Uuid
-  marketId      String        @map("market_id") @db.Uuid
-  shopId        String        @map("shop_id") @db.Uuid
-  tenantId      String        @map("tenant_id") @db.Uuid
-  amount        Decimal       @db.Decimal(18, 4)
-  currencyId    String        @map("currency_id") @db.Uuid
-  paymentDate   DateTime      @map("payment_date") @db.Timestamptz(6)
-  paymentMethod PaymentMethod @map("payment_method")
-  accountId     String?       @map("account_id") @db.Uuid
-  collectedById String?       @map("collected_by_id") @db.Uuid
-  receiptNumber String?       @map("receipt_number") @db.VarChar(100)
-  notes         String?       @db.Text
-  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  id                 String            @id @default(uuid()) @db.Uuid
+  marketId           String            @map("market_id") @db.Uuid
+  shopId             String            @map("shop_id") @db.Uuid
+  tenantId           String            @map("tenant_id") @db.Uuid
+  amount             Decimal           @db.Decimal(18, 4)
+  currencyId         String            @map("currency_id") @db.Uuid
+  exchangeRate       Decimal?          @map("exchange_rate") @db.Decimal(24, 10)
+  baseCurrencyAmount Decimal?          @map("base_currency_amount") @db.Decimal(18, 4)
+  paymentDate        DateTime          @map("payment_date") @db.Timestamptz(6)
+  paymentMethod      PaymentMethod     @map("payment_method")
+  accountId          String?           @map("account_id") @db.Uuid
+  source             PaymentSourceType @default(BANK)
+  isOpeningEntry     Boolean           @default(false) @map("is_opening_entry")
+  collectedById      String?           @map("collected_by_id") @db.Uuid
+  receiptNumber      String?           @map("receipt_number") @db.VarChar(100)
+  notes              String?           @db.Text
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
 
   market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
   shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
@@ -142,12 +190,6 @@ model ElectricityPaymentAllocation {
   @@map("electricity_payment_allocations")
 }
 
-// مدل ShareholderTransaction به prisma/models/shareholder.prisma منتقل شد
-// (کنار Shareholder و ShareholderEquity، چون دیگر یک ردیف اسکلتی نیست).
-
-// ==========================================
-// ✅ اصلاح‌شده: اضافه کردن رابطه با Asset
-// ==========================================
 model DepreciationEvent {
   id                 String   @id @default(uuid()) @db.Uuid
   assetId            String   @map("asset_id") @db.Uuid // 👈 اضافه شد
@@ -159,7 +201,6 @@ model DepreciationEvent {
   appliedById        String?  @map("applied_by_id") @db.Uuid
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  // 👇 رابطه با Asset (کلید اصلی)
   asset     Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
   appliedBy User? @relation("DepreciationAppliedBy", fields: [appliedById], references: [id], onDelete: SetNull)
 
