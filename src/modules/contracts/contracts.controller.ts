@@ -23,6 +23,8 @@ import { RenewContractDto } from './dto/renew-contract.dto';
 import { AdjustContractRentDto } from './dto/adjust-contract-rent.dto';
 import { DiscountDebtDto } from './dto/discount-debt.dto';
 import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
+import { PayFromDepositDto } from './dto/pay-from-deposit.dto';
+import { RefundDepositDto } from './dto/refund-deposit.dto';
 import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -151,6 +153,51 @@ export class ContractsController {
     @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
   ) {
     return this.contractsService.payDebt(
+      req.user,
+      id,
+      dto,
+      extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
+    );
+  }
+
+  // خلاصهٔ تسویه: بدهیِ باز (کرایه + برق به تفکیکِ ارز) در برابرِ امانتِ باقی‌مانده — برای صفحهٔ «تسویهٔ حساب».
+  @Permission('contracts.view')
+  @Get(':id/settlement-summary')
+  getSettlementSummary(@Req() req: any, @Param('id') id: string) {
+    return this.contractsService.getSettlementSummary(req.user, id);
+  }
+
+  // تسویه از محل امانت: مبلغِ کرایه و برق جدا و دستی. اگر امانت کم بود، باقی را مستأجر نقد می‌دهد (pay-debt).
+  @Permission('contracts.pay_from_deposit')
+  @Post(':id/pay-from-deposit')
+  @Roles('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')
+  payFromDeposit(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: PayFromDepositDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
+  ) {
+    return this.contractsService.payFromDeposit(
+      req.user,
+      id,
+      dto,
+      extractRequestMeta(req),
+      parseIdempotencyKey(idempotencyKey),
+    );
+  }
+
+  // برگرداندنِ امانتِ باقی‌مانده به مستأجر (بعد از فسخ/پایان و تسویهٔ کاملِ بدهی).
+  @Permission('contracts.refund_deposit')
+  @Post(':id/refund-deposit')
+  @Roles('SUPER_ADMIN', 'ADMIN')
+  refundDeposit(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() dto: RefundDepositDto,
+    @Headers(IDEMPOTENCY_HEADER) idempotencyKey?: string,
+  ) {
+    return this.contractsService.refundDeposit(
       req.user,
       id,
       dto,

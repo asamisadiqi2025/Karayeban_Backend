@@ -50,6 +50,8 @@ export const PERMISSION_CATALOG: PermissionSection[] = [
       { key: 'contracts.terminate', label: 'فسخ قرارداد' },
       { key: 'contracts.settle', label: 'تسویهٔ قرارداد' },
       { key: 'contracts.pay_debt', label: 'پرداخت بدهی قرارداد' },
+      { key: 'contracts.pay_from_deposit', label: 'تسویهٔ بدهی از محل امانت' },
+      { key: 'contracts.refund_deposit', label: 'برگرداندن امانت به مستأجر' },
     ],
   },
   {

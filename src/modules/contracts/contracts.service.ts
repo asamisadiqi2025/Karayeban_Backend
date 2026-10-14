@@ -37,10 +37,14 @@ import { SettleContractDto } from './dto/settle-contract.dto';
 import { CancelContractDto } from './dto/cancel-contract.dto';
 import { RenewContractDto } from './dto/renew-contract.dto';
 import { PayContractDebtDto } from './dto/pay-contract-debt.dto';
+import { PayFromDepositDto } from './dto/pay-from-deposit.dto';
+import { RefundDepositDto } from './dto/refund-deposit.dto';
 import { ContractExpiryForecastQueryDto } from './dto/contract-expiry-forecast-query.dto';
 import { AuditLogService } from '../../common/audit-log/audit-log.service';
 import { RequestMeta } from '../../common/audit-log/request-meta.util';
 import { hashRequest, runIdempotent } from '../../common/idempotency/idempotency';
+import { acquireAdvisoryXactLock } from '../../common/utils/advisory-lock';
+import { assertPaymentDateNotInFuture } from '../../common/utils/assert-payment-date';
 
 const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
 
@@ -107,6 +111,87 @@ export class ContractsService {
     const contract = await this.prisma.contract.findUnique({ where: { id } });
     if (!contract) throw new NotFoundException('قرارداد یافت نشد');
     return contract;
+  }
+
+  // ==========================================================================
+  // بدهیِ باز + محافظِ «اول تسویه، بعد فسخ/تمدید/برگشتِ امانت»
+  // ==========================================================================
+
+  // بدهیِ بازِ یک قرارداد: کرایهٔ همین قرارداد + برقِ همین مستأجر/دوکان (به تفکیکِ ارز).
+  //  rentScope='all': همهٔ فاکتورهای بازِ کرایه (بعد از فسخ فاکتورهای آینده لغو شده‌اند، پس همین «بدهیِ واقعی» است)؛
+  //  rentScope='due': فقط فاکتورهایی که periodStart‌شان رسیده (برای تمدیدِ قراردادِ هنوز‌جاری — کرایهٔ ماه‌های بعد هنوز بدهی نیست).
+  private async getOutstandingDebt(
+    tx: Prisma.TransactionClient,
+    contract: { id: string; tenantId: string | null; shopId: string | null },
+    rentScope: 'all' | 'due',
+  ) {
+    const rent = await tx.rentCharges.aggregate({
+      where: {
+        contractId: contract.id,
+        status: { in: OPEN_STATUSES },
+        ...(rentScope === 'due' ? { periodStart: { lte: new Date() } } : {}),
+      },
+      _sum: { remainingAmount: true },
+    });
+    const electricity =
+      contract.tenantId && contract.shopId
+        ? await this.electricityService.getOpenDebtByCurrencyForShop(
+            tx,
+            contract.tenantId,
+            contract.shopId,
+          )
+        : [];
+    const rentAmount = rent._sum.remainingAmount ?? new Prisma.Decimal(0);
+    return {
+      rent: rentAmount,
+      electricity,
+      hasDebt: rentAmount.greaterThan(0) || electricity.length > 0,
+    };
+  }
+
+  // خطای ۴۰۹ با متنِ فارسیِ روشن (چقدر کرایه، چقدر برق، چقدر امانت داریم و کجا تسویه کنید) + همان اعداد به‌صورت
+  // ساختاریافته در details (فرانت بدونِ پارسِ متن نشان بدهد).
+  private async buildDebtError(
+    tx: Prisma.TransactionClient,
+    contract: { id: string; currencyId: string | null; securityDepositRemaining: Prisma.Decimal | null },
+    debt: { rent: Prisma.Decimal; electricity: { currencyId: string; amount: Prisma.Decimal; billsCount: number }[] },
+    action: 'terminate' | 'renew' | 'refund-deposit',
+  ) {
+    const ids = [contract.currencyId, ...debt.electricity.map((e) => e.currencyId)].filter(
+      (v): v is string => !!v,
+    );
+    const currencies = ids.length
+      ? await tx.currency.findMany({ where: { id: { in: ids } }, select: { id: true, code: true } })
+      : [];
+    const code = (id: string | null) => currencies.find((c) => c.id === id)?.code ?? '';
+
+    const deposit = contract.securityDepositRemaining ?? new Prisma.Decimal(0);
+    const parts: string[] = [];
+    if (debt.rent.greaterThan(0)) parts.push(`کرایه ${debt.rent.toString()} ${code(contract.currencyId)}`.trim());
+    for (const e of debt.electricity) parts.push(`برق ${e.amount.toString()} ${code(e.currencyId)}`.trim());
+
+    const verb = { terminate: 'فسخ', renew: 'تمدید', 'refund-deposit': 'برگرداندنِ امانتِ' }[action];
+    const message =
+      `${verb} قرارداد ممکن نیست: مستأجر بدهیِ باز دارد (${parts.join('، ')}). اول حساب‌ها را تسویه کنید — ` +
+      `از امانت (باقی‌مانده ${deposit.toString()} ${code(contract.currencyId)}): POST /contracts/${contract.id}/pay-from-deposit ، ` +
+      `یا نقد از خودِ مستأجر: POST /contracts/${contract.id}/pay-debt`;
+
+    return new ConflictException({
+      message,
+      details: {
+        code: 'OUTSTANDING_DEBT',
+        action,
+        rentDebt: debt.rent.toString(),
+        rentCurrency: { id: contract.currencyId, code: code(contract.currencyId) },
+        electricityDebt: debt.electricity.map((e) => ({
+          currencyId: e.currencyId,
+          currencyCode: code(e.currencyId),
+          amount: e.amount.toString(),
+          billsCount: e.billsCount,
+        })),
+        depositRemaining: deposit.toString(),
+      },
+    });
   }
 
   // ==========================================================================
@@ -529,6 +614,12 @@ export class ContractsService {
     const terminationDate = new Date(dto.terminationDate);
     const prorate = dto.prorate ?? true;
 
+    if (dto.acknowledgeDebt && !dto.reason?.trim()) {
+      throw new BadRequestException(
+        'برای فسخ با وجود بدهیِ باز، ذکرِ دلیل (reason) الزامی است',
+      );
+    }
+
     return this.prisma.$transaction(async (tx) => {
       const spanningCharge = prorate
         ? await tx.rentCharges.findFirst({
@@ -611,6 +702,15 @@ export class ContractsService {
         await this.rentService.recomputeRentDebt(tx, contract.tenantId);
       }
 
+      // محافظ: «اول تسویه، بعد فسخ». بدهیِ باز «بعد از» محاسبهٔ فسخ (تناسبِ روزِ آخر + لغوِ فاکتورهای آینده) سنجیده
+      // می‌شود تا عددی که می‌بینید دقیقاً همان است که مستأجر باید بدهد؛ اگر بدهی ماند، کلِ این تراکنش (حتی
+      // فاکتورهای اصلاح‌شده) rollback می‌شود و هیچ چیزی عوض نمی‌شود. فقط ادمین با acknowledgeDebt (+ reason)
+      // می‌تواند «با بدهیِ باز» فسخ کند؛ بدهی بخشیده نمی‌شود و روی مستأجر می‌ماند.
+      const debt = await this.getOutstandingDebt(tx, contract, 'all');
+      if (debt.hasDebt && !dto.acknowledgeDebt) {
+        throw await this.buildDebtError(tx, contract, debt, 'terminate');
+      }
+
       const finalContract = await tx.contract.findUniqueOrThrow({ where: { id } });
 
       await this.auditLog.record({
@@ -621,7 +721,19 @@ export class ContractsService {
         marketId: contract.marketId,
         userId: actor.id,
         oldData: contract,
-        newData: finalContract,
+        newData: debt.hasDebt
+          ? {
+              ...finalContract,
+              debtAtTermination: {
+                rent: debt.rent.toString(),
+                electricity: debt.electricity.map((e) => ({
+                  currencyId: e.currencyId,
+                  amount: e.amount.toString(),
+                })),
+              },
+            }
+          : finalContract,
+        reason: debt.hasDebt ? dto.reason : undefined,
         ip: meta.ip,
         userAgent: meta.userAgent,
       });
@@ -707,9 +819,8 @@ export class ContractsService {
 
   // ==========================================================================
   // تمدید — قرارداد فعلی را می‌بندد (expired) و بلافاصله از همان روزی که تمام
-  // می‌شود یک قرارداد جدیِ پیوسته می‌سازد (دوکان هرگز «خالی» نمی‌شود). بدهیِ کرایه/برقِ
-  // باقی‌مانده کاری لازم ندارد چون RentDebt/ElectricityDebt بر مبنای tenantId (نه
-  // contractId) جمع می‌شوند — زیر قرارداد جدید هم خودکار همان بدهی دیده می‌شود.
+  // می‌شود یک قرارداد جدیِ پیوسته می‌سازد (دوکان هرگز «خالی» نمی‌شود). شرط: مستأجر کرایه یا
+  // برقِ سررسیدشده بدهکار نباشد (وگرنه ۴۰۹ و اول تسویه از امانت یا نقد).
   // امانت (securityDeposit) به قرارداد جدید منتقل می‌شود تا دوباره‌شمار نشود.
   // ==========================================================================
   async renew(
@@ -820,6 +931,13 @@ export class ContractsService {
     const isNewStarted = newStartDate <= new Date();
 
     return this.prisma.$transaction(async (tx) => {
+      // محافظ: مستأجری که کرایه یا برقِ سررسیدشده بدهکار است قراردادش تمدید نمی‌شود — اول تسویه (از امانت یا نقد).
+      // کرایهٔ ماه‌های بعد (periodStart نرسیده) هنوز بدهی حساب نمی‌شود. برخلافِ فسخ، «تمدید با بدهی» راه ندارد.
+      const debt = await this.getOutstandingDebt(tx, contract, 'due');
+      if (debt.hasDebt) {
+        throw await this.buildDebtError(tx, contract, debt, 'renew');
+      }
+
       await tx.contract.update({
         where: { id },
         data: { status: ContractStatus.expired, securityDepositRemaining: 0 },
@@ -1231,6 +1349,325 @@ export class ContractsService {
       }
 
       return result;
+      },
+    });
+  }
+
+  // ==========================================================================
+  // خلاصهٔ تسویه: بدهیِ باز (کرایه + برق به تفکیکِ ارز) در برابرِ امانتِ باقی‌مانده — صفحهٔ «تسویهٔ حساب» فرانت
+  // همین را نشان می‌دهد؛ مبلغ‌های سررسیدشده (due) همان چیزی است که برای تمدید باید صفر باشد.
+  // ==========================================================================
+  async getSettlementSummary(currentUser: { id: string }, id: string) {
+    const actor = await this.getActor(currentUser);
+    const contract = await this.findOrThrow(id);
+    this.ensureAccess(actor, contract.marketId, 'دسترسی به این قرارداد مجاز نیست');
+
+    const [due, allOpen] = await Promise.all([
+      this.getOutstandingDebt(this.prisma, contract, 'due'),
+      this.getOutstandingDebt(this.prisma, contract, 'all'),
+    ]);
+
+    const ids = [contract.currencyId, ...allOpen.electricity.map((e) => e.currencyId)].filter(
+      (v): v is string => !!v,
+    );
+    const currencies = ids.length
+      ? await this.prisma.currency.findMany({ where: { id: { in: ids } }, select: { id: true, code: true } })
+      : [];
+    const code = (cid: string | null) => currencies.find((c) => c.id === cid)?.code ?? null;
+
+    const deposit = contract.securityDepositRemaining ?? new Prisma.Decimal(0);
+    // امانت فقط بدهیِ «هم‌ارزِ خودش» را می‌پوشاند: کرایه (ارز قرارداد) + برقِ هم‌ارز.
+    const electricitySameCurrency = allOpen.electricity
+      .filter((e) => e.currencyId === contract.currencyId)
+      .reduce((s, e) => s.add(e.amount), new Prisma.Decimal(0));
+    const coverable = due.rent.add(electricitySameCurrency);
+    const otherCurrencyElectricity = allOpen.electricity.filter((e) => e.currencyId !== contract.currencyId);
+
+    return {
+      contractId: contract.id,
+      status: contract.status,
+      currency: { id: contract.currencyId, code: code(contract.currencyId) },
+      rentDebt: { due: due.rent, allOpen: allOpen.rent },
+      electricityDebt: allOpen.electricity.map((e) => ({
+        currencyId: e.currencyId,
+        currencyCode: code(e.currencyId),
+        amount: e.amount,
+        billsCount: e.billsCount,
+      })),
+      depositRemaining: deposit,
+      // بدهیِ سررسیدشدهٔ قابل‌پوشش با امانت و نتیجه‌اش (اگر برقِ ارزِ دیگری هست، با امانت پوشیده نمی‌شود: نقد).
+      dueDebtCoverableByDeposit: coverable,
+      depositCoversDueDebt: deposit.greaterThanOrEqualTo(coverable),
+      depositLeftAfterDebt: Prisma.Decimal.max(0, deposit.sub(coverable)),
+      shortfallToPayInCash: Prisma.Decimal.max(0, coverable.sub(deposit)),
+      electricityInOtherCurrency: otherCurrencyElectricity.map((e) => ({
+        currencyId: e.currencyId,
+        currencyCode: code(e.currencyId),
+        amount: e.amount,
+      })),
+      hasDueDebt: due.hasDebt,
+    };
+  }
+
+  // ==========================================================================
+  // تسویه از محل امانت — مبلغِ کرایه و برق جدا و دستی (هیچ تقسیمِ خودکار نیست). هر بخش یک پرداختِ مستقل
+  // (source=SECURITY_DEPOSIT) با FIFO روی بل‌های بازِ خودش؛ فقط securityDepositRemaining کم می‌شود. برای قراردادِ
+  // فعال/معلق (قبل از فسخ) و فسخ‌شده/منقضی (برای بدهیِ قدیمی) مجاز است. امانت فقط بدهیِ هم‌ارزِ خودش را می‌پوشاند.
+  // قفلِ مشورتیِ «امانتِ این قرارداد» دو برداشتِ هم‌زمان را پشتِ هم می‌گذارد تا امانت دوبار خرج نشود.
+  // ==========================================================================
+  async payFromDeposit(
+    currentUser: { id: string },
+    id: string,
+    dto: PayFromDepositDto,
+    meta: RequestMeta = NO_REQUEST_META,
+    idempotencyKey?: string,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const contract = await this.findOrThrow(id);
+    this.ensureAccess(actor, contract.marketId, 'دسترسی به این قرارداد مجاز نیست');
+    if (!contract.tenantId || !contract.shopId || !contract.currencyId) {
+      throw new BadRequestException('قرارداد ناقص است');
+    }
+    if (
+      contract.status === ContractStatus.draft ||
+      contract.status === ContractStatus.cancelled
+    ) {
+      throw new ConflictException('قراردادِ شروع‌نشده یا لغوشده بدهی ندارد که از امانت تسویه شود');
+    }
+
+    const rentAmount = new Prisma.Decimal(dto.rentAmount ?? 0);
+    const electricityAmount = new Prisma.Decimal(dto.electricityAmount ?? 0);
+    if (rentAmount.lessThanOrEqualTo(0) && electricityAmount.lessThanOrEqualTo(0)) {
+      throw new BadRequestException('حداقل یکی از rentAmount یا electricityAmount باید بزرگ‌تر از صفر باشد');
+    }
+    const paymentDate = dto.paymentDate ? new Date(dto.paymentDate) : new Date();
+    assertPaymentDateNotInFuture(paymentDate);
+    const notes = dto.notes?.trim() || 'پرداخت از محل امانت';
+    const { tenantId, shopId, currencyId } = contract;
+
+    return runIdempotent(this.prisma, {
+      userId: actor.id,
+      scope: 'CONTRACT_PAY_FROM_DEPOSIT',
+      key: idempotencyKey,
+      requestHash: hashRequest({ contractId: id, ...dto }),
+      work: async (tx) => {
+        await acquireAdvisoryXactLock(tx, `contract-deposit:${id}`);
+        const fresh = await tx.contract.findUniqueOrThrow({ where: { id } });
+        let remaining = fresh.securityDepositRemaining ?? new Prisma.Decimal(0);
+
+        const total = rentAmount.add(electricityAmount);
+        if (total.greaterThan(remaining)) {
+          throw new ConflictException(
+            `امانتِ باقی‌مانده (${remaining.toString()}) برای این مبلغ (${total.toString()}) کافی نیست — باقی را مستأجر نقد می‌دهد: POST /contracts/${id}/pay-debt`,
+          );
+        }
+
+        const result: {
+          rentPayment: Awaited<ReturnType<RentService['recordPayment']>> | null;
+          electricityPayment: Awaited<ReturnType<ElectricityService['recordPayment']>> | null;
+          depositRemaining: Prisma.Decimal;
+        } = { rentPayment: null, electricityPayment: null, depositRemaining: remaining };
+
+        if (rentAmount.greaterThan(0)) {
+          result.rentPayment = await this.rentService.recordPayment(
+            tx,
+            actor,
+            {
+              contract: {
+                id,
+                marketId: contract.marketId,
+                tenantId,
+                shopId,
+                currencyId,
+                securityDepositRemaining: remaining,
+              },
+              amount: rentAmount,
+              paymentDate,
+              paymentMethod: 'cash',
+              source: PaymentSourceType.SECURITY_DEPOSIT,
+              isOpeningEntry: false,
+              notes,
+            },
+            meta,
+          );
+          remaining = remaining.sub(rentAmount);
+        }
+
+        if (electricityAmount.greaterThan(0)) {
+          const debts = await this.electricityService.getOpenDebtByCurrencyForShop(tx, tenantId, shopId);
+          if (debts.length === 0) {
+            throw new BadRequestException('هیچ بلِ بازِ برقی برای این مستأجر/دوکان وجود ندارد');
+          }
+          if (debts.some((d) => d.currencyId !== currencyId)) {
+            throw new BadRequestException(
+              'ارزِ بل‌های بازِ برق با ارزِ امانت (ارزِ قرارداد) یکی نیست — امانت فقط بدهیِ هم‌ارزِ خودش را می‌پوشاند؛ برق را نقد پرداخت کنید',
+            );
+          }
+          result.electricityPayment = await this.electricityService.recordPayment(
+            tx,
+            actor,
+            {
+              marketId: contract.marketId,
+              shopId,
+              tenantId,
+              currencyId,
+              amount: electricityAmount,
+              paymentDate,
+              paymentMethod: 'cash',
+              source: PaymentSourceType.SECURITY_DEPOSIT,
+              isOpeningEntry: false,
+              notes,
+              securityDeposit: { contractId: id, remaining },
+            },
+            meta,
+          );
+          remaining = remaining.sub(electricityAmount);
+        }
+
+        result.depositRemaining = remaining;
+        return result;
+      },
+    });
+  }
+
+  // ==========================================================================
+  // برگرداندنِ امانتِ باقی‌مانده به مستأجر — فقط بعد از فسخ/پایان/لغوِ قرارداد و فقط وقتی هیچ بدهیِ بازِ کرایه یا
+  // برقی نمانده. پول از accountId (هم‌ارزِ قرارداد، با موجودیِ کافی) کم می‌شود: ledger از نوعِ OUT (متقارنِ با ledgerِ
+  // IN هنگامِ دریافتِ امانت) + کم‌شدنِ securityDepositRemaining + audit. ثبتِ دوباره با Idempotency-Key امن است.
+  // ==========================================================================
+  async refundDeposit(
+    currentUser: { id: string },
+    id: string,
+    dto: RefundDepositDto,
+    meta: RequestMeta = NO_REQUEST_META,
+    idempotencyKey?: string,
+  ) {
+    const actor = await this.getActor(currentUser);
+    const contract = await this.findOrThrow(id);
+    this.ensureAccess(actor, contract.marketId, 'دسترسی به این قرارداد مجاز نیست');
+    if (!contract.tenantId || !contract.shopId || !contract.currencyId) {
+      throw new BadRequestException('قرارداد ناقص است');
+    }
+    const refundable: ContractStatus[] = [
+      ContractStatus.early_terminated,
+      ContractStatus.expired,
+      ContractStatus.cancelled,
+    ];
+    if (!refundable.includes(contract.status)) {
+      throw new ConflictException(
+        'امانت فقط بعد از فسخ، پایان یا لغوِ قرارداد برگردانده می‌شود — قراردادِ جاری هنوز امانت را نگه می‌دارد',
+      );
+    }
+
+    const account = await this.prisma.account.findUnique({ where: { id: dto.accountId } });
+    if (!account) throw new NotFoundException('حساب یافت نشد');
+    if (account.marketId !== contract.marketId) {
+      throw new BadRequestException('حساب باید متعلق به همان بازار باشد');
+    }
+    if (!account.isActive) throw new ConflictException('حساب غیرفعال است');
+    if (account.currencyId !== contract.currencyId) {
+      throw new BadRequestException('ارز حساب باید با ارز قرارداد (ارزِ امانت) یکی باشد');
+    }
+
+    const refundDate = dto.refundDate ? new Date(dto.refundDate) : new Date();
+    assertPaymentDateNotInFuture(refundDate);
+    const shop = await this.prisma.shop.findUnique({
+      where: { id: contract.shopId },
+      select: { shopNumber: true },
+    });
+    const { currencyId } = contract;
+
+    return runIdempotent(this.prisma, {
+      userId: actor.id,
+      scope: 'CONTRACT_REFUND_DEPOSIT',
+      key: idempotencyKey,
+      requestHash: hashRequest({ contractId: id, ...dto }),
+      work: async (tx) => {
+        await acquireAdvisoryXactLock(tx, `contract-deposit:${id}`);
+        const fresh = await tx.contract.findUniqueOrThrow({ where: { id } });
+        const remaining = fresh.securityDepositRemaining ?? new Prisma.Decimal(0);
+        if (remaining.lessThanOrEqualTo(0)) {
+          throw new ConflictException('امانتِ باقی‌مانده‌ای برای برگرداندن نیست');
+        }
+        const amount = dto.amount !== undefined ? new Prisma.Decimal(dto.amount) : remaining;
+        if (amount.greaterThan(remaining)) {
+          throw new ConflictException(
+            `مبلغ (${amount.toString()}) از امانتِ باقی‌مانده (${remaining.toString()}) بیشتر است`,
+          );
+        }
+
+        // اول تسویه: تا بدهیِ بازی هست امانت پس داده نمی‌شود.
+        const debt = await this.getOutstandingDebt(tx, fresh, 'all');
+        if (debt.hasDebt) throw await this.buildDebtError(tx, fresh, debt, 'refund-deposit');
+
+        const rate = await resolveRateToBase(tx, {
+          marketId: contract.marketId,
+          currencyId,
+          date: refundDate,
+          amount,
+        });
+
+        // کم‌کردنِ موجودیِ حساب فقط اگر کافی باشد (شرط داخلِ خودِ UPDATE)، و کم‌کردنِ امانت فقط اگر هنوز همان‌قدر مانده باشد.
+        const debited = await tx.account.updateMany({
+          where: { id: account.id, balance: { gte: amount } },
+          data: { balance: { decrement: amount } },
+        });
+        if (debited.count === 0) {
+          throw new ConflictException('موجودیِ حساب برای این برگشتِ امانت کافی نیست');
+        }
+        const updatedAccount = await tx.account.findUniqueOrThrow({ where: { id: account.id } });
+
+        const depositUpdated = await tx.contract.updateMany({
+          where: { id, securityDepositRemaining: { gte: amount } },
+          data: { securityDepositRemaining: { decrement: amount } },
+        });
+        if (depositUpdated.count === 0) {
+          throw new ConflictException('امانتِ باقی‌مانده هم‌زمان تغییر کرد — دوباره تلاش کنید');
+        }
+
+        const ledger = await tx.ledgerEntry.create({
+          data: {
+            marketId: contract.marketId,
+            accountId: account.id,
+            currencyId,
+            direction: 'OUT',
+            amount,
+            balanceAfter: updatedAccount.balance,
+            exchangeRate: rate.exchangeRate,
+            baseCurrencyAmount: rate.baseCurrencyAmount,
+            entryDate: refundDate,
+            description:
+              `برگشتِ امانت قرارداد دوکان «${shop?.shopNumber ?? ''}»${dto.notes ? ` — ${dto.notes.trim()}` : ''}`.trim(),
+            createdById: actor.id,
+          },
+        });
+
+        const newRemaining = remaining.sub(amount);
+        await this.auditLog.record({
+          tx,
+          action: 'UPDATE',
+          entityType: 'Contract',
+          entityId: id,
+          marketId: contract.marketId,
+          userId: actor.id,
+          oldData: { securityDepositRemaining: remaining },
+          newData: {
+            securityDepositRemaining: newRemaining,
+            depositRefund: { amount, accountId: account.id, ledgerEntryId: ledger.id },
+          },
+          reason: dto.notes?.trim() || 'برگشتِ امانت به مستأجر',
+          ip: meta.ip,
+          userAgent: meta.userAgent,
+        });
+
+        return {
+          contractId: id,
+          refundedAmount: amount,
+          depositRemaining: newRemaining,
+          accountId: account.id,
+          accountBalanceAfter: updatedAccount.balance,
+          ledgerEntryId: ledger.id,
+        };
       },
     });
   }
