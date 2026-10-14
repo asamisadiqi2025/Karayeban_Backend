@@ -171,7 +171,6 @@ async function restore(file: string, opts: { confirmMarketId?: string; allowSche
           fail(`تنظیمِ session_replication_role ممکن نشد — برای بازگردانی باید با یوزرِ superuser (مثلاً postgres) وصل شوید: ${(e as Error).message}`);
         }
 
-        // رمزِ فعلیِ کاربرانی که هنوز وجود دارند نگه داشته می‌شود (در فایل رمزی نیست).
         const keptHashes = new Map<string, { passwordHash: string; passwordChangedAt: Date | null }>(
           (await tx.user.findMany({ where: { marketId }, select: { id: true, passwordHash: true, passwordChangedAt: true } })).map(
             (u) => [u.id, { passwordHash: u.passwordHash, passwordChangedAt: u.passwordChangedAt }],

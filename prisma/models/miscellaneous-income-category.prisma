@@ -1,0 +1,40 @@
+// دسته‌بندی عواید متفرقه — هم‌شکلِ ExpenseCategory، با دو تفاوتِ عمدی:
+//  ۱) همیشه مخصوصِ یک مارکت است (marketId اجباری)؛ دسته‌بندیِ سراسری ندارد.
+//  ۲) یکتاییِ نام را خودِ دیتابیس تضمین می‌کند (scopeKey + nameKey)، نه فقط بررسیِ درونِ کد؛
+//     پس دو درخواستِ هم‌زمان هم نمی‌توانند دو دسته‌ی هم‌نام بسازند و برای هزاران سب‌کتگوری
+//     بررسیِ تکراری بودن O(1) است (یک ایندکس)، نه خواندنِ همهٔ هم‌نام‌ها.
+model MiscellaneousIncomeCategory {
+  id       String  @id @default(uuid()) @db.Uuid
+  marketId String  @map("market_id") @db.Uuid
+  name     String  @db.VarChar(255)
+  isActive Boolean @default(true) @map("is_active")
+
+  // نامِ نرمال‌شده برای مقایسه («نذیر احمد» = «نذیراحمد» = «نذیر‌احمد»، ی/ي، ک/ك) — خروجیِ
+  // nameKey() در common/utils/category-name.ts. هرگز مستقیم از کاربر نمی‌آید.
+  nameKey String @map("name_key") @db.VarChar(255)
+
+  // «حوزهٔ یکتایی»: برای کتگوریِ مادر = marketId، برای سب‌کتگوری = parentId. با
+  // @@unique([scopeKey, nameKey]) یعنی: نامِ مادرها در یک مارکت یکتاست و نامِ سب‌کتگوری‌ها زیرِ
+  // هر مادر. (به‌جای ایندکسِ جزئی/partial، چون parentId برای مادرها NULL است و در PostgreSQL
+  // مقدارهای NULL در ایندکسِ یکتا با هم برابر حساب نمی‌شوند. این ستون هیچ‌وقت NULL نیست.)
+  scopeKey String @map("scope_key") @db.Uuid
+
+  // سلسله‌مراتبِ ۲‌سطحیِ عمدی (مثل ExpenseCategory): parentId=null یعنی کتگوریِ مادر، غیرِ‌آن یعنی
+  // سب‌کتگوری. سرویس جلوی سطح سوم و جابه‌جایی بین والدها را می‌گیرد؛ چون parentId بعد از ساخت
+  // هرگز عوض نمی‌شود، MiscellaneousIncome.rootCategoryId هم هرگز کهنه نمی‌شود.
+  parentId String? @map("parent_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  market   Market                        @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  parent   MiscellaneousIncomeCategory?  @relation("MiscellaneousIncomeCategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  children MiscellaneousIncomeCategory[] @relation("MiscellaneousIncomeCategoryHierarchy")
+
+  incomes     MiscellaneousIncome[] @relation("MiscellaneousIncomeCategoryLeaf")
+  rootIncomes MiscellaneousIncome[] @relation("MiscellaneousIncomeCategoryRoot")
+
+  @@unique([scopeKey, nameKey])
+  @@index([marketId, parentId, isActive])
+  @@index([parentId])
+  @@map("miscellaneous_income_categories")
+}

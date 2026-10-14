@@ -70,6 +70,7 @@ export const BACKUP_REGISTRY: BackupEntry[] = [
   market('DealerLoan'),
   market('DealerRepayment'),
   market('CollateralItem'),
+  market('MiscellaneousIncomeCategory'),
   market('MiscellaneousIncome'),
   market('LotteryDraw'),
   child('LotteryEntry', 'draw'),
