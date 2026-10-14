@@ -18,6 +18,7 @@ import { ShareholdersModule } from './modules/shareholders/shareholders.module';
 import { AssetsModule } from './modules/assets/assets.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { ExpensesModule } from './modules/expenses/expenses.module';
+import { MiscellaneousIncomeModule } from './modules/miscellaneous-income/miscellaneous-income.module';
 import { RentModule } from './modules/rent/rent.module';
 import { ContractsModule } from './modules/contracts/contracts.module';
 import { ElectricityModule } from './modules/electricity/electricity.module';
@@ -60,6 +61,7 @@ import { IdempotencyModule } from './common/idempotency/idempotency.module';
     AssetsModule,
     InventoryModule,
     ExpensesModule,
+    MiscellaneousIncomeModule,
     RentModule,
     ContractsModule,
     ElectricityModule,

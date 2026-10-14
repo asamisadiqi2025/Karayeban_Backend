@@ -82,6 +82,17 @@ export const PERMISSION_CATALOG: PermissionSection[] = [
     ],
   },
   {
+    key: 'misc_income',
+    label: 'عواید متفرقه',
+    items: [
+      { key: 'misc_income.view', label: 'دیدن عواید متفرقه و گزارش آن' },
+      { key: 'misc_income.create', label: 'ثبت عایدی متفرقه' },
+      { key: 'misc_income.update', label: 'ویرایش عایدی متفرقه' },
+      { key: 'misc_income.delete', label: 'حذف عایدی متفرقه' },
+      { key: 'misc_income.manage_categories', label: 'مدیریت دسته‌بندی عواید متفرقه' },
+    ],
+  },
+  {
     key: 'dealers',
     label: 'دیلرها (قرض‌ها)',
     items: [
