@@ -43,7 +43,11 @@ USER node
 # Documentation only. Runtime port comes from ENV.
 EXPOSE ${PORT}
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=240s --retries=5 \
+# Coolify بعد از start-period (۲۴۰ ثانیه) هر ~۳۰ ثانیه وضعیتِ سلامت را می‌پرسد و تا retries تلاش می‌کند. راه‌اندازیِ
+# اپ روی سرورِ فعلی (build ~۹ دقیقه) تا ~۶ دقیقه طول کشید و با retries=5 درست چند ثانیه قبل از بالا آمدن «unhealthy» شد و
+# Coolify به نسخهٔ قبلی برگشت. retries بیشتر، تحمل را بالا می‌برد (۲۴۰ + ۱۵×۳۰ ≈ ۱۱ دقیقه) بدونِ اینکه deployهای سریع
+# کندتر شوند — به‌محض سالم‌شدن، همان لحظه تمام می‌شود.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=240s --retries=15 \
   CMD wget -qO- http://127.0.0.1:${PORT}/ >/dev/null || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
