@@ -146,6 +146,38 @@ describe('ExpensesService.createExpense — مصرف فقط روی برگ', () =
   });
 });
 
+describe('ExpensesService.createCategory — افزودن سب‌کتگوری به کتگوریِ موجود', () => {
+  it('اگر نامِ مادر از قبل وجود داشته باشد، فقط سب‌کتگوری‌های جدید اضافه می‌شوند', async () => {
+    const { service, tx } = setup();
+
+    const existingRoot = { id: 'cat1', name: 'قرعه کشی', parentId: null, marketId: 'mk1', isActive: true };
+    const existingChildren = [{ id: 'child1', name: 'لباس شویی', parentId: 'cat1' }];
+
+    tx.expenseCategory.findMany = jest.fn(async ({ where }: any) => {
+      if (where.parentId === null) return [existingRoot];
+      if (where.parentId === 'cat1') return existingChildren;
+      return [];
+    });
+
+    await expect(
+      service.createCategory(
+        { id: 'u1' },
+        { name: 'قرعه کشی', subcategories: ['ماشین لباسشویی'] } as any,
+        meta,
+      ),
+    ).resolves.toMatchObject({ id: 'cat1', name: 'قرعه کشی' });
+
+    expect(tx.expenseCategory.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          name: 'ماشین لباسشویی',
+          parentId: 'cat1',
+        }),
+      }),
+    );
+  });
+});
+
 describe('ExpensesService.updateExpense — فقط وقتی کتگوری عوض می‌شود', () => {
   const user = { id: 'u1' };
 
