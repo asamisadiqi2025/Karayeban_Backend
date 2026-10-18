@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { ExpensesService } from './expenses.service';
 
@@ -159,13 +159,23 @@ describe('ExpensesService.createCategory — افزودن سب‌کتگوری ب
       return [];
     });
 
-    await expect(
-      service.createCategory(
-        { id: 'u1' },
-        { name: 'قرعه کشی', subcategories: ['ماشین لباسشویی'] } as any,
-        meta,
-      ),
-    ).resolves.toMatchObject({ id: 'cat1', name: 'قرعه کشی' });
+    const result = await service.createCategory(
+      { id: 'u1' },
+      { name: 'قرعه کشی', subcategories: ['ماشین لباسشویی'] } as any,
+      meta,
+    );
+
+    expect(result).toMatchObject({
+      id: 'cat1',
+      name: 'قرعه کشی',
+      children: [
+        { id: 'child1', name: 'لباس شویی' },
+        { id: 'new-sub', name: 'ماشین لباسشویی' },
+      ],
+    });
+    expect(result.children[1]).not.toHaveProperty('marketId');
+    expect(result.children[1]).not.toHaveProperty('isActive');
+    expect(result.children[1]).not.toHaveProperty('parentId');
 
     expect(tx.expenseCategory.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -175,6 +185,29 @@ describe('ExpensesService.createCategory — افزودن سب‌کتگوری ب
         }),
       }),
     );
+  });
+
+  it('اگر نامِ مادر و نامِ سب‌کتگوری هر دو تکراری باشند، ۴۰۹ برمی‌گردد', async () => {
+    const { service, tx } = setup();
+
+    const existingRoot = { id: 'cat1', name: 'قرعه کشی', parentId: null, marketId: 'mk1', isActive: true };
+    const existingChildren = [{ id: 'child1', name: 'لباس شویی', parentId: 'cat1' }];
+
+    tx.expenseCategory.findMany = jest.fn(async ({ where }: any) => {
+      if (where.parentId === null) return [existingRoot];
+      if (where.parentId === 'cat1') return existingChildren;
+      return [];
+    });
+
+    const err = await service
+      .createCategory(
+        { id: 'u1' },
+        { name: 'قرعه کشی', subcategories: ['لباس شویی'] } as any,
+        meta,
+      )
+      .catch((e) => e);
+
+    expect(err).toBeInstanceOf(ConflictException);
   });
 });
 
