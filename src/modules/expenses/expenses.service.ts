@@ -104,7 +104,7 @@ export class ExpensesService {
 
   // نامِ تکراری در همان «سطح» ممنوع است: مادرها بین مادرهای قابل‌دیدنِ همان بازار (و سراسری‌ها)،
   // سب‌کتگوری‌ها زیرِ همان مادر. مقایسه روی کلیدِ نرمال‌شده است (ن.ک. nameKey).
-  private async assertCategoryNameFree(
+  private async findCategoryNameClash(
     db: Pick<Prisma.TransactionClient, 'expenseCategory'>,
     scope: { parentId: string | null; marketId: string | null },
     name: string,
@@ -117,9 +117,21 @@ export class ExpensesService {
             parentId: null,
             OR: [{ marketId: null }, ...(scope.marketId ? [{ marketId: scope.marketId }] : [])],
           };
-    const siblings = await db.expenseCategory.findMany({ where, select: { id: true, name: true } });
+    const siblings = await db.expenseCategory.findMany({
+      where,
+      select: { id: true, name: true, marketId: true },
+    });
     const key = nameKey(name);
-    const clash = siblings.find((s) => s.id !== excludeId && nameKey(s.name) === key);
+    return siblings.find((s) => s.id !== excludeId && nameKey(s.name) === key) ?? null;
+  }
+
+  private async assertCategoryNameFree(
+    db: Pick<Prisma.TransactionClient, 'expenseCategory'>,
+    scope: { parentId: string | null; marketId: string | null },
+    name: string,
+    excludeId?: string,
+  ) {
+    const clash = await this.findCategoryNameClash(db, scope, name, excludeId);
     if (clash) {
       throw new ConflictException(
         scope.parentId !== null
@@ -173,7 +185,43 @@ export class ExpensesService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      await this.assertCategoryNameFree(tx, { parentId: parent?.id ?? null, marketId }, name);
+      const scope = { parentId: parent?.id ?? null, marketId };
+      const existingRoot = parent === null ? await this.findCategoryNameClash(tx, scope, name) : null;
+
+      if (existingRoot && subNames.length > 0 && scope.parentId === null) {
+        const existingChildren = await tx.expenseCategory.findMany({
+          where: { parentId: existingRoot.id },
+          select: { id: true, name: true },
+        });
+        const seen = new Set(existingChildren.map((c) => nameKey(c.name)));
+        const children = [...existingChildren];
+
+        for (const subName of subNames) {
+          const key = nameKey(subName);
+          if (seen.has(key)) continue;
+
+          const sub = await tx.expenseCategory.create({
+            data: { marketId: existingRoot.marketId ?? marketId, name: subName, parentId: existingRoot.id },
+          });
+          await this.auditLog.record({
+            tx,
+            action: 'CREATE',
+            entityType: 'ExpenseCategory',
+            entityId: sub.id,
+            marketId,
+            userId: actor.id,
+            newData: sub,
+            ip: meta.ip,
+            userAgent: meta.userAgent,
+          });
+          children.push(sub);
+          seen.add(key);
+        }
+
+        return { ...existingRoot, children };
+      }
+
+      await this.assertCategoryNameFree(tx, scope, name);
 
       const category = await tx.expenseCategory.create({
         data: { marketId, name, parentId: parent?.id ?? null },

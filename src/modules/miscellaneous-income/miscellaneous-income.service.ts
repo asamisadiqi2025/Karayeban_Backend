@@ -170,7 +170,7 @@ export class MiscellaneousIncomeService {
 
   // بررسیِ تکراری‌بودنِ نام فقط برای پیامِ دوستانه است (یک lookupِ O(1) روی ایندکسِ یکتا)؛ تضمینِ
   // واقعی همان @@unique([scopeKey, nameKey]) در دیتابیس است که هم‌زمانی را هم می‌گیرد.
-  private async assertCategoryNameFree(
+  private async findCategoryNameClash(
     db: CategoryDb,
     scope: { parentId: string | null; marketId: string },
     name: string,
@@ -183,9 +183,20 @@ export class MiscellaneousIncomeService {
           nameKey: nameKey(name),
         },
       },
-      select: { id: true, name: true },
+      select: { id: true, name: true, marketId: true },
     });
-    if (clash && clash.id !== excludeId) {
+    if (clash && clash.id !== excludeId) return clash;
+    return null;
+  }
+
+  private async assertCategoryNameFree(
+    db: CategoryDb,
+    scope: { parentId: string | null; marketId: string },
+    name: string,
+    excludeId?: string,
+  ) {
+    const clash = await this.findCategoryNameClash(db, scope, name, excludeId);
+    if (clash) {
       throw new ConflictException(
         scope.parentId !== null
           ? `سب‌کتگوری «${clash.name}» زیر همین کتگوری از قبل وجود دارد`
@@ -275,7 +286,30 @@ export class MiscellaneousIncomeService {
 
     try {
       return await this.prisma.$transaction(async (tx) => {
-        const category = await this.insertCategory(tx, { parentId, marketId }, name, actor, meta);
+        const scope = { parentId, marketId };
+        const existingRoot = parentId === null ? await this.findCategoryNameClash(tx, scope, name) : null;
+
+        if (existingRoot && subNames.length > 0 && scope.parentId === null) {
+          const existingChildren = await tx.miscellaneousIncomeCategory.findMany({
+            where: { parentId: existingRoot.id },
+            select: { id: true, name: true },
+          });
+          const seen = new Set(existingChildren.map((c) => nameKey(c.name)));
+          const children = [...existingChildren];
+
+          for (const subName of subNames) {
+            const key = nameKey(subName);
+            if (seen.has(key)) continue;
+
+            const child = await this.insertCategory(tx, { parentId: existingRoot.id, marketId }, subName, actor, meta);
+            children.push(child);
+            seen.add(key);
+          }
+
+          return { ...existingRoot, children };
+        }
+
+        const category = await this.insertCategory(tx, scope, name, actor, meta);
         if (subNames.length === 0) return category;
 
         const children = [];
