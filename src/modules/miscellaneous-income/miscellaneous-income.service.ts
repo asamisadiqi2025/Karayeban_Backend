@@ -289,20 +289,31 @@ export class MiscellaneousIncomeService {
         const scope = { parentId, marketId };
         const existingRoot = parentId === null ? await this.findCategoryNameClash(tx, scope, name) : null;
 
-        if (existingRoot && subNames.length > 0 && scope.parentId === null) {
+        if (existingRoot) {
+          if (subNames.length === 0) {
+            throw new ConflictException(`کتگوری «${existingRoot.name}» از قبل وجود دارد`);
+          }
+
           const existingChildren = await tx.miscellaneousIncomeCategory.findMany({
             where: { parentId: existingRoot.id },
             select: { id: true, name: true },
           });
           const seen = new Set(existingChildren.map((c) => nameKey(c.name)));
-          const children = [...existingChildren];
+          const duplicateSub = subNames.find((subName) => seen.has(nameKey(subName)));
+          if (duplicateSub) {
+            throw new ConflictException(
+              `سب‌کتگوری «${duplicateSub}» زیر همین کتگوری از قبل وجود دارد`,
+            );
+          }
+
+          const children: Array<{ id: string; name: string }> = [...existingChildren];
 
           for (const subName of subNames) {
             const key = nameKey(subName);
             if (seen.has(key)) continue;
 
             const child = await this.insertCategory(tx, { parentId: existingRoot.id, marketId }, subName, actor, meta);
-            children.push(child);
+            children.push({ id: child.id, name: child.name });
             seen.add(key);
           }
 
@@ -312,11 +323,10 @@ export class MiscellaneousIncomeService {
         const category = await this.insertCategory(tx, scope, name, actor, meta);
         if (subNames.length === 0) return category;
 
-        const children = [];
+        const children: Array<{ id: string; name: string }> = [];
         for (const subName of subNames) {
-          children.push(
-            await this.insertCategory(tx, { parentId: category.id, marketId }, subName, actor, meta),
-          );
+          const child = await this.insertCategory(tx, { parentId: category.id, marketId }, subName, actor, meta);
+          children.push({ id: child.id, name: child.name });
         }
         return { ...category, children };
       });

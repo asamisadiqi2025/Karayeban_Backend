@@ -188,13 +188,24 @@ export class ExpensesService {
       const scope = { parentId: parent?.id ?? null, marketId };
       const existingRoot = parent === null ? await this.findCategoryNameClash(tx, scope, name) : null;
 
-      if (existingRoot && subNames.length > 0 && scope.parentId === null) {
+      if (existingRoot) {
+        if (subNames.length === 0) {
+          throw new ConflictException(`کتگوری «${existingRoot.name}» از قبل وجود دارد`);
+        }
+
         const existingChildren = await tx.expenseCategory.findMany({
           where: { parentId: existingRoot.id },
           select: { id: true, name: true },
         });
         const seen = new Set(existingChildren.map((c) => nameKey(c.name)));
-        const children = [...existingChildren];
+        const duplicateSub = subNames.find((subName) => seen.has(nameKey(subName)));
+        if (duplicateSub) {
+          throw new ConflictException(
+            `سب‌کتگوری «${duplicateSub}» زیر همین کتگوری از قبل وجود دارد`,
+          );
+        }
+
+        const children: Array<{ id: string; name: string }> = [...existingChildren];
 
         for (const subName of subNames) {
           const key = nameKey(subName);
@@ -214,7 +225,7 @@ export class ExpensesService {
             ip: meta.ip,
             userAgent: meta.userAgent,
           });
-          children.push(sub);
+          children.push({ id: sub.id, name: sub.name });
           seen.add(key);
         }
 
@@ -241,7 +252,7 @@ export class ExpensesService {
 
       if (subNames.length === 0) return category;
 
-      const children = [];
+      const children: Array<{ id: string; name: string }> = [];
       for (const subName of subNames) {
         const sub = await tx.expenseCategory.create({
           data: { marketId, name: subName, parentId: category.id },
@@ -257,7 +268,7 @@ export class ExpensesService {
           ip: meta.ip,
           userAgent: meta.userAgent,
         });
-        children.push(sub);
+        children.push({ id: sub.id, name: sub.name });
       }
       return { ...category, children };
     });
