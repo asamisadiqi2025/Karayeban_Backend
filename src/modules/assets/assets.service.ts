@@ -327,7 +327,7 @@ export class AssetsService {
       purchaseDate: 'desc',
     });
 
-    return paginate(this.prisma.asset, {
+    const result = await paginate(this.prisma.asset, {
       where,
       orderBy,
       page: query.page,
@@ -337,6 +337,9 @@ export class AssetsService {
         category: { select: { id: true, name: true } },
       },
     });
+
+    const now = new Date();
+    return { ...result, data: result.data.map((a) => this.withLifespanProgress(a, now)) };
   }
 
   async findOne(currentUser: { id: string }, id: string) {
@@ -344,7 +347,7 @@ export class AssetsService {
     const asset = await this.findActiveOrThrow(id);
     this.ensureAccess(actor, asset.marketId);
 
-    return this.prisma.asset.findUnique({
+    const full = await this.prisma.asset.findUnique({
       where: { id },
       include: {
         currency: { select: { id: true, code: true, name: true } },
@@ -352,6 +355,7 @@ export class AssetsService {
         depreciationEvents: { orderBy: { year: 'desc' } },
       },
     });
+    return full && this.withLifespanProgress(full);
   }
 
   async update(
@@ -595,6 +599,28 @@ export class AssetsService {
       (now.getMonth() === purchaseDate.getMonth() && now.getDate() >= purchaseDate.getDate());
     if (!anniversaryPassed) years -= 1;
     return Math.max(years, 0);
+  }
+
+  // پیشرفتِ عمرِ مفید برای نمایش — لحظه‌ای از purchaseDate حساب می‌شود و در دیتابیس ذخیره
+  // نمی‌شود. عمداً با همان calcYearsElapsed و همان سقفِ lifespanYearsِ کرونِ استهلاک ساخته شده
+  // تا عددی که کاربر می‌بیند با سال‌هایی که کرون اعمال می‌کند یکی باشد.
+  // توجه: isLifespanExpired یعنی «عمر تمام شده»، نه «ارزش دفتری صفر شده»؛ تا اجرای کرونِ
+  // بعدی (حداکثر یک روز) currentBookValue هنوز می‌تواند صفر نشده باشد.
+  private withLifespanProgress<T extends { purchaseDate: Date; lifespanYears: number }>(
+    asset: T,
+    now: Date = new Date(),
+  ) {
+    const yearsElapsed = Math.min(
+      this.calcYearsElapsed(asset.purchaseDate, now),
+      asset.lifespanYears,
+    );
+    const remainingYears = Math.max(asset.lifespanYears - yearsElapsed, 0);
+    return {
+      ...asset,
+      yearsElapsed,
+      remainingYears,
+      isLifespanExpired: remainingYears === 0,
+    };
   }
 
    private async applyOneDepreciationYear(assetId: string): Promise<boolean> {
