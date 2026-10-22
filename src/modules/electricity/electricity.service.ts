@@ -628,6 +628,28 @@ export class ElectricityService {
     );
   }
 
+  // همان بدهیِ بازِ برقِ یک مستأجر روی یک دوکان، ولی «به تفکیکِ ارز» — بل‌ها می‌توانند ارزِ متفاوت داشته باشند
+  // و جمعِ خامِ ارزهای مختلف معنی ندارد. برای محافظِ فسخ/تمدید/برگشتِ امانت و خلاصهٔ تسویه.
+  async getOpenDebtByCurrencyForShop(
+    tx: Prisma.TransactionClient,
+    tenantId: string,
+    shopId: string,
+  ): Promise<{ currencyId: string; amount: Prisma.Decimal; billsCount: number }[]> {
+    const rows = await tx.electricityBill.groupBy({
+      by: ['currencyId'],
+      where: { tenantId, shopId, status: { in: OPEN_STATUSES } },
+      _sum: { remainingAmount: true },
+      _count: true,
+    });
+    return rows
+      .map((r) => ({
+        currencyId: r.currencyId,
+        amount: r._sum.remainingAmount ?? new Prisma.Decimal(0),
+        billsCount: r._count,
+      }))
+      .filter((r) => r.amount.greaterThan(0));
+  }
+
   // بخشیدن (write-off) باقی‌ماندهٔ بل‌های باز یک مستأجر روی یک دوکان — بدون جابه‌جایی پول.
   // چون ElectricityBill ستون discountAmount ندارد، totalAmount را تا سطح paidAmount پایین
   // می‌آوریم (مبلغ نهایی واقعی) و دلیل را در notes ثبت می‌کنیم.
