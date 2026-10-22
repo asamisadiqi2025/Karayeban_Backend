@@ -827,11 +827,20 @@ export class RentService {
   // (PENDING/OVERDUE) با نرخ روزانهٔ جدید بازمحاسبه می‌شوند. ماه‌های PARTIAL/PAID
   // دست‌نخورده می‌مانند (گذشته تغییر نمی‌کند). Contract.rent هم دست‌نخورده می‌ماند —
   // این فقط روی فاکتورهای آینده اثر می‌گذارد، نه سند اصلی قرارداد.
+  // بازه: دوره‌هایی که periodStart‌شان در [effectiveFrom, effectiveTo) باشد (بدون effectiveTo
+  // تا آخر قرارداد). سقف: کرایهٔ جدید از Contract.rent (رقم امضاشده) بیشتر نمی‌شود.
+  // مبلغ هر فاکتور از grossAmount (مبلغ اصلی) بازمحاسبه می‌شود؛ پس اگر effectiveFrom به گذشته برود و
+  // روی فاکتوری بیفتد که قبلاً با discountDebt از آن بخشیده شده، آن بخشش جایگزین می‌شود.
   // ==========================================================================
   async adjustFutureRent(
     currentUser: { id: string },
     contractId: string,
-    dto: { newRent: number; effectiveFrom: string; reason?: string },
+    dto: {
+      newRent: number;
+      effectiveFrom: string;
+      effectiveTo?: string;
+      reason: string;
+    },
     meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
@@ -848,13 +857,34 @@ export class RentService {
       throw new ConflictException('فقط قرارداد فعال قابل تعدیل کرایه است');
     }
 
+    const reason = dto.reason?.trim();
+    if (!reason) {
+      throw new BadRequestException('ذکر دلیل (reason) برای تعدیل کرایه الزامی است');
+    }
+
     const effectiveFrom = new Date(dto.effectiveFrom);
+    const effectiveTo = dto.effectiveTo ? new Date(dto.effectiveTo) : null;
+    if (effectiveTo && effectiveTo <= effectiveFrom) {
+      throw new BadRequestException('تاریخ پایانِ تعدیل (effectiveTo) باید بعد از تاریخ شروع باشد');
+    }
     const newRent = new Prisma.Decimal(dto.newRent);
+
+    // سقف: کرایهٔ امضاشدهٔ قرارداد. کمتر یا مساوی مجاز است (مساوی = برگشت به کرایهٔ عادی).
+    if (!contract.rent) {
+      throw new BadRequestException('کرایهٔ این قرارداد ثبت نشده است');
+    }
+    if (newRent.greaterThan(contract.rent)) {
+      throw new BadRequestException(
+        `کرایهٔ جدید (${newRent.toString()}) نمی‌تواند از کرایهٔ قرارداد (${contract.rent.toString()}) بیشتر باشد`,
+      );
+    }
 
     const adjustableCharges = await this.prisma.rentCharges.findMany({
       where: {
         contractId,
-        periodStart: { gte: effectiveFrom },
+        periodStart: effectiveTo
+          ? { gte: effectiveFrom, lt: effectiveTo }
+          : { gte: effectiveFrom },
         status: { in: [RentChargeStatus.PENDING, RentChargeStatus.OVERDUE] },
       },
       orderBy: { periodStart: 'asc' },
@@ -862,18 +892,23 @@ export class RentService {
 
     if (adjustableCharges.length === 0) {
       throw new BadRequestException(
-        'هیچ فاکتور پرداخت‌نشده‌ای از این تاریخ به بعد یافت نشد تا تعدیل شود (تاریخ را با شروع یکی از دوره‌های فاکتور تطبیق دهید)',
+        effectiveTo
+          ? 'هیچ فاکتور پرداخت‌نشده‌ای در این بازه یافت نشد تا تعدیل شود (تاریخ‌ها را با شروع دوره‌های فاکتور تطبیق دهید)'
+          : 'هیچ فاکتور پرداخت‌نشده‌ای از این تاریخ به بعد یافت نشد تا تعدیل شود (تاریخ را با شروع یکی از دوره‌های فاکتور تطبیق دهید)',
       );
     }
 
-    const note = `تعدیل کرایه از ${dto.effectiveFrom.slice(0, 10)}: ${contract.rent?.toString()} → ${newRent.toString()}${dto.reason ? ` — ${dto.reason}` : ''}`;
+    const note = `تعدیل کرایه از ${dto.effectiveFrom.slice(0, 10)}${dto.effectiveTo ? ` تا ${dto.effectiveTo.slice(0, 10)}` : ''}: ${contract.rent.toString()} → ${newRent.toString()} — ${reason}`;
+    const contractRent = contract.rent;
 
     return this.prisma.$transaction(async (tx) => {
       const updated: Prisma.RentChargesGetPayload<Record<string, never>>[] = [];
 
       for (const charge of adjustableCharges) {
-        const newDailyRate = newRent.div(charge.days);
-        const newNetAmount = newDailyRate.mul(charge.days);
+        // نسبت به مبلغ اصلیِ همین فاکتور (grossAmount) حساب می‌شود، نه «newRent ÷ days»: برای ماهِ کامل
+        // دقیقاً newRent می‌شود، و برای دورهٔ ناقص (مثلاً آخرین ماهِ ۱۵ روزه) سهمِ روزانه حفظ می‌شود.
+        const newNetAmount = charge.grossAmount.mul(newRent).div(contractRent);
+        const newDailyRate = newNetAmount.div(charge.days);
         const newRemaining = Prisma.Decimal.max(
           0,
           newNetAmount.sub(charge.paidAmount),
@@ -908,8 +943,12 @@ export class RentService {
         entityId: contractId,
         marketId: contract.marketId,
         userId: actor.id,
-        oldData: { rent: contract.rent, effectiveFrom: dto.effectiveFrom },
-        newData: { newRent: dto.newRent, reason: dto.reason ?? null, affectedCharges: updated },
+        oldData: {
+          rent: contract.rent,
+          effectiveFrom: dto.effectiveFrom,
+          effectiveTo: dto.effectiveTo ?? null,
+        },
+        newData: { newRent: dto.newRent, reason, affectedCharges: updated },
         ip: meta.ip,
         userAgent: meta.userAgent,
       });
@@ -924,11 +963,13 @@ export class RentService {
   // واقعی استفاده می‌کند، فقط این‌جا به‌جای paidAmount، discountAmount بالا می‌رود و هیچ
   // پولی/حساب/دفترداری‌ای دست نمی‌خورد. برخلاف adjustFutureRent، عمداً فاکتورهای PARTIAL
   // را هم شامل می‌شود — چون این یک بخششِ یک‌بارهٔ مبلغ است، نه تغییرِ نرخِ آینده.
+  // فقط از بدهیِ «سررسیدشده» (periodStart رسیده — همان تعریفِ getOpenDebtForContract) می‌بخشد؛
+  // کرایهٔ ماه‌های آینده بدهی نیست و با این دستور کم نمی‌شود (برای آن‌ها adjustFutureRent).
   // ==========================================================================
   async discountDebt(
     currentUser: { id: string },
     contractId: string,
-    dto: { amount: number; reason?: string },
+    dto: { amount: number; reason: string },
     meta: RequestMeta = NO_REQUEST_META,
   ) {
     const actor = await this.getActor(currentUser);
@@ -945,12 +986,22 @@ export class RentService {
       throw new BadRequestException('قرارداد ناقص است');
     }
 
+    const reason = dto.reason?.trim();
+    if (!reason) {
+      throw new BadRequestException('ذکر دلیل (reason) برای بخشش بدهی الزامی است');
+    }
+
     const amount = new Prisma.Decimal(dto.amount);
-    const note = `بخشش بدهی: ${amount.toString()}${dto.reason ? ` — ${dto.reason}` : ''}`;
+    const note = `بخشش بدهی: ${amount.toString()} — ${reason}`;
+    const now = new Date();
 
     return this.prisma.$transaction(async (tx) => {
       const openCharges = await tx.rentCharges.findMany({
-        where: { contractId, status: { in: OPEN_STATUSES } },
+        where: {
+          contractId,
+          status: { in: OPEN_STATUSES },
+          periodStart: { lte: now },
+        },
         orderBy: { periodStart: 'asc' },
       });
 
@@ -960,7 +1011,7 @@ export class RentService {
       );
       if (amount.greaterThan(totalOutstanding)) {
         throw new BadRequestException(
-          `مبلغِ بخشش (${amount.toString()}) از مجموع بدهیِ بازِ این قرارداد (${totalOutstanding.toString()}) بیشتر است`,
+          `مبلغِ بخشش (${amount.toString()}) از مجموع بدهیِ سررسیدشدهٔ این قرارداد (${totalOutstanding.toString()}) بیشتر است`,
         );
       }
 
@@ -1004,7 +1055,7 @@ export class RentService {
         userId: actor.id,
         newData: {
           totalDiscounted: amount.toString(),
-          reason: dto.reason ?? null,
+          reason,
           affectedCharges: affected,
         },
         ip: meta.ip,
