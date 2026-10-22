@@ -23,4 +23,10 @@ export class TerminateContractDto {
   @IsOptional()
   @IsBoolean()
   acknowledgeDebt?: boolean;
+
+  // تاریخِ قولِ پرداخت (روزِ تقویمی، YYYY-MM-DD؛ امروز یا بعد). وقتی acknowledgeDebt=true الزامی است: بدهی روی
+  // مستأجر می‌ماند و در «فهرستِ پیگیری» (GET /debt-promises) می‌آید؛ اگر تاریخ گذشت و پرداخت نشد، عقب‌افتاده می‌شود.
+  @IsOptional()
+  @IsDateString()
+  promisedPaymentDate?: string;
 }

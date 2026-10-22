@@ -53,6 +53,8 @@ export const BACKUP_REGISTRY: BackupEntry[] = [
   market('ElectricityPayment'),
   child('ElectricityPaymentAllocation', 'payment'),
   child('ElectricityDebt', 'tenant'),
+  // تعهدِ پرداخت (قولِ پرداختِ بدهی) — به مستأجر/قرارداد/کاربر وصل است، پس بعد از آن‌ها بازگردانی می‌شود.
+  market('DebtPromise'),
   market('ExpenseCategory'),
   market('Expense'),
   market('AssetCategory'),

@@ -5,7 +5,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ElectricityBillStatus, Prisma, RentChargeStatus } from '@prisma/client';
+import { DebtPromiseStatus, ElectricityBillStatus, Prisma, RentChargeStatus } from '@prisma/client';
+import { describePromise } from '../debt-promises/debt-promise.util';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { ensureMarketSetupComplete } from '../../common/utils/ensure-market-setup-complete';
 import { paginate, resolveSort, buildSearchWhere } from '../../common/utils/pagination';
@@ -487,6 +488,23 @@ export class TenantsService {
       electricityOpenMap.set(g.contractId as string, list);
     }
 
+    // تعهدِ پرداخت (قولِ مستأجر برای بدهیِ باز) — در حسابِ مستأجر دیده می‌شود: چه تاریخی، چقدر مانده، عقب‌افتاده یا نه.
+    const openPromise = await this.prisma.debtPromise.findFirst({
+      where: { tenantId, status: DebtPromiseStatus.OPEN },
+      orderBy: { createdAt: 'desc' },
+    });
+    const debtPromise = openPromise
+      ? {
+          id: openPromise.id,
+          source: openPromise.source,
+          promisedDate: openPromise.promisedDate,
+          reason: openPromise.reason,
+          debtAtPromise: openPromise.snapshot,
+          rescheduleCount: openPromise.rescheduleCount,
+          ...(await describePromise(this.prisma, openPromise, now)),
+        }
+      : null;
+
     const contractsSummary = contracts.map((c) => {
       const electricityOpenDebts = electricityOpenMap.get(c.id) ?? [];
       return {
@@ -537,6 +555,7 @@ export class TenantsService {
       // سازگار با نسخهٔ قبل: برای مستأجرِ تک‌ارزی همان بلوک؛ برای چندارزی null (جمعِ ارزها بی‌معناست).
       ...legacyTopLevel(statements),
       contracts: contractsSummary,
+      debtPromise,
     };
   }
 }

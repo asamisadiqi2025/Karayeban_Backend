@@ -62,6 +62,7 @@ model User {
   refreshToken                 String?                  @map("refresh_token") @db.Text
   refreshTokenExpiry           DateTime?                @map("refresh_token_expiry") @db.Timestamptz(6)
   auditLogs                    AuditLog[]
+  createdDebtPromises          DebtPromise[]            @relation("DebtPromiseCreator")
 
   @@index([marketId])
   @@index([customRoleId])

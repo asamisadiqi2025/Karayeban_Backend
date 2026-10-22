@@ -56,7 +56,21 @@ function setup(o: Opts = {}) {
       findUniqueOrThrow: jest.fn(async () => ({ id: 'acc1', balance: D(7000) })),
     },
     ledgerEntry: { create: jest.fn(async ({ data }: any) => ({ id: 'led1', ...data })) },
+    electricityBill: {
+      findMany: jest.fn(async () =>
+        (o.electricity ?? []).map((e, i) => ({ id: `eb${i}`, currencyId: e.currencyId, remainingAmount: e.amount })),
+      ),
+    },
+    debtPromise: {
+      findMany: jest.fn(async () => []),
+      update: jest.fn(async () => ({})),
+      create: jest.fn(async ({ data }: any) => ({ id: 'dp1', ...data })),
+    },
   };
+  // کرایهٔ بازِ قرارداد برای collectDebtItems (تعهدِ پرداخت)
+  tx.rentCharges.findMany = jest.fn(async () =>
+    o.rentDebt && o.rentDebt.greaterThan(0) ? [{ id: 'rc1', currencyId: 'afn', remainingAmount: o.rentDebt }] : [],
+  );
   const prisma: any = {
     user: { findUnique: jest.fn(async () => ({ id: 'u1', role: 'ADMIN', marketId: 'mk' })) },
     contract: { findUnique: jest.fn(async () => contractRow), findFirst: jest.fn(async () => null) },
@@ -139,9 +153,19 @@ describe('terminate — اول تسویه، بعد فسخ', () => {
       rentDebt: D(1000),
       electricity: [{ currencyId: 'afn', amount: D(250), billsCount: 2 }],
     });
-    await service.terminate(user, 'c1', term({ acknowledgeDebt: true, reason: 'مستأجر رفت و پرداخت نکرد' }));
+    const promised = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+    await service.terminate(
+      user,
+      'c1',
+      term({ acknowledgeDebt: true, reason: 'مستأجر رفت و پرداخت نکرد', promisedPaymentDate: promised }),
+    );
     const call = (audit.record as jest.Mock).mock.calls[0][0];
     expect(call.reason).toBe('مستأجر رفت و پرداخت نکرد');
+    // تعهدِ پرداخت با همین تاریخ و همان فاکتورِ باز ساخته شده است
+    const promiseData = (tx.debtPromise.create as jest.Mock).mock.calls[0][0].data;
+    expect(promiseData.promisedDate.toISOString().slice(0, 10)).toBe(promised);
+    expect(promiseData.rentChargeIds).toEqual(['rc1']);
+    expect(promiseData.source).toBe('TERMINATE');
     expect(call.newData.debtAtTermination).toEqual({
       rent: '1000',
       electricity: [{ currencyId: 'afn', amount: '250' }],

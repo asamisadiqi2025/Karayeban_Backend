@@ -24,6 +24,7 @@ import { toJalaliYearMonth, AFGHAN_SOLAR_MONTHS } from '../../common/utils/jalal
 import { CreateRentPaymentDto } from './dto/create-rent-payment.dto';
 import { CreateRentPaymentsBulkDto } from './dto/create-rent-payments-bulk.dto';
 import { buildRentDebtView, summarizeRentDebt } from './rent-debt-summary';
+import { refreshDebtPromisesForTenant } from '../debt-promises/debt-promise.util';
 import { RentChargeQueryDto } from './dto/rent-charge-query.dto';
 import { RentPaymentQueryDto } from './dto/rent-payment-query.dto';
 import { RentDebtQueryDto } from './dto/rent-debt-query.dto';
@@ -314,6 +315,9 @@ export class RentService {
       where: { tenantId, currencyId: { notIn: [...chargesByCurrency.keys()] } },
       data: { totalDebt: 0, overdueDebt: 0, status: DebtStatus.CLEAN },
     });
+
+    // تعهدِ پرداختِ بازِ این مستأجر اگر فاکتورهایش همه بسته شده، FULFILLED می‌شود.
+    await refreshDebtPromisesForTenant(tx, tenantId);
   }
 
   // ==========================================================================

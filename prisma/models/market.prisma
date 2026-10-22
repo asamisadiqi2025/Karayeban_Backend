@@ -45,6 +45,7 @@ model Market {
   dealerLoans                   DealerLoan[]
   dealerRepayments              DealerRepayment[]
   backups                       MarketBackup[]
+  debtPromises                  DebtPromise[]
 
   // بک‌آپِ خودکارِ روزانهٔ همین مارکت (ادمین می‌تواند خاموشش کند).
   autoBackupEnabled        Boolean                   @default(true) @map("auto_backup_enabled")

@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDateString,
   IsNumber,
   IsOptional,
@@ -33,4 +34,19 @@ export class RenewContractDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  // تمدید با بدهیِ باز (مثلاً مستأجر پول کامل ندارد): فقط با اجازهٔ ادمین (یا کسی که دسترسیِ
+  // contracts.allow_debt دارد)، همراهِ دلیل و تاریخِ قولِ پرداخت. بدهی روی مستأجر می‌ماند، با پرداخت‌های بعدی
+  // تسویه می‌شود و تا آن موقع در فهرستِ پیگیری (GET /debt-promises) است. بدونِ این، تمدیدِ بدهکار ۴۰۹ می‌دهد.
+  @IsOptional()
+  @IsBoolean()
+  acknowledgeDebt?: boolean;
+
+  @IsOptional()
+  @IsString()
+  reason?: string;
+
+  @IsOptional()
+  @IsDateString()
+  promisedPaymentDate?: string;
 }

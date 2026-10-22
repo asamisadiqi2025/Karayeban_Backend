@@ -52,6 +52,14 @@ export const PERMISSION_CATALOG: PermissionSection[] = [
       { key: 'contracts.pay_debt', label: 'پرداخت بدهی قرارداد' },
       { key: 'contracts.pay_from_deposit', label: 'تسویهٔ بدهی از محل امانت' },
       { key: 'contracts.refund_deposit', label: 'برگرداندن امانت به مستأجر' },
+      { key: 'contracts.allow_debt', label: 'اجازهٔ فسخ/تمدید با بدهیِ باقی‌مانده و ثبتِ تعهدِ پرداخت' },
+    ],
+  },
+  {
+    key: 'debt_promises',
+    label: 'تعهدِ پرداخت و پیگیریِ بدهی',
+    items: [
+      { key: 'debt_promises.view', label: 'دیدنِ فهرستِ پیگیریِ بدهی و تعهدهای پرداخت' },
     ],
   },
   {

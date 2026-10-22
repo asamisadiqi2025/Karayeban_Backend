@@ -21,6 +21,7 @@ import { ExpensesModule } from './modules/expenses/expenses.module';
 import { MiscellaneousIncomeModule } from './modules/miscellaneous-income/miscellaneous-income.module';
 import { RentModule } from './modules/rent/rent.module';
 import { ContractsModule } from './modules/contracts/contracts.module';
+import { DebtPromisesModule } from './modules/debt-promises/debt-promises.module';
 import { ElectricityModule } from './modules/electricity/electricity.module';
 import { UploadsModule } from './modules/uploads/uploads.module';
 import { ReportsModule } from './modules/reports/reports.module';
@@ -64,6 +65,7 @@ import { IdempotencyModule } from './common/idempotency/idempotency.module';
     MiscellaneousIncomeModule,
     RentModule,
     ContractsModule,
+    DebtPromisesModule,
     ElectricityModule,
     UploadsModule,
     ReportsModule,

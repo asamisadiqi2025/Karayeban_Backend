@@ -34,6 +34,7 @@ import {
   runIdempotent,
 } from '../../common/idempotency/idempotency';
 import { paginate, resolveSort } from '../../common/utils/pagination';
+import { refreshDebtPromisesForTenant } from '../debt-promises/debt-promise.util';
 import { jalaliMonthStart, jalaliMonthEnd } from '../../common/utils/jalali-date';
 import { CreateElectricityBillDto } from './dto/create-electricity-bill.dto';
 import { ElectricityBillQueryDto } from './dto/electricity-bill-query.dto';
@@ -711,6 +712,9 @@ export class ElectricityService {
           : {}),
       },
     });
+
+    // تعهدِ پرداختِ بازِ این مستأجر اگر بل‌هایش همه بسته شده، FULFILLED می‌شود.
+    await refreshDebtPromisesForTenant(tx, tenantId);
   }
 
   // ==========================================================================

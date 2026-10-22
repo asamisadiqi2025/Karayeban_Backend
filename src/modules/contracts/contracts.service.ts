@@ -8,6 +8,7 @@ import {
 import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   ContractStatus,
+  DebtPromiseSource,
   MeterStatus,
   Prisma,
   PaymentSourceType,
@@ -45,8 +46,18 @@ import { RequestMeta } from '../../common/audit-log/request-meta.util';
 import { hashRequest, runIdempotent } from '../../common/idempotency/idempotency';
 import { acquireAdvisoryXactLock } from '../../common/utils/advisory-lock';
 import { assertPaymentDateNotInFuture } from '../../common/utils/assert-payment-date';
+import { canAllowDebt } from '../debt-promises/debt-allow';
+import {
+  collectDebtItems,
+  createDebtPromise,
+  parsePromisedDate,
+} from '../debt-promises/debt-promise.util';
 
 const NO_REQUEST_META: RequestMeta = { ip: null, userAgent: null };
+
+// راهِ دومِ فسخ/تمدید با بدهی: بدهی روی مستأجر می‌ماند و «تعهدِ پرداخت» (تاریخِ قول) ثبت می‌شود.
+const ACKNOWLEDGE_HINT =
+  ' — یا با اجازهٔ ادمین، بدهی را روی مستأجر نگه دارید و تاریخِ قولِ پرداخت ثبت کنید (acknowledgeDebt + reason + promisedPaymentDate)';
 
 type Actor = { id: string; role: string; marketId: string | null };
 
@@ -174,7 +185,8 @@ export class ContractsService {
     const message =
       `${verb} قرارداد ممکن نیست: مستأجر بدهیِ باز دارد (${parts.join('، ')}). اول حساب‌ها را تسویه کنید — ` +
       `از امانت (باقی‌مانده ${deposit.toString()} ${code(contract.currencyId)}): POST /contracts/${contract.id}/pay-from-deposit ، ` +
-      `یا نقد از خودِ مستأجر: POST /contracts/${contract.id}/pay-debt`;
+      `یا نقد از خودِ مستأجر: POST /contracts/${contract.id}/pay-debt` +
+      (action === 'refund-deposit' ? '' : ACKNOWLEDGE_HINT);
 
     return new ConflictException({
       message,
@@ -190,8 +202,57 @@ export class ContractsService {
           billsCount: e.billsCount,
         })),
         depositRemaining: deposit.toString(),
+        // فسخ/تمدید را می‌شود با acknowledgeDebt (+ reason + promisedPaymentDate) با بدهی هم انجام داد؛ برگشتِ امانت نه.
+        acknowledgeDebtPossible: action !== 'refund-deposit',
       },
     });
+  }
+
+  // اجازهٔ «با بدهیِ باز فسخ/تمدید کردن»: ادمین/سوپرادمین همیشه؛ حسابدار/کارمند فقط اگر ادمین کلیدِ
+  // contracts.allow_debt را برایش فعال کرده باشد (permissions.catalog.ts).
+  private async assertMayAllowDebt(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true, grantedPermissions: true },
+    });
+    if (!user || !canAllowDebt(user)) {
+      throw new ForbiddenException(
+        'اجازهٔ فسخ/تمدیدِ قرارداد با بدهیِ باقی‌مانده را ندارید — از ادمین بخواهید یا دسترسیِ «اجازهٔ فسخ/تمدید با بدهی» را برایتان فعال کند',
+      );
+    }
+  }
+
+  // تعهدِ پرداخت برای بدهیِ همین قرارداد (کرایهٔ باقی‌ماندهٔ قرارداد + برقِ بازِ مستأجر روی همان دوکان) — داخلِ
+  // همان تراکنشِ فسخ/تمدید، پس یا هر دو انجام می‌شود یا هیچ‌کدام.
+  private async recordDebtPromise(
+    tx: Prisma.TransactionClient,
+    p: {
+      contract: { id: string; marketId: string; tenantId: string | null; shopId: string | null };
+      source: DebtPromiseSource;
+      rentScope: 'all' | 'due';
+      promisedDate: Date;
+      reason: string | undefined;
+      actorId: string;
+    },
+  ) {
+    const items = await collectDebtItems(tx, {
+      tenantId: p.contract.tenantId!,
+      contractId: p.contract.id,
+      shopId: p.contract.shopId,
+      rentScope: p.rentScope,
+    });
+    const res = await createDebtPromise(tx, {
+      marketId: p.contract.marketId,
+      tenantId: p.contract.tenantId!,
+      contractId: p.contract.id,
+      source: p.source,
+      promisedDate: p.promisedDate,
+      reason: p.reason ?? '',
+      createdById: p.actorId,
+      items,
+    });
+    // supersededIds: تعهدهای بازِ قبلیِ همین مستأجر که با این تعهد جایگزین شدند (برای audit).
+    return { ...res.promise, supersededIds: res.supersededIds };
   }
 
   // ==========================================================================
@@ -619,6 +680,12 @@ export class ContractsService {
         'برای فسخ با وجود بدهیِ باز، ذکرِ دلیل (reason) الزامی است',
       );
     }
+    // با بدهیِ باز فقط با «اجازه» و «تاریخِ قولِ پرداخت»: بدهی روی مستأجر می‌ماند و در فهرستِ پیگیری می‌آید.
+    let promisedDate: Date | null = null;
+    if (dto.acknowledgeDebt) {
+      await this.assertMayAllowDebt(actor.id);
+      promisedDate = parsePromisedDate(dto.promisedPaymentDate);
+    }
 
     return this.prisma.$transaction(async (tx) => {
       const spanningCharge = prorate
@@ -710,6 +777,18 @@ export class ContractsService {
       if (debt.hasDebt && !dto.acknowledgeDebt) {
         throw await this.buildDebtError(tx, contract, debt, 'terminate');
       }
+      // بدهی ماند و ادمین آگاهانه تأیید کرد: تعهدِ پرداخت (تاریخِ قول) ثبت می‌شود.
+      const promise =
+        debt.hasDebt && promisedDate && contract.tenantId
+          ? await this.recordDebtPromise(tx, {
+              contract,
+              source: DebtPromiseSource.TERMINATE,
+              rentScope: 'all',
+              promisedDate,
+              reason: dto.reason,
+              actorId: actor.id,
+            })
+          : null;
 
       const finalContract = await tx.contract.findUniqueOrThrow({ where: { id } });
 
@@ -724,6 +803,9 @@ export class ContractsService {
         newData: debt.hasDebt
           ? {
               ...finalContract,
+              debtPromise: promise
+                ? { id: promise.id, promisedDate: promise.promisedDate, supersededIds: promise.supersededIds }
+                : undefined,
               debtAtTermination: {
                 rent: debt.rent.toString(),
                 electricity: debt.electricity.map((e) => ({
@@ -846,6 +928,18 @@ export class ContractsService {
       );
     }
 
+    // تمدید با بدهیِ باز: فقط با اجازه + دلیل + تاریخِ قولِ پرداخت (همان قاعدهٔ فسخ). بدهی روی مستأجر می‌ماند.
+    let promisedDate: Date | null = null;
+    if (dto.acknowledgeDebt) {
+      if (!dto.reason?.trim()) {
+        throw new BadRequestException(
+          'برای تمدید با وجود بدهیِ باز، ذکرِ دلیل (reason) الزامی است',
+        );
+      }
+      await this.assertMayAllowDebt(actor.id);
+      promisedDate = parsePromisedDate(dto.promisedPaymentDate);
+    }
+
     // تمدیدِ زودهنگام (مثلاً ماه‌ها قبل از پایان) قرارداد فعلی را همین الان expired می‌کند
     // در حالی‌که هنوز فاکتورهای واقعی و بازِ زیادی رویش مانده — این فاکتورها به‌خاطر renew
     // لغو نمی‌شوند (بر خلاف terminate)، پس زیر یک قراردادِ ظاهراً «تمام‌شده» معلق می‌مانند.
@@ -932,11 +1026,23 @@ export class ContractsService {
 
     return this.prisma.$transaction(async (tx) => {
       // محافظ: مستأجری که کرایه یا برقِ سررسیدشده بدهکار است قراردادش تمدید نمی‌شود — اول تسویه (از امانت یا نقد).
-      // کرایهٔ ماه‌های بعد (periodStart نرسیده) هنوز بدهی حساب نمی‌شود. برخلافِ فسخ، «تمدید با بدهی» راه ندارد.
+      // کرایهٔ ماه‌های بعد (periodStart نرسیده) هنوز بدهی حساب نمی‌شود. با acknowledgeDebt (اجازه + دلیل + تاریخِ قول)
+      // تمدید با بدهی هم ممکن است: بدهی روی همان قراردادِ قبلی می‌ماند و تعهدِ پرداخت ثبت می‌شود.
       const debt = await this.getOutstandingDebt(tx, contract, 'due');
-      if (debt.hasDebt) {
+      if (debt.hasDebt && !dto.acknowledgeDebt) {
         throw await this.buildDebtError(tx, contract, debt, 'renew');
       }
+      const promise =
+        debt.hasDebt && promisedDate && contract.tenantId
+          ? await this.recordDebtPromise(tx, {
+              contract,
+              source: DebtPromiseSource.RENEW,
+              rentScope: 'due',
+              promisedDate,
+              reason: dto.reason,
+              actorId: actor.id,
+            })
+          : null;
 
       await tx.contract.update({
         where: { id },
@@ -1019,7 +1125,13 @@ export class ContractsService {
         marketId: contract.marketId,
         userId: actor.id,
         oldData: contract,
-        newData: finalNewContract,
+        newData: promise
+          ? {
+              ...finalNewContract,
+              debtPromise: { id: promise.id, promisedDate: promise.promisedDate, supersededIds: promise.supersededIds },
+            }
+          : finalNewContract,
+        reason: promise ? dto.reason : undefined,
         ip: meta.ip,
         userAgent: meta.userAgent,
       });
