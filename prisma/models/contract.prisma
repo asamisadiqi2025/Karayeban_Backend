@@ -46,6 +46,7 @@ model Contract {
   renewedToContract     Contract? @relation("ContractRenewal")
 
   settlement ContractSettlement?
+  debtPromises DebtPromise[]
 
   @@index([marketId])
   @@index([shopId])

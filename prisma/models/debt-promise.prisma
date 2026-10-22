@@ -1,0 +1,58 @@
+// تعهد پرداخت (قولِ پرداختِ بدهی) — وقتی مستأجر با بدهیِ باز قراردادش فسخ یا تمدید می‌شود (یا ادمین
+// دستی ثبت می‌کند)، سیستم مانع نمی‌شود؛ فقط «چه بدهی‌ای مانده» و «مستأجر تا کدام تاریخ قول داده» ثبت
+// می‌شود. بدهی خودش همچنان روی همان فاکتورهای کرایه/بل‌های برق است و با هر پرداخت کم می‌شود؛ این رکورد فقط
+// «پیگیری» را ممکن می‌کند: تاریخ گذشت و هنوز مانده = در فهرستِ پیگیری.
+//
+// هر مستأجر در هر لحظه حداکثر یک تعهدِ OPEN دارد (سرویس تضمین می‌کند): تعهدِ تازه، تعهدِ بازِ قبلی را
+// جایگزین می‌کند و فاکتورهای باقی‌ماندهٔ آن را هم در خود می‌گیرد تا هیچ بدهیِ قدیمی از فهرستِ پیگیری نیفتد.
+enum DebtPromiseStatus {
+  OPEN
+  FULFILLED
+  CANCELLED
+}
+
+enum DebtPromiseSource {
+  TERMINATE
+  RENEW
+  MANUAL
+}
+
+model DebtPromise {
+  id         String            @id @default(uuid()) @db.Uuid
+  marketId   String            @map("market_id") @db.Uuid
+  tenantId   String            @map("tenant_id") @db.Uuid
+  // قراردادی که فسخ/تمدید شد (برای MANUAL خالی است).
+  contractId String?           @map("contract_id") @db.Uuid
+  source     DebtPromiseSource
+  status     DebtPromiseStatus @default(OPEN)
+
+  // روزِ تقویمیِ وعده (به وقتِ کابل). «عقب‌افتاده» یعنی امروزِ کابل از این روز گذشته و هنوز بدهی مانده.
+  promisedDate DateTime @map("promised_date") @db.Date
+  reason       String   @db.Text
+
+  // دقیقاً همین فاکتورها/بل‌ها زیرِ این تعهد هستند: «چقدر مانده» = جمعِ باقی‌ماندهٔ همین‌ها. به‌خاطر همین،
+  // فاکتورهای تازهٔ قراردادِ تمدیدشده هرگز باعثِ باز ماندنِ این تعهد نمی‌شوند.
+  rentChargeIds      String[] @map("rent_charge_ids") @db.Uuid
+  electricityBillIds String[] @map("electricity_bill_ids") @db.Uuid
+
+  // عکسِ لحظهٔ ثبت برای نمایش (به‌تفکیکِ نوع و ارز): [{ kind, currencyId, currencyCode, amount }]
+  snapshot Json
+
+  rescheduleCount Int       @default(0) @map("reschedule_count")
+  fulfilledAt     DateTime? @map("fulfilled_at") @db.Timestamptz(6)
+  cancelledAt     DateTime? @map("cancelled_at") @db.Timestamptz(6)
+  cancelReason    String?   @map("cancel_reason") @db.Text
+
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  market    Market    @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contract  Contract? @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  createdBy User?     @relation("DebtPromiseCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([marketId, status, promisedDate])
+  @@index([tenantId, status])
+  @@map("debt_promises")
+}

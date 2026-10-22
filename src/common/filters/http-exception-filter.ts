@@ -22,6 +22,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string | string[] = 'Internal server error';
     let errors: Record<string, string[]> | undefined;
+    // اختیاری: استثنا می‌تواند یک شیء ساختاریافته (مثلاً مبلغ‌های بدهی) در کلیدِ details بدهد تا فرانت بدون
+    // پارس‌کردنِ متن استفاده‌اش کند. برای استثناهای بدونِ details هیچ تغییری در پاسخ نیست.
+    let details: unknown;
      
 
     // 1. Handle Validation Error specialy(422)
@@ -64,6 +67,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
         if (responseMessage) {
           message = responseMessage;
         }
+
+        const responseDetails = (exceptionResponse as { details?: unknown }).details;
+        if (responseDetails !== undefined) details = responseDetails;
       }
     } else {
       this.logger.error(
@@ -80,6 +86,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       ...(errors ? { errors } : {}),
+      ...(details !== undefined ? { details } : {}),
     });
   }
 }
