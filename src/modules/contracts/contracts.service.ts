@@ -47,6 +47,7 @@ import { hashRequest, runIdempotent } from '../../common/idempotency/idempotency
 import { acquireAdvisoryXactLock } from '../../common/utils/advisory-lock';
 import { assertPaymentDateNotInFuture } from '../../common/utils/assert-payment-date';
 import { canAllowDebt } from '../debt-promises/debt-allow';
+import { monthlyRentFromDailyRate } from '../rent/monthly-rent';
 import {
   collectDebtItems,
   createDebtPromise,
@@ -1010,12 +1011,20 @@ export class ContractsService {
     // adjust-rent دیگر لزوماً نرخ واقعی نیست)، آخرین فاکتورِ همین قرارداد را می‌خوانیم —
     // یعنی نرخی که همین الان واقعاً جاری است. این‌طور اگر حسابدار حین تمدید فراموش کند
     // دوباره تخفیف را بگوید، تخفیف قبلی بی‌سروصدا از بین نمی‌رود، خودکار ادامه پیدا می‌کند.
+    // از «نرخ روزانه»ٔ آخرین فاکتور می‌خوانیم، نه از مبلغ آن: مبلغ، کوتاهیِ ماهِ آخر (قراردادِ غیرِ ماهِ کامل) و
+    // بخششِ یک‌باره (discount-debt) را هم در خودش دارد و آن‌ها را نباید به‌عنوان کرایهٔ ماهانه ادامه داد.
     const lastCharge = await this.prisma.rentCharges.findFirst({
       where: { contractId: id },
       orderBy: { periodStart: 'desc' },
-      select: { netAmount: true },
+      select: { dailyRate: true, periodStart: true },
     });
-    const effectiveRent = lastCharge?.netAmount ?? contract.rent;
+    const effectiveRent = lastCharge
+      ? monthlyRentFromDailyRate(
+          lastCharge.dailyRate,
+          lastCharge.periodStart,
+          contract.rent,
+        )
+      : contract.rent;
     const rent = dto.rent ? new Prisma.Decimal(dto.rent) : effectiveRent;
     const carriedDeposit =
       contract.securityDepositRemaining ?? new Prisma.Decimal(0);
